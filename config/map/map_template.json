@@ -1,0 +1,157 @@
+{
+  // ============================================================================
+  //  地图配置模板（单图文件 · JSONC，允许 // 与 /* */ 注释）
+  // ----------------------------------------------------------------------------
+  //  存储形式（2026-09-09 起）：
+  //    1) config/map/map_index.json          —— 索引：start_map_id + maps[{id,name,file}]
+  //    2) config/map/maps/<slug>.json        —— 本文件：单个地图的全部数据（下列 9 区块）
+  //    引擎在 globals.loadConfig 中先读 map_index.json，再按 file 逐个加载并
+  //    由 deriveFromMapInfo 派生出运行时 map / npcs。
+  //
+  //  坐标系说明（关键，对齐 AS3 客户端）：
+  //    · 渲染切片：矩形 14×14（slice_width×slice_height 像素），仅用于贴图。
+  //    · 寻路/碰撞：等距菱形(RP)网格 grid_x×grid_y（默认 42×126，菱形格 64×32，2:1）。
+  //      所有 grid_x/grid_y / 出生点 / NPC / 传送门 / 刷怪区坐标都是【RP 格坐标】，
+  //      运行时经 transformRPToCXY 换算为屏幕像素(x,y)，与角色/贴图同一世界。
+  //    · pathfinding_mask：一维平铺，长度 = grid_x*grid_y，行优先 index = row*grid_x + col。
+  //      掩码语义：0=阻挡(不可走)，1=可走，2=半透明遮挡但仍可走（角色走到此处半透明）。
+  // ============================================================================
+
+  // ── 1. 背景切片渲染配置（矩形 14×14 贴图层，仅供渲染，不参与寻路）──
+  "slice_width": 200,          // [像素] 单个切片图片宽度
+  "slice_height": 150,         // [像素] 单个切片图片高度
+  "maxRow": 13,                // [索引] 切片最大行索引 0~13（共 14 行）；rows = maxRow+1
+  "maxCol": 13,                // [索引] 切片最大列索引 0~13（共 14 列）；cols = maxCol+1
+  "totalWidth": 2800,          // [像素] 贴图层总宽 = (maxCol+1)*slice_width
+  "totalHeight": 2100,         // [像素] 贴图层总高 = (maxRow+1)*slice_height
+
+  // ── 2. 地图基础与网格信息 ──
+  "map_info": {
+    "map_name": "新月村",       // [字符串] UI 显示名称
+    "map_id": "1",             // [字符串] 全局唯一地图 ID（引擎内部转 Number；切图/传送按此匹配）
+    "res_id": 180,             // [数字] 真实客户端资源编号（Smallmap_<resId>.png / Map_<resId>_<c>_<r>.jpg）；≠ map_id，缺失会导致小地图/切片 404
+    "tile_width": 64,          // [像素] 单个等距菱形格宽（2:1 视角）
+    "tile_height": 32,         // [像素] 单个等距菱形格高
+    "grid_x": 42,              // [网格] 寻路层 X 列数
+    "grid_y": 126,             // [网格] 寻路层 Y 行数
+    "total_grids": 5292        // [网格] 总格数 = grid_x * grid_y（校验用）
+  },
+
+  // ── 3. 环境与氛围配置（驱动天气/暗度/音频）──
+  "environment": {
+    "bgm": "scene1",                 // [资源ID] 背景音乐（见 sound.playBgm；资源缺失则静默）
+    "ambient_sound": "snd_wind_birds", // [资源ID] 环境音效（循环，见 sound.playAmbient）
+    "weather": "clear",              // [枚举] clear=晴朗 / rain=下雨 / fog=大雾（渲染天气覆盖层）
+    "darkness": 0                    // [数值 0~1] 全局暗度遮罩系数（0=白天全亮，1=深夜全黑）
+  },
+
+  // ── 4. 玩家出生点 / 传送落地点 ──
+  //    id 约定：from_<来源> 为从某处传送进来的落点；revive_point 为死亡复活点。
+  "spawn_points": [
+    {
+      "id": "from_forest_east", // [字符串] 出生点唯一标识（首图默认落点取第一个或名字含 from_ 的首个）
+      "grid_x": 39,             // [网格X] RP 格坐标
+      "grid_y": 71,             // [网格Y]
+      "dir": 4                  // [方向 0~7] 初始朝向，见下方 dir 映射（待确认：4≈正南/右下=RB）
+    },
+    {
+      "id": "revive_point",     // [字符串] 死亡复活落点（战斗失败后回城落此，缺失则退回首出生点）
+      "grid_x": 20,
+      "grid_y": 50,
+      "dir": 2
+    }
+  ],
+
+  // ── 5. NPC 与静态交互物体 ──
+  //    type 枚举：npc(普通对话) / shop(商店) / quest(任务) / teleport(传送NPC) / monster(怪物)
+  //    dir：0~7 数值朝向；引擎经 dirToIso 映射到 RB/LB/RT/LT（映射待确认，见 globals）。
+  //    闲聊气泡：配了 chat 台词池的 NPC，在地图上每隔 10~chat_interval 秒（默认上限 180=3 分钟）
+  //    随机取一句冒头顶气泡（复用 ChatBubbleManager，与 AS3 角色随机发言同款；每次重排都在
+  //    10~上限之间重新随机，用户 2026-10-01 裁决）；chat 为空数组/缺失 ⇒ 该 NPC 不参与定时闲聊。
+  "npcs_and_objects": [
+    {
+      "id": 1004,                  // [数字/字符串] 实例唯一 ID
+      "name": "新手引导员 若华",     // [字符串] 头顶名称
+      "grid_x": 11,                // [网格X] RP 格坐标
+      "grid_y": 89,                // [网格Y]
+      "dir": 6,                    // [方向 0~7]
+      "charId": 201036,            // [资源ID] 角色模型
+      "portrait": "Portrait_202036.png", // [资源ID] 头像
+      "type": "npc",               // [枚举] npc/shop/quest/teleport/monster
+      "dialog": "我是新手引导员若华……", // [字符串] 对话文本
+      "monsterId": "",             // [字符串] type=monster 时填怪物配置表 ID（Config.monsters 的 key）
+      "count": 0,                  // [数量] 明雷怪一次涌出数（mulang 用）
+      "chat": [],                  // [字符串数组] 闲聊台词池（每行一句；定时随机取一句冒泡，城市 NPC 常用）
+      "chat_interval": 180,        // [秒] 闲聊随机间隔上限（缺省 180；实际在 10~该值之间随机一次）
+      "desc": "",                  // [字符串] 备注
+      "script_id": "script_guide_ruohua" // [字符串] 原始脚本 ID（预留）
+    }
+  ],
+
+  // ── 6. 传送门 / 场景切换触发点 ──
+  //    target_map / target_portal 共同决定跳转到目标地图的哪个 spawn_point 落点。
+  "portals": [
+    {
+      "id": 1,                          // [数字] 传送门唯一 ID
+      "name": "东影月森林\n（8-15级）",   // [字符串] 悬浮提示（\n 换行）
+      "grid_x": 40,                     // [网格X]
+      "grid_y": 71,                     // [网格Y]
+      "target_map": "150",              // [字符串] 目标地图 map_id
+      "target_portal": "from_xinyue_east" // [字符串] 目标地图落点 spawn_point.id
+    }
+  ],
+
+  // ── 7. 怪物刷新区域配置（明雷区域刷怪）──
+  //    monster_id 需匹配 Config.monsters 的 key；缺失则该刷怪区静默跳过。
+  "monster_spawners": [
+    {
+      "spawner_id": 1,                  // [数字] 刷怪区唯一 ID
+      "monster_id": "mob_wild_boar_01", // [资源ID] 怪物配置表 ID
+      "center_grid_x": 15,             // [网格X] 区域中心
+      "center_grid_y": 40,             // [网格Y]
+      "radius": 5,                     // [网格] 刷新/巡逻半径
+      "max_count": 3,                  // [数量] 同屏最大存活数
+      "respawn_time": 10               // [秒] 死亡后刷新冷却
+    }
+  ],
+
+  // ── 8. 暗雷遇敌规则（本图踩雷随机战斗；省略此区块则本图无暗雷）──
+  //    ★ 按【行走距离】判定（不移动不遇敌）：引擎每走 100px 按 rate 掷一次骰（命中后 3s 冷却），
+  //    速度 200px/s 时约每秒 2 次 ⇒ rate=0.10 期望约 5 秒遇一局；命中即进入战斗；
+  //    怪物按 dark_group 权重表抽取：
+  //      dark_pick=perUnit（默认）每个敌人独立抽 ⇒ 同场出现混合怪群；
+  //      dark_pick=once 整场只用首次抽中的那一只。
+  //    怪物等级不在此配：资质型等级恒 1，属性由 chars.json 资质×成长率派生。
+  //    ★ 真源即本区块；config/encounters.json 仅作旧规则兜底（本图配了 dark_encounter 则以其为准）。
+  "dark_encounter": {
+    "rate": 0.10,               // [0~1] 每走 100px 掷骰的遇敌概率（速度 200 时约 5 秒/局）
+    "dark_pick": "perUnit",     // [枚举] perUnit 逐单位独立抽 / once 整场同一只
+    "dark_group": [             // [表] 暗雷怪物生成表（加权抽取）
+      { "mob": "dark_cat", "weight": 30 },
+      { "mob": "bright_rabbit", "weight": 30 },
+      { "mob": "dark_sheep", "weight": 30 },
+      { "mob": "dark_catdemon", "weight": 10 }
+    ]
+  },
+
+  // ── 9. 地图特效配置 ──
+  //    is_follow_camera=false：世界固定特效，绑定物理坐标（地图滚动时随之移动）
+  //    is_follow_camera=true ：镜头/屏幕特效，固定在屏幕（玩家移动它不动）
+  "map_effects": [
+    {
+      "effect_name": "flowerEff_point", // [资源ID] 特效预制体名称
+      "time_window": "00:01 - 23:59",   // [时间段] 生效时段（24h 制，预留）
+      "is_follow_camera": false,        // [布尔] false=世界固定 / true=镜头固定
+      "grid_x": 42,                     // [网格X] is_follow_camera=false 时生效
+      "grid_y": 72                      // [网格Y]
+    }
+  ],
+
+  // ── 10. 寻路与碰撞数据网格（一维平铺，行优先，长度 = grid_x*grid_y）──
+  //    0=阻挡 / 1=可走 / 2=半透明遮挡但仍可走
+  "pathfinding_mask": [
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+    // ……实际 5292 个元素，由数据解析脚本 gen_map_info.py 从 map_grid.grid_text 生成……
+  ]
+}

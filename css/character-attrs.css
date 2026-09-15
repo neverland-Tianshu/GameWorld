@@ -1,0 +1,641 @@
+﻿/* character-attrs.css
+ * 人物属性面板（参考 AS3 真实人物属性窗）。可独立预览：
+ *   http://127.0.0.1:8000/人物属性.html
+ *
+ * 视觉对齐 AS3：暖黄羊皮纸背景 + 红棕描边 + 金边深棕控件区 + 红宝石选中态。
+ * 每个 class 前缀 ca-（character-attrs）防止与游戏其它面板冲突。
+ */
+
+/* ── 设计令牌 ─────────────────────────────────────────────── */
+:root {
+  --ca-bg-page:    #2d1b0e;     /* 页外底：暗色背景，把面板托出来 */
+  --ca-bg-page-2:  #1d1108;
+  --ca-paper:      #f7e8b3;     /* 羊皮纸 */
+  --ca-paper-dk:   #e2c97c;     /* 深一点的羊皮纸（点缀/底） */
+  --ca-paper-lt:   #ffe9a8;
+  --ca-frame:      #3a2715;     /* 深棕主框 */
+  --ca-frame-dk:   #231509;
+  --ca-gold:       #c79445;     /* 金边 */
+  --ca-gold-dk:    #8d5e1e;
+  --ca-gold-lt:    #ffd778;
+  --ca-red:        #b53224;     /* 红宝石 / 选中 */
+  --ca-red-dk:     #7d1b13;
+  --ca-text-dk:    #2c1804;     /* 面板内主文字 */
+  --ca-text-mid:   #5c3b1a;
+  --ca-text-lt:    #fbe7a8;     /* 深棕底上的文字（亮） */
+  --ca-text-on-red:#fff5d4;     /* 红底文字 */
+
+  --ca-tab-h:      30px;
+  --ca-cell:       46px;        /* 装备/技能格子基准尺寸 */
+  --ca-cell-big:   64px;        /* 心法大格子 */
+}
+
+/* ── 页面骨架 ─────────────────────────────────────────────── */
+html, body {
+  margin: 0; padding: 0; min-height: 100%;
+  background:
+    radial-gradient(ellipse at center, var(--ca-bg-page) 0%, var(--ca-bg-page-2) 70%, #000 100%);
+  font-family: "Microsoft YaHei", "微软雅黑", "PingFang SC", sans-serif;
+  color: var(--ca-text-dk);
+  user-select: none;
+}
+
+body {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 30px 0;
+}
+
+.ca-panel {
+  width: 520px;
+  background:
+    linear-gradient(180deg, var(--ca-paper-lt) 0%, var(--ca-paper) 40%, var(--ca-paper-dk) 100%);
+  border: 2px solid var(--ca-frame);
+  box-shadow:
+    0 0 0 3px var(--ca-gold-dk),
+    0 0 0 5px var(--ca-frame),
+    0 8px 28px rgba(0,0,0,0.55);
+  position: relative;
+  font-size: 12px;
+}
+
+/* 面板四个角的"宝石"装饰 */
+.ca-panel::before, .ca-panel::after,
+.ca-corner-bl, .ca-corner-br {
+  content: '';
+  position: absolute;
+  width: 22px; height: 22px;
+  background:
+    radial-gradient(circle at 30% 30%, #ffd778 0%, var(--ca-red) 35%, var(--ca-red-dk) 80%);
+  border: 1px solid var(--ca-frame);
+  border-radius: 50%;
+  z-index: 5;
+  pointer-events: none;
+}
+.ca-panel::before { top: 38px; left:  -12px; }
+.ca-panel::after  { top: 38px; right: -12px; }
+.ca-corner-bl { bottom: 6px; left:  -12px; }
+.ca-corner-br { bottom: 6px; right: -12px; }
+
+/* ── 标题栏 ─────────────────────────────────────────────── */
+.ca-title {
+  display: flex;
+  align-items: center;
+  height: 38px;
+  background:
+    linear-gradient(180deg, var(--ca-frame) 0%, var(--ca-frame-dk) 100%);
+  border-bottom: 2px solid var(--ca-gold-dk);
+  padding: 0 10px;
+  color: var(--ca-text-lt);
+  font-size: 15px;
+  letter-spacing: 4px;
+  font-weight: bold;
+  text-shadow: 1px 1px 0 #000, 0 0 6px rgba(255, 200, 80, 0.5);
+  position: relative;
+}
+.ca-title .ca-title-txt {
+  flex: 1;
+  text-align: center;
+  font-weight: bold;
+}
+.ca-title .ca-close {
+  width: 21px; height: 21px; padding: 0; border: 0; flex: none;
+  background: url(../update/i18n/zh_CN/Resource/icons/panelbtnbg.png) center/contain no-repeat #f2a809;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+.ca-title .ca-close img { width: 17px; height: 17px; pointer-events: none; }
+.ca-title .ca-close:hover { filter: brightness(1.15); }
+
+/* ── Tab 栏 ─────────────────────────────────────────────── */
+.ca-tabs {
+  display: flex;
+  margin: 8px 8px 0;
+  background: var(--ca-paper-dk);
+  border: 1px solid var(--ca-frame);
+  padding: 3px 3px 0;
+  gap: 4px;
+  height: var(--ca-tab-h);
+}
+.ca-tab {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: var(--ca-tab-h);
+  color: var(--ca-text-dk);
+  font-size: 13px;
+  letter-spacing: 4px;
+  font-weight: bold;
+  cursor: pointer;
+  background: linear-gradient(180deg, var(--ca-paper) 0%, var(--ca-paper-dk) 100%);
+  border: 1px solid var(--ca-frame);
+  border-bottom: none;
+  position: relative;
+  top: 1px;
+}
+.ca-tab:hover { background: var(--ca-paper-lt); }
+.ca-tab.on {
+  background: #fff;
+  color: var(--ca-red);
+  border: 2px solid var(--ca-red);
+  font-weight: bold;
+  text-shadow: none;
+  top: 1px;
+  height: calc(var(--ca-tab-h) + 1px);
+  z-index: 2;
+  box-shadow:
+    inset 0 0 0 1px #fff,
+    inset 0 0 0 3px var(--ca-red);
+}
+.ca-tab.on::after {
+  content: '';
+  position: absolute;
+  left: 0; right: 0; bottom: -8px;
+  height: 8px;
+  background: var(--ca-paper);
+  border-bottom: 2px solid transparent;
+}
+
+/* ── Tab 内容区 ───────────────────────────────────────── */
+.ca-body {
+  position: relative;
+  height: 580px;
+  margin: 0 8px;
+  background: var(--ca-paper);
+  border: 1px solid var(--ca-frame);
+  border-top: 2px solid var(--ca-frame);
+  overflow: hidden;
+}
+.ca-page { position: absolute; inset: 0; display: none; }
+.ca-page.on { display: block; }
+
+/* ── ① 装备 tab（角色模型 + 装备格 + 底部属性条） ───────── */
+.ca-eq {
+  position: relative;
+  height: 100%;
+}
+.ca-eq-model {
+  position: absolute;
+  left: 0; right: 0;
+  top: 8px;
+  height: 360px;
+  background:
+    radial-gradient(ellipse at center, rgba(255, 220, 130, 0.55) 0%, rgba(255, 220, 130, 0) 60%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.ca-eq-model canvas, .ca-eq-model .stage-fighter {
+  filter: drop-shadow(0 4px 6px rgba(0,0,0,0.35));
+}
+
+/* 装备插槽：左右两列各 4 个 + 底部 5 个（背包/格子）*/
+.ca-slot-col {
+  position: absolute;
+  top: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.ca-slot-col.left  { left: 8px; }
+.ca-slot-col.right { right: 8px; }
+
+.ca-slot {
+  width: var(--ca-cell);
+  height: var(--ca-cell);
+  background:
+    linear-gradient(180deg, rgba(120, 78, 30, 0.18) 0%, rgba(120, 78, 30, 0.32) 100%);
+  border: 2px solid var(--ca-frame);
+  box-shadow:
+    inset 0 0 0 1px var(--ca-gold),
+    inset 0 0 6px rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  cursor: pointer;
+}
+.ca-slot::before {
+  /* 暗色纹章底纹，模拟 AS3 占位纹理 */
+  content: '';
+  position: absolute;
+  inset: 4px;
+  background:
+    repeating-linear-gradient(45deg,
+      rgba(255, 220, 130, 0.07) 0 4px,
+      rgba(0, 0, 0, 0.05) 4px 8px);
+  pointer-events: none;
+}
+.ca-slot.empty {
+  filter: saturate(0.55) brightness(0.85);
+}
+.ca-slot img {
+  position: relative;
+  z-index: 1;
+  max-width: 90%;
+  max-height: 90%;
+  pointer-events: none;
+}
+.ca-slot .ca-slot-label {
+  position: absolute;
+  left: 0; right: 0;
+  bottom: -16px;
+  text-align: center;
+  font-size: 10px;
+  color: var(--ca-text-mid);
+}
+
+/* 装备下方背包行（5 格） */
+.ca-eq-bags {
+  position: absolute;
+  left: 0; right: 0;
+  bottom: 175px;
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+}
+.ca-eq-bags .ca-slot .ca-slot-label { display: none; }
+
+/* 底部属性条：基础属性 + 物理 */
+.ca-eq-stats {
+  position: absolute;
+  left: 8px; right: 8px;
+  bottom: 8px;
+  display: flex;
+  gap: 8px;
+}
+.ca-eq-stats .ca-stat-col {
+  flex: 1;
+  background:
+    linear-gradient(180deg, rgba(255, 240, 200, 0.7) 0%, rgba(255, 240, 200, 0.3) 100%);
+  border: 1px solid var(--ca-frame);
+  padding: 4px 8px;
+}
+/* 属性框下拉选择器：标题改为可切换 基础属性/物理/法术 */
+.ca-eq-stats .ca-stat-select {
+  display: block;
+  width: 100%;
+  margin-bottom: 4px;
+  padding: 3px 6px;
+  border: 1px solid var(--ca-frame);
+  border-radius: 2px;
+  background:
+    linear-gradient(180deg, var(--ca-paper-lt) 0%, var(--ca-paper-dk) 100%);
+  color: var(--ca-red);
+  font-weight: bold;
+  font-size: 12px;
+  letter-spacing: 3px;
+  text-align: center;
+  text-align-last: center;
+  cursor: pointer;
+  box-shadow: inset 0 0 0 1px var(--ca-gold);
+}
+.ca-eq-stats .ca-stat-select:hover { background: var(--ca-paper-lt); }
+.ca-eq-stats .ca-stat-select:focus { outline: none; box-shadow: inset 0 0 0 2px var(--ca-red); }
+.ca-eq-stats .ca-stat-row {
+  display: flex;
+  justify-content: space-between;
+  line-height: 18px;
+  font-size: 12px;
+}
+.ca-eq-stats .ca-stat-row span:last-child {
+  color: var(--ca-red);
+  font-weight: bold;
+}
+
+/* ── ② 属性 tab ──────────────────────────────────────── */
+.ca-attr {
+  padding: 10px 14px;
+  height: 100%;
+  box-sizing: border-box;
+  overflow: auto;
+}
+.ca-attr-main {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+.ca-attr-stats {
+  flex: 1.5;
+  background:
+    linear-gradient(180deg, rgba(255, 240, 200, 0.7) 0%, rgba(255, 240, 200, 0.3) 100%);
+  border: 1px solid var(--ca-frame);
+  padding: 6px 10px;
+  font-size: 12px;
+  line-height: 22px;
+}
+.ca-attr-stats .ar { display: flex; justify-content: space-between; }
+.ca-attr-stats .ar b { color: var(--ca-red); font-weight: bold; }
+
+.ca-attr-info {
+  flex: 1;
+  background:
+    linear-gradient(180deg, rgba(255, 240, 200, 0.7) 0%, rgba(255, 240, 200, 0.3) 100%);
+  border: 1px solid var(--ca-frame);
+  padding: 6px 10px;
+  font-size: 12px;
+  line-height: 22px;
+}
+.ca-attr-info .ai { display: flex; justify-content: space-between; }
+.ca-attr-info .ai b { color: var(--ca-red); font-weight: bold; }
+
+/* 主属性行：强壮/耐力/敏捷/智力/信仰 */
+.ca-prim {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 8px;
+  margin-bottom: 10px;
+}
+.ca-prim .ca-prim-cell {
+  background:
+    linear-gradient(180deg, rgba(255, 240, 200, 0.85) 0%, rgba(255, 240, 200, 0.4) 100%);
+  border: 1px solid var(--ca-frame);
+  padding: 4px 6px;
+  text-align: center;
+  font-size: 12px;
+  position: relative;
+}
+.ca-prim .ca-prim-cell .lbl { font-size: 11px; color: var(--ca-text-mid); }
+.ca-prim .ca-prim-cell .val {
+  font-size: 16px;
+  font-weight: bold;
+  color: var(--ca-red);
+}
+.ca-prim .ca-prim-cell .ctrl {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 2px;
+}
+.ca-prim .ca-prim-cell .ctrl button {
+  width: 18px; height: 18px;
+  background: var(--ca-paper);
+  border: 1px solid var(--ca-frame);
+  color: var(--ca-text-dk);
+  font-weight: bold;
+  cursor: pointer;
+  font-size: 12px;
+  line-height: 16px;
+}
+.ca-prim .ca-prim-cell .ctrl button:hover { background: var(--ca-paper-lt); }
+.ca-prim .ca-prim-cell .ctrl button:disabled { color: #aaa; cursor: not-allowed; }
+
+/* 属性 tab 底部：潜质分配 + 持久分配风格 */
+.ca-prim-actions {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+.ca-prim-actions button {
+  flex: 0 0 80px;
+  height: 28px;
+  background:
+    linear-gradient(180deg, var(--ca-paper) 0%, var(--ca-paper-dk) 100%);
+  border: 1px solid var(--ca-frame);
+  color: var(--ca-text-dk);
+  font-weight: bold;
+  cursor: pointer;
+  letter-spacing: 4px;
+}
+.ca-prim-actions button:hover { background: var(--ca-paper-lt); }
+.ca-prim-actions button.primary {
+  background:
+    linear-gradient(180deg, var(--ca-red) 0%, var(--ca-red-dk) 100%);
+  color: var(--ca-text-on-red);
+}
+
+.ca-expbar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  border-top: 1px dashed var(--ca-frame);
+  padding-top: 8px;
+}
+.ca-expbar .ca-exp-text {
+  flex: 1;
+  color: var(--ca-text-dk);
+}
+.ca-expbar input {
+  width: 160px;
+  height: 22px;
+  border: 1px solid var(--ca-frame);
+  background: rgba(255, 240, 200, 0.8);
+  padding: 0 6px;
+  font-size: 12px;
+  color: var(--ca-text-dk);
+}
+.ca-expbar button {
+  height: 22px;
+  padding: 0 12px;
+  background: var(--ca-red);
+  border: 1px solid var(--ca-frame);
+  color: var(--ca-text-on-red);
+  cursor: pointer;
+  font-weight: bold;
+}
+
+/* ── ③ 心法 tab ──────────────────────────────────────── */
+.ca-xin {
+  padding: 8px 12px;
+  height: 100%;
+  box-sizing: border-box;
+  overflow: auto;
+}
+.ca-xin-top {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 6px;
+  margin-bottom: 6px;
+}
+.ca-xin-mid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 6px;
+  margin-bottom: 6px;
+}
+.ca-xin-grid2 {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 6px;
+}
+.ca-xin-cell {
+  width: var(--ca-cell);
+  height: var(--ca-cell);
+  background:
+    linear-gradient(180deg, rgba(120, 78, 30, 0.35) 0%, rgba(60, 38, 18, 0.6) 100%);
+  border: 2px solid var(--ca-frame);
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  overflow: hidden;
+  box-shadow:
+    inset 0 0 0 1px var(--ca-gold),
+    inset 0 0 8px rgba(0,0,0,0.5);
+}
+.ca-xin-cell.red {
+  background:
+    linear-gradient(180deg, rgba(180, 60, 50, 0.7) 0%, rgba(110, 30, 25, 0.85) 100%);
+  box-shadow:
+    inset 0 0 0 1px var(--ca-gold-lt),
+    inset 0 0 10px rgba(0,0,0,0.6);
+}
+.ca-xin-cell img {
+  max-width: 96%;
+  max-height: 96%;
+  pointer-events: none;
+}
+.ca-xin-cell .cost {
+  position: absolute;
+  right: 2px; bottom: 0;
+  background: rgba(0,0,0,0.7);
+  color: var(--ca-gold-lt);
+  font-size: 10px;
+  padding: 0 4px;
+  border-radius: 4px 0 0 0;
+  font-weight: bold;
+}
+.ca-xin-cell .clock {
+  position: absolute;
+  right: 2px; top: 2px;
+  width: 14px; height: 14px;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at center, #fff 30%, var(--ca-red) 70%);
+  border: 1px solid var(--ca-frame);
+}
+.ca-xin-cell .badge {
+  position: absolute;
+  left: 2px; bottom: 2px;
+  background: rgba(0,0,0,0.7);
+  color: var(--ca-text-on-red);
+  font-size: 10px;
+  font-weight: bold;
+  padding: 0 3px;
+}
+
+.ca-xin-desc {
+  font-size: 12px;
+  line-height: 1.6;
+  margin: 8px 0;
+  color: var(--ca-text-dk);
+}
+.ca-xin-desc b { color: var(--ca-red); }
+.ca-xin-desc .ca-xin-row4 {
+  display: grid;
+  grid-template-columns: repeat(4, auto) auto;
+  gap: 8px;
+  align-items: center;
+  margin-top: 6px;
+}
+.ca-xin-desc .ca-xin-row4 .ca-xin-tag { justify-self: end; }
+.ca-xin-desc .ca-xin-tag {
+  width: 30px; height: 30px;
+  background:
+    radial-gradient(circle, #fff 0%, var(--ca-red) 70%, var(--ca-red-dk) 100%);
+  border: 1px solid var(--ca-frame);
+  color: #fff;
+  text-align: center;
+  line-height: 30px;
+  font-weight: bold;
+  font-size: 11px;
+  letter-spacing: 0;
+  border-radius: 4px;
+  margin-left: auto;
+}
+
+.ca-xin-foot {
+  margin-top: 8px;
+  border-top: 1px dashed var(--ca-frame);
+  padding-top: 6px;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.ca-xin-foot .ca-upgrade {
+  margin-left: auto;
+  display: inline-flex;
+  gap: 4px;
+  align-items: center;
+}
+.ca-xin-foot .ca-upgrade input {
+  width: 38px; height: 22px;
+  border: 1px solid var(--ca-frame);
+  text-align: center;
+  background: rgba(255,240,200,0.8);
+}
+.ca-xin-foot .ca-upgrade button {
+  height: 24px;
+  background: var(--ca-red);
+  border: 1px solid var(--ca-frame);
+  color: var(--ca-text-on-red);
+  cursor: pointer;
+  padding: 0 10px;
+  font-weight: bold;
+}
+
+/* ── ④ 敬章 tab（占位） ─────────────────────────────── */
+.ca-med {
+  padding: 14px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+}
+.ca-med .ca-med-cell {
+  background:
+    linear-gradient(180deg, rgba(255, 240, 200, 0.8) 0%, rgba(255, 220, 130, 0.4) 100%);
+  border: 1px solid var(--ca-frame);
+  aspect-ratio: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  color: var(--ca-text-mid);
+  flex-direction: column;
+  text-align: center;
+  cursor: pointer;
+  position: relative;
+}
+.ca-med .ca-med-cell:hover { background: var(--ca-paper-lt); }
+.ca-med .ca-med-cell.unlocked::before {
+  content: '';
+  position: absolute;
+  inset: 4px;
+  border: 1px dashed var(--ca-frame);
+  border-radius: 50%;
+}
+
+/* ── 通用工具 ────────────────────────────────────────── */
+.ca-empty { color: #8a6b32; font-style: italic; }
+.ca-strong { color: var(--ca-red); font-weight: bold; }
+.ca-mono { font-family: Consolas, "Courier New", monospace; }
+
+#caToast {
+  position: fixed;
+  top: 18px; left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0,0,0,0.78);
+  color: #fff;
+  padding: 8px 18px;
+  border: 1px solid var(--ca-gold);
+  font-size: 12px;
+  z-index: 9999;
+  opacity: 0;
+  transition: opacity 0.25s;
+  pointer-events: none;
+}
+
+/* 适配小屏：面板自动缩放（保留 v1 调整空间；先打开可滚动） */
+@media (max-height: 720px) {
+  body { align-items: flex-start; }
+  .ca-body { height: 540px; }
+}

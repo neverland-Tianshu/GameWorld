@@ -1,0 +1,307 @@
+{
+ "meta": "PlayerSkillPanel2 配置真源 · 由 _verify/gen_player_skill_cfg.mjs 生成 · 布局=layout.xml / 文案=Lang.zh_CN.as / 协议=NetNet.as(CS804→SC224 / CS932 / CS1005→SC1018)",
+ "layout": {
+  "PlayerSkillPanel2": {
+   "PlayerSkillPanel2": {
+    "w": "295",
+    "h": "444"
+   },
+   "PlayerSkillPanel2_frame": {
+    "x": "12",
+    "y": "65",
+    "w": "270",
+    "h": "360"
+   },
+   "PlayerSkillPanel2_tab": {
+    "x": "14",
+    "y": "45",
+    "w": "50"
+   }
+  },
+  "ViewFightSkill": {
+   "ViewFightSkill": {
+    "x": "-2",
+    "y": "21"
+   },
+   "ViewFightSkill_frame": {
+    "x": "45",
+    "y": "4",
+    "w": "220",
+    "h": "38"
+   },
+   "ViewFightSkill_button": {
+    "x": "0",
+    "h": "45"
+   },
+   "ViewFightSkill_descInput": {
+    "x": "-14",
+    "y": "315",
+    "w": "220"
+   },
+   "ViewFightSkill_expInput": {
+    "x": "-14",
+    "y": "336",
+    "w": "220"
+   },
+   "ViewFightSkill_dic": {
+    "x": "45",
+    "y": "47"
+   },
+   "ViewFightSkill_icon": {
+    "x": "114",
+    "y": "16"
+   }
+  },
+  "ViewLifeSkill": {
+   "ViewLifeSkill": {
+    "x": "-2",
+    "y": "21"
+   },
+   "ViewLifeSkill_list": {
+    "w": "270",
+    "h": "360"
+   }
+  },
+  "ViewPassiveSkill": {},
+  "ViewSpecialSkill": {},
+  "ViewTalentSkill": {
+   "ViewTalentSkill": {
+    "x": "-2",
+    "y": "21"
+   },
+   "ViewTalentSkill_frame": {
+    "x": "25",
+    "y": "4",
+    "w": "220",
+    "h": "38"
+   },
+   "ViewTalentSkill_button": {
+    "x": "0",
+    "h": "45"
+   },
+   "ViewTalentSkill_descInput": {
+    "x": "-34",
+    "y": "315",
+    "w": "220"
+   },
+   "ViewTalentSkill_expInput": {
+    "x": "-34",
+    "y": "336",
+    "w": "220"
+   },
+   "ViewTalentSkill_dic": {
+    "x": "25",
+    "y": "47"
+   },
+   "ViewTalentSkill_icon": {
+    "x": "114",
+    "y": "16"
+   }
+  },
+  "ViewTransferSkill": {},
+  "ViewShengji": {}
+ },
+ "tabs": [
+  {
+   "id": "fight",
+   "key": "text_panel_skill_viewFight",
+   "name": "战斗"
+  },
+  {
+   "id": "life",
+   "key": "text_panel_skill_viewLife",
+   "name": "生活"
+  },
+  {
+   "id": "passive",
+   "key": "text_panel_skill_viewPassive",
+   "name": "被动"
+  },
+  {
+   "id": "special",
+   "key": "text_panel_skill_viewSpecial",
+   "name": "特殊"
+  },
+  {
+   "id": "talent",
+   "key": "text_panel_talent",
+   "name": "天赋"
+  },
+  {
+   "id": "transfer",
+   "key": "text_panel_viewtransfer",
+   "name": "转换"
+  },
+  {
+   "id": "shengji",
+   "key": "text_panel_shengji",
+   "name": "升级"
+  }
+ ],
+ "viewOffset": {
+  "fight": {
+   "x": 14,
+   "y": 45
+  },
+  "life": {
+   "x": 14,
+   "y": 45
+  },
+  "passive": {
+   "x": 14,
+   "y": 45
+  },
+  "special": {
+   "x": 14,
+   "y": 45
+  },
+  "talent": {
+   "x": 14,
+   "y": 45
+  },
+  "transfer": {
+   "x": 14,
+   "y": 45
+  },
+  "shengji": {
+   "x": 14,
+   "y": 45
+  }
+ },
+ "tabBar": {
+  "x": "14",
+  "y": "45",
+  "w": "50"
+ },
+ "frame": {
+  "x": "12",
+  "y": "65",
+  "w": "270",
+  "h": "360"
+ },
+ "skillTitles": [
+  {
+   "k": "text_panel_skill_titleBrave",
+   "zh": "气血"
+  },
+  {
+   "k": "text_panel_skill_titleDeligency",
+   "zh": "剑客"
+  },
+  {
+   "k": "text_panel_skill_titleConfident",
+   "zh": "术士"
+  },
+  {
+   "k": "text_panel_skill_titlePenetrate",
+   "zh": "修真"
+  },
+  {
+   "k": "text_panel_skill_titleKind",
+   "zh": "刺客"
+  },
+  {
+   "k": "text_panel_skill_titlePity",
+   "zh": "儒"
+  },
+  {
+   "k": "text_panel_skill_titleMercy",
+   "zh": "慈悲"
+  },
+  {
+   "k": "text_panel_skill_titleConfuse",
+   "zh": "怜悯"
+  }
+ ],
+ "lang": {
+  "text_panel_skill_viewFight": {
+   "k": "text_panel_skill_viewFight",
+   "zh": "战斗"
+  },
+  "text_panel_skill_viewLife": {
+   "k": "text_panel_skill_viewLife",
+   "zh": "生活"
+  },
+  "text_panel_skill_viewPassive": {
+   "k": "text_panel_skill_viewPassive",
+   "zh": "被动"
+  },
+  "text_panel_skill_viewSpecial": {
+   "k": "text_panel_skill_viewSpecial",
+   "zh": "特殊"
+  },
+  "text_panel_talent": {
+   "k": "text_panel_talent",
+   "zh": "天赋"
+  },
+  "text_panel_viewtransfer": {
+   "k": "text_panel_viewtransfer",
+   "zh": "转换"
+  },
+  "text_panel_shengji": {
+   "k": "text_panel_shengji",
+   "zh": "升级"
+  },
+  "text_panel_skill_titleBrave": {
+   "k": "text_panel_skill_titleBrave",
+   "zh": "气血"
+  },
+  "text_panel_skill_titleDeligency": {
+   "k": "text_panel_skill_titleDeligency",
+   "zh": "剑客"
+  },
+  "text_panel_skill_titleConfident": {
+   "k": "text_panel_skill_titleConfident",
+   "zh": "术士"
+  },
+  "text_panel_skill_titlePenetrate": {
+   "k": "text_panel_skill_titlePenetrate",
+   "zh": "修真"
+  },
+  "text_panel_skill_titleKind": {
+   "k": "text_panel_skill_titleKind",
+   "zh": "刺客"
+  },
+  "text_panel_skill_titlePity": {
+   "k": "text_panel_skill_titlePity",
+   "zh": "儒"
+  },
+  "text_panel_skill_titleMercy": {
+   "k": "text_panel_skill_titleMercy",
+   "zh": "慈悲"
+  },
+  "text_panel_skill_titleConfuse": {
+   "k": "text_panel_skill_titleConfuse",
+   "zh": "怜悯"
+  },
+  "text_panel_title_skill": {
+   "k": "text_panel_title_skill",
+   "zh": "技能"
+  }
+ },
+ "proto": {
+  "CS_INITIATIVE_GETDATA": 804,
+  "SC_SKILL_LIST2": 224,
+  "CS_TRANSFERSKILL_SHOW": 932,
+  "CS_SHENGJI_PANEL": 1005,
+  "SC_SHENGJI": 1018,
+  "SC_SHENGJI_PLAY": 1021,
+  "CS_SHENGJI_LEARN": 1006
+ },
+ "res": {
+  "text_panel_skill_viewFight": "textpanelskillviewfight.png",
+  "text_panel_skill_viewLife": "textpanelskillviewlife.png",
+  "text_panel_skill_viewPassive": "textpanelskillviewpassive.png",
+  "text_panel_skill_viewSpecial": "textpanelskillviewspecial.png",
+  "text_panel_talent": "textpaneltalent.png",
+  "text_panel_viewtransfer": "textpanelviewtransfer.png",
+  "text_panel_shengji": "textpanelshengji.png",
+  "panel_no_select": "panelnoselect.png",
+  "panel_select": "panelselect.png",
+  "text_panel_title_skill": "textpaneltitleskill.png"
+ },
+ "formulas": {
+  "note": "技能列表/转换/升级数值公式原版在服务端，客户端不计算 → 单机版仅做结构展示与协议闭环，公式待逆向标注。"
+ },
+ "note": "数据缺口：SC_SKILL_LIST2(224) 战斗/生活/被动/特殊/天赋技能明细抓包未覆盖 ⇒ 列表留「抓包未覆盖」占位，未臆造。"
+}

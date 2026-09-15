@@ -1,0 +1,2071 @@
+﻿/* 天书奇谈 HTML5 单机版 — 样式（深色游戏 UI，呼应 IDE 暗色主题） */
+* { box-sizing: border-box; }
+html, body { margin: 0; height: 100%; overflow: hidden; background: #0c0e14; color: #e7e9f0;
+  font-family: "PingFang SC", "Microsoft YaHei", sans-serif; user-select: none; }
+
+/* ── 层 ── */
+#loading-layer { position: fixed; inset: 0; z-index: 10;
+  background: radial-gradient(circle at 50% 30%, #1b2740, #0a0d16); }
+:root { --sidebar-w: 15vw;   /* 消息栏宽度：视口 15%（用户裁决 2026-09-20） */ }
+#world { position: fixed; top: 0; left: 0; bottom: 0; right: var(--sidebar-w); z-index: 5; }
+#ui-layer { position: fixed; inset: 0; z-index: 20; pointer-events: none; }
+#ui-layer > * { pointer-events: auto; }
+/* panelLayer / promptLayer 自身不挡操作，仅其内部面板可点（对齐 AS 分层） */
+#ui-layer > #panelLayer, #ui-layer > #promptLayer { pointer-events: none; }
+#panelLayer { position: absolute; inset: 0; z-index: 5000; }
+#promptLayer { position: absolute; inset: 0; z-index: 6000; }
+#panelLayer > *, #promptLayer > * { pointer-events: auto; }
+/* 右侧独立栏：聊天列 + 角色面板 + 战斗指令条入住（不叠加主窗口、不透明、不被遮挡） */
+#sidebar { position: fixed; top: 0; right: 0; bottom: 0; width: var(--sidebar-w);
+  background: #0c0e14; border-left: 1px solid #2c3656;
+  display: flex; flex-direction: column; z-index: 21; pointer-events: auto; }
+
+/* ── 登录 ── */
+.login-box { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+  width: 420px; max-width: 90vw; text-align: center; }
+.login-box h1 { font-size: 46px; letter-spacing: 8px; margin: 0 0 6px;
+  background: linear-gradient(90deg,#ffd479,#ff9a5a); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.login-box .sub { color: #9aa3c0; font-size: 13px; margin-bottom: 18px; }
+.server-list { display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px; }
+.server-row { display: flex; justify-content: space-between; padding: 10px 14px; border-radius: 8px;
+  background: #161c2e; border: 1px solid #2a3350; cursor: pointer; }
+.server-row.on { border-color: #ffb74d; background: #20283f; }
+.server-row .st { color: #6fe3a0; font-size: 12px; }
+.start-btn { position: relative; width: 180px; height: 36px; font-size: 16px; border: 0; cursor: pointer;
+  background: url('../update/GameWorld/images/img43.png') no-repeat center / 100% 100%, #c95e2a;
+  color: #fff; font-weight: 700; text-shadow: 0 1px 2px rgba(0,0,0,.6); margin: 0 auto; display: block; }
+.start-btn:hover { filter: brightness(1.1); }
+.login-box .tip { color: #6b7494; font-size: 12px; margin-top: 14px; }
+
+/* ── 主城 ── */
+/* touch-action:none：触屏长按/拖动时浏览器不抢手势去做页面滚动/双击缩放，
+   保证 touchmove 全程到达（长按人物跟随的移动端入口依赖于此）。 */
+#viewport { position: absolute; inset: 0; cursor: grab; overflow: hidden; touch-action: none; }
+#viewport:active { cursor: grabbing; }
+#world-scroll { position: absolute; left: 0; top: 0; will-change: transform; }
+#map-layer, #actor-layer { position: absolute; left: 0; top: 0; }
+#actor-layer { z-index: 2; }
+#main-hint { position: absolute; left: 50%; bottom: 70px; transform: translateX(-50%);
+  background: rgba(0,0,0,.55); padding: 6px 14px; border-radius: 20px; font-size: 13px; transition: opacity .3s; }
+
+.fighter { width: 0; height: 0; }
+/* 视觉整体容器：包裹【身体 canvasWrap + 全部纸娃娃/装备叠加层】。
+   LB/RT 合成方向 = 对它整体施加 scaleX(-1)（镜像轴由 JS 按身体画布中心写 transform-origin）。
+   width/height 0 + absolute 保证它是纯坐标系容器，不影响任何子元素布局；名字/血条在其外，不会被镜像。 */
+.fighter-body { position: absolute; left: 0; top: 0; width: 0; height: 0; z-index: 1; }
+/* 外层发光容器：包住 .fighter-body（身体+纸娃娃层），位于颜色矩阵滤镜之外，
+   仅承载 hover 高亮的 drop-shadow（见下方 .fighter.hovered .fighter-glow）。 */
+.fighter-glow { position: absolute; left: 0; top: 0; width: 0; height: 0; z-index: 1; }
+.fighter-canvas { position: absolute; left: 0; top: 0; pointer-events: none; }
+.fighter-name { position: absolute; left: 50%; top: 100%; transform: translate(-50%, -2px);
+  font-size: 12px; white-space: nowrap; color: #fff; text-shadow: 0 1px 2px #000; text-align: center; pointer-events: none; }
+/* 血条：对齐 AS3 Fighter.as initHpbar / updateHpbar —— 框 battlehpbar.png(45×9) 打底，
+   填充 battlehp.png(37×3) 落于框内偏移(4,3)；.fighter-hpfill 为裁剪容器，宽度 = 37×(hp/max)，
+   等价原版 _hpMask 遮罩按比例裁掉填充，不再是纯色 CSS 条 */
+.fighter-hpbar { position: absolute; left: 50%; top: calc(100% + 14px); width: 45px; height: 9px;
+  transform: translate(-50%, 0); pointer-events: none; }
+.fighter-hpbar-frame { position: absolute; left: 0; top: 0; display: block; }
+.fighter-hpfill { position: absolute; left: 4px; top: 3px; width: 37px; height: 3px; overflow: hidden; transition: width .2s; }
+.fighter-hpfill-img { position: absolute; left: 0; top: 0; display: block; }
+
+/* 对齐原点标记：画在脚底锚点 .el(0,0)，红叉 + 黄心，用于核对名字/血条是否对准模型脚底 */
+.fighter-origin { position: absolute; left: 0; top: 0; width: 18px; height: 18px; transform: translate(-50%, -50%); pointer-events: none; z-index: 70; }
+.fighter-origin::before, .fighter-origin::after { content: ""; position: absolute; background: rgba(255, 64, 64, .92); box-shadow: 0 0 2px rgba(0,0,0,.8); }
+.fighter-origin::before { left: 0; top: 50%; width: 100%; height: 2px; transform: translateY(-50%); }
+.fighter-origin::after { top: 0; left: 50%; height: 100%; width: 2px; transform: translateX(-50%); }
+.fighter-origin-dot { position: absolute; left: 50%; top: 50%; width: 5px; height: 5px; border-radius: 50%; background: #ffec3d; transform: translate(-50%, -50%); box-shadow: 0 0 2px rgba(0,0,0,.9); }
+
+.fighter.hovered .fighter-glow { filter: drop-shadow(0 0 8px #ffd479) drop-shadow(0 0 3px #fff); }
+.fighter.hovered .fighter-name { color: #ffe9a8; }
+
+/* ── Buff/Debuff 图标条（横排 5 个/行；wrap-reverse 让满行后向上堆叠，避免遮挡下方血条）── */
+.fighter-buffs { position: absolute; display: flex; flex-wrap: wrap-reverse; width: 79px; gap: 1px; z-index: 55; pointer-events: none; }
+.fighter-buff-icon { position: relative; width: 15px; height: 15px; border-radius: 2px; border: 1px solid rgba(0,0,0,.55); overflow: hidden; }
+.fighter-buff-icon .bf-color { position: absolute; inset: 0; }
+.fighter-buff-icon .bf-name { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 8px; font-weight: 700; color: #fff; text-shadow: 0 1px 1px rgba(0,0,0,.9); line-height: 1; }
+.fighter-buff-icon .bf-turns { position: absolute; right: 0; bottom: 0; font-size: 7px; font-weight: 700; color: #ffe9a8; text-shadow: 0 1px 1px rgba(0,0,0,.9); line-height: 1; padding: 0 1px; }
+.fighter-buff-icon.debuff { border-color: rgba(255,60,60,.7); }
+.fighter-buff-icon.buff { border-color: rgba(80,200,80,.7); }
+
+/* ── 通用拟物按钮（替代原版位图按钮皮：panelpetinfotitle.png 金棕 → .tsqt-btn-gold / panelbtnbg4.png 橙红 → .tsqt-btn-orange / panelbtnsilver.png 银灰） ── */
+.tsqt-bar-btn {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 140px; height: 24px; font-size: 12px; font-weight: bold;
+  user-select: none; cursor: pointer; box-sizing: border-box; transition: all 0.08s ease;
+}
+.tsqt-btn-silver {
+  border-radius: 2px; border: 1px solid #383838;
+  background: linear-gradient(to bottom, #d8d8d8 0%, #cacaca 48%, #b5b5b5 52%, #a8a8a8 100%);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.8), inset 0 -1px 0 rgba(0,0,0,0.25), 0 1px 2px rgba(0,0,0,0.4);
+  color: #333333; text-shadow: 0 1px 0 rgba(255,255,255,0.6);
+}
+.tsqt-btn-silver:hover { background: linear-gradient(to bottom, #e4e4e4 0%, #d8d8d8 48%, #c5c5c5 52%, #b6b6b6 100%); }
+.tsqt-btn-silver:active {
+  background: linear-gradient(to bottom, #a0a0a0 0%, #b2b2b2 50%, #c4c4c4 100%);
+  box-shadow: inset 0 1px 3px rgba(0,0,0,0.4); transform: translateY(1px);
+}
+.tsqt-btn-gold {
+  border-radius: 3px; border: 1px solid #2b1f14;
+  background: linear-gradient(to bottom, #e4cca2 0%, #cbb07d 48%, #b99a67 52%, #af8f5b 100%);
+  box-shadow: inset 0 1px 1px rgba(255,255,255,0.6), inset 0 -1px 1px rgba(0,0,0,0.2), 0 1px 2px rgba(0,0,0,0.35);
+  color: #3e2609; text-shadow: 0 1px 0 rgba(255,255,255,0.4);
+}
+.tsqt-btn-gold:hover { background: linear-gradient(to bottom, #ede0bd 0%, #d8be8d 48%, #c7a772 52%, #be9c67 100%); }
+.tsqt-btn-gold:active {
+  background: linear-gradient(to bottom, #9f7b49 0%, #b3915c 50%, #cbb07d 100%);
+  box-shadow: inset 0 1px 3px rgba(0,0,0,0.45); transform: translateY(1px);
+}
+.tsqt-btn-orange {
+  border-radius: 5px; border: 1px solid #4a1300;
+  background: linear-gradient(to bottom, #d77c4b 0%, #c4430a 45%, #b13f10 50%, #a0320a 100%);
+  box-shadow: inset 0 1px 1px rgba(255,178,115,0.8), inset 0 -1px 2px rgba(45,10,0,0.6), 0 1px 3px rgba(0,0,0,0.5);
+  color: #ffe3ca; text-shadow: 1px 1px 1px #310d00;
+}
+.tsqt-btn-orange:hover {
+  background: linear-gradient(to bottom, #f06c27 0%, #d75013 45%, #c8440d 50%, #9f2f05 100%);
+  box-shadow: inset 0 1px 1px rgba(255,200,150,0.9), 0 0 5px rgba(226,91,24,0.4);
+}
+.tsqt-btn-orange:active {
+  background: linear-gradient(to bottom, #6d1b00 0%, #962a04 50%, #c4430a 100%);
+  box-shadow: inset 0 2px 4px rgba(0,0,0,0.6); transform: translateY(1px);
+}
+
+/* ── 经典页籤三态按钮（替代 panelnoselect/paneloverselect/panelselect 位图） ── */
+.tsqt-tab-item {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    cursor: pointer;
+    user-select: none;
+    width: 60px;
+    height: 28px;
+    font-size: 12px;
+    font-weight: bold;
+    border-radius: 4px 4px 0 0;
+    border: 1px solid #14110b;
+    border-bottom: none;
+    background: linear-gradient(to bottom,
+        #dfc28d 0%,
+        #d1af77 40%,
+        #c39d61 60%,
+        #a67e45 100%);
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.7),
+        inset 1px 0 0 rgba(255, 255, 255, 0.3),
+        inset -1px 0 0 rgba(0, 0, 0, 0.2);
+    color: #4a2f0b;
+    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.4);
+    transition: background 0.1s ease, color 0.1s ease;
+}
+.tsqt-tab-item:hover {
+    border-color: #07191e;
+    background: linear-gradient(to bottom,
+        #5bc9e2 0%,
+        #31a6c4 40%,
+        #1d8ca8 60%,
+        #0d6880 100%);
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.8),
+        inset 1px 0 0 rgba(255, 255, 255, 0.4),
+        inset -1px 0 0 rgba(0, 0, 0, 0.3);
+    color: #ffffff;
+    text-shadow: 0 1px 2px #042a34;
+}
+.tsqt-tab-item.active,
+.tsqt-tab-item.active:hover {
+    border-color: #100204;
+    background: linear-gradient(to bottom,
+        #a80f2d 0%,
+        #8b0821 40%,
+        #700318 60%,
+        #4e000f 100%);
+    box-shadow:
+        inset 0 1px 0 rgba(255, 140, 160, 0.5),
+        inset 1px 0 0 rgba(255, 255, 255, 0.15),
+        inset -1px 0 0 rgba(0, 0, 0, 0.4);
+    color: #ffe6ea;
+    text-shadow: 1px 1px 2px #200005;
+}
+
+/* ── HUD：系统菜单（底部左侧，纯 CSS 拟物按钮） ── */
+.hud-menu { position: absolute; bottom: 10px; left: 10px; display: flex; flex-wrap: wrap; gap: 6px; max-width: 340px; z-index: 1; }
+.hud-menu { /* collapsed: only the master toggle button shows; grid opens on click */
+  max-width: 71px; overflow: visible;
+}
+.hud-menu .hud-menu-btn:not(.hud-master),
+.hud-menu .hud-menu-sep { display: none; }
+.hud-menu.open .hud-menu-btn,
+.hud-menu.open .hud-menu-sep { display: inline-flex; }
+.hud-menu.open { max-width: 340px; }
+.hud-menu-btn.hud-master { width: 71px; }
+.hud-menu-btn { position: relative; padding: 0; cursor: pointer; }
+.hud-menu-btn.tsqt-bar-btn { width: 71px; height: 22px; font-size: 12px; border-radius: 2px; }
+.hud-menu-btn span { position: relative; line-height: 1; text-shadow: 0 1px 0 rgba(255,255,255,.4); }
+
+/* 调试入口浮动按钮（顶部居中，避开左上小地图托盘与右侧聊天列） */
+.hud-debug-fab { position: absolute; top: 8px; left: 50%; transform: translateX(-50%); width: 30px; height: 30px; border-radius: 8px;
+  border: 1px solid #2c3656; background: rgba(35,44,70,.85); color: #ffd479; font-size: 15px; cursor: pointer; z-index: 2; }
+.hud-debug-fab:hover { filter: brightness(1.2); }
+
+/* ── HUD：CityFace 城市信息栏 + 任务追踪（左上） ── */
+/* CityFace = AS3 face/CityFace.as 的 1:1 复刻（js/ui/city-face.js）：
+     5 张底图按 addChild 顺序自下而上叠加（facetopleft1~4 下垂装饰 + facecity 卷轴条），
+     城名/坐标文本 + 功能按钮，全部绝对定位在 230×150 的浮层内。 */
+.hud-tray { position: absolute; top: 10px; left: 10px; display: flex; flex-direction: column; gap: 8px; align-items: flex-start; width: 230px; }
+.city-face { position: relative; width: 230px; height: 150px; flex: none; }
+.city-face .cf-bg { position: absolute; display: block; user-select: none; -webkit-user-drag: none; }
+.city-face .cf-tx { position: absolute; margin: 0; font-size: 12px; line-height: 15px; white-space: pre;
+  font-family: "PingFang SC","Microsoft YaHei",sans-serif; pointer-events: none; }
+.city-face .cf-city { color: #006600; }            /* AS3 cityField 色 26112 */
+.city-face .cf-xy, .city-face .cf-line { color: #003300; }   /* AS3 roadPoint/lineField 色 13056 */
+.city-face .cf-btn { position: absolute; padding: 0; border: 0; background: none; cursor: pointer;
+  user-select: none; -webkit-user-drag: none; }
+.city-face .cf-btn img { display: block; -webkit-user-drag: none; }
+.city-face .cf-btn:hover img { filter: brightness(1.25); }
+/* 注：四类图层开关已迁至小地图面板（.mini-map-layers）；.mini-layer 为面板与旧角标共用按钮样式 */
+/* ── 小地图面板（对齐 AS3 SmallMapPanel：common_small_* 薄金框 + 坐标条 + 勾选框 + 两按钮）── */
+/* AS3 SmallMapPanel 无标题栏/关闭按钮；内容直接挂在面板根上，用 AS3 局部坐标（含伸出面板的坐标条）定位 */
+#panel-minimap { overflow: visible; }
+#panel-minimap .pb-title, #panel-minimap .pb-close { display: none; }
+#panel-minimap .pb-body { display: none; }
+/* 拖拽条上移到「坐标条 + 顶框」区：薄金框只有 5~7px，AS3 原版靠整框拖动，这里让坐标条(0,-20)+顶框可拖 */
+#panel-minimap .pb-drag { top: -20px; height: 27px; }
+.mm-stage { position: absolute; inset: 0; z-index: 3; pointer-events: none; }
+.mm-stage img, .mm-stage .mm-tx { position: absolute; }
+/* 坐标条 panelmapxy.png（86x20 @ (0,-20)）；X/Y 白字 12px @ (16,-19)/(55,-19) 叠在其上 */
+.mm-xy { image-rendering: pixelated; }
+.mm-tx { color: #fff; font: 12px SimSun, "宋体", serif; white-space: pre; pointer-events: none;
+  text-shadow: 0 0 2px rgba(0,0,0,.85), 0 0 2px rgba(0,0,0,.85); }
+/* 地图 @ (6,6)：点击寻路、悬停出坐标（AS3 mapSpriteMouseHandler）*/
+.mm-mapwrap { position: absolute; overflow: hidden; cursor: crosshair; pointer-events: auto; background: #0e1424; }
+.mm-map { display: block; image-rendering: pixelated; }
+.mm-cv { position: absolute; left: 0; top: 0; width: 100%; height: 100%; pointer-events: none; }
+/* 悬停标记浮动名字（AS3 MapSprite.overHandler → promptFace.showInfoPrompt，12px） */
+.mm-tip { position: absolute; z-index: 5; pointer-events: none; white-space: nowrap;
+  padding: 2px 6px; border-radius: 3px;
+  background: rgba(20,14,6,.82); border: 1px solid #6b5432;
+  color: #ffe9b0; font: 12px SimSun, "宋体", serif;
+  text-shadow: 0 1px 1px rgba(0,0,0,.8); }
+/* 四类图层勾选框（AS3 CheckBox：商人/任务/资源/传送点，2x2 排在地图下方）*/
+.mm-cb { position: absolute; display: flex; align-items: center; gap: 3px; pointer-events: auto;
+  font-size: 11px; color: #3a2a10; cursor: pointer; user-select: none;
+  text-shadow: 0 1px 0 rgba(255,255,255,.35); }
+.mm-cb i { display: block; width: 12px; height: 12px; border: 1px solid #6b5432; border-radius: 2px;
+  background: #e8dcc0; box-shadow: inset 0 1px 0 rgba(255,255,255,.65); }
+.mm-cb.on i { background: #d1a985; border-color: #3a2a10; box-shadow: 0 1px 2px rgba(58,42,16,.45), inset 0 1px 0 rgba(0,0,0,.08); }
+.mm-cb.on i::after { content: "\2713"; display: block; font-size: 10px; line-height: 12px;
+  text-align: center; color: #1a1a1a; font-weight: 700; }
+.mm-cb:hover i { filter: brightness(1.12); }
+/* 世界地图按钮（panelmapworld.png 63x20，文字图 → CSS 深红文字按钮）@ (bgW-32,-10) 骑跨右上角 */
+.mm-world { position: absolute; width: 63px; height: 20px; padding: 0; pointer-events: auto;
+  border: 1px solid #540001; border-radius: 2px; cursor: pointer;
+  background: linear-gradient(to bottom, #a50328 0%, #8e0223 48%, #7d011d 52%, #6a0018 100%);
+  color: #fff; font-size: 11px; font-weight: 700; letter-spacing: 1px;
+  text-shadow: 0 1px 1px rgba(0,0,0,.65); }
+.mm-world:hover { filter: brightness(1.15); }
+.mm-world:active { filter: brightness(.9); }
+/* 飞行按钮（panelbtnbg4.png 53x27 → CSS .tsqt-btn-orange）@ (bgW-95,bgH-40) */
+.mm-fly { position: absolute; width: 53px; height: 27px; padding: 0; pointer-events: auto;
+  font-size: 12px; letter-spacing: 1px; }
+
+.hud-quest { width: 100%; background: rgba(12,16,28,.72); border: 1px solid #232c46; border-radius: 8px; padding: 8px 10px; font-size: 12px; }
+.qt-title { position: relative; width: 100%; height: 15px; margin-bottom: 6px;
+  background: url('../update/GameWorld/images/img34.png') no-repeat center / 100% 100%; display: flex; align-items: center; justify-content: center; }
+.qt-title img { display: none; }
+.qt-title span { position: relative; font-size: 11px; font-weight: 700; color: #5a3a10;
+  text-shadow: 0 1px 0 rgba(255,255,255,.4); letter-spacing: 2px; }
+.qt-row { display: flex; justify-content: space-between; gap: 8px; padding: 2px 4px; color: #c5cce6; cursor: pointer; border-radius: 4px; }
+.qt-row:hover { background: rgba(111,139,216,.18); }
+.qt-row:active { background: rgba(111,139,216,.3); }
+.qt-name { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.qt-prog { color: #6fe3a0; flex: none; }
+
+/* ── HUD：角色/宠物头像浮层（1:1 像素对齐 AS3 FaceHandler / PlayerFace / PetFace，全部真实位图） ──
+   AS3 坐标（deobfuscated/face/FaceHandler.as + PlayerFace.as + PetFace.as）：
+     容器 148 宽；玩家高 83（HP20/MP30/SP40/EXP50），宠物高 73（HP20/MP30/EXP40，无 SP）；
+     贴场景右上 (SCENE_WIDTH-148, 1)，宠物在玩家左侧 148px（PetFace x=SCENE_WIDTH-296）。
+     头像框 face_portrait_bg 42×42 @ (3,3)；名字底 face_name_bg 78×18 贴右上；等级底 face_level_bg 18×18 紧邻其左；
+     状态条 face_np_bg 98×9 @ x=49(_npX)，前景 face_hp/mp/sp/exp 96×7 偏移 (1,1)。
+   资源名 = AS3 key 大写转小写去下划线（face_np_bg→facenpbg.png 等），均在 Resource/icons/。 */
+.hud-face { position: absolute; top: 1px; z-index: 2; width: 148px; margin: 0; padding: 0;
+  background: transparent; cursor: pointer; }
+.hud-face.player { right: var(--sidebar-w); }
+.hud-face.pet    { right: calc(var(--sidebar-w) + 148px); }
+/* 头像框（face_portrait_bg 42×42 @ (3,3)，头像图 @ (4,4)） */
+.hud-face .portrait-wrap { position: absolute; left: 3px; top: 3px; width: 42px; height: 42px; overflow: hidden;
+  background: #1a2138 url('../update/i18n/zh_CN/Resource/icons/faceportraitbg.png') no-repeat center / 100% 100%; }
+.hud-face .portrait { width: 34px; height: 34px; margin: 4px; object-fit: cover; display: block; }
+/* 名字底 face_name_bg 78×18 贴容器右上（x=bgWidth-78-1）；等级底 face_level_bg 18×18 紧邻其左（x=bgWidth-99） */
+.hud-face .name-bg { position: absolute; top: 0; right: 1px; width: 78px; height: 18px;
+  display: flex; align-items: center; justify-content: center;
+  background: url('../update/i18n/zh_CN/Resource/icons/facenamebg.png') no-repeat center / 100% 100%; }
+.hud-face .name-bg span { font-size: 12px; line-height: 1; color: #fff; font-weight: 700;
+  text-shadow: 0 1px 1px #000; white-space: nowrap; overflow: hidden; max-width: 74px; }
+.hud-face .level-bg { position: absolute; top: 0; right: 79px; width: 18px; height: 18px;
+  display: flex; align-items: center; justify-content: center;
+  background: url('../update/i18n/zh_CN/Resource/icons/facelevelbg.png') no-repeat center / 100% 100%; }
+.hud-face .level-bg span { font-size: 11px; line-height: 1; color: #fff; font-weight: 700; text-shadow: 0 1px 1px #000; }
+/* 状态条（face_np_bg 98×9 @ x=49；前景 96×7 @ (1,1)；文本 11px 白字叠在条上方，对齐 AS3 hpField.y=15） */
+.hud-face .bar { position: absolute; left: 49px; width: 98px; height: 9px; padding: 0; border: 0;
+  border-radius: 0; overflow: visible;
+  background: url('../update/i18n/zh_CN/Resource/icons/facenpbg.png') no-repeat center / 100% 100%; }
+.hud-face .bar i { position: absolute; left: 1px; top: 1px; width: 0; height: 7px; display: block;
+  border-radius: 0; transition: width .25s;
+  background: url('../update/i18n/zh_CN/Resource/icons/facehp.png') no-repeat left center / 100% 100%; }
+.hud-face .bar.mp  i { background-image: url('../update/i18n/zh_CN/Resource/icons/facemp.png'); }
+.hud-face .bar.sp  i { background-image: url('../update/i18n/zh_CN/Resource/icons/facesp.png'); }
+.hud-face .bar.exp i { background-image: url('../update/i18n/zh_CN/Resource/icons/faceexp.png'); }
+/* 文本压在条上（对齐 AS3：hpField.y=15 vs 条 y=20，即文字顶边比条顶边高 5px，白字叠在条上） */
+.hud-face .bar span { position: absolute; left: 0; right: 0; top: -5px; height: 12px; line-height: 12px;
+  text-align: center; font-size: 11px; color: #fff; font-weight: 700;
+  text-shadow: 0 1px 1px #000; pointer-events: none; white-space: nowrap; }
+/* 玩家四条（PlayerFace：HP 20 / MP 30 / SP 40 / EXP 50） */
+.hud-face .bar.hp  { top: 20px; }
+.hud-face .bar.mp  { top: 30px; }
+.hud-face .bar.sp  { top: 40px; }
+.hud-face .bar.exp { top: 50px; }
+/* 宠物三条（PetFace：HP 20 / MP 30 / EXP 40，无 SP 条） */
+.hud-face.pet .bar.exp { top: 40px; }
+.hud-face.pet .bar.sp  { display: none; }
+
+/* ── HUD：技能热键栏（底部中央，img10.png 真实底图） ── */
+.hud-skillbar { position: absolute; left: 50%; bottom: 10px; transform: translateX(-50%); display: flex; gap: 6px;
+  background: rgba(12,16,28,.55); border: 1px solid #2c3656; border-radius: 10px; padding: 6px; }
+/* 战斗中「非玩家下令窗口」的禁用遮罩（对齐 AS3 ShortCutFace.setAllMask(true)：
+   maskLayer 半透明黑 0.7 盖整栏，栏体仍可见但不可交互）。玩家下令时由 JS 摘除该类。 */
+.skill-slot { position: relative; width: 52px; height: 52px; border-radius: 6px; cursor: pointer; display: flex; align-items: center; justify-content: center; overflow: hidden; background: #161c2e; }
+.skill-slot-bg { position: absolute; inset: 4px; width: calc(100% - 8px); height: calc(100% - 8px%); pointer-events: none; }
+.skill-ico { position: relative; width: 36px; height: 36px; object-fit: contain; z-index: 1; }
+.skill-slot:hover { filter: brightness(1.15); }
+.skill-slot.noimg { background: #161c2e; border: 1px solid #34507a; }
+.skill-key { position: absolute; left: 3px; top: 2px; font-size: 10px; color: #2a2010; font-weight: 700; text-shadow: 0 1px 0 rgba(255,255,255,.5); z-index: 2; }
+.skill-name { position: absolute; left: 0; right: 0; bottom: 1px; text-align: center; font-size: 10px; color: #2a2010; font-weight: 600; text-shadow: 0 1px 0 rgba(255,255,255,.4); z-index: 2; }
+
+/* ── 右侧聊天列：系统类(上) / 剧情类(下) 双聊天窗 ── */
+.chat-col { position: relative; flex: 1; min-height: 0; margin: 0;
+  display: flex; flex-direction: column; gap: 6px; background: #AFCFDA; }
+/* 左右边框：原版 face_message_border 位图（5×1，纵向平铺）贴在面板左右两侧，
+   对齐 AS3 MessageFace.initBackground 的 beginBitmapFill(face_message_border)
+   drawRect(0,27,5,559) / drawRect(200,27,5,559) —— 即面板左/右边缘衔接游戏窗口/屏幕的边缘描边。
+   缺失它会导致聊天面板与游戏窗口之间露出黑边。 */
+.msgface::before, .msgface::after {
+  content: ""; position: absolute; top: 27px; bottom: 0; width: 5px; z-index: 4; pointer-events: none;
+  background: url('../update/i18n/zh_CN/LoginResource/icons/facemessageborder.png') repeat-y center; }
+.msgface::before { left: 0; }
+.msgface::after  { right: 0; }
+/* 配色/滚动条 1:1 对齐 _MessageFace_仿制.html：面板底 #AFCFDA / 描边 #8FB6C4 / 正文 #163963 / 客户端 #4197AB / 系统 #7802c3 / 版本 #F6FA00 */
+.chat-box { flex: 1; min-height: 0; display: flex; flex-direction: column;
+  background: #AFCFDA; border: none; border-radius: 0; overflow: hidden; }
+/* ── 右侧聊天列：MessageFace 风格标题条（原版 LoginResource 位图 facemessagebg.png）── */
+.msgface .chat-head {
+  flex: none; height: 27px; min-height: 27px; padding: 0 8px;
+  display: flex; align-items: center; justify-content: center;
+  background: url('../update/i18n/zh_CN/LoginResource/icons/facemessagebg.png') no-repeat center / 100% 100%;
+  border-bottom: 1px solid #14232f;
+  position: relative;
+}
+.msgface .chat-ver {
+  position: absolute; left: 8px; top: 50%; transform: translateY(-50%);
+  font-size: 12px; font-weight: 700; color: #F6FA00; text-shadow: 0 1px 0 #000;
+  letter-spacing: 0; line-height: 15px; white-space: nowrap;
+}
+.msgface .chat-title-img { display: block; height: 13px; width: auto; image-rendering: pixelated; }
+.msgface .chat-title-txt {
+  font-size: 13px; font-weight: 700; color: #DCEAF2; letter-spacing: 2px;
+  text-shadow: 0 1px 0 rgba(0,0,0,.45);
+}
+.msgface .chat-body { flex: 1; min-height: 0; overflow-y: auto; padding: 6px 8px 6px 6px;
+  font-size: 12px; line-height: 15px; color: #163963;
+  /* 正文区放开选中复制（覆盖 html,body 的 user-select:none）：键盘 Ctrl+C 可复制；
+     右键 contextmenu 不在此处理（由全局统一屏蔽）。cursor:text 提示可选中。 */
+  user-select: text; -webkit-user-select: text; cursor: text;
+  scrollbar-width: thin; scrollbar-color: #7FA8B8 #C6DDE7; }
+.msgface .chat-body::-webkit-scrollbar { width: 11px; }
+.msgface .chat-body::-webkit-scrollbar-track { background: #C6DDE7; }
+.msgface .chat-body::-webkit-scrollbar-thumb { background: #7FA8B8; border: 2px solid #C6DDE7; border-radius: 6px; }
+.msgface .chat-body::-webkit-scrollbar-thumb:hover { background: #5D8B9E; }
+.log-line { padding: 0 0 3px; }
+.log-sys   { color: #7802c3; }
+.log-story { color: #163963; }
+.log-good  { color: #4197AB; }
+
+/* ───────────────────────── 面板系统（对齐 D:/tsqt/Game/resource/js/panel.js 的 PanelBgEngine.build） ─────────────────────────
+   真实客户端 common_* 九宫格图（i18n/zh_CN/LoginResource/icons）已就位：命中时 JS onload 覆盖 CSS 兜底。
+   九宫格真实尺寸（取自 LoginResource/icons 实际像素，厚度由 JS 用 image.naturalWidth/Height 写入 CSS 变量）：
+     顶角：common_panel_corner1   19×47（顶厚 47，对齐原版标题栏）
+     底角：common_corner2         19×19
+     顶边：common_panel_sideline3 18×36（repeat-x 平铺，厚 36）
+     底边：common_sideline2       1×8 （repeat-x 平铺，厚 8）
+     左边：common_sideline1       8×1 （repeat-y 平铺，宽 8）
+     右边：common_sideline1       8×1 （repeat-y + scaleX(-1) 镜像，宽 8）
+     中： common_background       34×34（repeat 双轴平铺）
+   边 = 真实 sideline 图叠加（repeat-x/y），不再是拉伸 100%×100%（避免糊图）。图缺失时回退渐变金边。 */
+.tsqt-panel { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
+  display: flex; flex-direction: column; background: #121829; border-radius: 0;
+  box-shadow: 0 12px 40px rgba(0,0,0,.6), inset 0 0 0 1px rgba(255,200,120,.15); color: #e7e9f0; overflow: hidden;
+  /* 默认厚/宽（取默认 config 的真实像素；JS onload 用图自然尺寸覆盖，加载前布局不塌陷）*/
+  --pb-corner-t-w: 19px; --pb-corner-t-h: 47px;
+  --pb-corner-b-w: 19px; --pb-corner-b-h: 19px;
+  --pb-border-t: 36px;    --pb-border-b: 8px;
+  --pb-border-l: 8px;     --pb-border-r: 8px; }
+.pb-bg { position: absolute; inset: 0; border-radius: 0; overflow: hidden; pointer-events: none; background: #0e1424; }
+/* 中：real-client commonbackground(34×34) repeat 双轴平铺；缺失回退深蓝渐变。
+   ★ 内缩 5px（top/left/right/bottom:5px）严格对齐 AS3 九宫格几何 rect(5,5,w-10,h-10)，
+     与复现页 g9() 的 add('c',…,'left:5px;top:5px;width:w-10;height:h-10') 完全一致；
+     此前写成 inset:0 会让中纹铺到边框底下（与 AS3 不符）。 */
+.pb-bg-center { position: absolute; top: 5px; left: 5px; right: 5px; bottom: 5px; background: linear-gradient(180deg,#1a2238,#10141f); background-repeat: repeat; }
+/* 角：real-client natural size (no-repeat)，缺失回退径向金点；TR/BR scaleX(-1) 镜像 */
+.pb-corner-tl, .pb-corner-tr { position: absolute; top: 0; width: var(--pb-corner-t-w); height: var(--pb-corner-t-h);
+  background: radial-gradient(circle at 50% 50%, #ffcf8a, #8a5e22); background-repeat: no-repeat; }
+.pb-corner-tl { left: 0; } .pb-corner-tr { right: 0; transform: scaleX(-1); }
+.pb-corner-bl, .pb-corner-br { position: absolute; bottom: 0; width: var(--pb-corner-b-w); height: var(--pb-corner-b-h);
+  background: radial-gradient(circle at 50% 50%, #ffcf8a, #8a5e22); background-repeat: no-repeat; }
+.pb-corner-bl { left: 0; } .pb-corner-br { right: 0; transform: scaleX(-1); }
+/* 边：real-client commonsideline TILE（repeat-x/y），厚度 = 加载图自然尺寸；缺失回退金线渐变 */
+.pb-border-t { position: absolute; top: 0; left: var(--pb-corner-t-w); right: var(--pb-corner-t-w); height: var(--pb-border-t);
+  background: linear-gradient(90deg,#caa15a 0%,#8a5e22 50%,#caa15a 100%); background-repeat: repeat-x; }
+.pb-border-b { position: absolute; bottom: 0; left: var(--pb-corner-b-w); right: var(--pb-corner-b-w); height: var(--pb-border-b);
+  background: linear-gradient(0deg,#caa15a 0%,#8a5e22 50%,#caa15a 100%); background-repeat: repeat-x; }
+.pb-border-l { position: absolute; top: var(--pb-corner-t-h); bottom: var(--pb-corner-b-h); left: 0; width: var(--pb-border-l);
+  background: linear-gradient(90deg,#caa15a 0%,#8a5e22 50%,#caa15a 100%); background-repeat: repeat-y; }
+.pb-border-r { position: absolute; top: var(--pb-corner-t-h); bottom: var(--pb-corner-b-h); right: 0; width: var(--pb-border-r);
+  background: linear-gradient(270deg,#caa15a 0%,#8a5e22 50%,#caa15a 100%); background-repeat: repeat-y; transform: scaleX(-1); }
+/* 内容区：随真实顶/底角厚度自适应，留出左/右 19px 避开角+sideline */
+.pb-drag { position: absolute; left: 0; right: 0; top: 0; height: var(--pb-border-t); cursor: grab; z-index: 2;
+  touch-action: none;                       /* 触屏拖拽时浏览器不抢手势去做滚动/缩放 */
+             /* ★ ay：z-index 从 5 降到 2（低于 .pp-layer 的 3）——否则拖拽条盖住 pp-asis 面板自带的
+                AS3 关闭/帮助按钮（按钮在 .pp-layer 内、y≈4..25 的拖拽条覆盖区），点击被拦截。
+                .pp-layer 本身 pointer-events:none，空白处点击照旧穿透到本拖拽条，拖动不受影响。 */ }
+.pb-drag:active { cursor: grabbing; }
+.pb-title { position: absolute; top: 0; left: 0; right: 0; height: 30px; text-align: center; font-size: 15px; font-weight: 700;
+  color: #ffd479; text-shadow: 0 1px 2px #000; z-index: 6; pointer-events: none; letter-spacing: 1px;
+  display: flex; align-items: center; justify-content: center; }
+.pb-title-txt { display: inline-block; }
+.pb-close { position: absolute; top: 4px; right: 10px; width: 21px; height: 21px; padding: 0; border: 0;
+  background: url(../update/i18n/zh_CN/Resource/icons/panelbtnbg.png) center/contain no-repeat #f2a809;
+  color: #462708; cursor: pointer; z-index: 7; font-size: 12px; line-height: 1; overflow: hidden; }
+.pb-close-ic { position: absolute; left: 2px; top: 2px; width: 17px; height: 17px; object-fit: contain; pointer-events: none; }
+.pb-close-x { display: block; width: 21px; height: 21px; line-height: 21px; text-align: center; }
+.pb-close:hover { filter: brightness(1.15); }
+.pb-body { position: absolute; top: var(--pb-corner-t-h); bottom: var(--pb-corner-b-h); left: var(--pb-corner-t-w); right: var(--pb-corner-t-w); overflow: auto;
+  background: rgba(255,255,255,.06); border: 1px solid #3a466a; border-radius: 6px; padding: 12px; box-sizing: border-box; }
+.pb-btns { position: absolute; bottom: 10px; left: 0; right: 0; display: flex; gap: 8px; justify-content: center; z-index: 6; }
+.pb-btn { padding: 6px 16px; border: 0; border-radius: 6px; background: #34507a; color: #fff; cursor: pointer; font-size: 13px; }
+.pb-btn:hover { filter: brightness(1.15); }
+
+/* 模态黑遮罩（对齐 AS3 MallPanel.bgBlackSp：isBgBlackSp 面板打开时叠加全屏半透明黑遮罩，
+   setChildIndex(numChildren-2) ⇒ 置于「本面板正下方」：既盖住世界 / 其它面板（模态），又不盖住本面板。
+   z-index 由 JS 动态设为「面板 zIndex-1」，此处仅作兜底层级。 */
+.pb-black-sp { position: absolute; inset: 0; z-index: 1; background: rgba(0,0,0,.5); pointer-events: auto; }
+
+/* 面板内容通用件 */
+.attr-grid { display: grid; grid-template-columns: 84px 1fr; gap: 8px 12px; font-size: 14px; }
+.attr-grid .attr-k { color: #8b95b8; }
+.attr-grid .attr-v { color: #e7e9f0; }
+.empty-tip { color: #6b7494; text-align: center; padding: 20px; }
+.empty-tip.sm { padding: 6px 0; font-size: 12px; }
+.item-list, .quest-list { display: flex; flex-direction: column; gap: 8px; }
+.item-row { display: flex; gap: 10px; align-items: center; padding: 8px; background: rgba(0,0,0,.25); border-radius: 8px; }
+.item-icon, .skill-icon { width: 44px; height: 44px; border-radius: 6px; background: #1a2138; object-fit: contain; flex: none; }
+.item-meta { flex: 1; min-width: 0; }
+.item-name { font-size: 14px; font-weight: 600; }
+.item-desc { font-size: 12px; color: #9aa3c0; }
+.mp-cost { font-size: 11px; color: #5ad0ff; margin-left: 6px; }
+.item-use { padding: 6px 12px; border: 0; border-radius: 6px; background: #2f7d4f; color: #fff; cursor: pointer; }
+.quest-row { padding: 10px; background: rgba(0,0,0,.25); border-radius: 8px; }
+.quest-name { font-size: 14px; font-weight: 600; }
+.quest-status { font-size: 12px; color: #ffb74d; }
+.quest-desc { font-size: 12px; color: #9aa3c0; margin: 4px 0 8px; }
+
+/* 调试面板 */
+.dbg-section { margin-bottom: 12px; }
+.dbg-h { font-size: 13px; font-weight: 700; color: #ffd479; margin-bottom: 6px; border-bottom: 1px solid #3a466a; padding-bottom: 4px; }
+.dbg-grid { display: flex; flex-wrap: wrap; gap: 6px; }
+.dbg-info { font-size: 12px; color: #9aa3c0; line-height: 1.7; }
+
+/* ── 对话（img16.png 金边羊皮纸标题条） ── */
+.dialog { position: absolute; left: 50%; bottom: 90px; transform: translateX(-50%); width: 460px; max-width: 92vw;
+  background: rgba(18,24,41,.92); border: 1px solid #2c3656; border-radius: 12px; padding: 0; overflow: hidden; }
+.dialog.hidden { display: none; }
+.dialog-header { position: relative; width: 100%; height: 54px;
+  background: url('../update/GameWorld/images/img16.png') no-repeat center / 100% 100%; display: flex; align-items: center; justify-content: center; }
+.dialog-header img { display: none; }
+.dialog-header .dialog-name { position: relative; font-weight: 700; font-size: 16px; color: #5a3a10; text-shadow: 0 1px 0 rgba(255,255,255,.4); }
+.dialog-body { display: flex; gap: 12px; padding: 14px; }
+.dialog-portrait img { width: 64px; height: 64px; border-radius: 8px; background: #1a2138; object-fit: cover; }
+.dialog-main { flex: 1; }
+.dialog-text { font-size: 13px; color: #c5cce6; margin-bottom: 10px; }
+.dialog-actions button, .quest-actions button, .item-use { padding: 6px 14px; border: 0; border-radius: 6px;
+  background: #34507a; color: #fff; cursor: pointer; margin-right: 6px; }
+.dialog-actions button:hover { filter: brightness(1.15); }
+
+/* ───────────────────────── 战斗舞台（对齐 BattleScene.as：800×600 + 分层） ───────────────────────── */
+#battle-layer { position: absolute; inset: 0; z-index: 8; background: transparent;
+  display: flex; align-items: center; justify-content: center; }
+#battle-layer.hidden { display: none; }
+/* 战斗舞台：透明（主城世界从 #battle-layer 之下透出）；pre 态隐藏，移除 pre 后播 battleFadeIn 出现动画 */
+.battle-stage { position: absolute; inset: 0; z-index: 1; border-radius: 0; overflow: hidden;
+  box-shadow: none; background: transparent; }
+.battle-stage.pre { opacity: 0; visibility: hidden; pointer-events: none; }
+.battle-stage:not(.pre) { animation: battleFadeIn .5s ease both; }
+/* 入场淡入（对齐 AS3 BattleScene.paint：alphaMultiplier 渐变把主场景淡入为战斗背景）*/
+@keyframes battleFadeIn { from { opacity: 0; transform: scale(.985); } to { opacity: 1; transform: scale(1); } }
+/* 战斗背景画布：#battle-layer 直接子节点（z-index:0 在舞台之下），承载多层透明叠加的 battle_background，
+   世界从画布透明处透出（对齐 AS3 paint() 先 draw 主场景、再反复叠 battle_background 的透明叠加）*/
+.battle-bg { position: absolute; inset: 0; z-index: 0; pointer-events: none; width: 100%; height: 100%; }
+.battle-characterLayer { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 2; }
+/* ★ characterLayer 必须是独立堆叠上下文（z-index:2）：否则其内 z=10000+groundY 的角色/技能/表现动画
+   会越过本层、直接与各 UI 层（numberLayer:65 伤害数字 / skillName:60 / chatLayer:70 / state:56…）比大小，
+   把伤害数字与技能横幅压在身下。设为堆叠上下文后，层内深度排序照旧，对 UI 层整体在下方。*/
+.battle-characterLayer .fighter-canvas { pointer-events: none; }
+.battle-characterLayer .enemy-side .fighter-canvas,
+.battle-characterLayer .fighter.enemy .fighter-canvas { pointer-events: none; }
+/* 飘字层（血蓝怒数字）移到技能声明面板(z:60)之上，确保伤害/回血数字不被施法名横幅遮住 */
+.battle-numberLayer { position: absolute; inset: 0; pointer-events: none; z-index: 65; }
+/* 施法名横幅：对齐 AS3 BattleSprite —— 以真实 battleskill.png（115×67）作底图、纯技能名文字（无图标），
+   12px 粗体黑色居中；left/top 由 _showSkillName 按释放者头顶坐标动态设置。 */
+.battle-skillName { position: absolute; transform: translateX(-50%); opacity: 0;
+  width: 115px; height: 67px; z-index: 60; pointer-events: none; white-space: nowrap;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px; font-weight: 700; color: #1a0a00; text-align: center;
+  background-image: var(--battle-btn-skill, none);
+  background-size: 100% 100%; background-repeat: no-repeat; background-position: center;
+  transition: opacity .2s; }
+.battle-skillName.show { opacity: 1; animation: skillNameIn .42s ease-out; }
+/* 施法名横幅入场动画（对齐原客户端施法名弹入）：轻微放大回弹 + 上浮定格 */
+@keyframes skillNameIn {
+  0%   { opacity: 0; transform: translateX(-50%) translateY(14px) scale(.85); }
+  35%  { opacity: 1; transform: translateX(-50%) translateY(0) scale(1.06); }
+  100% { opacity: 1; transform: translateX(-50%) translateY(0) scale(1); }
+}
+.battle-skip, .battle-escape { position: absolute; top: 12px; padding: 6px 12px; border: 1px solid #34507a; border-radius: 6px;
+  background: rgba(35,44,70,.9); color: #cdd6f5; font-size: 12px; cursor: pointer; z-index: 55; }
+.battle-skip { left: 12px; }
+.battle-escape { right: 12px; }
+.battle-skip:hover, .battle-escape:hover { filter: brightness(1.2); }
+/* 战斗指令条：对齐 AS3 BattlePanel（89×350），竖直居中于屏幕右侧 */
+.battle-cmd { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); width: 89px; height: 350px; padding: 0; z-index: 56;
+  pointer-events: auto;
+  background-image: var(--battle-panel-bg, none);
+  background-size: auto; background-repeat: no-repeat; background-position: center; background-color: transparent; }
+/* 主指令行：按钮按 AS3 布局绝对定位（x 居中于 89px 面板并带轻微错落，y=index*25+42） */
+.battle-cmd-row { position: relative; width: 100%; height: 100%; }
+/* 技能/道具子条：独立弹层（对齐 AS3 PetSkillItemList 的滚动面板），浮于指令条左侧、限高可竖滚；
+   脱离 89px 指令条宽度限制，按钮正常流布局互不重叠、可逐一点击。 */
+.battle-cmd-row.sub {
+  position: absolute; right: 96px; top: 50%; transform: translateY(-50%);
+  width: 184px; max-height: 350px; z-index: 57;
+  display: flex; flex-direction: column; gap: 5px; align-items: stretch;
+  overflow-y: auto; overflow-x: hidden;
+  padding: 6px;
+  background: rgba(12,16,30,.94);
+  border: 1px solid #2a3350;
+  border-radius: 6px;
+  box-shadow: 0 4px 16px rgba(0,0,0,.5);
+  scrollbar-width: thin;
+  scrollbar-color: #4a557a transparent;
+}
+.battle-cmd-row.sub::-webkit-scrollbar { width: 7px; }
+.battle-cmd-row.sub::-webkit-scrollbar-thumb { background: #4a557a; border-radius: 4px; }
+.battle-cmd-row.sub::-webkit-scrollbar-track { background: transparent; }
+/* 战斗药品格子面板：和背包同款格子（.bag-cell）+ 悬浮窗（showItemTip），浮于指令条左侧、限高可竖滚 */
+.battle-item-panel {
+  position: absolute; right: 100px; top: 50%; transform: translateY(-50%);
+  width: 252px; max-height: 360px; z-index: 58;
+  display: flex; flex-direction: column; gap: 6px;
+  padding: 8px; box-sizing: border-box;
+  background: rgba(12,16,30,.96);
+  border: 1px solid #ffd479; border-radius: 8px;
+  box-shadow: 0 6px 20px rgba(0,0,0,.55);
+  pointer-events: auto;
+}
+.bip-head { display: flex; justify-content: space-between; align-items: center;
+  color: #ffd479; font-size: 13px; font-weight: 700; padding: 0 2px 5px; border-bottom: 1px solid #3a466a; }
+.bip-close { width: 20px; height: 20px; padding: 0; border: 1px solid #2a3350; border-radius: 5px;
+  background: #131c30; color: #9fb0d8; font-size: 13px; line-height: 1; cursor: pointer; }
+.bip-close:hover { border-color: #ffd479; color: #ffd479; }
+.bip-grid { display: grid; grid-template-columns: repeat(6, 37px); gap: 2px; align-content: start;
+  overflow-y: auto; overflow-x: hidden; max-height: 300px; padding: 4px 0 0;
+  scrollbar-width: thin; scrollbar-color: #4a557a transparent; }
+.bip-grid::-webkit-scrollbar { width: 7px; }
+.bip-grid::-webkit-scrollbar-thumb { background: #4a557a; border-radius: 4px; }
+.bip-grid::-webkit-scrollbar-track { background: transparent; }
+/* 主指令按钮：对齐 AS3 AutoButton（bw=50 / bh=20）。
+   AS3 默认态仅显示 text_battle_* 文字图（无背景），鼠标移过才叠 battlebtnbgroll.png 翻转高亮。
+   故默认 background-image=none，悬停才切 roll；x 居中于面板带轻微错落，y=index*25+42。 */
+.battle-cmd-row:not(.sub) > .battle-cmd-btn { position: absolute; width: 50px; height: 20px; padding: 0; border: none; border-radius: 0;
+  overflow: visible; background-color: transparent;
+  color: #3a2a10; font-size: 12px; font-weight: 700; text-align: center; cursor: pointer; text-shadow: 0 1px 0 rgba(255,255,255,.45); }
+/* 悬停翻转皮 battlebtnbgroll.png（原生 52×34）：以 ::before 按原生尺寸居中显示，
+   超出 50×20 按钮框也不裁剪（对齐 AS3 按钮皮略大于点击区；背景图会被元素框裁切，故用伪元素溢出展示） */
+.battle-cmd-row:not(.sub) > .battle-cmd-btn::before {
+  content: ''; position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
+  width: 52px; height: 34px; z-index: 0; pointer-events: none; opacity: 0;
+  background-image: var(--battle-btn-bg-roll); background-size: auto; background-repeat: no-repeat; background-position: center; }
+.battle-cmd-row:not(.sub) > .battle-cmd-btn:hover::before { opacity: 1; filter: brightness(1.08); }
+/* 子条(技能/道具)按钮：正常流布局（可滚动、互不重叠、可点击）；铺满弹层宽度 */
+.battle-cmd-row.sub .battle-cmd-btn { position: relative; width: 100%; min-width: 0; height: auto; padding: 6px 8px; border: none; text-align: left;
+  background-image: none; background-color: transparent; color: #e8eefc; font-size: 13px; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 6px; }
+.battle-cmd-row.sub .battle-cmd-btn:hover { background-color: rgba(255,255,255,.08); filter: brightness(1.1); }
+.battle-cmd-btn .btn-bg { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: auto; height: auto; object-fit: contain; pointer-events: none; z-index: 0; }
+.battle-cmd-btn .txt { position: relative; z-index: 1; display: flex; align-items: center; gap: 6px; line-height: 1.4; }
+.battle-cmd-btn small { display: block; font-size: 10px; font-weight: 400; color: #9d6a1f; position: relative; z-index: 1; }
+.battle-cmd-btn.on { box-shadow: 0 0 10px rgba(255,200,120,.6); }
+/* 禁用态（对齐 AS3 AutoButton.updateTextImg(false)：文字图已换 text_battle_*2.png 禁用变体，
+   故只压暗 + 拦截悬停高亮皮，不再额外灰度处理；不用 disabled 属性以保留点击时的 toast 反馈） */
+.battle-cmd-row:not(.sub) > .battle-cmd-btn.off { opacity: .55; cursor: default; }
+.battle-cmd-row:not(.sub) > .battle-cmd-btn.off:hover { filter: none; }
+.battle-cmd-row:not(.sub) > .battle-cmd-btn.off:hover::before { opacity: 0; }
+.battle-cmd-btn:disabled { opacity: .45; cursor: not-allowed; filter: grayscale(.6); }
+/* 指令按钮标签：真实 text_battle_* 文字图（对齐 AS3 BattlePanel AutoButton 第二参）；图缺失时 onerror 回退中文文本。
+   无缩放：width/height 均为 auto，按图源原生像素 1:1 显示（原图约 32×17，源本身低分辨率，不再强制 18px 二次放大而发虚）。 */
+.battle-cmd-btn .cmd-ic { display: block; margin: 0 auto; width: auto; height: auto; max-width: 100%; pointer-events: none; position: relative; z-index: 1; }
+.float-num { position: absolute; transform: translateX(-50%); font-size: 22px; font-weight: 800;
+  text-shadow: 0 2px 4px #000; animation: floatUp 0.9s ease-out forwards; }
+/* 数值飘字（数字图片版，对齐 AS3 UtilUpdater02.updateHpMpSpNumber）：
+   由 battle{hp|mp|sp}{数字|nega|plus}.png 逐位横向拼接；上浮由 JS 按类型设置 transition
+   （HP -110px/1150ms、MP -75px/1050ms、SP -40px/950ms） */
+.battle-num { position: absolute; display: flex; align-items: center; pointer-events: none; white-space: nowrap;
+  will-change: top; }
+.battle-num-img { display: block; flex: 0 0 auto; }
+/* 暴击数字：AS3 UtilUpdater02.updateHpMpSpNumber 仅 setSacle(1.3,1.3)，无发光滤镜；
+   原金色 drop-shadow 发光为非 AS3 效果，已移除；缩放由 _floatNumber 设 transform:scale(1.3)。 */
+
+/* ── 头顶聊天气泡（照搬 AS3 face/PromptFace.as + component/BottomPrompt.as）──
+   圆角矩形+底中三角融合为同一条 path，黄线描边作用于融合轮廓；显示于血条与技能声明面板之上。 */
+.battle-chatLayer { position: absolute; inset: 0; pointer-events: none; z-index: 70; }
+.chat-stack {
+  position: absolute; transform: translate(-50%, -100%);
+  width: max-content;   /* 关键：地图场景气泡挂在 fig.el(0×0 脚底锚)下，abspos 含块宽=0 会收缩成1字宽竖条；max-content 让栈按内容(气泡)定宽，不被 0×0 含块压扁 */
+  display: flex; flex-direction: column; gap: 4px; align-items: center;
+  pointer-events: none; z-index: 70;
+}
+.bubble {
+  position: relative; max-width: 156px;
+  padding: calc(6px * var(--bubble-ps, 1.3)) calc(10px * var(--bubble-ps, 1.3)) calc(10px * var(--bubble-ps, 1.3)) calc(6px * var(--bubble-ps, 1.3));
+  color: #fff; font-size: 12px; line-height: 1.35;    /* FACE 文本框硬性 <font size=12> */
+  text-align: left; white-space: pre-wrap; word-break: break-word;
+  animation: chatPop .14s ease-out;
+}
+.bubble-bg { position: absolute; left: 0; top: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; z-index: 0; }
+.bubble-bg path { stroke: rgb(224, 230, 137); stroke-width: 1; }   /* lineStyle(1,14739081,1) 作用于融合轮廓 */
+.bubble-txt { position: relative; z-index: 1; }
+@keyframes chatPop { from { transform: translateY(6px) scale(.92); opacity: 0; } to { transform: none; opacity: 1; } }
+/* 当前操控对象高亮（宠物手动操控：点立绘切换操控时，明确标出"正在操控谁"） */
+.fighter-ctrl { filter: drop-shadow(0 0 5px rgba(255,215,120,.95)) drop-shadow(0 0 11px rgba(255,180,50,.65)); }
+@keyframes floatUp {
+  0%   { opacity: 0; transform: translate(-50%, 8px) scale(1.4); }
+  18%  { opacity: 1; transform: translate(-50%, 0) scale(1); }
+  100% { opacity: 0; transform: translate(-50%, -52px) scale(1); }
+}
+
+/* ── 战斗分层（严格对齐 AS3 BattleScene.as 的 addChild 顺序）── */
+.battle-holySoulDown { position: absolute; inset: 0; z-index: 1; pointer-events: none;
+  background: radial-gradient(ellipse at 50% 64%, rgba(120,90,200,.10), transparent 60%); }
+.battle-characterLayer { z-index: 2; }
+.battle-holySoulUp { position: absolute; inset: 0; z-index: 3; pointer-events: none;
+  background: radial-gradient(ellipse at 50% 40%, rgba(90,200,255,.10), transparent 55%); }
+.battle-areaSkill { position: absolute; inset: 0; z-index: 6; pointer-events: none; }   /* 区域技能/地面特效层 */
+.battle-perfect { position: absolute; inset: 0; z-index: 9; pointer-events: none; }      /* 完美/暴击闪光层 */
+
+/* 战斗状态层：回合横幅 + 倒计时（对齐 showCountImg / updateTimerField）*/
+.battle-state { position: absolute; top: 8px; left: 50%; transform: translateX(-50%); z-index: 56;
+  display: flex; flex-direction: column; align-items: center; gap: 4px; pointer-events: none; }
+.battle-round { font-size: 14px; font-weight: 700; color: #cdd6f5; text-shadow: 0 1px 2px #000;
+  background: rgba(0,0,0,.4); padding: 3px 14px; border-radius: 14px; border: 1px solid #34507a; }
+.battle-round.pop { animation: roundPop 1.6s ease forwards; }
+@keyframes roundPop { 0% { opacity: 0; transform: translateY(-8px) scale(.9); } 18% { opacity: 1; transform: translateY(0) scale(1); } 100% { opacity: 1; transform: translateY(0) scale(1); } }
+.battle-timer { font: 700 13px/1 ui-monospace, Menlo, Consolas, monospace; letter-spacing: 1px;
+  color: #ffd479; background: rgba(0,0,0,.4); padding: 2px 10px; border-radius: 10px; border: 1px solid #34507a; }
+.battle-timer.low { color: #ff7a7a; border-color: #b5402f; }
+/* 底部系统提示（对齐 AS3 face/PromptFace.as::setBottomPromptText → component/BottomPrompt.as）
+   AS3 原始规格：_bottomPrompt = new BottomPrompt(false, 16)；x = (800-180)/2 = 310；y = 600-100 = 500；
+     setPromptText(text, 220, false, 0) ⇒ 宽 220 / 字号 16 / 白字 / 半透明黑填充(0x000000, alpha .5) / 直角 / 无描边；
+     文本框 x=6 y=6 宽 220-16=204，背景高 = textHeight+16。
+   Web 端舞台自适应尺寸（#viewport inset:0），故等效还原为「底部居中 + 距底 44px」
+   （AS3 框顶 500 + 框高约 56 = 556，距 600 底约 44px）；内边距 8px 使内容宽恰为 204，与 AS3 一致。 */
+.battle-bottomPrompt { position: absolute; left: 50%; bottom: 44px; transform: translateX(-50%); z-index: 58;
+  width: 220px; box-sizing: border-box; padding: 8px; text-align: center;
+  font-size: 16px; line-height: 1.25; color: #fff; background: rgba(0,0,0,.5);
+  opacity: 0; transition: opacity .18s; pointer-events: none; }
+.battle-bottomPrompt.show { opacity: 1; }
+
+/* ── Toast ── */
+.toast { position: absolute; left: 50%; top: 30%; transform: translate(-50%, -10px); opacity: 0; transition: all .3s;
+  background: rgba(0,0,0,.8); padding: 10px 18px; border-radius: 8px; border: 1px solid #ffb74d; color: #ffd479; z-index: 50;
+  pointer-events: none; }   /* 纯提示，不拦截 elementFromPoint（否则会盖住装备槽拖拽落点） */
+.toast.show { opacity: 1; transform: translate(-50%, 0); }
+
+/* ── 角色面板：PlayerPanel 卡 + 5 子面板 TabView（装备/属性/守护/徽章/元神）── */
+.char-head { display: flex; gap: 14px; padding: 14px; border: 1px solid #2a3350; border-radius: 10px; margin-bottom: 10px; }
+.char-portrait { width: 84px; height: 84px; border-radius: 10px; background: #0c1322; border: 1px solid #ffb74d; overflow: hidden; flex: none; }
+.char-portrait-img { width: 100%; height: 100%; object-fit: cover; }
+.char-meta { flex: 1; min-width: 0; }
+.char-name { font-size: 20px; font-weight: 700; color: #ffd479; }
+.char-idline { display: flex; align-items: baseline; gap: 8px; margin-bottom: 8px; }
+.char-prof { color: #7ec8ff; font-size: 13px; font-weight: 600; padding: 1px 8px; border: 1px solid #2f5f86; border-radius: 10px; background: rgba(46,95,134,.22); }
+.char-level { color: #9aa3c0; font-size: 13px; }
+.char-bars { display: flex; flex-direction: column; gap: 6px; }
+.mini-bar { position: relative; height: 16px; border-radius: 8px; background: #0c1322; overflow: hidden; border: 1px solid #2a3350; }
+.mini-bar i { position: absolute; inset: 0; width: 0; }
+.mini-bar.hp i { background: linear-gradient(90deg,#e23b3b,#ff6b6b); }
+.mini-bar.mp i { background: linear-gradient(90deg,#2f7bff,#5ad0ff); }
+.mini-bar.exp i { background: linear-gradient(90deg,#caa23a,#ffd479); }
+.mini-bar span { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 11px; color: #fff; text-shadow: 0 1px 2px #000; }
+
+/* 主 TabView：背景 panelnoselect/panelselect，标签图 textpanelplayer* */
+.char-tabs { display: flex; flex-wrap: wrap; gap: 2px; padding: 0 12px; }
+.char-tab { width: 78px; height: 30px; padding: 0; border: 0; border-radius: 4px 4px 0 0;
+  background-color: transparent; background-size: 100% 100%; background-repeat: no-repeat; background-position: center;
+  color: #cdd3ea; cursor: pointer; font-size: 13px; display: inline-flex; align-items: center; justify-content: center; }
+.char-tab.on { color: #fff; }
+.tabimg { max-height: 18px; max-width: 64px; object-fit: contain; pointer-events: none; }
+
+.char-sub { padding: 12px 14px 14px; border-top: 1px solid #2a3350; max-height: 372px; overflow-y: auto; }
+.sub-cap { color: #ffd479; font-size: 14px; margin-bottom: 6px; }
+.sub-cap code, .sub-field b code { color: #5ad0ff; }
+.sub-note { color: #9aa3c0; font-size: 12px; line-height: 1.5; margin-bottom: 10px; }
+.sub-field { display: flex; justify-content: space-between; gap: 10px; padding: 6px 0; border-bottom: 1px dashed #2a3350; font-size: 13px; }
+.sub-field span { color: #9aa3c0; }
+.sub-field b { color: #cdd3ea; }
+.sec-h { color: #ffd479; font-size: 14px; margin: 8px 0 6px; border-left: 3px solid #ffb74d; padding-left: 8px; }
+
+/* 属性(ViewProperty，对齐 人物属性.html「属性」页)：左数值网格 + 右角色信息 + 主属性五格 + 操作 + 经验/称号 */
+.char-sub.prop-mode, .char-sub.xin-mode { max-height: 470px; }
+.ap-wrap { font-size: 12px; color: #cdd3ea; }
+.ap-main { display: flex; gap: 10px; margin-bottom: 10px; }
+.ap-stats { flex: 1.5; border: 1px solid #2a3350; border-radius: 8px; padding: 6px 10px; font-size: 12px; line-height: 22px; }
+.ap-stats .ar { display: flex; justify-content: space-between; }
+.ap-stats .ar b { color: #ffd479; font-weight: 600; }
+.ap-info { flex: 1; border: 1px solid #2a3350; border-radius: 8px; padding: 6px 10px; font-size: 12px; line-height: 22px; }
+.ap-info .ai { display: flex; justify-content: space-between; }
+.ap-info .ai b { color: #ffd479; font-weight: 600; }
+.ap-prim { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; margin-bottom: 10px; }
+.ap-prim-cell { border: 1px solid #2a3350; border-radius: 8px; padding: 4px 6px; text-align: center; font-size: 12px; }
+.ap-prim-cell .lbl { font-size: 11px; color: #9aa3c0; }
+.ap-prim-cell .val { font-size: 16px; font-weight: 700; color: #ffd479; }
+.ap-prim-cell .ctrl { display: flex; justify-content: space-between; margin-top: 2px; }
+.ap-prim-cell .ctrl button { width: 18px; height: 18px; background: #16203a; border: 1px solid #34507a; color: #cdd3ea; cursor: pointer; font-size: 13px; line-height: 16px; border-radius: 3px; }
+.ap-prim-cell .ctrl button:hover { border-color: #ffb74d; color: #ffd479; }
+.ap-prim-cell .ctrl button:disabled { color: #4a557a; cursor: not-allowed; }
+.ap-prim-actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin-bottom: 12px; }
+.ap-prim-actions button { height: 28px; padding: 0 12px; background: #16203a; border: 1px solid #34507a; color: #cdd3ea; cursor: pointer; letter-spacing: 2px; border-radius: 4px; }
+.ap-prim-actions button:hover { border-color: #ffb74d; color: #fff; }
+.ap-prim-actions button.primary { background: linear-gradient(180deg, #b53224, #7d1b13); border-color: #7d1b13; color: #fff5d4; font-weight: 700; }
+.ap-pot { color: #9aa3c0; font-size: 12px; align-self: center; }
+.ap-pot b { color: #ffd479; }
+.ap-expbar { display: flex; align-items: center; gap: 8px; font-size: 12px; border-top: 1px dashed #2a3350; padding-top: 8px; }
+.ap-exp-text { flex: 1; color: #cdd3ea; }
+.ap-input { width: 150px; height: 22px; border: 1px solid #34507a; color: #1e0600; padding: 0 6px; border-radius: 4px; }
+.ap-input:focus { outline: none; border-color: #ffb74d; }
+.ap-title-btn, .xin-learn { height: 22px; padding: 0 12px; background: #34507a; border: 1px solid #34507a; color: #fff; cursor: pointer; border-radius: 4px; font-weight: 600; }
+.ap-title-btn:hover { background: #436391; }
+
+/* 心法(ViewHeart 心法页，对齐 人物属性.html「心法」页)：上排5 + 中排5红 + 英勇描述 + 4技能 + 灵修/加持 + 底部升级 */
+.xin-wrap { font-size: 12px; color: #cdd3ea; }
+.xin-top, .xin-mid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; margin-bottom: 6px; }
+.xin-cell { aspect-ratio: 1 / 1; border: 1px solid #34507a; border-radius: 6px; color: #1e0600;
+  position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; overflow: hidden;
+  box-shadow: inset 0 0 0 1px rgba(255,183,77,.35), inset 0 0 8px rgba(0,0,0,.5); }
+.xin-cell.red { background: linear-gradient(180deg, rgba(180,60,50,.7) 0%, rgba(110,30,25,.85) 100%); border-color: #ff7aa0;
+  box-shadow: inset 0 0 0 1px rgba(255,160,170,.5), inset 0 0 10px rgba(0,0,0,.6); }
+.xin-cell img { max-width: 92%; max-height: 70%; flex: 1; object-fit: contain; pointer-events: none; }
+.xin-cell .xin-nm { font-size: 9px; line-height: 1; color: #1e0600; padding: 0 2px 2px; text-align: center; }
+.xin-cell .xin-empty { color: #1e0600; font-size: 11px; font-style: italic; }
+.xin-cell .xin-cost { position: absolute; right: 2px; bottom: 0; background: rgba(0,0,0,.7); color: #ffd479; font-size: 10px; padding: 0 4px; border-radius: 4px 0 0 0; font-weight: 700; }
+.xin-cell .xin-clock { position: absolute; right: 2px; top: 2px; width: 14px; height: 14px; border-radius: 50%;
+  background: radial-gradient(circle at center, #fff 30%, #b53224 70%); border: 1px solid #2a3350; }
+.xin-cell .xin-badge { position: absolute; left: 2px; bottom: 2px; background: rgba(0,0,0,.7); color: #fff5d4; font-size: 10px; font-weight: 700; padding: 0 3px; border-radius: 3px; }
+.xin-desc { font-size: 12px; line-height: 1.6; margin: 8px 0; color: #cdd3ea; }
+.xin-desc-title { color: #ffd479; font-weight: 700; font-size: 13px; }
+.xin-desc-text b { color: #ffd479; }
+.xin-desc-sub { color: #9aa3c0; font-size: 11px; }
+.xin-row4 { display: grid; grid-template-columns: repeat(4, 1fr) auto; gap: 6px; align-items: center; margin-top: 6px; }
+.xin-tag { width: 30px; height: 30px; border-radius: 4px; background: radial-gradient(circle, #fff 0%, #b53224 70%, #7d1b13 100%);
+  border: 1px solid #2a3350; color: #fff; text-align: center; line-height: 30px; font-weight: 700; font-size: 11px; margin-left: auto; }
+.xin-note { color: #9aa3c0; font-size: 12px; line-height: 1.6; background: #0c1322; border: 1px solid #2a3350; border-radius: 6px; padding: 6px 8px; margin-top: 8px; }
+.xin-foot { margin-top: 8px; border-top: 1px dashed #2a3350; padding-top: 6px; font-size: 12px; display: flex; align-items: center; flex-wrap: wrap; gap: 12px; }
+.xin-foot b { color: #ffd479; }
+.xin-upgrade { margin-left: auto; display: inline-flex; gap: 4px; align-items: center; flex-wrap: wrap; }
+.xin-in { width: 38px; height: 22px; border: 1px solid #34507a; text-align: center; color: #1e0600; border-radius: 4px; }
+.xin-learn { background: #7a3450; border: 1px solid #b53224; }
+.xin-learn:hover { filter: brightness(1.15); }
+
+/* 徽章(灵修开始等按钮)沿用 AS3 背景图 */
+.char-act { min-width: 72px; height: 30px; padding: 0 10px; border: 0; border-radius: 4px; cursor: pointer;
+  background-color: transparent; background-size: 100% 100%; background-repeat: no-repeat; background-position: center;
+  color: #fff; font-size: 13px; display: inline-flex; align-items: center; justify-content: center; }
+.char-act .tabimg { max-height: 16px; }
+
+/* 装备(ViewArm)：15 装备槽(panel_equipXX 底图) + 立绘 + 翅膀 + 八卦 */
+.arm-wrap { display: flex; gap: 14px; align-items: flex-start; position: relative; }
+.arm-avatar { width: 130px; height: 168px; border-radius: 8px; background: #0c1322; border: 1px solid #ffb74d; overflow: hidden; position: relative; flex: none; }
+.arm-av-img { width: 100%; height: 100%; object-fit: cover; }
+.arm-wing { position: absolute; left: 6px; bottom: 6px; font-size: 11px; padding: 2px 6px; border-radius: 10px; background: #2a3350; color: #6b7494; }
+.arm-wing.on { background: #3b6d11; color: #c0dd97; }
+.arm-bagua { position: absolute; right: 6px; top: 6px; font-size: 11px; padding: 2px 8px; border: 0; border-radius: 10px; background: #4a3a1a; color: #ffd479; cursor: pointer; }
+.arm-grid { flex: 1; display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.eq-slot { position: relative; border: 1px dashed #2a3350; border-radius: 8px; padding: 6px 4px 4px; text-align: center; min-height: 70px; }
+.eq-bg { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; pointer-events: none; }
+.eq-bgimg { max-width: 100%; max-height: 100%; opacity: .5; object-fit: contain; }
+.eq-ic { position: relative; width: 40px; height: 40px; margin: 2px auto 0; }
+.eq-ic-img { width: 100%; height: 100%; object-fit: contain; }
+.eq-nm { position: relative; font-size: 12px; color: #cdd3ea; margin-top: 4px; }
+.eq-st { position: relative; font-size: 11px; color: #5ad0ff; }
+.arm-bar { margin-top: 10px; display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+.arm-wing-lbl { color: #9aa3c0; font-size: 12px; cursor: pointer; }
+.arm-eqpow { font-size: 12px; color: #ffb74d; background: rgba(255,183,77,.08); border: 1px solid rgba(255,183,77,.25); padding: 3px 10px; border-radius: 10px; }
+
+/* 装备页底部：两个属性框（下拉切换 基础属性/物理/法术），严格读 Fighter 派生字段，对齐 js/entities/attrs.js */
+.arm-stat2 { display: flex; gap: 12px; margin-top: 10px; }
+.arm-stat2 .arm-stat-col { flex: 1; border: 1px solid #2a3350; border-radius: 8px; padding: 6px 10px; color: #1e0600; }
+.arm-stat2 .arm-stat-sel { display: block; width: 100%; margin-bottom: 6px; padding: 3px 6px;
+  border: 1px solid #34507a; border-radius: 6px; background: #16203a; color: #ffd479;
+  font-size: 12px; font-weight: bold; letter-spacing: 2px; text-align: center; text-align-last: center; cursor: pointer; }
+.arm-stat2 .arm-stat-sel:hover { border-color: #ffb74d; }
+.arm-stat2 .arm-stat-sel:focus { outline: none; border-color: #ffb74d; box-shadow: 0 0 0 1px rgba(255,183,77,.4); }
+.arm-stat2 .arm-stat-row { display: flex; justify-content: space-between; font-size: 12px; line-height: 20px; color: #1e0600; }
+.arm-stat2 .arm-stat-row span:last-child { color: #1e0600; font-weight: bold; }
+
+/* 装备页重构：角色动画居中 + 装备槽环绕（左列/右列/底排） */
+.char-sub.arm-mode { max-height: 460px; }
+.arm-root { display: flex; flex-direction: column; gap: 8px; }
+.arm-stage { position: relative; flex: 1; min-height: 300px; }
+.arm-col { position: absolute; top: 0; display: grid; grid-template-columns: repeat(2, 1fr); gap: 5px; width: 108px; }
+.arm-col.arm-left  { left: 0; }
+.arm-col.arm-right { right: 0; }
+.arm-col .eq-slot { min-height: 46px; padding: 3px 2px 2px; }
+.arm-col .eq-slot .eq-ic { width: 30px; height: 30px; }
+.arm-col .eq-slot .eq-nm { font-size: 11px; margin-top: 2px; }
+.arm-col .eq-slot .eq-st { font-size: 10px; }
+.arm-col .eq-slot .eq-bgimg { opacity: .35; }
+.arm-fig { position: absolute; left: 50%; top: 54%; transform: translate(-50%, -50%); z-index: 1; pointer-events: none; }
+.arm-fig .fighter { pointer-events: none; }
+.arm-fig .fighter-canvas canvas { filter: drop-shadow(0 4px 6px rgba(0,0,0,.45)); }
+.arm-bottom { position: absolute; left: 50%; bottom: 2px; transform: translateX(-50%); display: flex; flex-wrap: wrap; gap: 5px; justify-content: center; width: 300px; }
+.arm-bottom .eq-slot { width: 46px; min-height: 46px; padding: 3px 2px 2px; }
+.arm-bottom .eq-slot .eq-ic { width: 26px; height: 26px; }
+.arm-bottom .eq-slot .eq-nm { font-size: 11px; }
+.arm-bottom .eq-slot .eq-st { display: none; }
+.arm-bottom .eq-slot .eq-bgimg { opacity: .3; }
+
+/* 装备页换装弹层（点击 武器/衣服 槽弹出） */
+.eq-slot.pick { cursor: pointer; transition: background .12s, border-color .12s; }
+.eq-slot.pick:hover { border-color: #ffb74d; background: #16203a; }
+.arm-menu { position: absolute; z-index: 60; left: 50%; top: 18px; transform: translateX(-50%); width: 244px; max-height: 322px; overflow-y: auto;
+  border: 1px solid #34507a; border-radius: 10px; padding: 8px; box-shadow: 0 10px 28px rgba(0,0,0,.55); color: #1e0600; }
+.arm-menu-h { display: flex; align-items: center; justify-content: space-between; color: #1e0600; font-size: 13px; margin-bottom: 6px; padding: 0 2px; }
+.arm-menu-x { background: #2a3350; border: 0; color: #1e0600; border-radius: 6px; cursor: pointer; width: 22px; height: 22px; line-height: 1; font-size: 13px; }
+.arm-menu-x:hover { background: #3a4a6a; }
+.arm-pick { display: flex; align-items: center; gap: 8px; width: 100%; text-align: left; background: #16203a; border: 1px solid #2a3350; color: #1e0600; border-radius: 8px; padding: 6px 8px; margin-bottom: 6px; cursor: pointer; }
+.arm-pick:hover { border-color: #5ad0ff; background: #1b2540; }
+.arm-pick.off { background: #3a2230; border-color: #7a3450; color: #1e0600; }
+.arm-pick.off:hover { border-color: #ff7aa0; background: #45243a; }
+.arm-pick-ic { width: 28px; height: 28px; object-fit: contain; flex: none; }
+.arm-pick-nm { font-size: 13px; flex: 1; }
+.arm-pick-st { font-size: 11px; color: #1e0600; flex: none; }
+.arm-menu-empty { font-size: 12px; color: #1e0600; padding: 6px 4px; }
+
+/* 道具悬浮详情（装备页槽位 + 背包格共用） */
+.item-tip { position: absolute; z-index: 200; max-width: 220px; display: none; pointer-events: none;
+  border: 1px solid #34507a; border-radius: 8px; padding: 8px 10px; box-shadow: 0 10px 28px rgba(0,0,0,.55); color: #1e0600; }
+.itip-h { font-size: 13px; color: #1e0600; display: flex; align-items: center; gap: 8px; }
+.itip-t { font-size: 11px; color: #1e0600; border: 1px solid #2a3350; border-radius: 8px; padding: 0 6px; }
+.itip-lv { font-size: 11px; color: #1e0600; margin: 4px 0; }
+.itip-lines { margin-top: 4px; }
+.itip-line { font-size: 12px; color: #1e0600; line-height: 1.6; }
+.itip-desc { font-size: 11px; color: #1e0600; margin-top: 6px; border-top: 1px solid #2a3350; padding-top: 6px; }
+/* AS3 原版富文本浮窗（对齐 deobfuscated/component/BottomPrompt.as setInfoText(text, 360, false)）：
+   深 色 半 透 明 底、描边色 14739081(≈#E0E689)、白字默认、宽 = 内容宽（上限 360） */
+.item-tip-as3 { max-width: 360px; width: max-content; background: rgba(0, 0, 0, .65);
+  border: 1px solid #E0E689; border-radius: 6px; padding: 8px 12px; color: #fff;
+  font-size: 12px; line-height: 1.75; letter-spacing: .2px; box-shadow: 0 10px 26px rgba(0, 0, 0, .65); }
+.item-tip-as3 font { font-family: inherit; }
+/* ★ itip-* 原为深色字 #1e0600（配透明浅底）；浮窗改 .item-tip-as3 黑底后必须在同一作用域转浅色，
+     否则黑底深棕字不可读（技能浮窗与非装备物品的结构化兜底都走 .item-tip-as3） */
+.item-tip-as3 .itip-h { color: #fff; }
+.item-tip-as3 .itip-t { color: #c8d2e8; border-color: #5a6a8a; }
+.item-tip-as3 .itip-lv,
+.item-tip-as3 .itip-line,
+.item-tip-as3 .itip-desc { color: #d8d2c4; border-color: #5a6a8a; }
+
+/* 徽章(ViewBagde)：类型标签(panel_select) + 列表 + 详情(panel_item_bg + 4 框架) */
+.bagde-wrap { display: flex; flex-direction: column; gap: 10px; }
+.bagde-types { display: flex; gap: 6px; }
+.bd-type { width: 84px; height: 28px; border: 0; border-radius: 4px; cursor: pointer; color: #cdd3ea; font-size: 13px;
+  background-color: transparent; background-size: 100% 100%; background-repeat: no-repeat; background-position: center; display: inline-flex; align-items: center; justify-content: center; }
+.bd-type.on { color: #fff; }
+.bagde-list { display: flex; flex-wrap: wrap; gap: 6px; }
+.badge { display: inline-block; margin: 0; padding: 4px 10px; border-radius: 14px; font-size: 12px; border: 1px solid #2a3350; cursor: pointer; }
+.badge.got { background: #20283f; color: #ffd479; border-color: #ffb74d; }
+.badge.not { background: #161c2e; color: #4a557a; }
+.badge.sel { outline: 2px solid #5ad0ff; }
+.bagde-detail { display: flex; gap: 12px; border: 1px solid #2a3350; border-radius: 8px; padding: 10px; }
+.bd-bg { position: relative; width: 72px; height: 72px; flex: none; display: flex; align-items: center; justify-content: center; }
+.bd-bgimg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; opacity: .6; }
+.bd-ic { position: relative; width: 40px; height: 40px; object-fit: contain; }
+.bd-frames { flex: 1; display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.bd-f { background: #0c1322; border: 1px solid #2a3350; border-radius: 6px; padding: 6px 8px; }
+.bd-ft { color: #ffd479; font-size: 12px; }
+.bd-fv { color: #cdd3ea; font-size: 12px; margin-top: 2px; }
+
+/* 元神(ViewEssence)：4 分页 TabView + 消耗区 */
+.es-tabs { display: flex; gap: 4px; margin-bottom: 10px; }
+.es-tab { width: 78px; height: 30px; padding: 0; border: 0; border-radius: 4px 4px 0 0; cursor: pointer; color: #cdd3ea; font-size: 13px;
+  background-color: transparent; background-size: 100% 100%; background-repeat: no-repeat; background-position: center; display: inline-flex; align-items: center; justify-content: center; }
+.es-tab.on { color: #fff; }
+.es-consume { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; padding: 8px 10px; background: #0c1322; border: 1px solid #2a3350; border-radius: 8px; margin-bottom: 10px; }
+.es-c { color: #9aa3c0; font-size: 12px; }
+.es-body { margin-top: 4px; }
+.fe-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; }
+.fe-el { text-align: center; border: 1px solid #2a3350; border-radius: 8px; padding: 12px 4px; }
+.fe-n { color: #9aa3c0; font-size: 13px; }
+.fe-v { color: #ffd479; font-size: 18px; font-weight: 700; margin-top: 4px; }
+.tl-tree { display: flex; flex-wrap: wrap; gap: 8px; }
+.tl-node { padding: 6px 12px; border: 1px solid #ffb74d; border-radius: 16px; color: #ffd479; font-size: 13px; display: inline-flex; align-items: center; gap: 6px; }
+.tl-node.lock { border-color: #2a3350; color: #4a557a; }
+.tl-ic { width: 22px; height: 22px; object-fit: contain; }
+.dl-body, .ac-body { color: #cdd3ea; font-size: 14px; padding: 12px; border: 1px solid #2a3350; border-radius: 8px; line-height: 1.7; }
+.dl-body b, .ac-body b { color: #ffd479; }
+
+/* ── 背包网格（对齐 ItemPanel / PlayerItemPanel：gridMax=216，pageGridNum=36 → 6 页 × 36 格）──
+   每格底图 panel_item_bg(panelitembg.png)，选中高亮 item_select(panelitemselect.png)，
+   分页标签 text_panel_item_bag(textpanelitembag.png)。真实资产由 JS 注入为 CSS 变量。 */
+.bag-tabs { display: flex; gap: 4px; padding: 4px 0 0; align-items: center; }
+.bag-tab { position: relative; width: 34px; height: 26px; padding: 0; border: 1px solid #2a3350; border-radius: 6px; background: #0e1626; cursor: pointer; display: flex; align-items: center; justify-content: center; opacity: .7; transition: opacity .12s; }
+.bag-tab img { height: 12px; pointer-events: none; }
+.bag-tab .bag-pageno { position: absolute; right: 2px; bottom: 0; font-size: 9px; color: #9fb0d8; line-height: 1; }
+.bag-tab.on { border-color: #ffd479; opacity: 1; background: #1a2438; box-shadow: 0 0 0 1px #ffd479 inset; }
+.bag-grid { display: grid; grid-template-columns: repeat(6, 37px); gap: 2px; padding: 8px 0 0; align-content: start;
+  max-height: 244px; overflow-y: auto; overflow-x: hidden; }
+/* 六大类分类签（短名 + 计数） */
+.bag-cats { display: flex; flex-wrap: wrap; gap: 3px; padding: 2px 0 4px; }
+.bag-cat { position: relative; padding: 3px 7px; border: 1px solid #2a3350; border-radius: 6px; background: #0e1626; color: #9fb0d8;
+  font-size: 11px; cursor: pointer; display: flex; align-items: center; gap: 3px; }
+.bag-cat .bag-cat-n { font-size: 9px; color: #6d7fa8; }
+.bag-cat:hover { border-color: #4a5a86; }
+.bag-cat.on { border-color: #ffd479; color: #ffd479; background: #1a2438; }
+/* 二级明细 chips：「全部」+ 各子类（零物品子类不渲染） */
+.bag-subs { display: flex; flex-wrap: wrap; gap: 3px; padding: 0 0 2px; }
+.bag-sub { padding: 2px 8px; border: 1px solid #232c46; border-radius: 9px; background: #131c30; color: #8fa0c8; font-size: 10px; cursor: pointer; }
+.bag-sub .bag-sub-n { font-size: 9px; color: #5d6f96; margin-left: 2px; }
+.bag-sub:hover { border-color: #3d4f80; }
+.bag-sub.on { border-color: #7fa8ff; color: #cfe0ff; background: #1b2a4a; }
+.bag-empty { grid-column: 1 / -1; text-align: center; color: #6d7fa8; font-size: 12px; padding: 28px 0; }
+.bag-cell { position: relative; width: 37px; height: 37px; background-color: #0e1626; background-image: var(--bag-cell-bg); background-size: 100% 100%; background-repeat: no-repeat; border-radius: 4px; cursor: pointer; }
+.bag-cell.empty { cursor: default; }
+.bag-cell .bag-ic { width: 32px; height: 32px; object-fit: contain; position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); pointer-events: none; }
+.bag-cell .bag-count { position: absolute; right: 2px; bottom: 0; font-size: 11px; color: #ffd479; text-shadow: 0 1px 2px #000; pointer-events: none; }
+.bag-cell .bag-sel { position: absolute; inset: 0; background-image: var(--bag-sel-bg); background-size: 100% 100%; background-repeat: no-repeat; pointer-events: none; }
+    .bag-cell .bag-timer { position: absolute; left: 0; right: 0; bottom: 0; font-size: 9px; line-height: 12px; text-align: center; color: #8fd3ff; background: rgba(6,12,24,.72); text-shadow: 0 1px 2px #000; pointer-events: none; border-radius: 0 0 4px 4px; }
+.bag-actions { display: flex; gap: 8px; padding: 8px 0 4px; align-items: center; flex-wrap: wrap; }
+.bag-money { display: flex; align-items: center; gap: 6px; padding: 4px 2px 1px; font-size: 12px; color: #cdd6f4; }
+.bag-money .bag-money-ic { width: 18px; height: 18px; object-fit: contain; pointer-events: none; }
+.bag-money b { color: #ffd479; font-size: 15px; font-weight: 700; text-shadow: 0 1px 2px #000; }
+.bag-act { display: flex; align-items: center; gap: 4px; padding: 4px 10px; border: 1px solid #2a3350; border-radius: 6px; background: #16203a; color: #e7ecff; font-size: 12px; cursor: pointer; }
+.bag-act img { height: 16px; pointer-events: none; }
+.bag-act:hover { border-color: #ffd479; }
+.bag-act[disabled] { opacity: .45; cursor: not-allowed; }
+
+/* ── 背包/装备 拖拽跟随光标（对齐 AS3 cursorManager + LoadSprite 跟随光标）── */
+/* 抓取物品后生成的幽灵图标：fixed 定位 + translate(-50%,-50%) 居中于光标，pointer-events:none 不挡命中检测 */
+.item-drag-ghost {
+  position: fixed; left: 0; top: 0; width: 40px; height: 40px;
+  transform: translate(-50%, -50%); pointer-events: none; z-index: 99999;
+  object-fit: contain; opacity: .92; filter: drop-shadow(0 3px 6px rgba(0,0,0,.55));
+}
+/* 拖拽进行中：全局 grabbing 光标 + 禁止文本选中（避免误选面板文字） */
+body.item-dragging, body.item-dragging * { cursor: grabbing !important; user-select: none; }
+/* 装备格拖拽高亮：绿=类型匹配可装备，红=类型不符（对齐 AS3 showGrid 高亮命中格） */
+.eq-slot.pick.drop-ok {
+  border-color: #6fe07a !important; background: #16331c !important;
+  box-shadow: 0 0 0 2px rgba(111,224,122,.5) inset;
+}
+.eq-slot.pick.drop-bad {
+  border-color: #ff6b6b !important; background: #331616 !important;
+  box-shadow: 0 0 0 2px rgba(255,107,107,.45) inset;
+}
+
+/* ── 技能面板（对齐 PlayerSkillPanel2：顶部 7 功能分页 + 战斗页内左侧 8 心法导航）──
+   命名空间 sk2-*：与 HUD 技能热键栏的 .skill-slot/.skill-name 等彻底隔离。
+   ★ 旧版曾用 .skill-name/.skill-row 等，与 HUD 热键栏 .skill-name(position:absolute) 同名冲突导致行内错位，已全部改用 sk2-*。 */
+.sk2-tabs { display: flex; flex-wrap: wrap; gap: 4px; padding: 10px 14px 0; border-bottom: 1px solid #2a3350; }
+.sk2-tab { height: 28px; padding: 0 10px; border-radius: 8px 8px 0 0; border: 1px solid #2a3350; border-bottom: 0;
+  background: #161c2e; color: #9aa3c0; cursor: pointer; font-size: 13px; display: inline-flex; align-items: center; }
+.sk2-tab.on { background: #20283f; color: #ffd479; border-color: #ffb74d; }
+.sk2-tab.disabled { opacity: .4; cursor: not-allowed; text-decoration: line-through; }
+.sk2-tab-ic { height: 16px; object-fit: contain; pointer-events: none; }
+
+.sk2-body { padding: 10px 14px 14px; max-height: 372px; overflow-y: auto; }
+.sk2-fight { display: flex; gap: 10px; align-items: flex-start; }
+/* 左侧 8 心法导航（对齐 AS3 SkillButtonNav） */
+.sk2-nav { display: flex; flex-direction: column; gap: 6px; flex: none; width: 64px; }
+.sk2-nav-btn { width: 64px; height: 40px; padding: 0; border: 1px solid #2a3350; border-radius: 8px;
+  background: #161c2e; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+.sk2-nav-btn:hover { border-color: #ffb74d; }
+.sk2-nav-btn.on { background: #20283f; border-color: #ffb74d; box-shadow: 0 0 0 1px #ffb74d inset; }
+.sk2-nav-btn.empty { opacity: .45; }
+.sk2-nav-ic { max-width: 100%; max-height: 100%; object-fit: contain; pointer-events: none; }
+/* 右侧：心法标题 + 技能列表 */
+.sk2-main { flex: 1; min-width: 0; }
+.sk2-title { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+.sk2-title-ic { height: 20px; object-fit: contain; }
+.sk2-count { color: #9aa3c0; font-size: 11px; }
+.sk2-list { display: flex; flex-direction: column; gap: 8px; }
+.sk2-row { display: flex; gap: 10px; align-items: flex-start; padding: 8px; border-radius: 8px; border: 1px solid #2a3350; }
+.sk2-ic { width: 40px; height: 40px; object-fit: contain; flex: none; cursor: pointer; transition: filter .12s; }
+/* 对齐 AS3 Skill2Sprite.onMouseOver 的 UtilUtil03.setBrightness：悬停图标提亮 */
+.sk2-ic:hover { filter: brightness(1.3); }
+.sk2-meta { flex: 1; min-width: 0; }
+.sk2-name { color: #ffd479; font-size: 14px; font-weight: 600; }
+.sk2-lv { color: #6fe3a0; font-size: 12px; margin-left: 6px; font-weight: 400; }
+.sk2-mp { color: #5ad0ff; font-size: 12px; margin-left: 6px; font-weight: 400; }
+/* 熟练度进度条：对齐 AS3 ProgressBar(TYPE_NORMAL)——底槽 + state_collect_progressbar 进度脸图按比例裁剪 */
+.sk2-bar { position: relative; height: 14px; margin-top: 5px; border-radius: 7px; overflow: hidden;
+  background: #0c1322; border: 1px solid #2a3350; }
+.sk2-bar-face { position: absolute; left: 0; top: 0; bottom: 0; background-repeat: no-repeat; background-size: 100% 100%; }
+.sk2-bar-tx { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+  font-size: 10px; color: #e8edff; text-shadow: 0 1px 2px rgba(0,0,0,.9); pointer-events: none; }
+/* 底部：心法说明 + 职业擅长/技能经验 */
+.sk2-foot { margin-top: 10px; border-top: 1px dashed #2a3350; padding-top: 8px; }
+.sk2-desc { color: #9aa3c0; font-size: 12px; line-height: 1.6; }
+.sk2-desc b { color: #ffd479; }
+.sk2-exp { color: #9aa3c0; font-size: 12px; margin-top: 4px; }
+.sk2-exp b { color: #ffd479; }
+
+/* ── 任务面板：TaskListPanel 双标签树 + DescTaskPanel 详情 ── */
+.quest-tabs { display: flex; gap: 8px; padding: 12px 14px 0; }
+.quest-tab { padding: 6px 14px; border-radius: 8px 8px 0 0; border: 1px solid #2a3350; border-bottom: 0;
+  background: #161c2e; color: #9aa3c0; cursor: pointer; }
+.quest-tab.on { background: #20283f; color: #ffd479; border-color: #ffb74d; }
+.quest-tab-ic { height: 16px; vertical-align: middle; pointer-events: none; }
+.quest-btn-ic { height: 15px; vertical-align: middle; pointer-events: none; }
+.quest-extra { margin-left: auto; display: flex; gap: 6px; }
+.quest-split { display: flex; gap: 10px; padding: 12px 14px 14px; border-top: 1px solid #2a3350; }
+.quest-tree { flex: 1; max-height: 320px; overflow-y: auto; border-right: 1px solid #2a3350; padding-right: 8px; }
+.quest-node { display: flex; justify-content: space-between; padding: 8px 10px; border-radius: 6px; border: 1px solid #2a3350; margin-bottom: 6px; cursor: pointer; }
+.quest-node.on { border-color: #ffb74d; background: #20283f; }
+.qn-name { color: #e7e9f0; font-size: 13px; }
+.qn-prog { color: #9aa3c0; font-size: 12px; }
+.quest-detail { flex: 1; max-height: 320px; overflow-y: auto; }
+.qd-name { font-size: 16px; color: #ffd479; font-weight: 700; }
+.qd-status { color: #6fe3a0; font-size: 12px; margin: 4px 0; }
+.qd-desc { color: #cdd3ea; font-size: 13px; line-height: 1.5; }
+.qd-reward { color: #ffd479; font-size: 12px; margin: 8px 0; }
+.qd-acts { display: flex; gap: 8px; margin-top: 8px; }
+.pb-btn.ghost { background: #161c2e; border: 1px solid #2a3350; color: #9aa3c0; }
+
+/* ── 调试面板：运行期字段（对齐 DebugPanel 的 fpsField/mouseField/...）── */
+.dbg-runtime { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; padding: 12px 14px; }
+.dbg-field { display: flex; align-items: center; justify-content: space-between; gap: 8px;
+  border: 1px solid #2a3350; border-radius: 8px; padding: 8px 10px; font-size: 13px; }
+.dbg-field span { color: #9aa3c0; }
+.dbg-field b { color: #5ad0ff; }
+.dbg-field .pb-btn.ghost { font-size: 12px; padding: 3px 10px; }
+.dbg-section { padding: 6px 14px 14px; }
+.dbg-h { color: #ffd479; font-size: 13px; margin: 8px 0; border-left: 3px solid #ffb74d; padding-left: 8px; }
+.dbg-grid { display: flex; flex-wrap: wrap; gap: 8px; }
+.dbg-summon { background: #20283f; border-color: #ffb74d; }
+.dbg-catalog { max-height: 220px; overflow-y: auto; border: 1px solid #2a3350; border-radius: 8px; padding: 8px; }
+.catalog-group { margin-bottom: 10px; }
+.catalog-ghead { color: #9aa3c0; font-size: 12px; margin-bottom: 6px; }
+.catalog-grid { display: flex; flex-wrap: wrap; gap: 6px; }
+.cat-btn { font-size: 12px; padding: 4px 9px; }
+
+/* 调试开关：拨钮控件（替代原静态文字） */
+.dbg-toggle { position: relative; width: 46px; height: 22px; border-radius: 11px; border: 1px solid #2a3350;
+  background: #2a3350; cursor: pointer; padding: 0; display: inline-flex; align-items: center; transition: background .2s; }
+.dbg-toggle .dbg-knob { position: absolute; left: 2px; width: 16px; height: 16px; border-radius: 50%;
+  background: #9aa3c0; transition: left .2s, background .2s; }
+.dbg-toggle.on { background: #1f7a4d; border-color: #2fae6b; }
+.dbg-toggle.on .dbg-knob { left: 26px; background: #5affa0; }
+.dbg-toggle-txt { margin-left: auto; margin-right: 6px; font-size: 11px; color: #9aa3c0; line-height: 22px; }
+.dbg-toggle.on .dbg-toggle-txt { margin-left: 7px; margin-right: auto; color: #d6ffe8; }
+
+/* 常驻 DEBUG 浮标（调试开关开启时显示于屏幕左下） */
+.dbg-hud-overlay { position: absolute; left: 10px; bottom: 10px; z-index: 6;
+  background: rgba(10,14,28,.82); border: 1px solid #2fae6b; border-radius: 8px; padding: 7px 11px;
+  font: 12px/1.5 ui-monospace, Menlo, Consolas, monospace; color: #9aa3c0; min-width: 96px; }
+.dbg-hud-overlay.hidden { display: none; }
+.dbg-hud-overlay .dhud-row { display: flex; justify-content: space-between; gap: 10px; }
+.dbg-hud-overlay .dhud-row b { color: #5affa0; }
+
+
+/* ── AS3 面板（反编译结构视图）── */
+.as3-view { padding: 14px; font-size: 13px; line-height: 1.6; max-height: 400px; overflow-y: auto; }
+.as3-head { display: flex; justify-content: space-between; align-items: center; gap: 10px; margin-bottom: 8px; }
+.as3-title { font-size: 16px; font-weight: 600; color: #eaf0ff; }
+.as3-cls { font-size: 11px; font-weight: 400; color: #6b7494; margin-left: 6px; }
+.as3-tags { display: flex; gap: 6px; flex: none; }
+.as3-tag { font-size: 11px; padding: 2px 8px; border-radius: 10px; background: #1c2c4a; color: #9ad0ff; border: 1px solid #2a4a72; }
+.as3-tag.dim { background: #141a2c; color: #6b7494; border-color: #232c44; }
+.as3-pkg { color: #9aa3c0; margin: 4px 0; }
+.as3-pkg code, .as3-src code { color: #5ad0ff; background: #0c1322; padding: 1px 5px; border-radius: 4px; word-break: break-all; }
+.as3-chain { color: #cdd3ea; margin: 4px 0 10px; }
+.as3-chain b { color: #9aa3c0; font-weight: 500; margin-right: 4px; }
+.as3-sec { margin: 12px 0; border-top: 1px solid #1d2740; padding-top: 10px; }
+.as3-sec-h { color: #ffd479; font-size: 13px; font-weight: 500; margin-bottom: 6px; border-left: 3px solid #ffb74d; padding-left: 8px; }
+.as3-desc { color: #cdd3ea; white-space: pre-wrap; }
+.as3-note { color: #ffb74d; }
+.as3-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.as3-chip { font-size: 12px; padding: 2px 9px; border-radius: 6px; background: #16203a; color: #b7c6f0; border: 1px solid #2a3a5c; }
+.as3-flds { display: grid; grid-template-columns: repeat(2, 1fr); gap: 4px 14px; }
+.as3-fld { display: flex; gap: 4px; font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 12px; }
+.as3-fld-n { color: #cdd6f5; }
+.as3-fld-t { color: #7f8bb0; }
+.as3-mths { font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 12px; max-height: 220px; overflow-y: auto; border: 1px solid #1d2740; border-radius: 8px; padding: 6px 8px; color: #1e0600; }
+.as3-mth { color: #1e0600; padding: 2px 0; border-bottom: 1px dashed #18203a; }
+.as3-m-vis { color: #1e0600; margin-right: 4px; }
+.as3-m-params { color: #1e0600; }
+.as3-m-ret { color: #1e0600; }
+.as3-more { color: #1e0600; font-style: italic; margin-top: 4px; }
+.as3-extra { margin: 10px 0; display: flex; flex-direction: column; gap: 6px; }
+.as3-kv { color: #cdd3ea; font-size: 12px; }
+.as3-kv b { color: #9aa3c0; font-weight: 500; margin-right: 6px; }
+.as3-src { color: #9aa3c0; margin-top: 12px; border-top: 1px dashed #2a3350; padding-top: 8px; }
+.as3-domain-list { max-height: 200px; overflow-y: auto; border: 1px solid #2a3350; border-radius: 8px; padding: 6px; }
+.as3-row { display: flex; gap: 10px; align-items: baseline; padding: 5px 8px; border-radius: 6px; margin-bottom: 5px; }
+.as3-row b { color: #cdd6f5; font-weight: 500; flex: none; min-width: 92px; }
+.as3-row span { color: #9aa3c0; font-size: 12px; }
+.as3-row.more { color: #6b7494; background: transparent; justify-content: center; }
+
+/* ── 面板结构视图：UI 皮肤（face）段 ── */
+.as3-face { margin: 12px 0; border-top: 1px solid #1d2740; padding-top: 10px;
+  background: linear-gradient(180deg, rgba(255,183,77,.05), transparent); border-radius: 8px; padding: 10px 10px 12px; }
+.as3-face .as3-sec-h { color: #ffd479; border-left-color: #ffb74d; }
+.as3-face-kv { display: flex; flex-wrap: wrap; gap: 8px 14px; margin: 6px 0; }
+.as3-kv-item { font-size: 12px; color: #cdd3ea; }
+.as3-kv-item b { color: #9ad0ff; font-weight: 600; }
+.as3-kv-item code { color: #5ad0ff; background: #0c1322; padding: 1px 6px; border-radius: 4px; }
+.as3-res-list { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+.as3-res { font-size: 11px; padding: 2px 8px; border-radius: 6px; background: #16203a; color: #b7c6f0;
+  border: 1px solid #2a3a5c; font-family: ui-monospace, Menlo, Consolas, monospace; }
+
+/* ── 面板结构视图：可交互外壳 ── */
+.as3-tabs { display: flex; flex-wrap: wrap; gap: 6px; margin: 8px 0 4px; }
+.as3-tab { font-size: 12px; padding: 4px 12px; border-radius: 14px; cursor: pointer;
+  background: #141d33; color: #9fb0d8; border: 1px solid #2a3a5c; }
+.as3-tab.on { background: #2a3f66; color: #ffe9a8; border-color: #ffb74d; }
+.as3-body { margin-top: 4px; }
+.as3-actions { display: flex; flex-wrap: wrap; gap: 7px; }
+.as3-btn { font-size: 12px; padding: 5px 14px; border-radius: 8px; cursor: pointer; border: 0;
+  background: linear-gradient(180deg, #ffce7a, #f0a44e); color: #3a2410; font-weight: 600;
+  box-shadow: 0 1px 0 rgba(0,0,0,.3); }
+.as3-btn:hover { filter: brightness(1.06); }
+.as3-btn:active, .as3-btn.pressed { transform: translateY(1px); filter: brightness(.92); }
+.as3-btn.ghost { background: #16203a; color: #9ad0ff; border: 1px solid #2a4a72; }
+.as3-form { display: flex; flex-direction: column; gap: 7px; margin-top: 4px; }
+.as3-fld-row { display: flex; align-items: center; gap: 8px; font-size: 12px; color: #cdd3ea; }
+.as3-fld-n { min-width: 96px; color: #9aa3c0; }
+.as3-input { flex: 1; min-width: 0; padding: 4px 8px; border-radius: 6px;
+  color: #1e0600; border: 1px solid #2a3a5c; font-size: 12px; }
+.as3-input:focus { outline: none; border-color: #ffb74d; }
+.as3-fld-row select { padding: 4px 8px; border-radius: 6px; color: #1e0600; border: 1px solid #2a3a5c; }
+.as3-fval { color: #9ad0ff; font-family: ui-monospace, Menlo, Consolas, monospace; min-width: 34px; text-align: right; }
+.as3-list { display: flex; flex-direction: column; gap: 4px; }
+.as3-li { display: flex; gap: 8px; align-items: baseline; padding: 5px 8px; border-radius: 6px; font-size: 12px; }
+.as3-li b { color: #cdd6f5; font-weight: 500; flex: none; min-width: 120px; }
+.as3-li span { color: #9aa3c0; font-size: 12px; }
+.as3-struct { margin-top: 10px; border-top: 1px solid #1d2740; padding-top: 8px; }
+.as3-struct > summary { cursor: pointer; color: #ffd479; font-size: 13px; font-weight: 500; margin-bottom: 6px; }
+.as3-log { margin-top: 10px; border-top: 1px dashed #2a3350; padding-top: 8px; }
+.as3-log-empty { color: #6b7494; font-size: 12px; font-style: italic; }
+.as3-log-line { font-size: 12px; color: #9ad0ff; padding: 2px 0; border-bottom: 1px dashed #18203a; font-family: ui-monospace, Menlo, Consolas, monospace; }
+
+/* ───────────────────────── 真实游戏面板（商店/仓库/强化/伙伴/地图/图鉴/成就/设置/队伍/战报）───────────────────────── */
+.pb-btn.on { background: #1f7a4d; border-color: #2fae6b; }
+.pb-btn:disabled { opacity: .5; cursor: default; filter: none; }
+.hud-menu-sep { width: 1px; height: 16px; background: #2a3350; margin: 0 4px; align-self: center; }
+
+/* 仓库 */
+.wh-wrap { display: flex; gap: 10px; padding: 12px; height: 100%; box-sizing: border-box; }
+.wh-col { flex: 1; display: flex; flex-direction: column; min-width: 0; }
+.wh-h { color: #cdd6f5; font-size: 13px; margin-bottom: 6px; }
+.wh-list { flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 6px; padding-right: 4px; }
+.wh-row { display: flex; gap: 8px; align-items: center; padding: 6px; border-radius: 8px; border: 1px solid #2a3350; }
+.wh-icon { width: 30px; height: 30px; border-radius: 6px; object-fit: contain; }
+.wh-n { flex: 1; color: #cdd6f5; font-size: 12px; }
+
+/* 强化 / 锻造 */
+.forge-wrap { display: flex; gap: 10px; padding: 12px; height: 100%; box-sizing: border-box; }
+.forge-list { width: 150px; display: flex; flex-direction: column; gap: 6px; overflow-y: auto; }
+.forge-pick { padding: 7px 8px; border-radius: 6px; background: #161c2e; border: 1px solid #2a3350; color: #cdd6f5; cursor: pointer; font-size: 12px; text-align: left; }
+.forge-pick.on { background: #34507a; border-color: #3f5e8c; color: #fff; }
+.forge-detail { flex: 1; display: flex; flex-direction: column; gap: 8px; padding: 10px; border-radius: 8px; border: 1px solid #2a3350; }
+.forge-name { color: #cdd6f5; font-size: 15px; }
+.forge-lv { color: #ffb74d; }
+.forge-stat { color: #9aa3c0; font-size: 12px; }
+.forge-cost { color: #ffd479; font-size: 13px; }
+.forge-cost b { color: #ffe9b0; }
+
+/* 伙伴 / 召唤兽 */
+.pet-tabs, .quest-tabs { display: flex; gap: 6px; padding: 10px 12px 0; }
+.pet-tab { padding: 4px 12px; border-radius: 6px; background: #161c2e; border: 1px solid #2a3350; color: #9aa3c0; cursor: pointer; font-size: 12px; }
+.pet-tab.on { background: #34507a; color: #fff; border-color: #3f5e8c; }
+.pet-list { padding: 10px 12px; overflow-y: auto; max-height: 350px; display: flex; flex-direction: column; gap: 8px; }
+.pet-row { display: flex; gap: 10px; align-items: center; padding: 8px; border-radius: 8px; border: 1px solid #2a3350; }
+.pet-badge { width: 34px; height: 34px; border-radius: 50%; background: #2a3350; color: #ffd479; display: flex; align-items: center; justify-content: center; font-size: 16px; flex: none; }
+.pet-meta { flex: 1; min-width: 0; }
+.pet-name { color: #cdd6f5; font-size: 13px; }
+.pet-name span { color: #9ad0ff; font-size: 12px; }
+.pet-sub { color: #9aa3c0; font-size: 12px; }
+.pet-row.on { border-color: #ffb74d; box-shadow: 0 0 0 1px rgba(255,183,77,.4) inset; }
+.pet-state { color: #ffb74d; font-size: 11px; margin-left: 4px; padding: 1px 6px; border: 1px solid rgba(255,183,77,.5); border-radius: 8px; }
+.pet-battle-bar { display: flex; gap: 8px; padding: 8px 12px; border-bottom: 1px solid #2a3350; }
+.pet-battle-bar .pb-btn { flex: 1; }
+
+/* 怪物配置器 */
+.moncfg-wrap { display: flex; height: 460px; }
+.moncfg-list { width: 180px; flex: none; border-right: 1px solid #2a3350; padding: 10px; overflow-y: auto; display: flex; flex-direction: column; gap: 6px; }
+.moncfg-add { padding: 6px; border-radius: 6px; background: #2d4a2f; color: #b9f6ca; border: 1px solid #3f6e42; cursor: pointer; font-size: 12px; }
+.moncfg-item { text-align: left; padding: 7px 9px; border-radius: 6px; border: 1px solid #2a3350; color: #cdd6f5; cursor: pointer; font-size: 12px; display: flex; justify-content: space-between; align-items: center; }
+.moncfg-item.on { background: #34507a; border-color: #3f5e8c; color: #fff; }
+.moncfg-lv { color: #9ad0ff; font-size: 11px; }
+.moncfg-detail { flex: 1; padding: 12px; overflow-y: auto; }
+.moncfg-keys { display: flex; gap: 8px; margin-bottom: 10px; }
+.moncfg-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.moncfg-field { display: flex; flex-direction: column; gap: 3px; font-size: 12px; color: #9aa3c0; }
+.moncfg-field.moncfg-full { margin-top: 10px; }
+.moncfg-field input { background: #0e1424; border: 1px solid #2a3350; color: #cdd6f5; border-radius: 5px; padding: 5px 7px; font-size: 13px; }
+.moncfg-field input:focus { outline: none; border-color: #ffb74d; }
+.moncfg-actions { margin-top: 14px; display: flex; gap: 8px; }
+
+/* 世界地图 */
+.map-big { position: relative; margin: 12px 12px 0; border-radius: 8px; overflow: hidden; border: 1px solid #2a3350; background: #0c1220; }
+.map-big-img { display: block; width: 100%; height: 190px; object-fit: cover; }
+.map-big-line { position: absolute; inset: 0; width: 100%; height: 190px; object-fit: cover; pointer-events: none; }
+.map-line-btn { position: absolute; right: 8px; bottom: 8px; padding: 4px 10px; font-size: 12px; }
+.map-list { padding: 12px; overflow-y: auto; max-height: 280px; display: flex; flex-direction: column; gap: 8px; }
+.map-row { display: flex; gap: 10px; align-items: center; padding: 10px; border-radius: 8px; border: 1px solid #2a3350; }
+.map-row.on { border-color: #ffb74d; box-shadow: 0 0 0 1px #ffb74d inset; }
+.map-thumb { width: 72px; height: 54px; object-fit: contain; border-radius: 6px; border: 1px solid #2a3350; background: #0c1220; flex: 0 0 auto; align-self: center; }
+.map-info { display: flex; flex-direction: column; gap: 3px; flex: 1 1 auto; min-width: 0; }
+.map-name { color: #ffd479; font-size: 14px; }
+.map-desc { color: #9aa3c0; font-size: 12px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+/* 怪物图鉴 */
+.best-wrap { display: flex; flex-direction: column; padding: 12px; height: 100%; box-sizing: border-box; }
+.best-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 10px; }
+.best-cell { padding: 8px; border-radius: 8px; border: 1px solid #2a3350; text-align: center; cursor: pointer; opacity: .55; }
+.best-cell.killed { opacity: 1; }
+.best-cell.on { border-color: #ffb74d; box-shadow: 0 0 0 1px #ffb74d inset; }
+.best-badge { width: 36px; height: 36px; margin: 0 auto 4px; border-radius: 50%; background: #2a3350; color: #ff8a8a; display: flex; align-items: center; justify-content: center; font-size: 16px; }
+.best-n { color: #cdd6f5; font-size: 12px; }
+.best-lv { color: #9aa3c0; font-size: 11px; }
+.best-detail { flex: 1; padding: 10px; border-radius: 8px; border: 1px solid #2a3350; color: #1e0600; }
+.best-d-name { color: #1e0600; font-size: 15px; margin-bottom: 6px; }
+.best-found { color: #1e0600; font-size: 12px; margin-left: 8px; }
+.best-unfound { color: #1e0600; font-size: 12px; margin-left: 8px; }
+.best-d-stat { color: #1e0600; font-size: 12px; margin-bottom: 4px; }
+
+/* 商城（对齐 AS3 MallPanel02：一级×二级 页签 + 商品网格(3列/时装2列) + 购买/充值/神秘/随意购/搜索 + 外观预览） */
+.mall-wrap { display: flex; flex-direction: column; padding: 10px; height: 100%; box-sizing: border-box; gap: 8px; }
+.mall-l1 { display: flex; gap: 6px; }
+.mall-tab { flex: 1; padding: 9px 0; background: #1a2740; color: #9fb3d8; border: 1px solid #3a4a66; border-bottom: none; border-radius: 8px 8px 0 0; cursor: pointer; font-size: 13px; }
+.mall-tab.on { background: #2d4a7a; color: #fff; border-color: #ffb74d; }
+.mall-l2 { display: flex; gap: 5px; flex-wrap: wrap; border-bottom: 1px solid #2a3350; padding-bottom: 7px; }
+.mall-tab2 { padding: 4px 11px; background: #16203a; color: #8aa0c8; border: 1px solid #2a3350; border-radius: 14px; cursor: pointer; font-size: 12px; }
+.mall-tab2.on { background: #34507f; color: #fff; border-color: #ffb74d; }
+.mall-body { flex: 1; display: flex; gap: 10px; overflow: hidden; min-height: 0; }
+/* ── 商城（按货币分类的真实商店浏览器）── */
+.mall-wrap { display: flex; flex-direction: column; height: 100%; box-sizing: border-box; }
+.mall-l1 { display: flex; gap: 6px; padding: 6px 10px 0; }
+.mall-tab { padding: 5px 16px; font-size: 13px; border: 1px solid #2a3350; border-radius: 6px 6px 0 0; background: #0e1626; color: #9fb0d8; cursor: pointer; }
+.mall-tab.on { border-color: #ffd479; color: #ffd479; background: #1a2438; }
+.ml-cnt { font-size: 10px; color: #5c6580; }
+.ml-body { flex: 1; display: flex; gap: 10px; padding: 8px 10px 10px; min-height: 0; }
+.ml-shops { width: 168px; flex: none; overflow-y: auto; display: flex; flex-direction: column; gap: 4px; padding-right: 2px; }
+.ml-shop { text-align: left; padding: 6px 9px; font-size: 12px; color: #c9d6f2; background: #0e1626; border: 1px solid #2a3350; border-radius: 6px; cursor: pointer; }
+.ml-shop.on { border-color: #ffd479; color: #ffd479; background: #1a2438; }
+.ml-shop-n { font-size: 10px; color: #5c6580; }
+.ml-main { flex: 1; display: flex; flex-direction: column; min-width: 0; }
+.ml-main .ns-tabs { padding: 0; }
+.ml-money { margin-left: auto; font-size: 11px; color: #9fb0d8; display: flex; gap: 12px; align-items: baseline; align-self: center; }
+.ml-money b { color: #ffd479; font-size: 12px; }
+.ml-bar { display: flex; justify-content: flex-end; padding: 8px 0 4px; }
+.ml-bar .ml-buy { width: 74px; height: 26px; padding: 0; font-size: 12px; }
+.mall-nodata { flex: 1; align-self: stretch; display: flex; flex-direction: column; justify-content: center; text-align: center; color: #7c85a0; font-size: 12px; line-height: 2; background: #0c1220; border: 1px dashed #2a3350; border-radius: 8px; padding: 20px 14px; }
+.mall-nodata span { font-size: 11px; color: #5c6580; }
+.mall-grid { flex: 1; display: grid; gap: 8px; align-content: start; overflow-y: auto; padding-right: 4px; }
+.mall-cell.empty { min-height: 74px; border: 1px dashed #2a3350; border-radius: 8px; background: #0c1220; }
+.mall-preview { flex: 0 0 184px; border: 1px solid #2a3350; border-radius: 8px; background: #0c1220; padding: 12px; display: flex; flex-direction: column; align-items: center; gap: 7px; align-self: flex-start; }
+.mall-pv-title { color: #ffd479; font-size: 13px; }
+.mall-pv-model { font-size: 50px; line-height: 1; }
+.mall-pv-row { color: #9fb3d8; font-size: 12px; }
+.mall-pv-row.dim { color: #6b7494; font-size: 11px; }
+.mall-pv-val { color: #dfe7f5; }
+.mall-pv-bar { width: 140px; height: 8px; border-radius: 4px; background: #16203a; overflow: hidden; border: 1px solid #2a3350; }
+.mall-pv-bar > i { display: block; height: 100%; width: 0; background: linear-gradient(90deg, #ffb74d, #ffd479); }
+.mall-note { color: #7c85a0; font-size: 11px; line-height: 1.4; }
+.mall-btns { display: flex; gap: 8px; flex-wrap: wrap; }
+
+/* NPC 商店（与上方「商城」严格区分：NPC 买/卖，金币结算；背靠 shop_catalog 真实货品） */
+.npcshop-wrap { display: flex; flex-direction: column; padding: 10px; height: 100%; box-sizing: border-box; gap: 8px; }
+.npcshop-tabs { display: flex; gap: 6px; align-items: center; }
+.ns-tab { flex: 0 0 auto; padding: 8px 18px; background: #1a2740; color: #9fb3d8; border: 1px solid #3a4a66; border-bottom: none; border-radius: 8px 8px 0 0; cursor: pointer; font-size: 13px; }
+.ns-tab.on { background: #2d4a7a; color: #fff; border-color: #ffb74d; }
+.ns-shop { margin-left: auto; padding: 6px 8px; background: #16203a; color: #dfe7f5; border: 1px solid #2a3350; border-radius: 6px; font-size: 13px; max-width: 280px; }
+.ns-silver { color: #ffd479; font-size: 12px; }
+.npcshop-note { color: #7c85a0; font-size: 11px; line-height: 1.4; background: #0e1626; border: 1px solid #2a3350; border-radius: 6px; padding: 6px 8px; }
+.npcshop-list { flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 6px; min-height: 0; padding-right: 4px; }
+/* ── NPC 商店（AS3 ShopItemPanel 1:1：260×430、6页签×48格、格 37px）── */
+.ns-tabs { display: flex; gap: 3px; padding: 4px 4px 0; align-items: center; flex-wrap: wrap; }
+.ns-tabs .ns-shop { width: 108px; height: 24px; font-size: 11px; background: #0e1626; color: #c9d6f2; border: 1px solid #2a3350; border-radius: 4px; padding: 0 2px; }
+.ns-selltab { width: 26px; height: 26px; padding: 0; font-size: 12px; border: 1px solid #2a3350; border-radius: 4px; background: #0e1626; color: #9fb0d8; cursor: pointer; }
+.ns-selltab.on { border-color: #ffd479; color: #ffd479; }
+.ns-grid { display: grid; grid-template-columns: repeat(6, 37px); gap: 2px; padding: 6px 4px 0; width: 232px; }
+.ns-cell { cursor: pointer; }
+.ns-bar { display: flex; align-items: center; justify-content: space-between; gap: 6px; padding: 8px 8px 4px; }
+.ns-money { font-size: 11px; color: #9fb0d8; display: flex; gap: 10px; align-items: baseline; }
+.ns-money b { color: #ffd479; font-size: 12px; }
+.ns-money-g b { color: #ffe9a8; }
+.ns-bar .ns-buy { width: 74px; height: 26px; padding: 0; font-size: 12px; }   /* AS3 购买按钮宽 74 */
+.ns-note { margin: 2px 8px 6px; font-size: 10.5px; line-height: 1.45; color: #8a94b0; background: #0e1626; border: 1px solid #2a3350; border-radius: 5px; padding: 5px 7px; }
+.ns-empty { margin: 30px 12px; text-align: center; color: #7c85a0; font-size: 12px; line-height: 1.8; }
+.ns-empty span { font-size: 10.5px; color: #5c6580; }
+/* 数量输入框（对齐 AS3 Prompt34 语义） */
+.ns-qty { position: absolute; left: 12px; right: 12px; bottom: 64px; z-index: 20; background: #121b30; border: 1px solid #3a4a72; border-radius: 8px; padding: 10px 12px; box-shadow: 0 6px 24px rgba(0,0,0,.55); }
+.ns-qty-t { font-size: 12px; color: #ffd479; margin-bottom: 4px; }
+.ns-qty-p { font-size: 11px; color: #9fb0d8; margin-bottom: 6px; }
+.ns-qty-in { width: 100%; box-sizing: border-box; background: #0a1120; color: #e6ecfa; border: 1px solid #2a3350; border-radius: 4px; padding: 5px 6px; font-size: 13px; }
+.ns-qty-sum { font-size: 11px; color: #9fb0d8; margin: 6px 0; }
+.ns-qty-sum b { color: #ffd479; }
+.ns-qty-btns { display: flex; gap: 8px; }
+.ns-qty-btns .pb-btn { flex: 1; height: 26px; padding: 0; font-size: 12px; }
+/* 出售页（紧凑列表，适配 260 宽） */
+.ns-sell-list { padding: 8px 8px 0; display: flex; flex-direction: column; gap: 4px; max-height: 300px; overflow-y: auto; }
+.ns-sell-row { display: flex; align-items: center; gap: 6px; background: #0e1626; border: 1px solid #2a3350; border-radius: 5px; padding: 5px 7px; }
+.ns-sell-n { flex: 1; font-size: 11px; color: #d5defa; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.ns-sell-p { font-size: 11px; color: #ffd479; }
+.ns-sell-row .pb-btn { width: 40px; height: 22px; padding: 0; font-size: 11px; }
+.npcshop-row { display: grid; grid-template-columns: 150px 1fr 90px 72px; align-items: center; gap: 8px; padding: 7px 9px; background: #0e1626; border: 1px solid #2a3350; border-radius: 7px; }
+.ns-name { color: #dfe7f5; font-size: 13px; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.ns-desc { color: #9aa3c0; font-size: 11px; line-height: 1.35; max-height: 30px; overflow: hidden; }
+.ns-price { color: #ffd479; font-size: 12px; text-align: right; }
+.ns-buy, .ns-sell { padding: 5px 0; font-size: 12px; }
+
+/* 宝箱（对齐 AS3 ChestItemPanel / ChestPreopenPanel） */
+.chest-wrap { padding: 12px; height: 100%; box-sizing: border-box; display: flex; flex-direction: column; }
+.chest-intro { color: #9fb3d8; font-size: 12px; margin-bottom: 8px; line-height: 1.5; }
+.chest-auto { display: flex; align-items: center; gap: 6px; color: #cdd6f5; font-size: 13px; margin-bottom: 10px; cursor: pointer; }
+.chest-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; overflow-y: auto; }
+.chest-cell { padding: 10px; border-radius: 8px; border: 1px solid #2a3350; text-align: center; background: #0e1626; }
+.chest-cell .chest-ic { font-size: 30px; line-height: 1; margin-bottom: 4px; }
+.chest-n { color: #ffd479; font-size: 13px; margin-bottom: 2px; }
+.chest-meta { color: #9aa3c0; font-size: 11px; margin-bottom: 8px; }
+.chest-go { width: 100%; }
+
+/* 开宝箱预览（ChestPreopenPanel） */
+.cop-wrap { padding: 12px; height: 100%; box-sizing: border-box; display: flex; flex-direction: column; }
+.cop-head { display: flex; gap: 12px; align-items: center; margin-bottom: 8px; }
+.cop-img { position: relative; width: 84px; height: 84px; border-radius: 8px; border: 1px solid #2a3350; background: #0c1220; display: flex; align-items: center; justify-content: center; flex: 0 0 auto; }
+.cop-img-fb { font-size: 44px; line-height: 1; }
+.cop-img-el { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; }
+.cop-name { color: #ffd479; font-size: 16px; }
+.cop-sub { color: #9aa3c0; font-size: 12px; margin-top: 4px; }
+.cop-tip { color: #cdd6f5; font-size: 12px; line-height: 1.5; margin-bottom: 4px; }
+.cop-tip.dim { color: #8a93b0; }
+.cop-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 6px; margin: 8px 0; }
+.chest-drop-cell { aspect-ratio: 1 / 1; border-radius: 6px; border: 1px dashed #2a3350; background: #0c1220; }
+.cop-legend { color: #7c85a0; font-size: 11px; line-height: 1.4; margin-bottom: 8px; }
+.cop-btns { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; margin-top: auto; }
+.cop-open { background: #2d4a7a; }
+.cop-get { background: #5a3a1e; }
+
+/* 成就 */
+.achv-list { padding: 12px; overflow-y: auto; max-height: 322px; display: flex; flex-direction: column; gap: 8px; }
+.achv-summary { padding: 14px 12px 4px; }
+.achv-summary-t { color: #cdd6f5; font-size: 13px; margin-bottom: 7px; }
+.achv-summary-t b { color: #ffd479; font-size: 15px; }
+.achv-bar { height: 8px; border-radius: 5px; background: #1a2236; overflow: hidden; border: 1px solid #2a3350; }
+.achv-bar i { display: block; height: 100%; width: 0; background: linear-gradient(90deg, #2fae6b, #7ef0a0); }
+.achv-bar.sm { height: 5px; margin-top: 6px; }
+.achv-row { display: flex; gap: 10px; align-items: center; padding: 10px; border-radius: 8px; border: 1px solid #2a3350; opacity: .7; }
+.achv-row.done { opacity: 1; border-color: #2fae6b; }
+.achv-mark { color: #ffd479; font-size: 20px; flex: none; width: 24px; text-align: center; }
+.achv-row.done .achv-mark { color: #ffb74d; }
+.achv-meta { flex: 1; min-width: 0; }
+.achv-name { color: #cdd6f5; font-size: 14px; }
+.achv-desc { color: #9aa3c0; font-size: 12px; }
+.achv-prog { color: #9ad0ff; font-size: 12px; font-family: ui-monospace, Menlo, Consolas, monospace; }
+
+/* 设置 */
+.set-list { padding: 14px; display: flex; flex-direction: column; gap: 14px; }
+.set-section { display: flex; flex-direction: column; gap: 12px; }
+.set-section-h { color: #ffd479; font-size: 13px; font-weight: 600; margin: 0 0 2px; padding-left: 8px; border-left: 3px solid #2fae6b; }
+.set-section-note { color: #6b7494; font-size: 12px; line-height: 1.6; padding: 0 4px; }
+.set-row { display: flex; justify-content: space-between; align-items: center; color: #cdd6f5; font-size: 14px; }
+.set-note { padding: 0 14px 14px; color: #6b7494; font-size: 12px; }
+
+/* 队伍 */
+.team-head { padding: 12px 12px 0; color: #cdd6f5; font-size: 13px; }
+.team-head b { color: #ffd479; }
+.team-list { padding: 12px; overflow-y: auto; max-height: 196px; display: flex; flex-direction: column; gap: 6px; }
+.team-row { display: flex; gap: 8px; align-items: center; padding: 6px; border-radius: 8px; border: 1px solid #2a3350; }
+.team-row.lead { border-color: #3a4a72; background: #16203a; }
+.team-lead { color: #ffd479; font-size: 11px; padding: 1px 7px; border: 1px solid #ffd479; border-radius: 6px; flex: none; }
+.team-foot { padding: 10px 12px 12px; }
+.team-badge { width: 28px; height: 28px; border-radius: 50%; background: #2a3350; color: #ffd479; display: flex; align-items: center; justify-content: center; font-size: 14px; flex: none; }
+.team-badge.bot { background: #3a2f5a; color: #c9a6ff; border: 1px solid #6a55a0; }
+.team-n { flex: 1; color: #cdd6f5; font-size: 13px; }
+.team-add { padding: 8px 12px 12px; }
+.team-h { color: #9aa3c0; font-size: 12px; margin-bottom: 6px; }
+.team-npcs { display: flex; flex-wrap: wrap; gap: 6px; }
+.team-npc { padding: 4px 10px; border-radius: 6px; background: #161c2e; border: 1px solid #2a3350; color: #cdd6f5; cursor: pointer; font-size: 12px; }
+.team-npc.on { background: #34507a; border-color: #3f5e8c; }
+.team-bots { display: flex; flex-wrap: wrap; gap: 6px; }
+.team-bot { padding: 4px 10px; border-radius: 6px; background: #1c1630; border: 1px solid #4a3a72; color: #c9a6ff; cursor: pointer; font-size: 12px; }
+.team-bot.on { background: #4a3a72; border-color: #6a55a0; color: #eadcff; }
+.team-bot:hover:not(:disabled), .team-npc:hover:not(:disabled) { border-color: #ffd479; }
+
+/* 战斗记录 */
+.blog-head { padding: 12px 12px 6px; color: #cdd6f5; font-size: 13px; }
+.blog-head b { color: #ffd479; font-weight: 700; }
+.blog-head b.g { color: #2fae6b; }
+.blog-head b.r { color: #ff8a8a; }
+.blog-list { padding: 12px; overflow-y: auto; max-height: 360px; display: flex; flex-direction: column; gap: 6px; }
+.blog-row { display: flex; flex-wrap: wrap; gap: 8px 10px; align-items: center; padding: 8px 10px; border-radius: 8px; border: 1px solid #2a3350; font-size: 13px; cursor: pointer; }
+.blog-row.win { border-color: #2fae6b; }
+.blog-row.lose { border-color: #7a3a3a; }
+.blog-row.open { border-color: #3a4a72; background: #16203a; }
+.blog-no { color: #9aa3c0; font-size: 12px; width: 48px; flex: none; }
+.blog-res { font-weight: 700; width: 22px; flex: none; }
+.blog-row.win .blog-res { color: #2fae6b; }
+.blog-row.lose .blog-res { color: #ff8a8a; }
+.blog-enemy { color: #cdd6f5; flex: 1; }
+.blog-meta { color: #7a83a8; font-size: 12px; }
+.blog-reward { margin-left: auto; color: #ffd479; font-size: 12px; }
+.blog-detail { flex-basis: 100%; margin-top: 6px; padding-top: 8px; border-top: 1px dashed #2a3350; display: flex; flex-direction: column; gap: 4px; font-size: 12px; color: #aeb6d0; }
+.blog-detail b { color: #cdd6f5; }
+.blog-detail b.g { color: #2fae6b; }
+.blog-detail b.r { color: #ff8a8a; }
+
+/* ───────────────────────── 新增面板（排行/称号/坐骑/表情/活动/技能书/帮助） ───────────────────────── */
+.rank-list, .title-list, .mount-list, .sb-list, .act-list { display: flex; flex-direction: column; gap: 6px; padding: 12px; overflow-y: auto; }
+.rank-row { display: flex; align-items: center; gap: 10px; padding: 8px 10px; border-radius: 8px; border: 1px solid #2a3350; font-size: 13px; }
+.rank-row.top { border-color: #caa15a; }
+.rank-row.me { background: #1c2c1c; border-color: #2fae6b; }
+.rank-no { width: 26px; color: #9aa3c0; font-weight: 700; text-align: center; flex: none; }
+.rank-row.top .rank-no { color: #ffd479; }
+.rank-n { flex: 1; color: #cdd6f5; }
+.rank-s { color: #ffd479; font-weight: 700; }
+
+.title-honor { padding: 10px 12px 0; color: #cdd6f5; font-size: 14px; }
+.title-honor b { color: #ffd479; }
+.title-row { display: flex; align-items: center; gap: 8px; padding: 7px 10px; border-radius: 8px; border: 1px solid #2a3350; font-size: 13px; }
+.title-row.got { border-color: #2fae6b; }
+.title-mark { width: 18px; color: #ff8a8a; flex: none; text-align: center; }
+.title-row.got .title-mark { color: #2fae6b; }
+.title-name { width: 96px; color: #ffd479; flex: none; }
+.title-desc { flex: 1; color: #9aa3c0; }
+.title-row .pb-btn { padding: 4px 12px; font-size: 12px; }
+
+/* 勋章面板（对齐 MedalPanel.as：勋章网格 + 点亮/未点亮槽位） */
+.medal-head { padding: 10px 12px 4px; color: #cdd6f5; font-size: 14px; }
+.medal-head b { color: #ffd479; }
+.medal-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; padding: 12px; overflow-y: auto; }
+.medal-cell { display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 10px 6px; border-radius: 10px; border: 1px solid #2a3350; text-align: center; }
+.medal-cell.on { border-color: #ffce6b; box-shadow: 0 0 0 1px #ffce6b inset, 0 0 12px rgba(255,200,120,.25); background: #1b2236; }
+.medal-ic { width: 46px; height: 46px; object-fit: contain; }
+.medal-cell:not(.on) .medal-ic { opacity: .5; filter: grayscale(.7); }
+.medal-name { font-size: 12px; color: #ffd479; }
+.medal-cell:not(.on) .medal-name { color: #9aa3c0; }
+.medal-state { font-size: 11px; color: #2fae6b; }
+.medal-cell:not(.on) .medal-state { color: #7c8600; }
+.medal-cell.nobg { opacity: .55; border-style: dashed; border-color: #38406a; cursor: default; }
+.medal-cell.nobg .medal-name { color: #6b7390; }
+.medal-cell.nobg .medal-state { color: #5a6488; }
+
+.mount-row, .sb-row { display: flex; align-items: center; gap: 10px; padding: 8px 10px; border-radius: 8px; border: 1px solid #2a3350; font-size: 13px; }
+.mount-row.on, .mount-row:hover, .sb-row:hover { border-color: #3f5e8c; }
+.mount-ic, .sb-ic { width: 36px; height: 36px; object-fit: contain; flex: none; background: #0d1322; border-radius: 6px; }
+.mount-meta, .sb-meta { flex: 1; overflow: hidden; }
+.mount-name, .sb-name { color: #cdd6f5; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.mount-name span, .sb-name .sb-tag { color: #ffd479; font-size: 12px; }
+.mount-sub, .sb-desc { color: #9aa3c0; font-size: 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+.mount-head { padding: 8px 12px 0; color: #cdd6f5; font-size: 14px; }
+.mount-head b { color: #ffd479; }
+.mount-badge { width: 36px; height: 36px; border-radius: 50%; background: #2a3350; color: #ffd479; display: flex; align-items: center; justify-content: center; font-size: 17px; flex: none; }
+.mount-row.on .mount-badge { background: #1c2c1c; color: #2fae6b; }
+
+.sb-head { padding: 8px 12px 0; color: #cdd6f5; font-size: 14px; }
+.sb-head b { color: #ffd479; }
+.sb-row.owned { border-color: #2fae6b; }
+.sb-tag { display: inline-block; margin-left: 6px; padding: 1px 7px; border-radius: 10px; background: #1c2742; border: 1px solid #34507a; font-size: 11px; font-weight: 600; }
+.sb-tag-enemy { color: #ff9a9a; }
+.sb-tag-self { color: #9affc0; }
+.sb-tag-ally { color: #9ad0ff; }
+.sb-tag-all { color: #ffd479; }
+.sb-attr { display: flex; flex-wrap: wrap; gap: 4px 10px; margin-top: 4px; }
+.sb-a { color: #9aa3c0; font-size: 12px; }
+.sb-a b { color: #cdd6f5; }
+
+.emote-head { text-align: center; padding: 8px 0; }
+.emote-ic { width: 48px; height: 48px; object-fit: contain; }
+.emote-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; padding: 8px 12px 12px; }
+.emote-cell { padding: 10px 0; border-radius: 8px; background: #161c2e; border: 1px solid #2a3350; color: #cdd6f5; cursor: pointer; font-size: 13px; }
+.emote-cell:hover { background: #34507a; border-color: #3f5e8c; }
+
+.act-row { display: grid; grid-template-columns: 1fr 90px 44px auto; align-items: center; gap: 10px; padding: 8px 10px; border-radius: 8px; border: 1px solid #2a3350; font-size: 13px; }
+.act-row.done { border-color: #2fae6b; }
+.act-name { color: #cdd6f5; }
+.act-bar { height: 8px; background: #0d1322; border-radius: 5px; overflow: hidden; }
+.act-bar i { display: block; height: 100%; background: linear-gradient(90deg,#caa15a,#ffd479); }
+.act-prog { color: #9aa3c0; font-size: 12px; text-align: center; }
+.act-reward { color: #ffd479; font-size: 12px; text-align: right; }
+
+.help-tabs { display: flex; gap: 6px; padding: 10px 12px 0; }
+.help-tab { padding: 5px 14px; border-radius: 6px 6px 0 0; background: #161c2e; border: 1px solid #2a3350; border-bottom: 0; color: #9aa3c0; cursor: pointer; font-size: 13px; }
+.help-tab.on { background: #1c2740; color: #ffd479; }
+.help-body { margin: 0 12px 12px; padding: 12px; min-height: 320px; border: 1px solid #2a3350; border-radius: 0 0 8px 8px; color: #cdd6f5; font-size: 13px; line-height: 1.9; }
+
+/* ── 新手引导 TutorManager（对齐 face/tutor/FaceTutor：全屏半透明遮罩 + 高亮目标 + 提示框）── */
+.tutor-overlay {
+  position: fixed; inset: 0; z-index: 9000;
+  background: rgba(6, 10, 20, 0.8);
+  display: flex; align-items: center; justify-content: center;
+  /* ★ 遮罩本身不拦截鼠标（pointer-events:none）：点击穿透到下方游戏，
+     杜绝"全屏半透明遮罩吞掉所有点击 = 首次进城弹引导后灵昌城卡死"。
+     仅 .tutor-box 提示框可交互（见下）。对应 tutor.js 的 ESC 跳过。 */
+  pointer-events: none;
+}
+.tutor-box {
+  max-width: 420px; width: calc(100% - 48px);
+  padding: 18px 20px;
+  background: linear-gradient(180deg, #1d2740, #141c30);
+  border: 1px solid #ffce6b;
+  border-radius: 12px;
+  box-shadow: 0 8px 40px rgba(0, 0, 0, .55), 0 0 0 1px rgba(255, 206, 107, .25) inset;
+  color: #e8edff;
+  text-align: center;
+  pointer-events: auto;   /* 提示框本身仍可点（下一步/跳过），遮罩其余区域点击穿透到游戏 */
+}
+.tutor-step { font-size: 12px; color: #ffd479; letter-spacing: 1px; margin-bottom: 8px; }
+.tutor-text { font-size: 14px; line-height: 1.8; color: #d6deff; margin-bottom: 16px; }
+.tutor-btns { display: flex; gap: 10px; justify-content: center; }
+.tutor-skip, .tutor-next {
+  padding: 7px 18px; border: 0; border-radius: 7px; cursor: pointer;
+  font-size: 13px; color: #fff;
+}
+.tutor-skip { background: #36405e; }
+.tutor-skip:hover { background: #43506f; }
+.tutor-next { background: linear-gradient(180deg, #f0c069, #d99b3c); color: #2a1c06; font-weight: 600; }
+.tutor-next:hover { filter: brightness(1.06); }
+/* 镂空高亮：聚焦被引导的真实 HUD/战斗元素（金边 + 抬升层级，露出在遮罩之上） */
+.tutor-hl {
+  position: relative;
+  z-index: 9001;
+  outline: 3px solid #ffce6b;
+  outline-offset: 2px;
+  box-shadow: 0 0 0 3px rgba(255, 206, 107, .35), 0 0 18px rgba(255, 206, 107, .45);
+  border-radius: 6px;
+}
+
+/* ── 出手顺序条（按速度先攻制）：头像代表单位，当前行动者金色高亮 ── */
+.battle-orderbar {
+  position: absolute; top: 30px; left: 50%; transform: translateX(-50%);
+  z-index: 55; display: flex; gap: 6px; align-items: flex-start; justify-content: center;
+  max-width: 680px; pointer-events: none; flex-wrap: nowrap;
+  transition: opacity .25s ease;   /* 回合演出期间降到 35%（用户 2026-10-05 口径） */
+}
+.battle-orderbar.battle-dim { opacity: .35; }
+.order-chip { display: flex; flex-direction: column; align-items: center; width: 44px; opacity: .9; transition: transform .15s ease, opacity .15s ease; }
+.order-chip .order-av {
+  width: 38px; height: 38px; border-radius: 50%; overflow: hidden; background: #1a2138;
+  border: 2px solid #5a6b8a; display: flex; align-items: center; justify-content: center;
+  font-size: 16px; font-weight: 700; color: #e8edf7; box-shadow: 0 1px 3px rgba(0,0,0,.5);
+}
+.order-chip .order-av img { width: 100%; height: 100%; object-fit: cover; }
+.order-chip.ally  .order-av { border-color: #46c46a; }
+.order-chip.enemy .order-av { border-color: #e0556a; }
+.order-chip .order-name {
+  margin-top: 2px; font-size: 10px; line-height: 1.1; color: #cdd6f5; text-shadow: 0 1px 2px #000;
+  max-width: 44px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.order-chip .order-spd { font-size: 9px; color: #8b97b8; }
+.order-chip.active { transform: translateY(-4px) scale(1.12); opacity: 1; }
+.order-chip.active .order-av { box-shadow: 0 0 10px 2px rgba(255,212,121,.85); border-color: #ffd479; }
+.order-chip.dead { opacity: .28; filter: grayscale(1); }
+.order-chip.dead .order-av { border-color: #555 !important; }
+
+/* ══════════════════ 宠物进阶面板 PetAdvancePanelNew（对齐 AS3 panel.property.pet.advance）══════════════════
+   坐标全部来自 config/pet_advance.json ← layout.xml；按钮皮为真实资源图 panelbtnbg4.png（53×27）。
+   未做任何风格臆造：图缺失时 onerror 隐藏，露出文字兜底。 */
+.pa-wrap { display:flex; flex-direction:column; gap:6px; padding:6px 8px; color:#f3e6c8; font-size:12px; }
+.pa-petsel { display:flex; align-items:center; gap:6px; }
+.pa-petsel select { background:#241a10; color:#f3e6c8; border:1px solid #6b5432; border-radius:3px; padding:2px 4px; max-width:220px; }
+.pa-hint { color:#9a8a6a; }
+.pa-hint b { color:#ffd67a; font-weight:600; }
+.pa-stage { position:relative; background:rgba(0,0,0,.18); border:1px dashed rgba(255,214,122,.25); overflow:hidden; }
+.pa-frame { position:absolute; border:1px solid #66471B; border-radius:2px; background:rgba(206,171,129,.06); }
+.pa-frame-t { position:absolute; left:6px; top:-9px; height:18px; background:rgba(20,14,8,.9); padding:0 4px; }
+.pa-sub { position:absolute; }
+.pa-btn { position:absolute; padding:0; border:0; background:transparent; cursor:pointer; line-height:1; }
+.pa-btn img { width:100%; height:100%; object-fit:fill; }
+.pa-btn:hover { filter:brightness(1.18); }
+.pa-top { background-size:100% 100%; }
+.pa-grid { position:absolute; width:40px; height:40px; border:1px solid #55D7BD; background:rgba(0,0,0,.35);
+           display:flex; flex-direction:column; align-items:center; justify-content:center; gap:1px; cursor:pointer; }
+.pa-grid:hover { box-shadow:0 0 0 1px #ffd67a inset; }
+.pa-g-n { font-size:10px; color:#cbb58a; }
+.pa-g-v { font-size:10px; color:#9E2B0E; font-weight:700; }
+.pa-g-add { color:#4a6cff; }
+.pa-g-ph { font-size:9px; color:#7a6a4a; text-align:center; line-height:1.15; padding:0 2px; }
+.pa-put { width:44px; height:44px; border-color:#E9DC04; }
+.pa-g-ic { font-size:14px; color:#E9DC04; line-height:1; }
+.pa-cb { position:absolute; background:#241a10; color:#f3e6c8; border:1px solid #6b5432; font-size:11px; height:20px; }
+.pa-quality { position:absolute; background:rgba(0,0,0,.45); border:1px solid #66471B; display:flex; align-items:center;
+              overflow:hidden; white-space:nowrap; }
+.pa-quality span { padding-left:2px; font-size:11px; }
+.pa-add { position:absolute; cursor:help; }
+.pa-ratio { position:absolute; color:#4a6cff; font-weight:700; font-size:11px; }
+.pa-chk { position:absolute; display:flex; align-items:center; gap:3px; font-size:10px; color:#cbb58a; cursor:pointer; }
+.pa-chk input { width:12px; height:12px; margin:0; }
+.pa-skillgrid { position:absolute; inset:0; }
+.pa-slot { position:absolute; width:40px; height:40px; border:1px solid #55D7BD; background:rgba(0,0,0,.35);
+           display:flex; align-items:center; justify-content:center; cursor:pointer; font-size:9px; text-align:center; }
+.pa-slot.on { box-shadow:0 0 0 2px #FFFF00 inset; }
+.pa-slot-e { color:#6a5a3a; }
+.pa-sbtn { font-size:11px; color:#f3e6c8; background:#3a2a18; border:1px solid #6b5432; border-radius:2px; }
+.pa-learn { position:absolute; border:1px solid #66471B; background:rgba(0,0,0,.3); padding:4px; overflow:auto; color:#cbb58a; }
+.pa-ndframe { position:absolute; border:1px solid #66471B; background:rgba(0,0,0,.25); }
+.pa-ndslot { position:absolute; border:1px solid transparent; cursor:pointer; display:flex; flex-direction:column;
+             align-items:center; justify-content:center; overflow:hidden; }
+.pa-ndslot.on { box-shadow:0 0 0 2px #FFFF00 inset; }
+.pa-ndslot.empty { opacity:.75; }
+.pa-nd-t { height:11px; opacity:.9; }
+.pa-nd-n { font-size:8px; color:#EF9C00; text-align:center; line-height:1.05; max-width:100%; overflow:hidden; }
+.pa-ndbtn { font-size:11px; color:#f3e6c8; background:#3a2a18; border:1px solid #6b5432; border-radius:2px; }
+/* 内丹属性浮层（PetNeiDan.switchDefaultView 的 propSprite）：落点由 JS 按 AS3 规则算出后 clamp 进面板 */
+.pa-nd-float { position:absolute; z-index:20; }
+.pa-nd-box { position:absolute; inset:0; background:rgba(0,0,0,.78); border:1px solid #66471B;
+             padding:4px 6px; overflow:auto; box-sizing:border-box; }
+.pa-nd-h { color:#E9DC04; font-size:11px; margin-bottom:2px; }
+.pa-nd-idx { float:right; color:#8a7a5a; font-weight:400; }
+.pa-nd-row { display:flex; gap:4px; font-size:10px; line-height:1.35; }
+.pa-nd-k { flex:0 0 62px; color:#cbb58a; }
+.pa-nd-v { flex:1; word-break:break-all; }
+/* 服务端下发的行值是带 <font size='14'> 的富文本（TextField.htmlText 语义）；
+   AS3 里 TextField 默认字号 12、行高固定，DOM 需把内联字号压回面板行高，否则撑破浮层 */
+.pa-nd-v font, .pa-nd-v b, .pa-nd-v span { font-size:10px !important; line-height:1.35 !important; }
+.pa-nd-v br { display:block; content:''; }
+.pa-nd-tip { position:absolute; background:rgba(0,0,0,.72); border:1px dashed #66471B;
+             padding:5px 6px; color:#d8c8a4; font-size:10px; line-height:1.4; z-index:20; box-sizing:border-box; }
+.pa-log { border-top:1px solid #3a2a18; padding-top:4px; }
+.pa-log-h { cursor:pointer; color:#ffd67a; font-size:11px; user-select:none; }
+.pa-log-b { max-height:120px; overflow:auto; }
+.pa-log-r { display:flex; gap:6px; font-size:10px; line-height:1.5; border-bottom:1px dotted #33261a; }
+.pa-log-r b { flex:0 0 20px; }
+.pa-log-r b.CS { color:#E9DC04; }
+.pa-log-r b.SC { color:#55D7BD; }
+.pa-log-r span { flex:0 0 60px; color:#cbb58a; }
+.pa-log-r i { flex:1; color:#8a7a5a; font-style:normal; word-break:break-all; }
+.pa-empty { color:#7a6a4a; font-size:10px; }
+
+/* ══════════════════ 骑宠进阶面板 RidePetAdvancePanel（对齐 AS3 panel.property.ridePet）══════════════════
+   坐标全部来自 config/ridepet_advance.json ← layout.xml；按钮皮为真实资源图（text_panel_* / panel_btn_bg4）。
+   未做风格臆造：图缺失时 onerror 隐藏并露出文字兜底。 */
+.rpa-wrap { display:flex; flex-direction:column; gap:6px; padding:6px 8px; color:#f3e6c8; font-size:12px; }
+.rpa-sel { display:flex; align-items:center; gap:6px; }
+.rpa-sel select { background:#241a10; color:#f3e6c8; border:1px solid #6b5432; border-radius:3px; padding:2px 4px; max-width:150px; }
+.rpa-hint { color:#9a8a6a; font-size:11px; }
+.rpa-hint b { color:#ffd67a; }
+.rpa-stage { position:relative; background:rgba(0,0,0,.18); border:1px dashed rgba(255,214,122,.25); overflow:hidden; }
+.rpa-frame-out { position:absolute; border:1px solid #66471B; background:rgba(206,171,129,.05); }
+.rpa-body { position:absolute; inset:0; }
+.rpa-sub { position:absolute; inset:0; }
+.rpa-fr { position:absolute; border:1px solid #66471B; background:rgba(206,171,129,.06); }
+.rpa-tabs { position:absolute; display:flex; gap:2px; z-index:12; }
+/* 标签按钮按 TabView.createTab 累加规则绝对定位（left = i * (tab.width + _space)），不是 flex 流式 */
+.rpa-tab { position:absolute; top:0; height:22px; padding:0; border:1px solid #6b5432; background:#2a1f12; color:#cbb58a;
+           cursor:pointer; font-size:11px; line-height:20px; overflow:hidden; }
+.rpa-tab img { position:absolute; inset:0; width:100%; height:100%; object-fit:fill; }
+.rpa-tab span { position:relative; z-index:2; }
+.rpa-tab.on { border-color:#ffd67a; color:#ffd67a; box-shadow:0 0 0 1px #ffd67a inset; }
+.rpa-stabs { position:absolute; display:flex; gap:2px; z-index:12; }
+.rpa-stab { position:absolute; top:0; height:20px; padding:0; border:1px solid #6b5432; background:#2a1f12; color:#cbb58a;
+            cursor:pointer; font-size:10px; line-height:18px; overflow:hidden; }
+.rpa-stab img { position:absolute; inset:0; width:100%; height:100%; object-fit:fill; }
+.rpa-stab span { position:relative; z-index:2; }
+.rpa-stab.on { border-color:#ffd67a; color:#ffd67a; }
+.rpa-prow { position:absolute; display:flex; align-items:center; background:rgba(0,0,0,.3); border-bottom:1px dotted #33261a; }
+.rpa-pk { position:absolute; color:#55D7BD; font-size:11px; }
+.rpa-pv { position:absolute; color:#fff; font-size:11px; }
+.rpa-desc { position:absolute; color:#d8c8a4; font-size:10px; line-height:1.4; }
+.rpa-desc-box { background:rgba(0,0,0,.28); border:1px solid #66471B; padding:3px 4px; overflow:auto; box-sizing:border-box; }
+.rpa-btn { position:absolute; padding:0; border:1px solid #6b5432; background:#3a2a18; color:#f3e6c8;
+           cursor:pointer; font-size:11px; line-height:1; overflow:hidden; }
+.rpa-btn img { position:absolute; inset:0; width:100%; height:100%; object-fit:fill; }
+.rpa-btn span { position:relative; z-index:2; }
+.rpa-btn:hover { filter:brightness(1.18); }
+.rpa-sk { position:absolute; width:22px; height:22px; border:0; background:transparent; cursor:pointer; }
+.rpa-sk img { width:100%; height:100%; object-fit:contain; }
+/* AS3 TextField（非 TextBg）：desc / fateAttr / fateInfoText / talentAry 说明文字 */
+.rpa-txt { position:absolute; color:#d8c8a4; font-size:11px; line-height:1.35; word-break:break-all; }
+/* PutGrid 内 Stepper02（数量步进器）占位：真实控件为 17×17 上下箭头 */
+.rpa-stepper { position:absolute; width:17px; height:17px; border:1px solid #E9DC04; background:rgba(0,0,0,.45); }
+.rpa-stepper::after { content:'+'; position:absolute; left:3px; top:-2px; font-size:12px; color:#E9DC04; }
+.rpa-stepper::before { content:'-'; position:absolute; left:4px; top:5px; font-size:11px; color:#E9DC04; }
+.rpa-sprite { position:absolute; width:255px; height:80px; }
+.rpa-cb { position:absolute; background:#241a10; color:#f3e6c8; border:1px solid #6b5432; font-size:10px; height:20px; }
+.rpa-put { position:absolute; width:40px; height:40px; border:1px solid #E9DC04; background:rgba(0,0,0,.35);
+           display:flex; align-items:center; justify-content:center; text-align:center; }
+.rpa-put-n { font-size:8px; color:#E9DC04; line-height:1.05; padding:0 2px; }
+.rpa-put-e { font-size:9px; color:#7a6a4a; }
+.rpa-grid { position:absolute; width:38px; height:38px; border:1px solid #55D7BD; background:rgba(0,0,0,.35);
+            display:flex; flex-direction:column; align-items:center; justify-content:center; gap:1px; cursor:pointer; }
+.rpa-g-n { font-size:9px; color:#cbb58a; }
+.rpa-g-v { font-size:9px; color:#9E2B0E; font-weight:700; }
+.rpa-g-add { color:#4a6cff; }
+.rpa-g-ph { font-size:8px; color:#7a6a4a; text-align:center; line-height:1.1; padding:0 2px; }
+.rpa-put2 { border-color:#E9DC04; }
+.rpa-chk { position:absolute; display:flex; align-items:center; gap:3px; font-size:10px; color:#cbb58a; cursor:pointer; }
+.rpa-chk input { width:12px; height:12px; margin:0; }
+.rpa-q { position:absolute; background:rgba(0,0,0,.45); border:1px solid #66471B; display:flex; align-items:center;
+         overflow:hidden; white-space:nowrap; font-size:10px; padding-left:3px; }
+.rpa-slot { position:absolute; border:1px solid #55D7BD; background:rgba(0,0,0,.35); display:flex;
+            align-items:center; justify-content:center; cursor:pointer; }
+.rpa-slot-e { font-size:9px; color:#6a5a3a; }
+.rpa-horse { position:absolute; }
+.rpa-fate-attr { width:230px; }
+.rpa-fate-bag { position:absolute; width:230px; height:60px; border:1px dashed #66471B; display:flex; align-items:center; justify-content:center; }
+.rpa-tbtns { position:absolute; display:flex; gap:6px; }
+.rpa-tbtn { position:relative; width:60px; height:22px; }
+.rpa-log { border-top:1px solid #3a2a18; padding-top:4px; }
+.rpa-log-h { cursor:pointer; color:#ffd67a; font-size:11px; user-select:none; }
+.rpa-log-b { max-height:110px; overflow:auto; }
+.rpa-log-r { display:flex; gap:6px; font-size:10px; line-height:1.5; border-bottom:1px dotted #33261a; }
+.rpa-log-r b { flex:0 0 20px; }
+.rpa-log-r b.CS { color:#E9DC04; }
+.rpa-log-r b.SC { color:#55D7BD; }
+.rpa-log-r span { flex:0 0 56px; color:#cbb58a; }
+.rpa-log-r i { flex:1; color:#8a7a5a; font-style:normal; word-break:break-all; }
+.rpa-empty { color:#7a6a4a; font-size:10px; line-height:1.4; }
+
+/* ══════════════════ 角色主面板 PlayerPanel（对齐 AS3 panel.property.PlayerPanel）══════════════════
+   ★ 几何不由 CSS 决定：元素表来自 js/ui/playerpanel-as3.js（复现管线直出的 AS3 坐标，已烘焙
+     tabBar(19,45)+viewOffset），舞台 = AS3 PlayerPanel.rect = 295×465。
+   本区块只负责「层级 / 点击穿透 / 文字样式」，不再自造边框底盒。 */
+.tsqt-panel.pp-asis .pb-title,
+.tsqt-panel.pp-asis .pb-close { display: none; }          /* 改用 AS3 自带的 title/help/close 图 */
+/* bo: AS3-repro panels (player/pet) embed a real Fighter model whose size comes from the
+   sprite assets and may exceed the panel box. Original AS3 Sprite never clips its children
+   (no scrollRect), so we unclip here to show the model in full. The baked background canvas
+   keeps its own overflow:hidden, so the nine-slice frame stays intact. */
+.tsqt-panel.pp-asis { overflow: visible; }
+.pp-layer { position: absolute; inset: 0; z-index: 3; pointer-events: none;
+            color: #f3e6c8; font-size: 11px; }
+/* ★ 点击穿透容器内，仅显式交互控件重新接收事件：
+   button/input/.pp-hit/.pp-tx 原有；新增 select(法术组合框)、.pp-petlist(列表滚动)、.pp-petrow(选宠)——
+   此前这三者被 .pp-layer{pointer-events:none} 一并禁用，导致组合框打不开、宠物列表无法点选（点击穿透到面板 body）。 */
+.pp-layer .pp-hit, .pp-layer button, .pp-layer input,
+.pp-layer select, .pp-layer .pp-petlist, .pp-layer .pp-petrow { pointer-events: auto; }
+.pp-layer .pp-hit, .pp-layer select, .pp-layer .pp-petrow { cursor: pointer; }
+.pp-top, .pp-page { position: absolute; inset: 0; }
+.pp-e { position: absolute; display: block; image-rendering: pixelated; }
+/* 装备槽拖拽落点热区：与 .eq-slot 划清界限（.eq-slot 属强化/打造面板的列表槽位，带虚线边框+min-height）。
+   平时 pointer-events:none 点击穿透到底图/图标，仅在拖拽进行中（body.item-dragging）激活，
+   让 elementFromPoint 能命中本槽（图标在槽内，closest 也能找到） */
+.pp-dropzone { position: absolute; pointer-events: none; }
+body.item-dragging .pp-dropzone { pointer-events: auto; }
+.pp-dropzone.drop-ok { box-shadow: inset 0 0 0 2px rgba(111, 224, 122, .85); }
+.pp-dropzone.drop-bad { box-shadow: inset 0 0 0 2px rgba(255, 107, 107, .7); }
+.pp-fr { border: 1px solid #66471B; box-sizing: border-box; }
+.pp-tab, .pp-subtab { position: absolute; color: #cbb58a;
+          cursor: pointer; font-size: 11px; line-height: 22px; overflow: hidden; }
+.pp-tab-lb { position: absolute; left: 8px; top: 3px; }
+.pp-tab-tx { position: relative; z-index: 2; }
+.pp-tab.on .pp-tab-tx, .pp-subtab.on .pp-tab-tx { color: #ffd67a; }
+/* 文字：口径与复现页 panels_repro 的 .tx 一致（SimSun / white-space:pre / 无自动换行） */
+.pp-tx { position: absolute; white-space: pre; font-family: SimSun, "宋体", serif;
+         text-shadow: 0 0 2px rgba(0,0,0,.55), 0 0 2px rgba(0,0,0,.55); }
+.pp-tx.dyn { border-bottom: 1px dotted rgba(191,135,0,.45); }
+.pp-layer .pp-tx { pointer-events: auto; }
+.pp-input { position: absolute; background: rgba(36,26,16,.92); color: #f3e6c8; border: 1px solid #6b5432;
+            font-size: 11px; font-family: SimSun, "宋体", serif; padding: 0 3px; box-sizing: border-box; }
+.pp-input::placeholder { color: #7a6a4a; }
+.pp-note { position: absolute; left: 22px; bottom: 2px; color: #7a6a4a; font-size: 9px; }
+/* 装备页居中角色模型（Fighter 立绘）：不拦截点击，落于装备槽底图之下（透明留白不挡槽位） */
+.pp-figure, .pp-figure * { pointer-events: none !important; }   /* 宠物形象仅展示、不拦截任何点击 */
+.pp-figure .fighter-canvas canvas { filter: drop-shadow(0 4px 6px rgba(0,0,0,.45)); }
+/* ════════ PetPanel 动态复合控件（_extra 直出，坐标由内联 style 提供，类只补定位/配色）════════ */
+.pp-petlist { position: absolute; overflow: auto; background: rgba(36,26,16,.6); color: #f3e6c8; font-size: 11px; }
+.pp-petrow { padding: 1px 4px; cursor: pointer; white-space: nowrap; }
+.pp-petrow.on { color: #ffd67a; background: rgba(120,90,40,.4); }
+.pp-combo { position: absolute; color: #f3e6c8; background: rgba(36,26,16,.92); border: 1px solid #6b5432;
+            font-size: 11px; font-family: SimSun, "宋体", serif; padding: 0 2px; box-sizing: border-box; }
+.pp-avatar { position: absolute; }
+/* 状态图标（AS3 stateSprite，容器原点 PetPanel_state(20,50)）：
+   出战/休息(0,0) · 绑定(22,0) · 锁定(110,0) —— 偏移取自 UtilUpdater02 的 getResourceImgXY。 */
+.pp-state { position: absolute; font-size: 11px; }
+.pp-state-ic { position: absolute; left: 0; top: 0; display: block; image-rendering: pixelated; }
+
+/* ══════════════════ 玩家技能面板 PlayerSkillPanel2（对齐 AS3 panel.skill.PlayerSkillPanel2）══════════════════
+   7 子视图（战斗/生活/被动/特殊/天赋/转换/升级）TabView；坐标 = tabBar(14,45) + 子视图偏移 + 内部 layout；
+   图缺失（textpanel*.png）onerror 隐藏，露文字兜底；底色对齐 .pp-* 木纹金边。 */
+.psp-wrap { display:flex; flex-direction:column; gap:6px; padding:6px 8px; color:#f3e6c8; font-size:12px; }
+.psp-stage { position:relative; background:rgba(0,0,0,.18); border:1px dashed rgba(255,214,122,.25); overflow:hidden; }
+.psp-frame-out { position:absolute; border:1px solid #66471B; background:rgba(206,171,129,.05); }
+.psp-body { position:absolute; inset:0; }
+.psp-sub { position:absolute; }
+.psp-fr { position:absolute; border:1px solid #66471B; background:rgba(206,171,129,.06); }
+.psp-tabs { position:absolute; display:flex; gap:2px; z-index:12; }
+.psp-tab { position:absolute; top:0; height:22px; padding:0; border:1px solid #6b5432; background:#2a1f12; color:#cbb58a;
+  font-size:11px; cursor:pointer; overflow:hidden; }
+.psp-tab img { position:absolute; inset:0; width:100%; height:100%; object-fit:fill; }
+.psp-tab span { position:relative; z-index:2; display:inline-block; line-height:22px; width:100%; text-align:center; }
+.psp-tab.on { border-color:#ffd67a; color:#ffd67a; box-shadow:0 0 0 1px #ffd67a inset; }
+.psp-tbar { position:absolute; display:flex; gap:1px; z-index:10; }
+.psp-title { position:relative; width:32px; height:45px; padding:0; border:1px solid #6b5432; background:#3a2a18; color:#cbb58a;
+  font-size:11px; cursor:pointer; display:flex; align-items:center; justify-content:center; writing-mode:vertical-rl; }
+.psp-title.on { border-color:#ffd67a; color:#ffd67a; box-shadow:0 0 0 1px #ffd67a inset; }
+.psp-title:hover { filter:brightness(1.18); }
+.psp-ic { position:absolute; width:32px; height:32px; border:1px solid #66471B; background:rgba(0,0,0,.35);
+  display:flex; align-items:center; justify-content:center; }
+.psp-ic::after { content:'技'; color:#ffd67a; font-size:14px; }
+.psp-name { position:absolute; color:#ffd67a; font-size:12px; font-weight:600; }
+.psp-dic { position:absolute; color:#55D7BD; font-size:11px; }
+.psp-desc { position:absolute; color:#d8c8a4; font-size:11px; line-height:1.35; word-break:break-all; }
+.psp-exp { position:absolute; color:#E9DC04; font-size:11px; }
+.psp-txt { position:absolute; color:#d8c8a4; font-size:11px; line-height:1.3; word-break:break-all; }
+.psp-note { position:absolute; color:#7a6a4a; font-size:10px; line-height:1.35; }
+.psp-list { position:absolute; overflow:auto; background:rgba(0,0,0,.18); border:1px solid #66471B; box-sizing:border-box; }
+.psp-empty { color:#7a6a4a; font-size:11px; line-height:1.5; padding:8px; }
+.psp-log { border-top:1px solid #3a2a18; padding-top:4px; }
+.psp-log-h { cursor:pointer; color:#ffd67a; font-size:11px; user-select:none; }
+.psp-log-b { max-height:120px; overflow:auto; }
+.psp-log-r { display:flex; gap:6px; font-size:10px; line-height:1.5; border-bottom:1px dotted #33261a; }
+.psp-log-r b { flex:0 0 22px; }
+.psp-log-r b.CS { color:#E9DC04; }
+.psp-log-r b.SC { color:#55D7BD; }
+.psp-log-r span { flex:0 0 56px; color:#cbb58a; }
+.psp-log-r i { flex:1; color:#8a7a5a; font-style:normal; word-break:break-all; }
+
+/* ══════════════════ 对话/任务面板 TalkPanel（对齐 AS3 panel.task.TalkPanel）══════════════════
+   坐标全部来自 config/talk.json ← layout.xml；按钮皮为真实资源图 panelbtnbg4.png。
+   未做任何风格臆造：图缺失时 onerror 隐藏，露出文字兜底。 */
+.tk-wrap { display:flex; flex-direction:column; gap:6px; padding:6px 8px; color:#f3e6c8; font-size:12px; }
+.tk-stage { position:relative; background:rgba(0,0,0,.18); border:1px dashed rgba(255,214,122,.25); overflow:hidden; }
+.tk-head { position:absolute; width:64px; height:64px; border:1px solid #66471B; background:rgba(0,0,0,.35);
+           display:flex; align-items:center; justify-content:center; overflow:hidden; }
+.tk-head img { width:100%; height:100%; object-fit:contain; }
+.tk-npcname { position:absolute; color:#903B8E; font-size:14px; font-weight:700; line-height:1.2; word-break:break-all; }
+.tk-content { position:absolute; overflow:auto; font-size:12px; line-height:1.5; color:#d8c8a4;
+              border:1px dotted rgba(255,214,122,.18); padding:2px 3px; }
+.tk-content.on { cursor:pointer; }
+.tk-content a { color:#E9DC04; text-decoration:none; }
+.tk-content a:hover { text-decoration:underline; }
+.tk-attr { position:absolute; }
+.tk-frame { position:absolute; width:1px; background:#66471B; }
+/* ── TalkRight：右侧 3 分组任务列表 ── */
+.tk-right { position:absolute; overflow:hidden; }
+.tk-right-scroll { position:relative; width:100%; height:100%; overflow-y:auto; }
+.tk-tg-t { position:absolute; left:0; font-size:14px; font-weight:700; white-space:nowrap; }
+.tk-ti { position:absolute; display:flex; align-items:center; gap:4px; height:18px; cursor:pointer; max-width:190px; }
+.tk-ti:hover { background:rgba(255,214,122,.12); }
+.tk-ti-ic { width:16px; height:16px; object-fit:contain; flex:0 0 16px; }
+.tk-ti-n { font-size:12px; color:#cbb58a; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+/* ── DescTaskPanel ── */
+.tk-desc { position:absolute; inset:0; }
+.tk-lv { position:absolute; background:rgba(206,171,129,.08); }
+.tk-lv1, .tk-lv2, .tk-lv3 { position:absolute; font-size:12px; color:#9E2B0E; white-space:nowrap; }
+.tk-lv3 { color:#f3e6c8; }
+.tk-star { position:absolute; color:#E9DC04; font-size:11px; letter-spacing:1px; white-space:nowrap; }
+.tk-dtxt { position:absolute; overflow:auto; font-size:12px; line-height:1.45; color:#d8c8a4;
+           border:1px dotted rgba(255,214,122,.15); padding:2px 3px; }
+.tk-bonus { position:absolute; display:flex; flex-wrap:wrap; gap:4px; max-width:250px; }
+.tk-bn { font-size:10px; color:#cbb58a; border:1px solid #55D7BD; padding:0 3px; background:rgba(0,0,0,.3); }
+.tk-empty { font-size:10px; color:#7a6a4a; }
+/* ── 按钮 ── */
+.tk-btn { position:absolute; width:53px; height:27px; padding:0; border:0; background:transparent;
+          background-size:100% 100%; cursor:pointer; line-height:1; display:flex; align-items:center; justify-content:center; }
+.tk-btn img { max-width:100%; max-height:100%; object-fit:contain; }
+.tk-btn span { position:absolute; font-size:11px; color:#f3e6c8; text-shadow:0 1px 2px #000; pointer-events:none; }
+.tk-btn:hover { filter:brightness(1.18); }
+/* ── 可选奖励 finishSprite ── */
+.tk-finish { position:absolute; }
+.tk-finish-t { position:absolute; left:0; top:-20px; white-space:nowrap; font-size:12px; }
+.tk-finish-g { position:relative; display:flex; gap:4px; }
+.tk-slot { position:relative; border:1px solid #55D7BD; background:rgba(0,0,0,.35); cursor:pointer;
+           display:flex; flex-direction:column; align-items:center; justify-content:center; overflow:hidden; }
+.tk-slot.on { box-shadow:0 0 0 2px #E9DC04 inset; }
+.tk-slot img { max-width:100%; max-height:60%; object-fit:contain; }
+.tk-slot-n { font-size:8px; color:#EF9C00; text-align:center; line-height:1.05; padding:0 1px; }
+.tk-slot-e { font-size:9px; color:#6a5a3a; }
+/* ── 上交装备 equipItemSprite ── */
+.tk-equip { position:absolute; left:0; right:0; }
+.tk-equip-fr { position:absolute; border:1px solid #66471B; display:flex; align-items:flex-start; padding-top:2px; }
+.tk-equip-fr img { height:12px; object-fit:contain; }
+.tk-equip-p { position:absolute; }
+/* ── 帮派贡献 TaskContribution ── */
+.tk-ctb { position:absolute; border:1px solid #66471B; background:rgba(0,0,0,.25); }
+.tk-ctb-t { position:absolute; color:#E9DC04; font-size:13px; font-weight:700; white-space:nowrap; }
+.tk-ctb-i, .tk-ctb-v, .tk-ctb-a { position:absolute; font-size:11px; color:#cbb58a; white-space:nowrap; }
+.tk-ctb-v { color:#f3e6c8; }
+.tk-ctb-b { position:absolute; font-size:11px; color:#f3e6c8; background:#3a2a18; border:1px solid #6b5432;
+            border-radius:2px; cursor:pointer; }
+.tk-ctb-b:hover { filter:brightness(1.18); }
+/* ── 底部工具条 / 协议流水 ── */
+.tk-bar { display:flex; align-items:center; gap:6px; flex-wrap:wrap; }
+.tk-npcsel { background:#241a10; color:#f3e6c8; border:1px solid #6b5432; border-radius:3px; padding:2px 4px; max-width:220px; }
+.tk-go { font-size:11px; color:#f3e6c8; background:#3a2a18; border:1px solid #6b5432; border-radius:2px; padding:2px 8px; cursor:pointer; }
+.tk-st { color:#9a8a6a; font-size:11px; }
+.tk-log { border-top:1px solid #3a2a18; padding-top:4px; }
+.tk-log-h { cursor:pointer; color:#ffd67a; font-size:11px; user-select:none; }
+.tk-log-b { max-height:120px; overflow:auto; }
+.tk-log-r { display:flex; gap:6px; font-size:10px; line-height:1.5; border-bottom:1px dotted #33261a; }
+.tk-log-r b { flex:0 0 20px; }
+.tk-log-r b.CS { color:#E9DC04; }
+.tk-log-r b.SC { color:#55D7BD; }
+.tk-log-r span { flex:0 0 90px; color:#cbb58a; }
+.tk-log-r i { flex:1; color:#8a7a5a; font-style:normal; word-break:break-all; }
+
+/* ══════════════════ 装备制造与强化系统容器 ItemPanel03（对齐 AS3 panel.item.facture.ItemPanel03）══════════════════
+   坐标全部来自 config/item_panel03.json ← layout.xml（FacturePanel 布局 + 14 按钮网格 + 14 子面板路由器）；
+   按钮/标题面图 textpanel*.png 缺失时 onerror 隐藏，露出中文名兜底；底色对齐 .pp-*/.psp-* 木纹金边。
+   子面板（StoneMake/ArmMake/... 共 14 个 RevelationPanel 深类）内部合成/材料/成功率公式原版在服务端 ⇒ 框占位标注（待逆向）。 */
+.ip3-wrap { display:flex; flex-direction:column; gap:6px; padding:6px 8px; color:#f3e6c8; font-size:12px; }
+.ip3-stage { position:relative; background:rgba(0,0,0,.18); border:1px dashed rgba(255,214,122,.25); overflow:hidden; }
+.ip3-title { position:absolute; left:16px; top:14px; display:flex; align-items:center; gap:6px; color:#ffd67a; font-size:15px; font-weight:700; }
+.ip3-title img { height:20px; object-fit:contain; }
+.ip3-btns { position:absolute; left:0; top:0; }
+.ip3-btn { position:absolute; padding:0; border:1px solid #6b5432; background:#3a2a18; color:#f3e6c8;
+           font-size:11px; line-height:1; overflow:hidden; cursor:pointer; display:flex; align-items:center;
+           justify-content:center; box-sizing:border-box; }
+.ip3-btn img { position:absolute; inset:0; width:100%; height:100%; object-fit:fill; }
+.ip3-btn span { position:relative; z-index:2; text-shadow:0 1px 2px #000; pointer-events:none; }
+.ip3-btn:hover { filter:brightness(1.18); }
+.ip3-btn.on { border-color:#ffd67a; color:#ffd67a; box-shadow:0 0 0 1px #ffd67a inset; }
+.ip3-sub { position:absolute; left:24px; top:200px; right:16px; bottom:54px; }
+.ip3-sub-h { color:#ffd67a; font-size:12px; font-weight:600; margin-bottom:4px; }
+.ip3-sub-body { position:relative; }
+.ip3-note { margin-top:6px; color:#7a6a4a; font-size:10px; line-height:1.4; }
+.ip3-make { position:absolute; }
+.ip3-make-t { color:#E9DC04; font-size:11px; font-weight:600; margin-bottom:3px; }
+.ip3-make-box { border:1px solid #66471B; background:rgba(0,0,0,.3); color:#cbb58a; font-size:10px;
+                width:120px; height:60px; display:flex; align-items:center; justify-content:center; text-align:center; }
+.ip3-close { position:absolute; right:16px; bottom:14px; font-size:11px; color:#f3e6c8; background:#3a2a18;
+             border:1px solid #6b5432; border-radius:2px; padding:3px 10px; cursor:pointer; }
+.ip3-close:hover { filter:brightness(1.18); }
+.ip3-log { border-top:1px solid #3a2a18; padding-top:4px; }
+.ip3-log-h { cursor:pointer; color:#ffd67a; font-size:11px; user-select:none; }
+.ip3-log-b { max-height:120px; overflow:auto; }
+.ip3-log-r { display:flex; gap:6px; font-size:10px; line-height:1.5; border-bottom:1px dotted #33261a; }
+.ip3-log-r b { flex:0 0 20px; }
+.ip3-log-r b.CS { color:#E9DC04; }
+.ip3-log-r b.SC { color:#55D7BD; }
+.ip3-log-r span { flex:0 0 56px; color:#cbb58a; }
+.ip3-log-r i { flex:1; color:#8a7a5a; font-style:normal; word-break:break-all; }
+.ip3-empty { color:#7a6a4a; font-size:10px; line-height:1.4; }
+/* ── 子面板 crafting 网格占位（6×38px 材料格 + 结果格 + 行动按钮）── */
+.ip3-grid { position:absolute; }
+.ip3-grid-h { color:#55D7BD; font-size:11px; margin-bottom:3px; }
+.ip3-row { display:flex; gap:3px; margin-bottom:4px; }
+.ip3-slot { width:38px; height:38px; border:1px solid #55D7BD; background:rgba(0,0,0,.35);
+            display:flex; align-items:center; justify-content:center; color:#cbb58a; font-size:9px; }
+.ip3-slot.res { border-color:#ffd67a; color:#ffd67a; }
+.ip3-act { font-size:11px; color:#f3e6c8; background:#3a2a18; border:1px solid #6b5432;
+           border-radius:2px; padding:3px 8px; cursor:pointer; }
+.ip3-act:hover { filter:brightness(1.18); }
+
+/* ═══════════════════════════════════════════════════════════════════
+   存档面板（js/ui/panel-save.js）· 完整存档 / 存档记录 / 备份槽
+   ─ 复用 .pb-btn / .pb-btn.ghost（底部主按钮 + 卡片内小按钮）
+   ─ 仅新增 .sv-* 容器样式，不改动既有面板样式
+   ═══════════════════════════════════════════════════════════════════ */
+.sv-list { padding:12px 14px 4px; display:flex; flex-direction:column; gap:12px;
+           height:100%; box-sizing:border-box; overflow-y:auto; }
+.sv-sec { display:flex; flex-direction:column; gap:8px; }
+.sv-h { color:#ffd479; font-size:13px; font-weight:600; padding-left:8px; border-left:3px solid #2fae6b; }
+.sv-card { background:#161c2e; border:1px solid #2a3350; border-radius:6px; padding:8px 10px;
+           display:flex; justify-content:space-between; align-items:flex-start; gap:10px; }
+.sv-card.empty { opacity:.62; align-items:center; }
+.sv-main { display:flex; flex-direction:column; gap:3px; min-width:0; flex:1 1 auto; }
+.sv-t { color:#e8eeff; font-size:13px; }
+.sv-d { color:#8b95b5; font-size:12px; line-height:1.5; word-break:normal; overflow-wrap:break-word; }
+.sv-acts { display:flex; gap:6px; flex-shrink:0; flex-wrap:wrap; justify-content:flex-end; }
+.sv-acts .pb-btn { padding:4px 10px; font-size:12px; }
+.sv-acts .pb-btn.danger { background:#3a1f28; border-color:#6b3444; color:#ffb4c0; }
+.sv-note { color:#6b7494; font-size:12px; line-height:1.65; padding:0 2px; }
+.sv-note b { color:#a8b6d8; font-weight:600; }
+.sv-note code { background:#161c2e; border:1px solid #2a3350; border-radius:3px; padding:0 4px; color:#9ad0ff; }
+
+
+/* ═════════════ 宠物详情面板（panel-pet-advance，分区重划 2026-09-19）═════════════ */
+.pa-layer { position: absolute; left: 0; top: 0; width: 100%; height: 100%; overflow: hidden;
+  font-family: "宋体", SimSun, sans-serif; pointer-events: none; }
+.pa-layer select, .pa-layer .pa-skill-cell, .pa-layer .pa-empty, .pa-layer .pa-skill-del { pointer-events: auto; }
+.pa-sel { position: absolute; left: 14px; top: 10px; width: 260px; height: 24px;
+  font-size: 12px; color: #f3e6c8; background: rgba(36,26,16,.85); border: 1px solid #6b5a3e; }
+.pa-empty { position: absolute; left: 14px; top: 12px; color: #c8c2b6; font-size: 12px; }
+/* 分区框（对齐 AS3 frame 边框底图，CSS 实现）*/
+.pa-frame { position: absolute; border: 1px solid #6b5a3e; border-radius: 4px;
+  background: rgba(30,22,14,.55); }
+.pa-frame-title { position: absolute; left: 8px; top: -1px; transform: translateY(-50%);
+  padding: 0 8px; font-size: 12px; color: #f3e6c8; background: #241a10; border: 1px solid #6b5a3e;
+  border-radius: 3px; white-space: nowrap; }
+/* frame1 资质行 */
+.pa-rows { position: absolute; left: 10px; top: 22px; right: 8px; }
+.pa-row { height: 24px; line-height: 24px; font-size: 12px; color: #c8c2b6;
+  border-bottom: 1px dashed rgba(107,90,62,.35); white-space: nowrap; }
+.pa-row .pa-k { display: inline-block; width: 64px; }
+.pa-row .pa-v { color: #f3e6c8; }
+/* frame2 技能格 */
+.pa-skill-cell { position: absolute; border: 1px solid #6b5a3e; border-radius: 3px;
+  background: rgba(20,14,8,.6); cursor: pointer; }
+.pa-skill-cell.empty { background: rgba(20,14,8,.25); border-color: rgba(107,90,62,.3); cursor: default; }
+.pa-skill-ic { position: absolute; left: 1px; top: 1px; width: 34px; height: 34px; }
+.pa-skill-ic.broken { visibility: hidden; }
+.pa-skill-del { position: absolute; right: -7px; top: -8px; width: 17px; height: 17px;
+  padding: 0; font-size: 10px; line-height: 15px; text-align: center; cursor: pointer;
+  color: #ffd0d0; background: rgba(70,14,14,.92); border: 1px solid #8a4a4a; border-radius: 9px; }
+.pa-skill-del.pending { background: #a02020; color: #fff; border-color: #ff8080;
+  box-shadow: 0 0 6px rgba(255,80,80,.7); }
+.pa-skill-del:disabled { opacity: .3; cursor: not-allowed; }
+.pa-lv { position: absolute; right: 1px; bottom: 0; font-size: 10px; color: #ffe9a8;
+  background: rgba(0,0,0,.55); padding: 0 2px; }
+.pa-passive { position: absolute; left: 1px; top: 0; font-size: 9px; color: #c9a0ff;
+  background: rgba(0,0,0,.55); padding: 0 2px; }
+.pa-learn { position: absolute; left: 16px; top: 192px; width: 233px; height: 50px;
+  font-size: 11px; color: #c8c2b6; line-height: 16px; overflow: hidden;
+  border: 1px solid rgba(107,90,62,.5); border-radius: 3px; background: rgba(20,14,8,.5);
+  padding: 2px 4px; }
+.pa-learn b { color: #f3e6c8; }
+.pa-learn-lv { color: #8fd8ff; }
+/* 悬停技能卡片（背景与物品浮窗 .item-tip-as3 同口径：rgba(0,0,0,.65)，对齐 AS3 BottomPrompt） */
+.pa-tip { position: absolute; z-index: 50; width: 200px; padding: 6px 8px;
+  background: rgba(0, 0, 0, .65); border: 1px solid #a3844e; border-radius: 4px;
+  font-size: 11px; color: #c8c2b6; pointer-events: none; box-shadow: 2px 2px 6px rgba(0,0,0,.5); }
+.pa-tip-name { font-size: 12px; color: #f3e6c8; font-weight: bold; }
+.pa-tip-lv { color: #8fd8ff; margin: 2px 0; }
+.pa-tip-desc { color: #c8c2b6; line-height: 15px; }
+
+.pp-fight-mark { display: inline-block; width: 13px; height: 13px; line-height: 13px; margin-right: 3px;
+  font-size: 10px; text-align: center; color: #241a10; background: #FD5908; border-radius: 2px; vertical-align: 1px; }
+
+/* ── 骑宠面板（panel-ridepet）── */
+#panel-ridepet .pb-body { padding: 8px 10px 4px; }
+.rp-row { display: flex; align-items: center; gap: 6px; margin-bottom: 6px; }
+.rp-lbl { color: #d8d2c4; font-size: 12px; white-space: nowrap; }
+.rp-in { flex: 1; min-width: 0; background: #1a2136; border: 1px solid #39436b; color: #f0ead9;
+  border-radius: 5px; padding: 4px 8px; font-size: 13px; outline: none; }
+.rp-in:focus { border-color: #6b7fbd; }
+.rp-in::placeholder { color: #6c7595; }
+.rp-stage { position: relative; width: 372px; height: 196px; margin: 0 auto;
+  background: linear-gradient(180deg, rgba(20,26,44,.55), rgba(10,14,26,.7));
+  border: 1px solid #39436b; border-radius: 8px; overflow: hidden; }
+.rp-flip { position: absolute; inset: 0; }
+.rp-layer { position: absolute; left: 0; top: 0; width: 0; height: 0; overflow: visible; }
+.rp-layer canvas { display: block; }
+.rp-empty { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+  text-align: center; color: #9aa3c0; font-size: 12px; line-height: 1.6; pointer-events: none; }
+.rp-ctl { display: flex; gap: 6px; margin: 6px 0 4px; }
+.rp-btn { flex: 1; padding: 4px 0; border: 1px solid #39436b; border-radius: 5px; background: #1a2136;
+  color: #c8c2b6; font-size: 12px; cursor: pointer; }
+.rp-btn:hover { border-color: #6b7fbd; color: #f0ead9; }
+.rp-btn.on { background: #1f7a4d; border-color: #2fae6b; color: #eafff4; }
+.rp-status { color: #c8c2b6; font-size: 12px; line-height: 1.6; text-align: center; min-height: 34px; }
+.rp-status b { color: #f0ead9; }
+.rp-note { color: #8fa3d8; font-size: 11px; }

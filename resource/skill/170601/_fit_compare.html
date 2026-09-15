@@ -1,0 +1,72 @@
+﻿<!DOCTYPE html><html lang="zh"><head><meta charset="utf-8">
+<title>170601 水魔爆 - 放大模式对比</title>
+<style>
+body{background:#101018;color:#ddd;font-family:sans-serif;margin:0;padding:14px}
+h2{color:#9cf;margin:4px 0 10px}
+.row{display:flex;gap:14px;flex-wrap:wrap}
+.card{background:#1c1c28;border:1px solid #3a3a4a;border-radius:8px;padding:10px;text-align:center}
+.card h3{font-size:14px;color:#9cf;margin:0 0 8px}
+.stage{position:relative;width:640px;height:360px;overflow:hidden;background:
+  repeating-conic-gradient(#1b1b26 0% 25%, #161620 0% 50%) 50%/24px 24px;
+  border:1px solid #3a3a4a}
+.stage canvas{position:absolute}
+.lbl{font-size:12px;color:#aaa;margin-top:6px}
+</style></head><body>
+<h2>170601 水魔爆 - 不缩放 / 等比例放大(contain) / 完全铺满(cover) - 舞台 1280x720 的 1/2 预览</h2>
+<div class="row" id="row"></div>
+<script src="../../../fanvas3-transparent.js"></script><script src="./swfData.js"></script>
+<script>
+var STAGE_W = 1280, STAGE_H = 720, PREV = 0.5;   // 预览缩一半,内部坐标仍按真实舞台算
+var CW = STAGE_W * PREV, CH = STAGE_H * PREV;
+var vis = {x:-373, y:-343, width:734.3, height:544.4};   // 真实可见内容包围盒(剥透明留白)
+var union = {x:-373, y:-493, width:734.3, height:694.4}; // 并集 rect(fanvas 用它定画布/原点)
+var GENERIC_MAIN = 20;
+
+function fitScale(mode){
+  if(mode==='none') return 1;
+  var s = (mode==='cover') ? Math.max(STAGE_W/vis.width, STAGE_H/vis.height)
+                           : Math.min(STAGE_W/vis.width, STAGE_H/vis.height);
+  return s;
+}
+
+// 复刻 loader.js visibleRectOf(此处数据已知,直接用 vis)
+var modes = [
+  {key:'none',  title:'不缩放 (scale=1)',           note:'旧行为:动画原始尺寸,落在落点'},
+  {key:'contain',title:'等比例放大 contain',        note:'min(W/w,H/rh):完整显示,短边铺满,长边留边'},
+  {key:'cover', title:'完全铺满 cover',             note:'max(W/w,H/rh):铺满全屏,长边方向裁掉一点'}
+];
+var row = document.getElementById('row');
+modes.forEach(function(m){
+  var card=document.createElement('div'); card.className='card';
+  var h=document.createElement('h3'); h.textContent=m.title; card.appendChild(h);
+  var st=document.createElement('div'); st.className='stage';
+  st.style.width=CW+'px'; st.style.height=CH+'px';
+  var cv=document.createElement('canvas');
+  st.appendChild(cv); card.appendChild(st);
+  var lb=document.createElement('div'); lb.className='lbl';
+  lb.textContent=m.note; card.appendChild(lb);
+  var lb2=document.createElement('div'); lb2.className='lbl';
+  lb2.id='lbl-'+m.key; card.appendChild(lb2);
+  row.appendChild(card);
+
+  var s = fitScale(m.key);
+  // 复刻 scene.js:playOpts={scale:s, x:cx, y:cy}
+  var cx=STAGE_W/2, cy=STAGE_H/2;
+  // mount: canvas.width = union.width*s (用并集 rect,与 fanvas 运行时一致)
+  cv.width = union.width*s; cv.height = union.height*s;
+  // fanvas 运行时会把画布缩放显示到 CSS 尺寸,这里用 CSS 固定为预览尺寸的等比
+  cv.style.width=(union.width*s*PREV)+'px'; cv.style.height=(union.height*s*PREV)+'px';
+  cv.style.left='0px'; cv.style.top='0px'; cv.style.transform='translate(0,0)';
+  // fanvas play(内部会按 rect 重设 width/height 并做 f.x=-rect.x*scale 的内部平移)
+  fanvas.play(cv, swfData, {rootDef:GENERIC_MAIN, transparent:true, cache:1, imagePath:'images/', scale:s});
+  // anchorOrigin: left/top = 舞台中心(换算到预览坐标), transform translate(-originX*s, -originY*s)
+  var originX=-union.x, originY=-union.y;
+  cv.style.left=(cx*PREV)+'px'; cv.style.top=(cy*PREV)+'px';
+  var t0='translate('+(-originX*s*PREV)+'px,'+(-originY*s*PREV)+'px)';
+  // scene.js 内容居中修正: translate(-(vis.x+vis.width/2)*s, -(vis.y+vis.height/2)*s)
+  var cdx=(vis.x+vis.width/2)*s, cdy=(vis.y+vis.height/2)*s;
+  var t1='translate('+(-cdx*PREV)+'px,'+(-cdy*PREV)+'px)';
+  cv.style.transform = (m.key==='none') ? t0 : (t0+' '+t1);
+  lb2.textContent='scale='+s.toFixed(3)+'  canvas='+Math.round(union.width*s)+'x'+Math.round(union.height*s);
+});
+</script></body></html>

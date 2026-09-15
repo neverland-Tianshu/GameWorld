@@ -1,0 +1,2 @@
+var swfData = {"definitionPool":[{"totalFrames":1,"rect":{"y":0,"height":0,"x":0,"width":0},"frameActionList":[]},{"rect":{"y":-47,"height":49,"x":-32,"width":77},"graphics":[["bf","img1.png",[1,0,0,1,-32,-47]],["p","AHCAUIsBAAIAAnpIMCAAIAAHq"],["ef"]]},{"totalFrames":1,"rect":{"y":-47,"height":49,"x":-32,"width":77},"frameActionList":[[0,["pE",{"id":1,"t":"SH","d":0,"n":"1-1"}]]]}],"images":["img1.png"],"frameRate":25,"stageWidth":10,"bgColor":"#FFFFFF","stageHeight":10};
+swfData.artOrigin = {"2":{"x":6.5,"y":2,"top":-47,"label":"pool2","area":0}};

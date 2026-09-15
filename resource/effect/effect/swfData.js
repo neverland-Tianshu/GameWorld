@@ -1,0 +1,1 @@
+var swfData = {"stageHeight":375,"bgColor":"#869CA7","stageWidth":500,"definitionPool":[{"totalFrames":1,"rect":{"y":0,"height":0,"x":0,"width":0},"frameActionList":[]},{"totalFrames":0,"rect":{"y":0,"height":0,"x":0,"width":0},"frameActionList":[]}],"frameRate":24};

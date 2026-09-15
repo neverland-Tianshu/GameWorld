@@ -1,0 +1,13 @@
+{
+  "steps": [
+    { "id": "welcome", "target": "", "text": "引导流程第一步：展示欢迎提示框，在确认按钮上方放置模拟鼠标，绘制全屏半透明遮罩(0.8)聚焦确认按钮，上报引导步 welcome；监听确认后进入「欢迎→引导」步。" },
+    { "id": "welcome_to_tutor", "target": "", "text": "欢迎→引导 过渡步：把镜头/玩家移动到引导 NPC(1004，不触发对话)，上报引导步；随后进入任务展示。" },
+    { "id": "welcome_task_show", "target": "[data-panel=\"quest\"]", "text": "展示欢迎任务：高亮任务条目区，提示如何查看当前任务与目标。" },
+    { "id": "welcome_task_accept", "target": "[data-panel=\"quest\"]", "text": "提交欢迎任务：高亮任务提交按钮区，提示确认提交以推进新手流程。" },
+    { "id": "task_complete_hint", "target": "", "text": "任务完成提示：聚焦引导 NPC(1004)，高亮并放置模拟鼠标，在 NPC 头顶显示完成提示。" },
+    { "id": "task_complete_show", "target": "", "text": "任务完成展示：高亮任务完成条目区，提示查看完成结果。" },
+    { "id": "task_complete_submit", "target": "", "text": "任务完成提交：高亮提交按钮区，提示向 NPC 提交以领取奖励。" },
+    { "id": "battle_tutor", "target": ".battle-cmd-btn[data-cmd=\"cast\"]", "text": "战斗教学：高亮「技能」与「物品」指令，教导玩家在战斗中使用技能与道具。" },
+    { "id": "welcome_last", "target": "", "text": "引导流程最后一步：展示末步提示框，确认后即完成新手引导，可自由探索天书世界。" }
+  ]
+}

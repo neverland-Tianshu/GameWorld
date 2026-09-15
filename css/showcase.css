@@ -1,0 +1,118 @@
+/* 模型展示（游戏引擎同款）—— 2 页：① 模型展示（锚点·战斗·纸娃娃）② NPC 模块（地图切片）
+   复用 style.css 的 .fighter / .fighter-name / .fighter-hpbar / .fighter-hpfill。 */
+
+* { box-sizing: border-box; }
+body { margin: 0; background: #11141c; color: #e8edf7; font-family: "Microsoft YaHei", system-ui, sans-serif; }
+
+#showcase { max-width: 1180px; margin: 0 auto; padding: 16px; }
+
+.showcase-head h1 { margin: 0 0 4px; font-size: 20px; }
+.showcase-sub { color: #9aa6c4; font-size: 13px; line-height: 1.6; }
+.showcase-sub code { background: #1a2236; padding: 1px 6px; border-radius: 4px; color: #ffd479; font-size: 12px; }
+.showcase-sub b { color: #ffd479; }
+
+/* 标签页 */
+.tabs { display: flex; gap: 8px; margin: 14px 0 10px; flex-wrap: wrap; }
+.tab {
+  padding: 8px 14px; border-radius: 8px 8px 0 0; border: 1px solid #2a3350; border-bottom: none;
+  background: #161c2c; color: #c4cde6; font-size: 13px; cursor: pointer; transition: filter .15s;
+}
+.tab:hover { filter: brightness(1.2); }
+.tab.on { background: #23304c; color: #ffd479; box-shadow: 0 -2px 0 #ffd479 inset; }
+
+.showcase-body { display: flex; gap: 16px; align-items: flex-start; }
+
+/* 舞台：800×600 设计空间。模型展示页 / NPC 模块各占一个 layer（互斥显示） */
+.showcase-main { position: relative; flex: 0 0 800px; }
+.showcase-stage {
+  position: relative;
+  width: 800px; height: 600px;
+  border: 1px solid #2a3350; border-radius: 0 10px 10px 10px;
+  overflow: hidden;
+  background: radial-gradient(120% 80% at 50% 18%, #243056 0%, #161b2b 55%, #0c0f18 100%);
+  box-shadow: 0 10px 40px rgba(0,0,0,.45) inset;
+}
+.stage-layer { position: absolute; inset: 0; }
+.stage-hint {
+  margin-top: 6px; font-size: 12px; color: #93a0c4; min-height: 16px;
+}
+
+/* 地图背景（真实切片）—— NPC 模块 */
+.map-bg { position: absolute; inset: 0; z-index: 0; }
+.map-tile { position: absolute; width: 200px; height: 150px; image-rendering: auto; user-select: none; }
+
+/* 角色层（引擎 Fighter 注入） */
+.stage-fighter { z-index: 8; }
+.stage-fighter.selected .fighter-name { color: #ffe9a8; }
+.stage-fighter.selected .fighter-canvas { filter: drop-shadow(0 0 6px #ffd479); }
+
+/* 脚底原点（锚点）叠层：叉号中心 = 角色 fig.x/fig.y */
+.origin-mark { position: absolute; transform: translate(-50%, -50%); z-index: 55; pointer-events: none; will-change: left, top; }
+.origin-mark .ox { position: absolute; left: -26px; right: -26px; top: 0; height: 0; border-top: 1px dashed rgba(255,212,121,.9); }
+.origin-mark .oy { position: absolute; top: -26px; bottom: -26px; left: 0; width: 0; border-left: 1px dashed rgba(255,212,121,.9); }
+.origin-mark .odot { position: absolute; left: 0; top: 0; width: 9px; height: 9px; border-radius: 50%; background: #ff5d5d; transform: translate(-50%, -50%); box-shadow: 0 0 0 2px rgba(0,0,0,.5), 0 0 10px rgba(255,90,90,.8); }
+.origin-mark .olabel { position: absolute; left: 12px; top: -9px; font-size: 11px; line-height: 1; color: #ffd479; white-space: nowrap; text-shadow: 0 1px 2px #000, 0 0 3px #000; }
+
+/* 飘字（受击/治疗） */
+.float-num {
+  position: absolute; transform: translate(-50%, -100%); z-index: 70; pointer-events: none;
+  font-size: 18px; font-weight: 700; text-shadow: 0 2px 4px #000; white-space: nowrap;
+  animation: floatUp 0.9s ease-out forwards;
+}
+@keyframes floatUp {
+  0% { opacity: 0; transform: translate(-50%, -60%); }
+  20% { opacity: 1; }
+  100% { opacity: 0; transform: translate(-50%, -160%); }
+}
+
+/* 控制面板 */
+.showcase-panel { width: 340px; flex: 1 1 auto; display: flex; flex-direction: column; gap: 12px; }
+.panel-block { background: #1a2032; border: 1px solid #2a3350; border-radius: 10px; padding: 12px; }
+.panel-block h3 { margin: 0 0 10px; font-size: 14px; color: #ffd479; }
+.panel-block label { display: flex; align-items: center; justify-content: space-between; gap: 8px; font-size: 13px; margin: 6px 0; color: #c4cde6; }
+.panel-block label input[type="number"],
+.panel-block label input[type="text"],
+.panel-block label select {
+  width: 180px; padding: 5px 7px; border-radius: 6px; border: 1px solid #34406a;
+  background: #0f1422; color: #e8edf7; font-size: 13px;
+}
+.panel-block label.chk { justify-content: flex-start; gap: 8px; }
+
+.btn {
+  display: inline-block; margin: 4px 0; padding: 7px 12px; border-radius: 7px;
+  border: 1px solid #34406a; background: #232c46; color: #e8edf7; font-size: 13px; cursor: pointer;
+  transition: filter .15s;
+}
+.btn:hover { filter: brightness(1.18); }
+.btn-row { display: flex; gap: 8px; flex-wrap: wrap; }
+.btn-row .btn { flex: 1; }
+.btn-primary { background: #2b5cff; border-color: #3a6bff; }
+.btn-danger  { background: #b23b3b; border-color: #c94a4a; }
+.btn-heal    { background: #2f8a4f; border-color: #3aa861; }
+
+.hint { margin: 8px 0 0; font-size: 12px; line-height: 1.55; color: #93a0c4; }
+.hint b { color: #d7e2ff; }
+.hint code { background: #1a2236; padding: 1px 5px; border-radius: 4px; color: #ffd479; font-size: 11.5px; }
+
+.readout { margin-top: 10px; font-size: 12px; line-height: 1.7; color: #cfe0ff;
+  background: #0a0f1c; border: 1px solid #1c2740; border-radius: 6px; padding: 8px 10px; white-space: pre-wrap; }
+.readout b { color: #ffd479; }
+
+.showcase-toast {
+  position: fixed; left: 50%; bottom: 28px; transform: translateX(-50%);
+  background: rgba(20,26,42,.95); border: 1px solid #34406a; color: #ffd479;
+  padding: 8px 16px; border-radius: 8px; font-size: 13px; opacity: 0; transition: opacity .25s;
+  pointer-events: none; z-index: 100;
+}
+
+/* 图层列表（纸娃娃） */
+.doll-list { margin-top: 8px; display: flex; flex-direction: column; gap: 6px; max-height: 260px; overflow: auto; }
+.doll-empty { color: #9fb0c8; font-size: 12px; padding: 4px 0; }
+.doll-row { display: flex; align-items: center; gap: 6px; background: rgba(20,30,50,.55); border: 1px solid #2a3a55; border-radius: 6px; padding: 5px 6px; flex-wrap: wrap; }
+.doll-no { color: #7fd0ff; font-weight: 600; min-width: 22px; }
+.doll-f { display: flex; align-items: center; gap: 3px; font-size: 11px; color: #cfe0f5; }
+.doll-f input { width: 60px; }
+.doll-f input.doll-z, .doll-f input.doll-dx, .doll-f input.doll-dy { width: 42px; }
+.btn-mini { padding: 2px 7px; font-size: 12px; line-height: 1.4; border-radius: 5px; border: 1px solid #2a3a55; background: #20304c; color: #dce8f7; cursor: pointer; }
+.btn-mini:hover { background: #2c4060; }
+.btn-mini.btn-danger { background: #4a2230; border-color: #6a3346; }

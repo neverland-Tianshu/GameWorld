@@ -1,0 +1,785 @@
+{
+ "start_map_id": "3",
+ "maps": [
+  {
+   "id": "3",
+   "name": "新月村",
+   "file": "maps/map_3.json"
+  },
+  {
+   "id": "4",
+   "name": "东影月森林",
+   "file": "maps/map_4.json"
+  },
+  {
+   "id": "5",
+   "name": "北影月森林",
+   "file": "maps/map_5.json"
+  },
+  {
+   "id": "7",
+   "name": "黑色水域",
+   "file": "maps/map_7.json"
+  },
+  {
+   "id": "8",
+   "name": "迷梦泽",
+   "file": "maps/map_8.json"
+  },
+  {
+   "id": "9",
+   "name": "灵仙岛",
+   "file": "maps/map_9.json"
+  },
+  {
+   "id": "10",
+   "name": "古道",
+   "file": "maps/map_10.json"
+  },
+  {
+   "id": "12",
+   "name": "灵昌城",
+   "file": "maps/map_12.json"
+  },
+  {
+   "id": "13",
+   "name": "皇城内",
+   "file": "maps/map_13.json"
+  },
+  {
+   "id": "15",
+   "name": "黄金港口",
+   "file": "maps/map_15.json"
+  },
+  {
+   "id": "16",
+   "name": "芷水湖",
+   "file": "maps/map_16.json"
+  },
+  {
+   "id": "18",
+   "name": "时雨山脚",
+   "file": "maps/map_18.json"
+  },
+  {
+   "id": "19",
+   "name": "半天坡",
+   "file": "maps/map_19.json"
+  },
+  {
+   "id": "20",
+   "name": "清溪云涧",
+   "file": "maps/map_20.json"
+  },
+  {
+   "id": "21",
+   "name": "云锁天阶",
+   "file": "maps/map_21.json"
+  },
+  {
+   "id": "22",
+   "name": "天台云顶",
+   "file": "maps/map_22.json"
+  },
+  {
+   "id": "23",
+   "name": "玄通大殿",
+   "file": "maps/map_23.json"
+  },
+  {
+   "id": "24",
+   "name": "护国寺",
+   "file": "maps/map_24.json"
+  },
+  {
+   "id": "25",
+   "name": "通天塔一层",
+   "file": "maps/map_25.json"
+  },
+  {
+   "id": "35",
+   "name": "元荒境十层",
+   "file": "maps/map_35.json"
+  },
+  {
+   "id": "45",
+   "name": "万化境十层",
+   "file": "maps/map_45.json"
+  },
+  {
+   "id": "46",
+   "name": "赦生道一层",
+   "file": "maps/map_46.json"
+  },
+  {
+   "id": "47",
+   "name": "赦生道二层",
+   "file": "maps/map_47.json"
+  },
+  {
+   "id": "48",
+   "name": "赦生道三层",
+   "file": "maps/map_48.json"
+  },
+  {
+   "id": "49",
+   "name": "赦生道四层",
+   "file": "maps/map_49.json"
+  },
+  {
+   "id": "50",
+   "name": "赦生道五层",
+   "file": "maps/map_50.json"
+  },
+  {
+   "id": "51",
+   "name": "赦生道六层",
+   "file": "maps/map_51.json"
+  },
+  {
+   "id": "52",
+   "name": "赦生道七层",
+   "file": "maps/map_52.json"
+  },
+  {
+   "id": "53",
+   "name": "赦生道八层",
+   "file": "maps/map_53.json"
+  },
+  {
+   "id": "54",
+   "name": "赦生道九层",
+   "file": "maps/map_54.json"
+  },
+  {
+   "id": "55",
+   "name": "赦生道十层",
+   "file": "maps/map_55.json"
+  },
+  {
+   "id": "65",
+   "name": "无间境十层",
+   "file": "maps/map_65.json"
+  },
+  {
+   "id": "66",
+   "name": "明湖水寨",
+   "file": "maps/map_66.json"
+  },
+  {
+   "id": "67",
+   "name": "回音谷",
+   "file": "maps/map_67.json"
+  },
+  {
+   "id": "68",
+   "name": "西川沼泽",
+   "file": "maps/map_68.json"
+  },
+  {
+   "id": "69",
+   "name": "召凤台",
+   "file": "maps/map_69.json"
+  },
+  {
+   "id": "70",
+   "name": "天涯海角",
+   "file": "maps/map_70.json"
+  },
+  {
+   "id": "71",
+   "name": "迷雾海",
+   "file": "maps/map_71.json"
+  },
+  {
+   "id": "72",
+   "name": "尚其村",
+   "file": "maps/map_72.json"
+  },
+  {
+   "id": "73",
+   "name": "密霞谷",
+   "file": "maps/map_73.json"
+  },
+  {
+   "id": "74",
+   "name": "不归幽林",
+   "file": "maps/map_74.json"
+  },
+  {
+   "id": "75",
+   "name": "幽谷清泉",
+   "file": "maps/map_75.json"
+  },
+  {
+   "id": "76",
+   "name": "坠龙城",
+   "file": "maps/map_76.json"
+  },
+  {
+   "id": "77",
+   "name": "广寒城",
+   "file": "maps/map_77.json"
+  },
+  {
+   "id": "78",
+   "name": "碧波水域",
+   "file": "maps/map_78.json"
+  },
+  {
+   "id": "79",
+   "name": "埋骨之地",
+   "file": "maps/map_79.json"
+  },
+  {
+   "id": "80",
+   "name": "伏魔山",
+   "file": "maps/map_80.json"
+  },
+  {
+   "id": "81",
+   "name": "千针雪林",
+   "file": "maps/map_81.json"
+  },
+  {
+   "id": "83",
+   "name": "咆哮谷",
+   "file": "maps/map_83.json"
+  },
+  {
+   "id": "84",
+   "name": "落雁峰",
+   "file": "maps/map_84.json"
+  },
+  {
+   "id": "85",
+   "name": "一线牵",
+   "file": "maps/map_85.json"
+  },
+  {
+   "id": "86",
+   "name": "三界关",
+   "file": "maps/map_86.json"
+  },
+  {
+   "id": "87",
+   "name": "万重山脚",
+   "file": "maps/map_87.json"
+  },
+  {
+   "id": "88",
+   "name": "万重山雪顶",
+   "file": "maps/map_88.json"
+  },
+  {
+   "id": "89",
+   "name": "天山瑶池",
+   "file": "maps/map_89.json"
+  },
+  {
+   "id": "90",
+   "name": "九霄台",
+   "file": "maps/map_90.json"
+  },
+  {
+   "id": "91",
+   "name": "天外天",
+   "file": "maps/map_91.json"
+  },
+  {
+   "id": "92",
+   "name": "北岭天关",
+   "file": "maps/map_92.json"
+  },
+  {
+   "id": "93",
+   "name": "迷途沙洲",
+   "file": "maps/map_93.json"
+  },
+  {
+   "id": "94",
+   "name": "困顿之林",
+   "file": "maps/map_94.json"
+  },
+  {
+   "id": "95",
+   "name": "祭牙台地",
+   "file": "maps/map_95.json"
+  },
+  {
+   "id": "96",
+   "name": "竞技场",
+   "file": "maps/map_96.json"
+  },
+  {
+   "id": "97",
+   "name": "灵昌广场",
+   "file": "maps/map_97.json"
+  },
+  {
+   "id": "99",
+   "name": "焚石山",
+   "file": "maps/map_99.json"
+  },
+  {
+   "id": "100",
+   "name": "怒焰祭坛",
+   "file": "maps/map_100.json"
+  },
+  {
+   "id": "101",
+   "name": "十字路口",
+   "file": "maps/map_101.json"
+  },
+  {
+   "id": "102",
+   "name": "逐浪广场",
+   "file": "maps/map_102.json"
+  },
+  {
+   "id": "103",
+   "name": "遗忘废墟",
+   "file": "maps/map_103.json"
+  },
+  {
+   "id": "104",
+   "name": "破碎龙柱",
+   "file": "maps/map_104.json"
+  },
+  {
+   "id": "105",
+   "name": "浸血围场",
+   "file": "maps/map_105.json"
+  },
+  {
+   "id": "106",
+   "name": "远古囚牢",
+   "file": "maps/map_106.json"
+  },
+  {
+   "id": "107",
+   "name": "龙宫大殿",
+   "file": "maps/map_107.json"
+  },
+  {
+   "id": "109",
+   "name": "区域109（数据待补充）",
+   "file": "maps/map_109.json"
+  },
+  {
+   "id": "110",
+   "name": "近天回廊",
+   "file": "maps/map_110.json"
+  },
+  {
+   "id": "111",
+   "name": "百鸟树林",
+   "file": "maps/map_111.json"
+  },
+  {
+   "id": "112",
+   "name": "晨光台地",
+   "file": "maps/map_112.json"
+  },
+  {
+   "id": "113",
+   "name": "空灵之地",
+   "file": "maps/map_113.json"
+  },
+  {
+   "id": "123",
+   "name": "风越峡谷",
+   "file": "maps/map_123.json"
+  },
+  {
+   "id": "125",
+   "name": "宠物岛一层",
+   "file": "maps/map_125.json"
+  },
+  {
+   "id": "126",
+   "name": "宠物岛二层",
+   "file": "maps/map_126.json"
+  },
+  {
+   "id": "127",
+   "name": "宠物岛三层",
+   "file": "maps/map_127.json"
+  },
+  {
+   "id": "128",
+   "name": "圣兽岭",
+   "file": "maps/map_128.json"
+  },
+  {
+   "id": "149",
+   "name": "三界裂缝",
+   "file": "maps/map_149.json"
+  },
+  {
+   "id": "150",
+   "name": "比武大会",
+   "file": "maps/map_150.json"
+  },
+  {
+   "id": "151",
+   "name": "通天幻境",
+   "file": "maps/map_151.json"
+  },
+  {
+   "id": "152",
+   "name": "区域152（数据待补充）",
+   "file": "maps/map_152.json"
+  },
+  {
+   "id": "153",
+   "name": "漠雪幽径",
+   "file": "maps/map_153.json"
+  },
+  {
+   "id": "154",
+   "name": "碧琅水榭",
+   "file": "maps/map_154.json"
+  },
+  {
+   "id": "156",
+   "name": "仙境府邸",
+   "file": "maps/map_156.json"
+  },
+  {
+   "id": "157",
+   "name": "庆功宴大会",
+   "file": "maps/map_157.json"
+  },
+  {
+   "id": "159",
+   "name": "魔幻小屋",
+   "file": "maps/map_159.json"
+  },
+  {
+   "id": "170",
+   "name": "五行宫-金阵",
+   "file": "maps/map_170.json"
+  },
+  {
+   "id": "172",
+   "name": "五行宫-八卦阵",
+   "file": "maps/map_172.json"
+  },
+  {
+   "id": "179",
+   "name": "天书密室",
+   "file": "maps/map_179.json"
+  },
+  {
+   "id": "183",
+   "name": "挖矿",
+   "file": "maps/map_183.json"
+  },
+  {
+   "id": "205",
+   "name": "幻想城",
+   "file": "maps/map_205.json"
+  },
+  {
+   "id": "206",
+   "name": "冰天雪地",
+   "file": "maps/map_206.json"
+  },
+  {
+   "id": "215",
+   "name": "区域215（数据待补充）",
+   "file": "maps/map_215.json"
+  },
+  {
+   "id": "216",
+   "name": "区域216（数据待补充）",
+   "file": "maps/map_216.json"
+  },
+  {
+   "id": "217",
+   "name": "旧灵昌城",
+   "file": "maps/map_217.json"
+  },
+  {
+   "id": "232",
+   "name": "竞技准备室",
+   "file": "maps/map_232.json"
+  },
+  {
+   "id": "233",
+   "name": "竞技准备室",
+   "file": "maps/map_233.json"
+  },
+  {
+   "id": "1001",
+   "name": "昆仑幻境",
+   "file": "maps/map_1001.json"
+  },
+  {
+   "id": "1002",
+   "name": "蜃龙密室",
+   "file": "maps/map_1002.json"
+  },
+  {
+   "id": "1003",
+   "name": "天音洞上层",
+   "file": "maps/map_1003.json"
+  },
+  {
+   "id": "1004",
+   "name": "天音洞下层",
+   "file": "maps/map_1004.json"
+  },
+  {
+   "id": "1005",
+   "name": "第一个阵基",
+   "file": "maps/map_1005.json"
+  },
+  {
+   "id": "1006",
+   "name": "第二个阵基",
+   "file": "maps/map_1006.json"
+  },
+  {
+   "id": "1007",
+   "name": "第三个阵基",
+   "file": "maps/map_1007.json"
+  },
+  {
+   "id": "1008",
+   "name": "第四个阵基",
+   "file": "maps/map_1008.json"
+  },
+  {
+   "id": "1009",
+   "name": "阵眼",
+   "file": "maps/map_1009.json"
+  },
+  {
+   "id": "1010",
+   "name": "最后的石窟",
+   "file": "maps/map_1010.json"
+  },
+  {
+   "id": "1011",
+   "name": "狩猎场",
+   "file": "maps/map_1011.json"
+  },
+  {
+   "id": "1012",
+   "name": "前线要塞",
+   "file": "maps/map_1012.json"
+  },
+  {
+   "id": "1014",
+   "name": "新月村",
+   "file": "maps/map_1014.json"
+  },
+  {
+   "id": "1015",
+   "name": "北影月",
+   "file": "maps/map_1015.json"
+  },
+  {
+   "id": "1016",
+   "name": "西影月",
+   "file": "maps/map_1016.json"
+  },
+  {
+   "id": "1017",
+   "name": "舞修罗的家",
+   "file": "maps/map_1017.json"
+  },
+  {
+   "id": "1018",
+   "name": "潮湿的洞穴",
+   "file": "maps/map_1018.json"
+  },
+  {
+   "id": "1019",
+   "name": "试炼之地",
+   "file": "maps/map_1019.json"
+  },
+  {
+   "id": "1020",
+   "name": "试炼之地",
+   "file": "maps/map_1020.json"
+  },
+  {
+   "id": "1021",
+   "name": "试炼之地",
+   "file": "maps/map_1021.json"
+  },
+  {
+   "id": "1039",
+   "name": "盘山道1层",
+   "file": "maps/map_1039.json"
+  },
+  {
+   "id": "1040",
+   "name": "盘山道2层",
+   "file": "maps/map_1040.json"
+  },
+  {
+   "id": "1041",
+   "name": "盘山道3层",
+   "file": "maps/map_1041.json"
+  },
+  {
+   "id": "1042",
+   "name": "盘山道4层",
+   "file": "maps/map_1042.json"
+  },
+  {
+   "id": "1043",
+   "name": "沁心湖",
+   "file": "maps/map_1043.json"
+  },
+  {
+   "id": "1044",
+   "name": "盘山道5层",
+   "file": "maps/map_1044.json"
+  },
+  {
+   "id": "1048",
+   "name": "伏魔穹顶",
+   "file": "maps/map_1048.json"
+  },
+  {
+   "id": "1056",
+   "name": "燃烧的村庄",
+   "file": "maps/map_1056.json"
+  },
+  {
+   "id": "1057",
+   "name": "御剑门穹顶",
+   "file": "maps/map_1057.json"
+  },
+  {
+   "id": "1058",
+   "name": "帮会大厅",
+   "file": "maps/map_1058.json"
+  },
+  {
+   "id": "1061",
+   "name": "天阶1层",
+   "file": "maps/map_1061.json"
+  },
+  {
+   "id": "1062",
+   "name": "天阶2层",
+   "file": "maps/map_1062.json"
+  },
+  {
+   "id": "1063",
+   "name": "天阶3层",
+   "file": "maps/map_1063.json"
+  },
+  {
+   "id": "1065",
+   "name": "空灵之地深处",
+   "file": "maps/map_1065.json"
+  },
+  {
+   "id": "1079",
+   "name": "帮会大厅",
+   "file": "maps/map_1079.json"
+  },
+  {
+   "id": "1086",
+   "name": "石窟尽头",
+   "file": "maps/map_1086.json"
+  },
+  {
+   "id": "1116",
+   "name": "古墓森林",
+   "file": "maps/map_1116.json"
+  },
+  {
+   "id": "1117",
+   "name": "地下古墓一层",
+   "file": "maps/map_1117.json"
+  },
+  {
+   "id": "1118",
+   "name": "地下古墓试炼室",
+   "file": "maps/map_1118.json"
+  },
+  {
+   "id": "1119",
+   "name": "地下古墓二层",
+   "file": "maps/map_1119.json"
+  },
+  {
+   "id": "1120",
+   "name": "古墓藏宝室",
+   "file": "maps/map_1120.json"
+  },
+  {
+   "id": "1133",
+   "name": "迷魂谷",
+   "file": "maps/map_1133.json"
+  },
+  {
+   "id": "1137",
+   "name": "芷水湖",
+   "file": "maps/map_1137.json"
+  },
+  {
+   "id": "1140",
+   "name": "翱翔天际",
+   "file": "maps/map_1140.json"
+  },
+  {
+   "id": "1145",
+   "name": "嘉年华",
+   "file": "maps/map_1145.json"
+  },
+  {
+   "id": "1158",
+   "name": "须弥山",
+   "file": "maps/map_1158.json"
+  },
+  {
+   "id": "99001",
+   "name": "切片测试图",
+   "file": "maps/map_99001.json"
+  },
+  {
+   "id": "11",
+   "name": "红海岸",
+   "file": "maps/map_980001.json"
+  },
+  {
+   "id": "17",
+   "name": "湖心岛",
+   "file": "maps/map_980002.json"
+  },
+  {
+   "id": "980003",
+   "name": "焚石山",
+   "file": "maps/map_980003.json"
+  },
+  {
+   "id": "980004",
+   "name": "近天回廊",
+   "file": "maps/map_980004.json"
+  },
+  {
+   "id": "980012",
+   "name": "旧灵昌城",
+   "file": "maps/map_980012.json"
+  },
+  {
+   "id": "0",
+   "name": "旧新月村",
+   "file": "maps/map_0.json"
+  },
+  {
+   "id": "14",
+   "name": "黄金海岸",
+   "file": "maps/map_黄金海岸.json"
+  }
+ ]
+}

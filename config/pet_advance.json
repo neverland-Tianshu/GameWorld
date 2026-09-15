@@ -1,0 +1,1832 @@
+{
+  "_meta": {
+    "generatedBy": "_verify/gen_pet_advance_cfg.mjs",
+    "用途": "宠物进阶子系统（PetAdvancePanelNew / PetWuRate / PetNeiDan）本地数据真源",
+    "数据来源": {
+      "内丹": "数据解析/输出/CSV/Pet_宠物/pet__宠物内丹.csv（op 582 SC_PET_NEIDAN_LIST 真实抓包样本）",
+      "悟性加成": "数据解析/输出/CSV/Pet_宠物/pet__宠物仙丹.csv（op 210 SC_PET_XIANDAN 真实抓包样本）",
+      "丹药列表": "数据解析/输出/CSV/Item_物品/item__物品简表.csv（op 230 SC_PET_FEED_LIST 真实抓包样本）",
+      "布局": "D:/tsqt/Game/update/i18n/zh_CN/layout.xml",
+      "文案": "update/i18n/zh_CN/Lang/zh_CN.as + deobfuscated/globals/GlobalsGlobal06.as",
+      "常量": "deobfuscated/globals/GlobalsGlobal05.as / GlobalsGlobal08.as / cache/CacheCache08.as",
+      "协议号": "deobfuscated/net/NetNet.as"
+    },
+    "注意": "抓包样本仅覆盖取样到的宠物/丹药，非原版全表；数值公式（提品/升星/喂丹成功率）原版由服务端下发，客户端不可见，未臆造，见 formulas.待逆向"
+  },
+  "proto": {
+    "CS_PET_EQUIP_MSG": 845,
+    "CS_PET_RESISTANCE": 936,
+    "CS_PET_MELT_INFO": 1000,
+    "CS_PET_USESKILLBOOK": 192,
+    "CS_PET_PRACTICE1": 681,
+    "CS_PET_XIANDAN_AUTOPUT": 205,
+    "CS_PET_FEED_UPGRADE": 237,
+    "CS_PET_NEIDAN": 335,
+    "CS_PET_NEIDAN_USEITEM": 334,
+    "CS_PET_FEED_LIST": 236,
+    "CS_PET_ADVANCED_INFO": 136,
+    "SC_PET_XIANDAN": 210,
+    "SC_PET_FEED_LIST": 230,
+    "SC_PET_NEIDAN_LIST": 582,
+    "SC_PET_NEIDAN_INFO": 583,
+    "SC_PET_ADVANCED_INFO": 140
+  },
+  "consts": {
+    "BAG_PET_VIEW_XIANDAN": 1000,
+    "BAG_PET_VIEW_NEIDAN": 1001,
+    "PANEL_STATE_OPEN": 1,
+    "PANEL_STATE_CLOSE": 2,
+    "PET_USE_BOOK_CLOSE": 1,
+    "PET_PRACTICE_CLOSE": 2,
+    "TYPE_PLAYER_PET": 0,
+    "GRID_OPEN": 0,
+    "PANEL_PET_ADVANCE_NEW": 622,
+    "PANEL_PLAYER_ITEM": 18,
+    "CURSOR_NAIDAN_EAT": 16,
+    "PET_ADV_PANEL_WU": 1,
+    "PET_ADV_PENEL_BP": 2,
+    "bp": {
+      "bpVitality": 10014,
+      "bpIntellect": 10013,
+      "bpStrong": 10012,
+      "bpAgile": 10015,
+      "bpBelief": 10016
+    },
+    "nd": {
+      "title": 0,
+      "index": 1,
+      "pinCost": 2,
+      "star": 3,
+      "starCost": 4,
+      "equipLv": 5,
+      "shape": 6,
+      "equipPet": 7,
+      "equipPhase": 8,
+      "trainLv": 9,
+      "trainExp": 10,
+      "curExp": 11,
+      "nextLvExp": 12,
+      "xiuwei": 13,
+      "isFeisheng": 22,
+      "yuanqi": 14,
+      "yuanqiMax": 15,
+      "feishengLv": 20,
+      "feishengExp": 21,
+      "petProp": 16,
+      "neidanProp": 17,
+      "neidanWeight": 18,
+      "neidanGemstone": 19
+    },
+    "growUpRate": 10011,
+    "huanHua": 133,
+    "hasSetLock": 119,
+    "petLockState": 118
+  },
+  "layout": {
+    "PetAdvancePanel_new": {
+      "PetAdvancePanel_new": {
+        "x": 20,
+        "y": 60,
+        "w": 480,
+        "h": 500,
+        "align": ""
+      },
+      "PetAdvancePanel_new_frame1": {
+        "x": 14,
+        "y": 55,
+        "w": 175,
+        "h": 405,
+        "align": ""
+      },
+      "PetAdvancePanel_new_frame2": {
+        "x": 207,
+        "y": 55,
+        "w": 260,
+        "h": 250,
+        "align": ""
+      },
+      "PetAdvancePanel_new_frame3": {
+        "x": 207,
+        "y": 320,
+        "w": 260,
+        "h": 140,
+        "align": ""
+      },
+      "PetAdvancePanel_new_buttons": {
+        "x": 200,
+        "y": 465,
+        "w": 40,
+        "h": 22,
+        "align": ""
+      }
+    },
+    "ViewPetWuRate_new": {
+      "ViewPetWuRate_new_itemBtn": {
+        "x": 8,
+        "y": 220,
+        "w": 120,
+        "h": 22,
+        "align": ""
+      },
+      "ViewPetWuRate_new_autoupBtn": {
+        "x": 13,
+        "y": 380,
+        "w": 60,
+        "h": 22,
+        "align": ""
+      },
+      "ViewPetWuRate_new_upBtn": {
+        "x": 100,
+        "y": 380,
+        "w": 60,
+        "h": 22,
+        "align": ""
+      },
+      "ViewPetWuRate_new_growCB": {
+        "x": 85,
+        "y": 288,
+        "w": 76,
+        "h": 150,
+        "align": ""
+      },
+      "ViewPetWuRate_new_useCB": {
+        "x": 85,
+        "y": 266,
+        "w": 76,
+        "h": 0,
+        "align": ""
+      },
+      "ViewPetWuRate_new_qualityInput": {
+        "x": -48,
+        "y": 242,
+        "w": 150,
+        "h": 22,
+        "align": ""
+      },
+      "ViewPetWuRate_new_putGrid": {
+        "x": 11,
+        "y": 311,
+        "w": 0,
+        "h": 0,
+        "align": ""
+      },
+      "ViewPetWuRate_new_check": {
+        "x": 26,
+        "y": 362,
+        "w": 90,
+        "h": 20,
+        "align": ""
+      },
+      "ViewPetWuRate_new_point1": {
+        "x": 130,
+        "y": 15,
+        "w": 0,
+        "h": 0,
+        "align": ""
+      },
+      "ViewPetWuRate_new_point2": {
+        "x": 130,
+        "y": 55,
+        "w": 0,
+        "h": 0,
+        "align": ""
+      },
+      "ViewPetWuRate_new_point3": {
+        "x": 130,
+        "y": 95,
+        "w": 0,
+        "h": 0,
+        "align": ""
+      },
+      "ViewPetWuRate_new_point4": {
+        "x": 130,
+        "y": 135,
+        "w": 0,
+        "h": 0,
+        "align": ""
+      },
+      "ViewPetWuRate_new_point5": {
+        "x": 130,
+        "y": 175,
+        "w": 0,
+        "h": 0,
+        "align": ""
+      },
+      "ViewPetWuRate_new_point": {
+        "x": 16,
+        "y": 316,
+        "w": 0,
+        "h": 0,
+        "align": ""
+      }
+    },
+    "PetWuRatio": {
+      "PetWuRatioAdd_new": {
+        "x": 90,
+        "y": 244,
+        "w": 0,
+        "h": 0,
+        "align": ""
+      },
+      "PetWuRatioText_new": {
+        "x": 109,
+        "y": 242,
+        "w": 0,
+        "h": 0,
+        "align": ""
+      },
+      "PetWuRatioAdd": {
+        "x": 190,
+        "y": 178,
+        "w": 0,
+        "h": 0,
+        "align": ""
+      },
+      "PetWuRatioText": {
+        "x": 204,
+        "y": 176,
+        "w": 0,
+        "h": 0,
+        "align": ""
+      }
+    },
+    "ViewPetNeiDan_new": {
+      "ViewPetNeiDan_new_frame": {
+        "x": 10,
+        "y": 20,
+        "w": 146,
+        "h": 111,
+        "align": ""
+      },
+      "ViewPetNeiDan_new_shape": {
+        "x": 15,
+        "y": 25,
+        "w": 35,
+        "h": 35,
+        "align": ""
+      },
+      "ViewPetNeiDan_new_shapeText": {
+        "x": 18,
+        "y": 34,
+        "w": 35,
+        "h": 35,
+        "align": ""
+      },
+      "ViewPetNeiDan_new_offBtn": {
+        "x": 180,
+        "y": 20,
+        "w": 65,
+        "h": 0,
+        "align": ""
+      },
+      "ViewPetNeiDan_new_eatedBtn": {
+        "x": 180,
+        "y": 48,
+        "w": 65,
+        "h": 0,
+        "align": ""
+      },
+      "ViewPetNeiDan_new_expBtn": {
+        "x": 180,
+        "y": 76,
+        "w": 65,
+        "h": 0,
+        "align": ""
+      },
+      "ViewPetNeiDan_new_eatBtn": {
+        "x": 180,
+        "y": 104,
+        "w": 65,
+        "h": 0,
+        "align": ""
+      },
+      "ViewPetNeiDan_new_propTips": {
+        "x": 580,
+        "y": 550,
+        "w": 245,
+        "h": 0,
+        "align": ""
+      },
+      "ViewPetNeiDan_new_tip": {
+        "x": 120,
+        "y": 320,
+        "w": 0,
+        "h": 0,
+        "align": ""
+      }
+    },
+    "ViewPetNeiDan_prop": {
+      "ViewPetNeiDan_propFrame": {
+        "x": 12,
+        "y": 173,
+        "w": 265,
+        "h": 265,
+        "align": ""
+      },
+      "ViewPetNeiDan_propBG": {
+        "x": 4,
+        "y": 185,
+        "w": 263,
+        "h": 273,
+        "align": ""
+      },
+      "ViewPetNeiDan_propTips": {
+        "x": 10,
+        "y": 190,
+        "w": 245,
+        "h": 0,
+        "align": ""
+      },
+      "ViewPetNeiDan_prop": {
+        "x": 6,
+        "y": 0,
+        "w": 134,
+        "h": 14,
+        "align": ""
+      },
+      "ViewPetNeiDan_propValue": {
+        "x": 60,
+        "y": 0,
+        "w": 0,
+        "h": 0,
+        "align": ""
+      },
+      "ViewPetNeiDan_propY1": {
+        "x": 0,
+        "y": 186,
+        "w": 0,
+        "h": 0,
+        "align": ""
+      },
+      "ViewPetNeiDan_propY2": {
+        "x": 0,
+        "y": 252,
+        "w": 130,
+        "h": 0,
+        "align": "left"
+      },
+      "ViewPetNeiDan_propY3": {
+        "x": 0,
+        "y": 266,
+        "w": 270,
+        "h": 0,
+        "align": "left"
+      },
+      "ViewPetNeiDan_propY4": {
+        "x": 0,
+        "y": 364,
+        "w": 270,
+        "h": 0,
+        "align": "left"
+      },
+      "ViewPetNeiDan_propY5": {
+        "x": 0,
+        "y": 300,
+        "w": 130,
+        "h": 0,
+        "align": "left"
+      },
+      "ViewPetNeiDan_propY6": {
+        "x": 0,
+        "y": 439,
+        "w": 0,
+        "h": 0,
+        "align": ""
+      },
+      "ViewPetNeiDan_propNY1": {
+        "x": 0,
+        "y": 0,
+        "w": 0,
+        "h": 0,
+        "align": ""
+      },
+      "ViewPetNeiDan_propNY2": {
+        "x": 0,
+        "y": 66,
+        "w": 130,
+        "h": 0,
+        "align": "left"
+      },
+      "ViewPetNeiDan_propNY3": {
+        "x": 0,
+        "y": 80,
+        "w": 270,
+        "h": 0,
+        "align": "left"
+      },
+      "ViewPetNeiDan_propNY4": {
+        "x": 0,
+        "y": 158,
+        "w": 270,
+        "h": 0,
+        "align": "left"
+      },
+      "ViewPetNeiDan_propNY5": {
+        "x": 0,
+        "y": 114,
+        "w": 130,
+        "h": 0,
+        "align": "left"
+      },
+      "ViewPetNeiDan_propNY6": {
+        "x": 0,
+        "y": 179,
+        "w": 0,
+        "h": 0,
+        "align": ""
+      }
+    },
+    "ViewPetSkill_new": {
+      "ViewPetSkill_new": {
+        "x": 12,
+        "y": 25,
+        "w": 0,
+        "h": 0,
+        "align": ""
+      },
+      "ViewPetSkill_new_learnFrame": {
+        "x": 16,
+        "y": 192,
+        "w": 233,
+        "h": 50,
+        "align": ""
+      },
+      "ViewPetSkill_new_learnBtn": {
+        "x": 98,
+        "y": 167,
+        "w": 50,
+        "h": 22,
+        "align": ""
+      },
+      "ViewPetSkill_new_deleteBtn": {
+        "x": 98,
+        "y": 107,
+        "w": 50,
+        "h": 22,
+        "align": ""
+      },
+      "ViewPetSkill_new_disciplineBtn": {
+        "x": 98,
+        "y": 137,
+        "w": 50,
+        "h": 22,
+        "align": ""
+      },
+      "ViewPetSkill_new_perceiveBtn": {
+        "x": 194,
+        "y": 107,
+        "w": 60,
+        "h": 80,
+        "align": ""
+      },
+      "ViewPetSkill_new_point": {
+        "x": 11,
+        "y": 111,
+        "w": 0,
+        "h": 0,
+        "align": ""
+      },
+      "ViewPetSkill_new_point1": {
+        "x": 11,
+        "y": 151,
+        "w": 0,
+        "h": 0,
+        "align": ""
+      },
+      "ViewPetSkill_new_skillItem": {
+        "x": 5,
+        "y": 13,
+        "w": 0,
+        "h": 0,
+        "align": ""
+      }
+    },
+    "PetPanel_propText": {
+      "PetPanel_propText": {
+        "x": 53,
+        "y": 2,
+        "w": 130,
+        "h": 16,
+        "align": "left"
+      },
+      "PetPanel_propText2": {
+        "x": 42,
+        "y": 0,
+        "w": 130,
+        "h": 0,
+        "align": ""
+      }
+    }
+  },
+  "lang": {
+    "VIEW_PET_WU_TYPR": {
+      "key": "VIEW_PET_WU_TYPR",
+      "value": 20217,
+      "zh": "选择种类",
+      "missing": null
+    },
+    "VIEW_PET_WU_PERFECTION": {
+      "key": "VIEW_PET_WU_PERFECTION",
+      "value": 20218,
+      "zh": "完美",
+      "missing": null
+    },
+    "VIEW_PET_WU_SALIENCE": {
+      "key": "VIEW_PET_WU_SALIENCE",
+      "value": 20219,
+      "zh": "卓越",
+      "missing": null
+    },
+    "VIEW_PET_PUTIN_PILLS": {
+      "key": "VIEW_PET_PUTIN_PILLS",
+      "value": 20214,
+      "zh": "放入宠物仙丹可提升宠物资质",
+      "missing": null
+    },
+    "VIEW_PET_WU_STOP": {
+      "key": "VIEW_PET_WU_STOP",
+      "value": 20216,
+      "zh": "遇变异宠自动停止",
+      "missing": null
+    },
+    "PROPERTY_GROWUPRATE": {
+      "key": "PROPERTY_GROWUPRATE",
+      "value": 20094,
+      "zh": "成长率:",
+      "missing": null
+    },
+    "HUANHUA_DU": {
+      "key": "HUANHUA_DU",
+      "value": 20475,
+      "zh": "  (幻化度 {0})",
+      "missing": null
+    },
+    "NEIDAN_OFF": {
+      "key": "NEIDAN_OFF",
+      "value": 183,
+      "zh": "可以将选中的内丹从内丹栏中卸下，卸下内丹时会消耗大量的修炼经验，并且耗尽内丹元气。",
+      "missing": null
+    },
+    "NEIDAN_EATED": {
+      "key": "NEIDAN_EATED",
+      "value": 184,
+      "zh": "宠物将选中的内丹消化掉，获得内丹中的修炼经验及内丹修为，消化之后内丹消失。",
+      "missing": null
+    },
+    "NEIDAN_EXP": {
+      "key": "NEIDAN_EXP",
+      "value": 185,
+      "zh": "内丹可以吸取宠物当前等级的经验值，把它们转化成内丹的修炼经验。",
+      "missing": null
+    },
+    "NEIDAN_EAT": {
+      "key": "NEIDAN_EAT",
+      "value": 186,
+      "zh": "内丹可以通过吞掉物品来增加元气，修炼经验等等，吞噬物品同人物使用物品类似。",
+      "missing": null
+    },
+    "NEIDAN_OPTION_ALERT": {
+      "key": "NEIDAN_OPTION_ALERT",
+      "value": 199,
+      "zh": "请先选择一个内丹",
+      "missing": null
+    },
+    "NEIDAN_PROP": {
+      "key": "NEIDAN_PROP",
+      "value": 198,
+      "zh": "内丹属性：",
+      "missing": null
+    },
+    "NEIDAN_FEISHENG_PROP": {
+      "key": "NEIDAN_FEISHENG_PROP",
+      "value": 40263,
+      "zh": "飞升属性：",
+      "missing": null
+    },
+    "NEIDAN_PINCOST": {
+      "key": "NEIDAN_PINCOST",
+      "value": 214,
+      "zh": "(当前提品消耗{0}修炼经验)",
+      "missing": null
+    },
+    "NEIDAN_STARCOST": {
+      "key": "NEIDAN_STARCOST",
+      "value": 215,
+      "zh": "(当前升星消耗{0}修炼经验)",
+      "missing": null
+    },
+    "NEIDAN_EQUIP_LV": {
+      "key": "NEIDAN_EQUIP_LV",
+      "value": 187,
+      "zh": "装备等级：",
+      "missing": null
+    },
+    "NEIDAN_SHAPE": {
+      "key": "NEIDAN_SHAPE",
+      "value": 188,
+      "zh": "内丹形状：",
+      "missing": null
+    },
+    "NEIDAN_FIT_PET": {
+      "key": "NEIDAN_FIT_PET",
+      "value": 189,
+      "zh": "适用宠物：",
+      "missing": null
+    },
+    "NEIDAN_FIT_PHASE": {
+      "key": "NEIDAN_FIT_PHASE",
+      "value": 190,
+      "zh": "适用阶段：",
+      "missing": null
+    },
+    "NEIDAN_XL_LV": {
+      "key": "NEIDAN_XL_LV",
+      "value": 191,
+      "zh": "修炼等级：",
+      "missing": null
+    },
+    "NEIDAN_XL_EXP": {
+      "key": "NEIDAN_XL_EXP",
+      "value": 192,
+      "zh": "修炼经验：",
+      "missing": null
+    },
+    "NEIDAN_CUR_EXP": {
+      "key": "NEIDAN_CUR_EXP",
+      "value": 193,
+      "zh": "当前经验：",
+      "missing": null
+    },
+    "NEIDAN_LV_EXP": {
+      "key": "NEIDAN_LV_EXP",
+      "value": 194,
+      "zh": "升级经验：",
+      "missing": null
+    },
+    "NEIDAN_XIUWEI": {
+      "key": "NEIDAN_XIUWEI",
+      "value": 195,
+      "zh": "内丹修为：",
+      "missing": null
+    },
+    "NEIDAN_YUANQI": {
+      "key": "NEIDAN_YUANQI",
+      "value": 196,
+      "zh": "内丹元气：",
+      "missing": null
+    },
+    "NEIDAN_FEISHENG_LV": {
+      "key": "NEIDAN_FEISHENG_LV",
+      "value": 40261,
+      "zh": "飞升等级：",
+      "missing": null
+    },
+    "NEIDAN_FEISHENG_EXP": {
+      "key": "NEIDAN_FEISHENG_EXP",
+      "value": 40262,
+      "zh": "飞升经验：",
+      "missing": null
+    },
+    "NEIDAN_PET_PROP": {
+      "key": "NEIDAN_PET_PROP",
+      "value": 197,
+      "zh": "宠物属性：",
+      "missing": null
+    },
+    "NEIDAN_DEFAULT": {
+      "key": "NEIDAN_DEFAULT",
+      "value": 181,
+      "zh": "想要装备宠物内丹，您可以打开背包，通过拖拽的方式将其放入一个空的内丹栏中，要注意内丹的形状需要与内丹栏的形状相同。装备内丹同穿人物装备类似，不同的是内丹可以成长，大幅提升属性。更多内丹的帮助信息请查看内丹栏右边的说明框及官网介绍。",
+      "missing": null
+    }
+  },
+  "neidanStageNames": [
+    "筑基",
+    "旋照",
+    "开光",
+    "融合",
+    "心动",
+    "灵寂",
+    "元婴",
+    "出窍",
+    "分神",
+    "合体",
+    "渡劫",
+    "大乘"
+  ],
+  "data": {
+    "neidan": [
+      {
+        "petId": "33147dd6-dac5-4116-bd95-2208ad3cbafc",
+        "title": "<font color='#CB40F1'><font size='14'>离珠的聚源金丹</font></font>",
+        "index": 0,
+        "pinCost": 200600000,
+        "star": 5,
+        "starCost": 25600000,
+        "equipLv": 55,
+        "shape": "▲",
+        "equipPet": "全部",
+        "equipPhase": "筑基期，旋照期，开光期，融合期",
+        "trainLv": 81,
+        "trainExp": 527293633,
+        "curExp": 36331698,
+        "nextLvExp": 75331116,
+        "xiuwei": 32496,
+        "isFeisheng": 0,
+        "yuanqi": 0,
+        "yuanqiMax": 26200,
+        "feishengLv": 0,
+        "feishengExp": "0/0",
+        "petProp": "<font size='12'><font color='#9B8CE9'>+28 耐力<br>+190 防御<br>+73 攻击</font></font>",
+        "neidanProp": "<font size='12'><font color='#9B8CE9'>+1% 获得蕴藏修为</font></font>",
+        "neidanWeight": "<font color='#FFFFFF'>评价：★★★★★</font>"
+      },
+      {
+        "petId": "33147dd6-dac5-4116-bd95-2208ad3cbafc",
+        "title": "<font color='#EF9C00'><font size='14'>九曜的聚源金丹</font></font>",
+        "index": 1,
+        "pinCost": 0,
+        "star": 5,
+        "starCost": 25600000,
+        "equipLv": 55,
+        "shape": "●",
+        "equipPet": "全部",
+        "equipPhase": "筑基期，旋照期，开光期，融合期",
+        "trainLv": 79,
+        "trainExp": 224458905,
+        "curExp": 46106744,
+        "nextLvExp": 68327543,
+        "xiuwei": 30810,
+        "isFeisheng": 0,
+        "yuanqi": 0,
+        "yuanqiMax": 26100,
+        "feishengLv": 0,
+        "feishengExp": "0/0",
+        "petProp": "<font size='12'><font color='#9B8CE9'>+66 恢复<br>+146 速度<br>+182 法术爆击<br>+188 忽视目标物防</font></font>",
+        "neidanProp": "<font size='12'><font color='#9B8CE9'>+300 元气上限</font></font>",
+        "neidanWeight": "<font color='#FFFFFF'>评价：★★★★★</font>"
+      }
+    ],
+    "xiandan": [
+      {
+        "petId": "33147dd6-dac5-4116-bd95-2208ad3cbafc",
+        "bpVitality": 860,
+        "bpIntellect": 860,
+        "bpStrong": 860,
+        "bpAgile": 860,
+        "bpBelief": 860,
+        "petType": 1
+      },
+      {
+        "petId": "da67d894-bcce-4244-80c4-87f00fba3786",
+        "bpVitality": 0,
+        "bpIntellect": 0,
+        "bpStrong": 0,
+        "bpAgile": 0,
+        "bpBelief": 0,
+        "petType": 1
+      },
+      {
+        "petId": "dc6f6226-f2fd-4e68-b285-1cb09f708aeb",
+        "bpVitality": 0,
+        "bpIntellect": 0,
+        "bpStrong": 0,
+        "bpAgile": 0,
+        "bpBelief": 0,
+        "petType": 1
+      },
+      {
+        "petId": "c517d364-7b08-4ced-8306-647a85453b32",
+        "bpVitality": 0,
+        "bpIntellect": 0,
+        "bpStrong": 0,
+        "bpAgile": 0,
+        "bpBelief": 0,
+        "petType": 2
+      },
+      {
+        "petId": "a6ef69b1-9cb5-4028-b5e7-cb13eabaf234",
+        "bpVitality": 0,
+        "bpIntellect": 0,
+        "bpStrong": 0,
+        "bpAgile": 0,
+        "bpBelief": 0,
+        "petType": 2
+      },
+      {
+        "petId": "fc5d2a2e-9458-4d7f-920b-19dd3630e166",
+        "bpVitality": 1400,
+        "bpIntellect": 700,
+        "bpStrong": 700,
+        "bpAgile": 700,
+        "bpBelief": 700,
+        "petType": 0
+      },
+      {
+        "petId": "58985804-0360-4887-8d57-4e21eded4c3a",
+        "bpVitality": 1400,
+        "bpIntellect": 700,
+        "bpStrong": 700,
+        "bpAgile": 700,
+        "bpBelief": 700,
+        "petType": 0
+      },
+      {
+        "petId": "7a308477-bd9a-45ff-8bfe-0cd285266091",
+        "bpVitality": 1400,
+        "bpIntellect": 700,
+        "bpStrong": 700,
+        "bpAgile": 700,
+        "bpBelief": 700,
+        "petType": 0
+      },
+      {
+        "petId": "bed30735-d1ef-4d0e-9927-f24155d58caf",
+        "bpVitality": 6258,
+        "bpIntellect": 4568,
+        "bpStrong": 4568,
+        "bpAgile": 4568,
+        "bpBelief": 3459,
+        "petType": 0
+      },
+      {
+        "petId": "8b676111-7b06-4d4c-ade3-69b507213533",
+        "bpVitality": 5360,
+        "bpIntellect": 4710,
+        "bpStrong": 4710,
+        "bpAgile": 4460,
+        "bpBelief": 4460,
+        "petType": 0
+      },
+      {
+        "petId": "ced6b0e6-580e-4d2c-ae06-7782b45cf3a5",
+        "bpVitality": 500,
+        "bpIntellect": 450,
+        "bpStrong": 450,
+        "bpAgile": 250,
+        "bpBelief": 250,
+        "petType": 0
+      },
+      {
+        "petId": "185194eb-2dbc-4420-aabf-6e811c41ae3e",
+        "bpVitality": 5642,
+        "bpIntellect": 4260,
+        "bpStrong": 3151,
+        "bpAgile": 4260,
+        "bpBelief": 4260,
+        "petType": 0
+      },
+      {
+        "petId": "f12cc55f-50f4-4e7a-86c0-188c86f28837",
+        "bpVitality": 3478,
+        "bpIntellect": 700,
+        "bpStrong": 700,
+        "bpAgile": 1727,
+        "bpBelief": 700,
+        "petType": 0
+      },
+      {
+        "petId": "3423786b-1b01-43b5-a29c-dde59bf66a7a",
+        "bpVitality": 2180,
+        "bpIntellect": 700,
+        "bpStrong": 700,
+        "bpAgile": 700,
+        "bpBelief": 700,
+        "petType": 0
+      },
+      {
+        "petId": "834584bb-d9c7-4b39-8993-f744f8ff8dbe",
+        "bpVitality": 300,
+        "bpIntellect": 100,
+        "bpStrong": 200,
+        "bpAgile": 200,
+        "bpBelief": 100,
+        "petType": 0
+      },
+      {
+        "petId": "10ab50b2-aff1-4123-b82b-1612692c2e14",
+        "bpVitality": 300,
+        "bpIntellect": 100,
+        "bpStrong": 200,
+        "bpAgile": 200,
+        "bpBelief": 100,
+        "petType": 0
+      },
+      {
+        "petId": "2954b40c-6e62-4586-8cf0-c549e3e6f859",
+        "bpVitality": 1385,
+        "bpIntellect": 1050,
+        "bpStrong": 0,
+        "bpAgile": 860,
+        "bpBelief": 0,
+        "petType": 0
+      },
+      {
+        "petId": "b3d60c8c-73e9-44fd-a0ac-8aed511db9a7",
+        "bpVitality": 1667,
+        "bpIntellect": 1905,
+        "bpStrong": 860,
+        "bpAgile": 860,
+        "bpBelief": 860,
+        "petType": 0
+      },
+      {
+        "petId": "5e418023-6114-450d-bd06-c77f71acb586",
+        "bpVitality": 0,
+        "bpIntellect": 0,
+        "bpStrong": 0,
+        "bpAgile": 0,
+        "bpBelief": 0,
+        "petType": 0
+      },
+      {
+        "petId": "823e2155-da12-4067-b6d8-8fb9f90bb62b",
+        "bpVitality": 0,
+        "bpIntellect": 0,
+        "bpStrong": 0,
+        "bpAgile": 0,
+        "bpBelief": 0,
+        "petType": 0
+      },
+      {
+        "petId": "59b2d88c-5158-43ea-97ec-f881d18dd0db",
+        "bpVitality": 295,
+        "bpIntellect": 100,
+        "bpStrong": 1071,
+        "bpAgile": 100,
+        "bpBelief": 1019,
+        "petType": 0
+      },
+      {
+        "petId": "2bd0f543-16c8-413d-9bdb-4ad73a20de85",
+        "bpVitality": 1100,
+        "bpIntellect": 1817,
+        "bpStrong": 1140,
+        "bpAgile": 0,
+        "bpBelief": 1100,
+        "petType": 0
+      },
+      {
+        "petId": "a65da6ec-0b1a-4325-8c76-20956ed7533f",
+        "bpVitality": 0,
+        "bpIntellect": 40,
+        "bpStrong": 80,
+        "bpAgile": 80,
+        "bpBelief": 40,
+        "petType": 0
+      },
+      {
+        "petId": "9c721dfa-0a45-422c-9737-a20d2ff069e9",
+        "bpVitality": 1450,
+        "bpIntellect": 1135,
+        "bpStrong": 40,
+        "bpAgile": 60,
+        "bpBelief": 50,
+        "petType": 0
+      },
+      {
+        "petId": "10c58f34-e915-449a-92b6-a7b7dd538eae",
+        "bpVitality": 1361,
+        "bpIntellect": 900,
+        "bpStrong": 2311,
+        "bpAgile": 940,
+        "bpBelief": 900,
+        "petType": 0
+      },
+      {
+        "petId": "61733465-af3b-4937-bdcc-29aac594f4d4",
+        "bpVitality": 0,
+        "bpIntellect": 0,
+        "bpStrong": 0,
+        "bpAgile": 0,
+        "bpBelief": 0,
+        "petType": 0
+      },
+      {
+        "petId": "a7fd081b-e1b4-426f-9239-058fc246d22d",
+        "bpVitality": 522,
+        "bpIntellect": 1045,
+        "bpStrong": 0,
+        "bpAgile": 0,
+        "bpBelief": 0,
+        "petType": 0
+      },
+      {
+        "petId": "2c5b98f9-9b4c-41aa-917c-88c8c7cd2992",
+        "bpVitality": 120,
+        "bpIntellect": 40,
+        "bpStrong": 80,
+        "bpAgile": 80,
+        "bpBelief": 40,
+        "petType": 0
+      },
+      {
+        "petId": "96747959-4668-4569-aad4-d0c606fe46ad",
+        "bpVitality": 1954,
+        "bpIntellect": 1200,
+        "bpStrong": 2316,
+        "bpAgile": 1855,
+        "bpBelief": 100,
+        "petType": 0
+      },
+      {
+        "petId": "dc60c807-ee67-4617-a6e2-87b6a1b27e38",
+        "bpVitality": 731,
+        "bpIntellect": 1162,
+        "bpStrong": 100,
+        "bpAgile": 100,
+        "bpBelief": 100,
+        "petType": 0
+      },
+      {
+        "petId": "44066403-9969-4c51-9172-80b9716bfe66",
+        "bpVitality": 725,
+        "bpIntellect": 1150,
+        "bpStrong": 100,
+        "bpAgile": 960,
+        "bpBelief": 960,
+        "petType": 0
+      },
+      {
+        "petId": "39d2808b-51f3-45dc-9ad8-f259b10b787a",
+        "bpVitality": 0,
+        "bpIntellect": 0,
+        "bpStrong": 0,
+        "bpAgile": 0,
+        "bpBelief": 0,
+        "petType": 0
+      },
+      {
+        "petId": "67bd7851-34b7-4e0d-807d-f2b4a24446f9",
+        "bpVitality": 0,
+        "bpIntellect": 0,
+        "bpStrong": 0,
+        "bpAgile": 0,
+        "bpBelief": 0,
+        "petType": 0
+      },
+      {
+        "petId": "c89ff78d-8c5d-4fce-a0c2-208bfaf101d7",
+        "bpVitality": 0,
+        "bpIntellect": 0,
+        "bpStrong": 0,
+        "bpAgile": 0,
+        "bpBelief": 0,
+        "petType": 0
+      },
+      {
+        "petId": "1d5625fa-2433-4276-96d8-69ac494f57a0",
+        "bpVitality": 0,
+        "bpIntellect": 0,
+        "bpStrong": 0,
+        "bpAgile": 0,
+        "bpBelief": 0,
+        "petType": 0
+      },
+      {
+        "petId": "101fd496-6e74-48a3-bc30-04da4c554899",
+        "bpVitality": 1300,
+        "bpIntellect": 1200,
+        "bpStrong": 1200,
+        "bpAgile": 960,
+        "bpBelief": 960,
+        "petType": 0
+      },
+      {
+        "petId": "c1c5d75d-3616-4d71-b5d2-4758ee37b45b",
+        "bpVitality": 860,
+        "bpIntellect": 860,
+        "bpStrong": 860,
+        "bpAgile": 860,
+        "bpBelief": 860,
+        "petType": 0
+      },
+      {
+        "petId": "1cf8c49a-898e-4ade-a499-d301c55aba24",
+        "bpVitality": 980,
+        "bpIntellect": 1080,
+        "bpStrong": 960,
+        "bpAgile": 920,
+        "bpBelief": 910,
+        "petType": 0
+      },
+      {
+        "petId": "84f255db-f9df-40ce-85bc-5e604fb65f48",
+        "bpVitality": 0,
+        "bpIntellect": 0,
+        "bpStrong": 0,
+        "bpAgile": 0,
+        "bpBelief": 0,
+        "petType": 0
+      },
+      {
+        "petId": "6d524dd6-b2f0-42c7-8fcd-cc294807e2da",
+        "bpVitality": 120,
+        "bpIntellect": 40,
+        "bpStrong": 80,
+        "bpAgile": 80,
+        "bpBelief": 40,
+        "petType": 0
+      },
+      {
+        "petId": "43392277-ea49-4173-93ea-7a72c7ca03a7",
+        "bpVitality": 120,
+        "bpIntellect": 90,
+        "bpStrong": 40,
+        "bpAgile": 60,
+        "bpBelief": 50,
+        "petType": 0
+      },
+      {
+        "petId": "23824fd2-79f9-47cb-b072-9c1ba5a39d4a",
+        "bpVitality": 0,
+        "bpIntellect": 0,
+        "bpStrong": 0,
+        "bpAgile": 0,
+        "bpBelief": 0,
+        "petType": 0
+      },
+      {
+        "petId": "fe5b1dbb-7ff6-4d2d-98d6-7bdf092764ad",
+        "bpVitality": 0,
+        "bpIntellect": 0,
+        "bpStrong": 0,
+        "bpAgile": 0,
+        "bpBelief": 0,
+        "petType": 0
+      },
+      {
+        "petId": "291d7149-dcca-4ac5-8bd5-ccb9b8388e67",
+        "bpVitality": 0,
+        "bpIntellect": 0,
+        "bpStrong": 0,
+        "bpAgile": 0,
+        "bpBelief": 0,
+        "petType": 0
+      },
+      {
+        "petId": "4dd5ea8d-37ec-4afd-8b60-1c8eed025020",
+        "bpVitality": 0,
+        "bpIntellect": 0,
+        "bpStrong": 0,
+        "bpAgile": 0,
+        "bpBelief": 0,
+        "petType": 0
+      },
+      {
+        "petId": "97d7a351-7c82-4fe6-bb9d-8c11a1824e7a",
+        "bpVitality": 0,
+        "bpIntellect": 0,
+        "bpStrong": 0,
+        "bpAgile": 0,
+        "bpBelief": 0,
+        "petType": 0
+      },
+      {
+        "petId": "14e2a8bd-2a33-4e06-9252-1315c8a148a5",
+        "bpVitality": 0,
+        "bpIntellect": 40,
+        "bpStrong": 80,
+        "bpAgile": 0,
+        "bpBelief": 0,
+        "petType": 0
+      },
+      {
+        "petId": "77fe2184-eecc-4e28-bd5e-509d0651215f",
+        "bpVitality": 0,
+        "bpIntellect": 40,
+        "bpStrong": 80,
+        "bpAgile": 80,
+        "bpBelief": 40,
+        "petType": 0
+      },
+      {
+        "petId": "2c7b7288-a928-4e4b-a294-220c6127a426",
+        "bpVitality": 0,
+        "bpIntellect": 0,
+        "bpStrong": 0,
+        "bpAgile": 0,
+        "bpBelief": 0,
+        "petType": 0
+      },
+      {
+        "petId": "d336e3b5-8f9f-437f-81dc-77e7d2291e3f",
+        "bpVitality": 0,
+        "bpIntellect": 0,
+        "bpStrong": 0,
+        "bpAgile": 0,
+        "bpBelief": 0,
+        "petType": 0
+      },
+      {
+        "petId": "14ff9a84-4355-49ae-acf1-11ff5d71c69c",
+        "bpVitality": 0,
+        "bpIntellect": 0,
+        "bpStrong": 0,
+        "bpAgile": 0,
+        "bpBelief": 0,
+        "petType": 0
+      },
+      {
+        "petId": "f221473b-4f0d-44b3-872a-4d0e754d47ec",
+        "bpVitality": 0,
+        "bpIntellect": 100,
+        "bpStrong": 100,
+        "bpAgile": 0,
+        "bpBelief": 0,
+        "petType": 0
+      },
+      {
+        "petId": "1211d66f-458d-4dbf-b357-cecdd3c9ea8b",
+        "bpVitality": 0,
+        "bpIntellect": 0,
+        "bpStrong": 0,
+        "bpAgile": 0,
+        "bpBelief": 0,
+        "petType": 0
+      },
+      {
+        "petId": "07ed0fef-b8b2-42e5-a19a-96fe6e077412",
+        "bpVitality": 1300,
+        "bpIntellect": 1200,
+        "bpStrong": 1200,
+        "bpAgile": 1200,
+        "bpBelief": 1200,
+        "petType": 0
+      },
+      {
+        "petId": "2048fe17-75e8-447f-830a-8e2ac1d73daa",
+        "bpVitality": 522,
+        "bpIntellect": 1085,
+        "bpStrong": 80,
+        "bpAgile": 80,
+        "bpBelief": 40,
+        "petType": 0
+      },
+      {
+        "petId": "c6e841d6-4eb2-4a84-9eb6-755822936765",
+        "bpVitality": 0,
+        "bpIntellect": 0,
+        "bpStrong": 0,
+        "bpAgile": 0,
+        "bpBelief": 0,
+        "petType": 0
+      },
+      {
+        "petId": "01f7d281-da5b-4389-ba14-60cdedfa0a41",
+        "bpVitality": 0,
+        "bpIntellect": 0,
+        "bpStrong": 0,
+        "bpAgile": 0,
+        "bpBelief": 0,
+        "petType": 0
+      },
+      {
+        "petId": "457f2dae-bb26-434c-946c-991e73956d1a",
+        "bpVitality": 0,
+        "bpIntellect": 0,
+        "bpStrong": 0,
+        "bpAgile": 0,
+        "bpBelief": 0,
+        "petType": 0
+      },
+      {
+        "petId": "e9afd202-117e-4a76-a400-b5389d112568",
+        "bpVitality": 0,
+        "bpIntellect": 0,
+        "bpStrong": 0,
+        "bpAgile": 0,
+        "bpBelief": 0,
+        "petType": 0
+      },
+      {
+        "petId": "6ade35b9-b830-4b52-8718-ac5e88b6296d",
+        "bpVitality": 0,
+        "bpIntellect": 0,
+        "bpStrong": 0,
+        "bpAgile": 0,
+        "bpBelief": 0,
+        "petType": 0
+      },
+      {
+        "petId": "6ea28d7d-9ca9-4a2c-ba6d-789fcd1b71c9",
+        "bpVitality": 0,
+        "bpIntellect": 0,
+        "bpStrong": 0,
+        "bpAgile": 0,
+        "bpBelief": 0,
+        "petType": 0
+      },
+      {
+        "petId": "5d587d08-3051-4d8d-a85b-461be069de79",
+        "bpVitality": 0,
+        "bpIntellect": 0,
+        "bpStrong": 0,
+        "bpAgile": 0,
+        "bpBelief": 0,
+        "petType": 0
+      },
+      {
+        "petId": "fc059379-0602-43f6-91a1-8e97f2b1ff91",
+        "bpVitality": 0,
+        "bpIntellect": 0,
+        "bpStrong": 0,
+        "bpAgile": 0,
+        "bpBelief": 0,
+        "petType": 0
+      },
+      {
+        "petId": "4f7cb085-be3f-409a-af69-e2d6a314c9a3",
+        "bpVitality": 0,
+        "bpIntellect": 0,
+        "bpStrong": 0,
+        "bpAgile": 0,
+        "bpBelief": 0,
+        "petType": 0
+      },
+      {
+        "petId": "eb428c39-1317-46d0-9fc6-0e99460c573d",
+        "bpVitality": 0,
+        "bpIntellect": 0,
+        "bpStrong": 0,
+        "bpAgile": 0,
+        "bpBelief": 0,
+        "petType": 0
+      },
+      {
+        "petId": "75af1027-aa86-4c21-a7be-274e1d632c1a",
+        "bpVitality": 0,
+        "bpIntellect": 0,
+        "bpStrong": 0,
+        "bpAgile": 0,
+        "bpBelief": 0,
+        "petType": 0
+      },
+      {
+        "petId": "26c0e63e-7c44-4595-b8d8-fbe69e2bbbd7",
+        "bpVitality": 0,
+        "bpIntellect": 0,
+        "bpStrong": 0,
+        "bpAgile": 0,
+        "bpBelief": 0,
+        "petType": 0
+      },
+      {
+        "petId": "880229b7-984c-47b1-b6a7-9b71bcd05357",
+        "bpVitality": 0,
+        "bpIntellect": 0,
+        "bpStrong": 0,
+        "bpAgile": 0,
+        "bpBelief": 0,
+        "petType": 0
+      },
+      {
+        "petId": "71e8e533-7c9c-41f4-9070-8e8c61a7025f",
+        "bpVitality": 0,
+        "bpIntellect": 0,
+        "bpStrong": 0,
+        "bpAgile": 0,
+        "bpBelief": 0,
+        "petType": 0
+      },
+      {
+        "petId": "77b447f8-a075-4116-b46d-c76f96db432b",
+        "bpVitality": 0,
+        "bpIntellect": 0,
+        "bpStrong": 0,
+        "bpAgile": 0,
+        "bpBelief": 0,
+        "petType": 0
+      },
+      {
+        "petId": "173c75a8-4746-412e-812e-ab0be178a9cd",
+        "bpVitality": 0,
+        "bpIntellect": 0,
+        "bpStrong": 0,
+        "bpAgile": 0,
+        "bpBelief": 0,
+        "petType": 0
+      },
+      {
+        "petId": "e8ebeb3e-eba1-432f-adaa-61d0b2461031",
+        "bpVitality": 1340,
+        "bpIntellect": 1340,
+        "bpStrong": 1340,
+        "bpAgile": 1340,
+        "bpBelief": 1340,
+        "petType": 0
+      },
+      {
+        "petId": "d0f50a67-da8b-4dee-b6bc-f0765d9292f2",
+        "bpVitality": 0,
+        "bpIntellect": 0,
+        "bpStrong": 0,
+        "bpAgile": 0,
+        "bpBelief": 0,
+        "petType": 0
+      },
+      {
+        "petId": "ba69be70-e9dd-46d2-af24-c878ea7a1285",
+        "bpVitality": 0,
+        "bpIntellect": 0,
+        "bpStrong": 0,
+        "bpAgile": 0,
+        "bpBelief": 0,
+        "petType": 0
+      },
+      {
+        "petId": "081a895a-f009-40e9-aec2-343af5b6234f",
+        "bpVitality": 0,
+        "bpIntellect": 0,
+        "bpStrong": 0,
+        "bpAgile": 0,
+        "bpBelief": 0,
+        "petType": 0
+      },
+      {
+        "petId": "96125957-6f39-4940-9e20-70136dd1dfc7",
+        "bpVitality": 0,
+        "bpIntellect": 0,
+        "bpStrong": 0,
+        "bpAgile": 0,
+        "bpBelief": 0,
+        "petType": 0
+      },
+      {
+        "petId": "f7c5ce31-18fb-42a2-b1e1-8d71ce7a9368",
+        "bpVitality": 0,
+        "bpIntellect": 0,
+        "bpStrong": 0,
+        "bpAgile": 0,
+        "bpBelief": 0,
+        "petType": 0
+      },
+      {
+        "petId": "ec20f7aa-9dc7-4668-94f7-e8253f309a00",
+        "bpVitality": 0,
+        "bpIntellect": 0,
+        "bpStrong": 0,
+        "bpAgile": 0,
+        "bpBelief": 0,
+        "petType": 0
+      },
+      {
+        "petId": "60c506dd-92e2-4071-9adf-3c2756dd6553",
+        "bpVitality": 0,
+        "bpIntellect": 0,
+        "bpStrong": 0,
+        "bpAgile": 0,
+        "bpBelief": 0,
+        "petType": 0
+      },
+      {
+        "petId": "60d358f3-05e1-48ea-bf91-eb4c8643e5ce",
+        "bpVitality": 1340,
+        "bpIntellect": 1340,
+        "bpStrong": 1340,
+        "bpAgile": 1340,
+        "bpBelief": 1340,
+        "petType": 0
+      },
+      {
+        "petId": "cf51ee8f-08e8-44a8-93b2-291b09fed266",
+        "bpVitality": 0,
+        "bpIntellect": 0,
+        "bpStrong": 0,
+        "bpAgile": 0,
+        "bpBelief": 0,
+        "petType": 0
+      },
+      {
+        "petId": "01bc22f1-e3b9-493c-aae5-e7fd7cff8209",
+        "bpVitality": 0,
+        "bpIntellect": 0,
+        "bpStrong": 0,
+        "bpAgile": 0,
+        "bpBelief": 0,
+        "petType": 0
+      },
+      {
+        "petId": "3c7d3eaa-6ee5-44f7-8b65-0989d865aa2b",
+        "bpVitality": 0,
+        "bpIntellect": 0,
+        "bpStrong": 0,
+        "bpAgile": 0,
+        "bpBelief": 0,
+        "petType": 0
+      },
+      {
+        "petId": "160cd744-d3b5-46fd-a9f0-cb2b09652363",
+        "bpVitality": 0,
+        "bpIntellect": 0,
+        "bpStrong": 0,
+        "bpAgile": 0,
+        "bpBelief": 0,
+        "petType": 0
+      },
+      {
+        "petId": "b65725fc-c2f0-4c05-be70-cc3675e8f83f",
+        "bpVitality": 0,
+        "bpIntellect": 0,
+        "bpStrong": 0,
+        "bpAgile": 0,
+        "bpBelief": 0,
+        "petType": 0
+      },
+      {
+        "petId": "64d7f077-d4d4-423b-a065-a69f9c7c4ca7",
+        "bpVitality": 0,
+        "bpIntellect": 0,
+        "bpStrong": 0,
+        "bpAgile": 0,
+        "bpBelief": 0,
+        "petType": 0
+      },
+      {
+        "petId": "9e959e7a-e9ca-4846-8fcc-19ecbfbd1acc",
+        "bpVitality": 0,
+        "bpIntellect": 0,
+        "bpStrong": 0,
+        "bpAgile": 0,
+        "bpBelief": 0,
+        "petType": 0
+      },
+      {
+        "petId": "f698c95b-7711-42fa-8f38-9bc48d5bbce5",
+        "bpVitality": 0,
+        "bpIntellect": 0,
+        "bpStrong": 0,
+        "bpAgile": 0,
+        "bpBelief": 0,
+        "petType": 0
+      },
+      {
+        "petId": "cd4add15-52bc-4600-b527-90e37b8c8c9a",
+        "bpVitality": 0,
+        "bpIntellect": 0,
+        "bpStrong": 0,
+        "bpAgile": 0,
+        "bpBelief": 0,
+        "petType": 0
+      },
+      {
+        "petId": "e7a91727-da5c-482e-8c3e-3affe76de44a",
+        "bpVitality": 0,
+        "bpIntellect": 0,
+        "bpStrong": 0,
+        "bpAgile": 0,
+        "bpBelief": 0,
+        "petType": 0
+      },
+      {
+        "petId": "0a6b15ae-42af-4206-8e03-64f4a7cc9ffa",
+        "bpVitality": 0,
+        "bpIntellect": 0,
+        "bpStrong": 0,
+        "bpAgile": 0,
+        "bpBelief": 0,
+        "petType": 0
+      },
+      {
+        "petId": "ce5d705a-496a-46b7-b2f4-7b2b036dbd1f",
+        "bpVitality": 0,
+        "bpIntellect": 0,
+        "bpStrong": 0,
+        "bpAgile": 0,
+        "bpBelief": 0,
+        "petType": 0
+      },
+      {
+        "petId": "47929a1b-33ad-4ae8-a150-7375c7293602",
+        "bpVitality": 1340,
+        "bpIntellect": 1340,
+        "bpStrong": 1340,
+        "bpAgile": 1340,
+        "bpBelief": 1340,
+        "petType": 0
+      },
+      {
+        "petId": "e9e3ea28-1b7d-4372-88c6-13df0bb89f4b",
+        "bpVitality": 0,
+        "bpIntellect": 0,
+        "bpStrong": 0,
+        "bpAgile": 0,
+        "bpBelief": 0,
+        "petType": 0
+      },
+      {
+        "petId": "1268e37a-ee32-4dfb-bd2b-1d7eddf63ee6",
+        "bpVitality": 1340,
+        "bpIntellect": 1340,
+        "bpStrong": 1340,
+        "bpAgile": 1340,
+        "bpBelief": 1340,
+        "petType": 0
+      },
+      {
+        "petId": "85695794-383a-4cd1-8784-313fb47a5225",
+        "bpVitality": 0,
+        "bpIntellect": 0,
+        "bpStrong": 0,
+        "bpAgile": 0,
+        "bpBelief": 0,
+        "petType": 0
+      },
+      {
+        "petId": "e50a41c5-2da6-4abb-b73f-2d37c248e315",
+        "bpVitality": 0,
+        "bpIntellect": 0,
+        "bpStrong": 0,
+        "bpAgile": 0,
+        "bpBelief": 0,
+        "petType": 0
+      },
+      {
+        "petId": "abf42179-9d67-44cb-9679-b43ecc9acaec",
+        "bpVitality": 0,
+        "bpIntellect": 0,
+        "bpStrong": 0,
+        "bpAgile": 0,
+        "bpBelief": 0,
+        "petType": 0
+      },
+      {
+        "petId": "5e5da330-25f0-4130-9d75-c92c5e4326a9",
+        "bpVitality": 1340,
+        "bpIntellect": 1340,
+        "bpStrong": 1340,
+        "bpAgile": 1340,
+        "bpBelief": 1340,
+        "petType": 0
+      },
+      {
+        "petId": "803e563f-3798-4ba4-a267-81c76a8096f2",
+        "bpVitality": 0,
+        "bpIntellect": 0,
+        "bpStrong": 0,
+        "bpAgile": 0,
+        "bpBelief": 0,
+        "petType": 0
+      },
+      {
+        "petId": "02e1315f-79cd-42f1-b264-2142d8fd1195",
+        "bpVitality": 1340,
+        "bpIntellect": 1340,
+        "bpStrong": 1340,
+        "bpAgile": 1340,
+        "bpBelief": 1340,
+        "petType": 0
+      },
+      {
+        "petId": "151209c2-a689-48f1-aee8-053e2b018555",
+        "bpVitality": 1340,
+        "bpIntellect": 1340,
+        "bpStrong": 1340,
+        "bpAgile": 1340,
+        "bpBelief": 1340,
+        "petType": 0
+      },
+      {
+        "petId": "5ae465ee-9291-46e1-82a9-73b300aa0f84",
+        "bpVitality": 0,
+        "bpIntellect": 0,
+        "bpStrong": 0,
+        "bpAgile": 0,
+        "bpBelief": 0,
+        "petType": 0
+      },
+      {
+        "petId": "7ac007c3-464c-475b-8dbd-61cf85286052",
+        "bpVitality": 1340,
+        "bpIntellect": 1340,
+        "bpStrong": 1340,
+        "bpAgile": 1340,
+        "bpBelief": 1340,
+        "petType": 0
+      },
+      {
+        "petId": "731780a2-ae5d-4bf0-ba79-1bb614ece08b",
+        "bpVitality": 0,
+        "bpIntellect": 0,
+        "bpStrong": 0,
+        "bpAgile": 0,
+        "bpBelief": 0,
+        "petType": 0
+      },
+      {
+        "petId": "c3b3e004-b890-4625-84da-1b6d5008953f",
+        "bpVitality": 0,
+        "bpIntellect": 0,
+        "bpStrong": 0,
+        "bpAgile": 0,
+        "bpBelief": 0,
+        "petType": 1
+      }
+    ],
+    "feedList": [
+      {
+        "name": "低级悟性丹",
+        "desc": "<font size='12'><font color='#FFFFFF'><font size='14'>低级悟性丹</font></font><br><br>【价格】 10两银<br>【描述】 使用：提高宠物的悟性\n“慢慢来，不要着急……”<br>【用途】 打开宠物面板，点击右键使用<br></font>",
+        "tempIp": 110001001,
+        "image": 110000005,
+        "petId": "1",
+        "count": 0
+      },
+      {
+        "name": "中级悟性丹",
+        "desc": "<font size='12'><font color='#00FF00'><font size='14'>中级悟性丹</font></font><br><br>【价格】 62两500文银<br>【描述】 使用：提高宠物的悟性\n“比低级悟性丹效果好很多。”<br>【用途】 打开宠物面板，点击右键使用<br> </font>",
+        "tempIp": 110001002,
+        "image": 110000005,
+        "petId": "1",
+        "count": 0
+      },
+      {
+        "name": "高级悟性丹",
+        "desc": "<font size='12'><font color='#08E6E3'><font size='14'>高级悟性丹</font></font><br><br>【价格】 125两银<br>【描述】 使用：提高宠物的悟性\n“效果全面超越中级悟性丹，相信我。”<br>【用途】 打开宠物面板，点击右键使用<br> </font>",
+        "tempIp": 110001003,
+        "image": 110000005,
+        "petId": "1",
+        "count": 0
+      },
+      {
+        "name": "举世无双悟性丹",
+        "desc": "<font size='12'><font color='#CB40F1'><font size='14'>举世无双悟性丹</font></font><br><br>【价格】 100文银<br>【描述】 使用：让您宠物的悟性由19提高到20，成功率为100％<br>【用途】 打开宠物面板，右键点击使用<br> </font>",
+        "tempIp": 110101490,
+        "image": 110000005,
+        "petId": "1",
+        "count": 0
+      },
+      {
+        "name": "还童丹",
+        "desc": "<font size='12'><font color='#00FF00'><font size='14'>还童丹</font></font><br><br>【价格】 121两600文银<br>【描述】 使用：普通宠物回到1级未绑定状态\n“宠物的资质，成长率，变异状态，拥有技能将重新生成（天赋及普通技能）；悟性，修为归0。并清除宠物身上原有的增益状态效果，比如：宠物经验双倍药。”<br>【用途】 打开宠物面板，点击右键使用<br> </font>",
+        "tempIp": 110000069,
+        "image": 110000791,
+        "petId": "2",
+        "count": 0
+      },
+      {
+        "name": "冰魄还童丹",
+        "desc": "<font size='12'><font color='#08E6E3'><font size='14'>冰魄还童丹</font></font><br><br>【价格】 100文银<br>【描述】 使用：普通宠物回到1级未绑定状态\n“宠物资质不变；成长率，变异状态将重新生成；悟性，修为归0，已领悟的技能亦会消失。其资质会因是否变异而产生少许改变。”<br>【用途】 打开宠物面板，点击右键使用<br> </font>",
+        "tempIp": 110000070,
+        "image": 110000792,
+        "petId": "2",
+        "count": 0
+      },
+      {
+        "name": "还童金丹",
+        "desc": "<font size='12'><font color='#CB40F1'><font size='14'>还童金丹</font></font><br><br>【价格】 100文银<br>【描述】 使用：普通宠物回到1级未绑定状态\n“宠物的资质，成长率以及拥有技能将重新生成（天赋及普通技能）；修为，悟性归0，变异状态不会改变。并清除宠物身上原有的增益状态效果，比如：宠物经验双倍药。”<br>【用途】 打开宠物面板，点击右键使用<br> </font>",
+        "tempIp": 110000072,
+        "image": 110000793,
+        "petId": "2",
+        "count": 0
+      },
+      {
+        "name": "混元还童丹",
+        "desc": "<font size='12'><font color='#CB40F1'><font size='14'>混元还童丹</font></font><br><br>【价格】 100文银<br>【描述】 使用：普通宠物回到1级未绑定状态\n“宠物的成长率不变；资质，变异状态将重新生成；悟性，修为归0，已领悟的技能亦会消失。”<br>【用途】 打开宠物面板，点击右键使用<br> </font>",
+        "tempIp": 110000073,
+        "image": 110000794,
+        "petId": "2",
+        "count": 0
+      },
+      {
+        "name": "神兽还童丹",
+        "desc": "<font size='12'><font color='#08E6E3'><font size='14'>神兽还童丹</font></font><br><br>【价格】 200两银<br>【描述】 使用：神兽类宠物回到1级未绑定状态\n“宠物的资质，成长率，变异状态，拥有技能将重新生成（天赋及普通技能）；悟性，修为归0。并清除宠物身上原有的增益状态效果，比如：宠物经验双倍药。”<br>【用途】 打开宠物面板，点击右键使用<br> </font>",
+        "tempIp": 110000083,
+        "image": 110000796,
+        "petId": "2",
+        "count": 0
+      },
+      {
+        "name": "神兽冰魄还童丹",
+        "desc": "<font size='12'><font color='#08E6E3'><font size='14'>神兽冰魄还童丹</font></font><br><br>【价格】 100文银<br>【描述】 使用：神兽类宠物回到1级未绑定状态\n“宠物资质不变；成长率，变异状态将重新生成；悟性，修为归0，已领悟的技能亦会消失。其资质会因是否变异而产生少许改变。”<br>【用途】 打开宠物面板，点击右键使用<br> </font>",
+        "tempIp": 110000311,
+        "image": 110000797,
+        "petId": "2",
+        "count": 0
+      },
+      {
+        "name": "神兽还童金丹",
+        "desc": "<font size='12'><font color='#CB40F1'><font size='14'>神兽还童金丹</font></font><br><br>【价格】 100文银<br>【描述】 使用：神兽类宠物回到1级未绑定状态\n“宠物的资质，成长率以及拥有技能将重新生成（天赋及普通技能）；修为，悟性归0，变异状态不会改变。并清除宠物身上原有的增益状态效果，比如：宠物经验双倍药。”<br>【用途】 打开宠物面板，点击右键使用<br> </font>",
+        "tempIp": 110000313,
+        "image": 110000798,
+        "petId": "2",
+        "count": 0
+      },
+      {
+        "name": "神兽混元还童丹",
+        "desc": "<font size='12'><font color='#CB40F1'><font size='14'>神兽混元还童丹</font></font><br><br>【价格】 100文银<br>【描述】 使用：神兽类宠物回到1级未绑定状态\n“宠物的成长率不变；资质，变异状态将重新生成；悟性，修为归0，已领悟的技能亦会消失。”<br>【用途】 打开宠物面板，点击右键使用<br> </font>",
+        "tempIp": 110000314,
+        "image": 110000799,
+        "petId": "2",
+        "count": 0
+      }
+    ]
+  },
+  "formulas": {
+    "待逆向": [
+      "提品/升星消耗的修炼经验随等级变化的公式（客户端只读到 NEIDAN_PINCOST/NEIDAN_STARCOST 的结果文案）",
+      "喂丹（sendPetFeedUpgrade）成功率与悟性提升幅度（服务端计算后由 SC 回推）",
+      "仙丹自动放入（sendXiandanAutoPut）的选取规则"
+    ]
+  }
+}

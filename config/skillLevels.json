@@ -1,0 +1,8331 @@
+{
+ "10020": {
+  "maxLevel": 10,
+  "levels": {
+   "1": {
+    "mpCost": 45,
+    "cd": 3,
+    "power": 2.2,
+    "heal": 0,
+    "params": {}
+   },
+   "2": {
+    "mpCost": 45,
+    "cd": 3,
+    "power": 2.2,
+    "heal": 0,
+    "params": {}
+   },
+   "3": {
+    "mpCost": 45,
+    "cd": 3,
+    "power": 2.2,
+    "heal": 0,
+    "params": {}
+   },
+   "4": {
+    "mpCost": 45,
+    "cd": 3,
+    "power": 2.2,
+    "heal": 0,
+    "params": {}
+   },
+   "5": {
+    "mpCost": 45,
+    "cd": 3,
+    "power": 2.2,
+    "heal": 0,
+    "params": {}
+   },
+   "6": {
+    "mpCost": 45,
+    "cd": 3,
+    "power": 2.2,
+    "heal": 0,
+    "params": {}
+   },
+   "7": {
+    "mpCost": 45,
+    "cd": 3,
+    "power": 2.2,
+    "heal": 0,
+    "params": {}
+   },
+   "8": {
+    "mpCost": 45,
+    "cd": 3,
+    "power": 2.2,
+    "heal": 0,
+    "params": {}
+   },
+   "9": {
+    "mpCost": 45,
+    "cd": 3,
+    "power": 2.2,
+    "heal": 0,
+    "params": {}
+   },
+   "10": {
+    "mpCost": 45,
+    "cd": 3,
+    "power": 2.2,
+    "heal": 0,
+    "params": {}
+   }
+  }
+ },
+ "10030": {
+  "maxLevel": 10,
+  "levels": {
+   "1": {
+    "mpCost": 40,
+    "cd": 4,
+    "power": 0,
+    "heal": 320,
+    "params": {}
+   },
+   "2": {
+    "mpCost": 40,
+    "cd": 4,
+    "power": 0,
+    "heal": 320,
+    "params": {}
+   },
+   "3": {
+    "mpCost": 40,
+    "cd": 4,
+    "power": 0,
+    "heal": 320,
+    "params": {}
+   },
+   "4": {
+    "mpCost": 40,
+    "cd": 4,
+    "power": 0,
+    "heal": 320,
+    "params": {}
+   },
+   "5": {
+    "mpCost": 40,
+    "cd": 4,
+    "power": 0,
+    "heal": 320,
+    "params": {}
+   },
+   "6": {
+    "mpCost": 40,
+    "cd": 4,
+    "power": 0,
+    "heal": 320,
+    "params": {}
+   },
+   "7": {
+    "mpCost": 40,
+    "cd": 4,
+    "power": 0,
+    "heal": 320,
+    "params": {}
+   },
+   "8": {
+    "mpCost": 40,
+    "cd": 4,
+    "power": 0,
+    "heal": 320,
+    "params": {}
+   },
+   "9": {
+    "mpCost": 40,
+    "cd": 4,
+    "power": 0,
+    "heal": 320,
+    "params": {}
+   },
+   "10": {
+    "mpCost": 40,
+    "cd": 4,
+    "power": 0,
+    "heal": 320,
+    "params": {}
+   }
+  }
+ },
+ "170100": {
+  "maxLevel": 11,
+  "levels": {
+   "1": {
+    "_src": "packet",
+    "mpCost": 32,
+    "lifeCost": 2,
+    "_reqLevel": 11,
+    "_powerStars": 5
+   },
+   "2": {
+    "_src": "packet",
+    "mpCost": 49,
+    "lifeCost": 4,
+    "_reqLevel": 21,
+    "_powerStars": 1
+   },
+   "3": {
+    "_src": "packet",
+    "mpCost": 73,
+    "lifeCost": 6,
+    "_reqLevel": 31,
+    "_powerStars": 6
+   },
+   "4": {
+    "_src": "packet",
+    "mpCost": 99,
+    "lifeCost": 8,
+    "_reqLevel": 41,
+    "_powerStars": 1
+   },
+   "5": {
+    "_src": "packet",
+    "mpCost": 133,
+    "lifeCost": 10,
+    "_reqLevel": 51,
+    "_powerStars": 6
+   },
+   "6": {
+    "_src": "packet",
+    "mpCost": 186,
+    "lifeCost": 12,
+    "_reqLevel": 61,
+    "_powerStars": 2
+   },
+   "7": {
+    "_src": "packet",
+    "mpCost": 251,
+    "lifeCost": 14,
+    "_reqLevel": 71,
+    "_powerStars": 7
+   },
+   "8": {
+    "_src": "packet",
+    "mpCost": 344,
+    "lifeCost": 16,
+    "_reqLevel": 71,
+    "_powerStars": 1
+   },
+   "9": {
+    "_src": "packet",
+    "mpCost": 452,
+    "lifeCost": 18,
+    "_reqLevel": 91,
+    "_powerStars": 6
+   },
+   "10": {
+    "_src": "packet",
+    "mpCost": 624,
+    "lifeCost": 20,
+    "_reqLevel": 91,
+    "_powerStars": 2
+   },
+   "11": {
+    "_src": "packet",
+    "mpCost": 724,
+    "lifeCost": 26,
+    "_reqLevel": 101,
+    "_powerStars": 7
+   }
+  },
+  "observed": 11
+ },
+ "170200": {
+  "maxLevel": 11,
+  "levels": {
+   "1": {
+    "_src": "packet",
+    "mpCost": 32,
+    "_reqLevel": 19,
+    "_powerStars": 2
+   },
+   "2": {
+    "_src": "packet",
+    "mpCost": 49,
+    "_reqLevel": 29,
+    "_powerStars": 5
+   },
+   "3": {
+    "_src": "packet",
+    "mpCost": 73,
+    "_reqLevel": 39,
+    "_powerStars": 7
+   },
+   "4": {
+    "_src": "packet",
+    "mpCost": 99,
+    "_reqLevel": 49,
+    "_powerStars": 1
+   },
+   "5": {
+    "_src": "packet",
+    "mpCost": 133,
+    "_reqLevel": 59,
+    "_powerStars": 3
+   },
+   "6": {
+    "_src": "packet",
+    "mpCost": 186,
+    "_reqLevel": 69,
+    "_powerStars": 6
+   },
+   "7": {
+    "_src": "packet",
+    "mpCost": 251,
+    "_reqLevel": 79,
+    "_powerStars": 8
+   },
+   "8": {
+    "_src": "packet",
+    "mpCost": 344,
+    "_reqLevel": 89,
+    "_powerStars": 1
+   },
+   "9": {
+    "_src": "packet",
+    "mpCost": 452,
+    "_reqLevel": 89,
+    "_powerStars": 3
+   },
+   "10": {
+    "_src": "packet",
+    "mpCost": 624,
+    "_reqLevel": 104,
+    "_powerStars": 6
+   },
+   "11": {
+    "_src": "packet",
+    "mpCost": 724,
+    "lifeCost": 4,
+    "_reqLevel": 104,
+    "_powerStars": 8
+   }
+  },
+  "observed": 11
+ },
+ "170300": {
+  "maxLevel": 11,
+  "levels": {
+   "10": {
+    "_src": "packet",
+    "mpCost": 624,
+    "lifeCost": 20,
+    "_reqLevel": 101,
+    "_powerStars": 1
+   },
+   "11": {
+    "_src": "packet",
+    "mpCost": 724,
+    "lifeCost": 24,
+    "_reqLevel": 101,
+    "_powerStars": 5
+   }
+  },
+  "observed": 2
+ },
+ "170400": {
+  "maxLevel": 11,
+  "levels": {
+   "1": {
+    "_src": "packet",
+    "mpCost": 32,
+    "_reqLevel": 19,
+    "_powerStars": 3
+   },
+   "2": {
+    "_src": "packet",
+    "mpCost": 49,
+    "_reqLevel": 29,
+    "_powerStars": 6
+   },
+   "3": {
+    "_src": "packet",
+    "mpCost": 73,
+    "_reqLevel": 39,
+    "_powerStars": 9
+   },
+   "4": {
+    "_src": "packet",
+    "mpCost": 99,
+    "_reqLevel": 49,
+    "_powerStars": 3
+   },
+   "5": {
+    "_src": "packet",
+    "mpCost": 133,
+    "_reqLevel": 59,
+    "_powerStars": 6
+   },
+   "6": {
+    "_src": "packet",
+    "mpCost": 186,
+    "_reqLevel": 69,
+    "_powerStars": 9
+   },
+   "7": {
+    "_src": "packet",
+    "mpCost": 251,
+    "_reqLevel": 79,
+    "_powerStars": 2
+   },
+   "8": {
+    "_src": "packet",
+    "mpCost": 344,
+    "_reqLevel": 89,
+    "_powerStars": 5
+   },
+   "9": {
+    "_src": "packet",
+    "mpCost": 452,
+    "_reqLevel": 99,
+    "_powerStars": 8
+   },
+   "10": {
+    "_src": "packet",
+    "mpCost": 624,
+    "_reqLevel": 99,
+    "_powerStars": 2
+   },
+   "11": {
+    "_src": "packet",
+    "mpCost": 746,
+    "lifeCost": 4,
+    "_reqLevel": 104,
+    "_powerStars": 5
+   }
+  },
+  "observed": 11
+ },
+ "170500": {
+  "maxLevel": 11,
+  "levels": {
+   "1": {
+    "_src": "packet",
+    "mpCost": 32,
+    "_reqLevel": 17,
+    "_powerStars": 2
+   },
+   "2": {
+    "_src": "packet",
+    "mpCost": 49,
+    "_reqLevel": 27,
+    "_powerStars": 4
+   },
+   "3": {
+    "_src": "packet",
+    "mpCost": 73,
+    "_reqLevel": 37,
+    "_powerStars": 6
+   },
+   "4": {
+    "_src": "packet",
+    "mpCost": 99,
+    "_reqLevel": 47,
+    "_powerStars": 8
+   },
+   "5": {
+    "_src": "packet",
+    "mpCost": 133,
+    "_reqLevel": 57,
+    "_powerStars": 1
+   },
+   "6": {
+    "_src": "packet",
+    "mpCost": 186,
+    "_reqLevel": 67,
+    "_powerStars": 3
+   },
+   "7": {
+    "_src": "packet",
+    "mpCost": 251,
+    "_reqLevel": 77,
+    "_powerStars": 5
+   },
+   "8": {
+    "_src": "packet",
+    "mpCost": 344,
+    "_reqLevel": 87,
+    "_powerStars": 7
+   },
+   "9": {
+    "_src": "packet",
+    "mpCost": 452,
+    "_reqLevel": 97,
+    "_powerStars": 9
+   },
+   "10": {
+    "_src": "packet",
+    "mpCost": 624,
+    "_reqLevel": 102,
+    "_powerStars": 1
+   },
+   "11": {
+    "_src": "packet",
+    "mpCost": 746,
+    "lifeCost": 4,
+    "_reqLevel": 102,
+    "_powerStars": 3
+   }
+  },
+  "observed": 11
+ },
+ "170600": {
+  "maxLevel": 11,
+  "levels": {
+   "1": {
+    "_src": "packet",
+    "mpCost": 11,
+    "lifeCost": 10,
+    "_reqLevel": 11,
+    "_powerStars": 8
+   },
+   "2": {
+    "_src": "packet",
+    "mpCost": 16,
+    "lifeCost": 20,
+    "_reqLevel": 21,
+    "_powerStars": 7
+   },
+   "3": {
+    "_src": "packet",
+    "mpCost": 24,
+    "lifeCost": 30,
+    "_reqLevel": 31,
+    "_powerStars": 5
+   },
+   "4": {
+    "_src": "packet",
+    "mpCost": 33,
+    "lifeCost": 40,
+    "_reqLevel": 41,
+    "_powerStars": 4
+   },
+   "5": {
+    "_src": "packet",
+    "mpCost": 43,
+    "lifeCost": 50,
+    "_reqLevel": 51,
+    "_powerStars": 1
+   },
+   "6": {
+    "_src": "packet",
+    "mpCost": 53,
+    "lifeCost": 60,
+    "_reqLevel": 61,
+    "_powerStars": 9
+   },
+   "7": {
+    "_src": "packet",
+    "mpCost": 64,
+    "lifeCost": 70,
+    "_reqLevel": 71,
+    "_powerStars": 8
+   },
+   "8": {
+    "_src": "packet",
+    "mpCost": 76,
+    "lifeCost": 80,
+    "_reqLevel": 81,
+    "_powerStars": 6
+   },
+   "9": {
+    "_src": "packet",
+    "mpCost": 89,
+    "lifeCost": 90,
+    "_reqLevel": 91,
+    "_powerStars": 5
+   },
+   "10": {
+    "_src": "packet",
+    "mpCost": 104,
+    "lifeCost": 100,
+    "_reqLevel": 101,
+    "_powerStars": 2
+   },
+   "11": {
+    "_src": "packet",
+    "mpCost": 164,
+    "lifeCost": 120,
+    "_reqLevel": 101,
+    "_powerStars": 10
+   }
+  },
+  "observed": 11
+ },
+ "170700": {
+  "maxLevel": 11,
+  "levels": {
+   "9": {
+    "_src": "packet",
+    "mpCost": 160,
+    "lifeCost": 9,
+    "_reqLevel": 91,
+    "_powerStars": 8
+   },
+   "10": {
+    "_src": "packet",
+    "mpCost": 187,
+    "lifeCost": 10,
+    "_reqLevel": 91,
+    "_powerStars": 1
+   },
+   "11": {
+    "_src": "packet",
+    "mpCost": 241,
+    "lifeCost": 12,
+    "_reqLevel": 101,
+    "_powerStars": 5
+   }
+  },
+  "observed": 3
+ },
+ "170800": {
+  "maxLevel": 11,
+  "levels": {
+   "8": {
+    "_src": "packet",
+    "mpCost": 229,
+    "_reqLevel": 89,
+    "_powerStars": 9
+   },
+   "9": {
+    "_src": "packet",
+    "mpCost": 266,
+    "_reqLevel": 89,
+    "_powerStars": 3
+   },
+   "10": {
+    "_src": "packet",
+    "mpCost": 312,
+    "_reqLevel": 104,
+    "_powerStars": 7
+   },
+   "11": {
+    "_src": "packet",
+    "mpCost": 404,
+    "lifeCost": 4,
+    "_reqLevel": 104,
+    "_powerStars": 10
+   }
+  },
+  "observed": 4
+ },
+ "170900": {
+  "maxLevel": 11,
+  "levels": {
+   "7": {
+    "_src": "packet",
+    "mpCost": 251,
+    "_reqLevel": 79,
+    "_powerStars": 5
+   },
+   "8": {
+    "_src": "packet",
+    "mpCost": 344,
+    "_reqLevel": 79,
+    "_powerStars": 9
+   },
+   "9": {
+    "_src": "interp",
+    "mpCost": 484
+   },
+   "10": {
+    "_src": "packet",
+    "mpCost": 624,
+    "_reqLevel": 104,
+    "_powerStars": 7
+   },
+   "11": {
+    "_src": "packet",
+    "mpCost": 404,
+    "lifeCost": 4,
+    "_reqLevel": 104,
+    "_powerStars": 10
+   }
+  },
+  "observed": 4
+ },
+ "171000": {
+  "maxLevel": 11,
+  "levels": {
+   "1": {
+    "_src": "packet",
+    "mpCost": 32,
+    "lifeCost": 8,
+    "_reqLevel": 11,
+    "_powerStars": 9
+   },
+   "2": {
+    "_src": "packet",
+    "mpCost": 49,
+    "lifeCost": 16,
+    "_reqLevel": 21,
+    "_powerStars": 9
+   },
+   "3": {
+    "_src": "packet",
+    "mpCost": 73,
+    "lifeCost": 24,
+    "_reqLevel": 31,
+    "_powerStars": 8
+   },
+   "4": {
+    "_src": "packet",
+    "mpCost": 99,
+    "lifeCost": 32,
+    "_reqLevel": 41,
+    "_powerStars": 8
+   },
+   "5": {
+    "_src": "packet",
+    "mpCost": 128,
+    "lifeCost": 40,
+    "_reqLevel": 51,
+    "_powerStars": 6
+   },
+   "6": {
+    "_src": "packet",
+    "mpCost": 159,
+    "lifeCost": 48,
+    "_reqLevel": 61,
+    "_powerStars": 6
+   },
+   "7": {
+    "_src": "packet",
+    "mpCost": 193,
+    "lifeCost": 56,
+    "_reqLevel": 71,
+    "_powerStars": 5
+   },
+   "8": {
+    "_src": "packet",
+    "mpCost": 229,
+    "lifeCost": 64,
+    "_reqLevel": 81,
+    "_powerStars": 5
+   },
+   "9": {
+    "_src": "packet",
+    "mpCost": 266,
+    "lifeCost": 72,
+    "_reqLevel": 91,
+    "_powerStars": 3
+   },
+   "10": {
+    "_src": "packet",
+    "mpCost": 312,
+    "lifeCost": 80,
+    "_reqLevel": 91,
+    "_powerStars": 3
+   },
+   "11": {
+    "_src": "packet",
+    "mpCost": 496,
+    "lifeCost": 96,
+    "_reqLevel": 101,
+    "_powerStars": 12
+   }
+  },
+  "observed": 11
+ },
+ "171100": {
+  "maxLevel": 11,
+  "levels": {
+   "10": {
+    "_src": "packet",
+    "mpCost": 187,
+    "lifeCost": 30,
+    "_reqLevel": 101,
+    "_powerStars": 1
+   },
+   "11": {
+    "_src": "packet",
+    "mpCost": 241,
+    "lifeCost": 36,
+    "_reqLevel": 101,
+    "_powerStars": 5
+   }
+  },
+  "observed": 2
+ },
+ "171200": {
+  "maxLevel": 11,
+  "levels": {
+   "10": {
+    "_src": "packet",
+    "mpCost": 312,
+    "lifeCost": 20,
+    "_reqLevel": 101,
+    "_powerStars": 7
+   },
+   "11": {
+    "_src": "packet",
+    "mpCost": 404,
+    "lifeCost": 24,
+    "_reqLevel": 101,
+    "_powerStars": 10
+   }
+  },
+  "observed": 2
+ },
+ "171700": {
+  "maxLevel": 11,
+  "levels": {
+   "10": {
+    "_src": "packet",
+    "mpCost": 312,
+    "lifeCost": 1,
+    "_reqLevel": 0,
+    "_powerStars": 1
+   },
+   "11": {
+    "_src": "packet",
+    "mpCost": 0,
+    "_reqLevel": 0,
+    "_powerStars": 0
+   }
+  },
+  "observed": 2
+ },
+ "171900": {
+  "maxLevel": 15,
+  "levels": {
+   "1": {
+    "mpCost": 32,
+    "lifeCost": 8,
+    "_src": "family"
+   },
+   "2": {
+    "mpCost": 49,
+    "lifeCost": 16,
+    "_src": "family"
+   },
+   "3": {
+    "mpCost": 73,
+    "lifeCost": 24,
+    "_src": "family"
+   },
+   "4": {
+    "mpCost": 99,
+    "lifeCost": 32,
+    "_src": "family"
+   },
+   "5": {
+    "mpCost": 128,
+    "lifeCost": 40,
+    "_src": "family"
+   },
+   "6": {
+    "mpCost": 159,
+    "lifeCost": 48,
+    "_src": "family"
+   },
+   "7": {
+    "mpCost": 193,
+    "lifeCost": 56,
+    "_src": "family"
+   },
+   "8": {
+    "mpCost": 229,
+    "lifeCost": 64,
+    "_src": "family"
+   },
+   "9": {
+    "_src": "packet",
+    "mpCost": 266,
+    "lifeCost": 72,
+    "_reqLevel": 91,
+    "_powerStars": 3
+   },
+   "10": {
+    "_src": "packet",
+    "mpCost": 312,
+    "lifeCost": 80,
+    "_reqLevel": 101,
+    "_powerStars": 3
+   },
+   "11": {
+    "_src": "packet",
+    "mpCost": 496,
+    "lifeCost": 100,
+    "_reqLevel": 101,
+    "_powerStars": 12
+   },
+   "12": {
+    "_src": "packet",
+    "mpCost": 680,
+    "lifeCost": 120,
+    "_reqLevel": 106,
+    "_powerStars": 11
+   },
+   "13": {
+    "_src": "interp",
+    "mpCost": 864,
+    "lifeCost": 140
+   },
+   "14": {
+    "_src": "packet",
+    "mpCost": 1048,
+    "lifeCost": 160,
+    "_reqLevel": 121,
+    "_powerStars": 9
+   },
+   "15": {
+    "_src": "packet",
+    "mpCost": 1232,
+    "lifeCost": 180,
+    "_reqLevel": 121,
+    "_powerStars": 9
+   }
+  },
+  "observed": 6
+ },
+ "172100": {
+  "maxLevel": 20,
+  "levels": {
+   "8": {
+    "_src": "packet",
+    "mpCost": 229,
+    "lifeCost": 8,
+    "_reqLevel": 89,
+    "_powerStars": 1
+   },
+   "9": {
+    "_src": "packet",
+    "mpCost": 266,
+    "lifeCost": 9,
+    "_reqLevel": 89,
+    "_powerStars": 6
+   },
+   "10": {
+    "_src": "packet",
+    "mpCost": 312,
+    "lifeCost": 10,
+    "_reqLevel": 104,
+    "_powerStars": 2
+   },
+   "11": {
+    "_src": "packet",
+    "mpCost": 404,
+    "lifeCost": 16,
+    "_reqLevel": 104,
+    "_powerStars": 7
+   },
+   "12": {
+    "_src": "interp",
+    "mpCost": 496,
+    "lifeCost": 22
+   },
+   "13": {
+    "_src": "interp",
+    "mpCost": 588,
+    "lifeCost": 28
+   },
+   "14": {
+    "_src": "packet",
+    "mpCost": 680,
+    "lifeCost": 34,
+    "_reqLevel": 124,
+    "_powerStars": 3
+   },
+   "15": {
+    "_src": "packet",
+    "mpCost": 772,
+    "lifeCost": 40,
+    "_reqLevel": 124,
+    "_powerStars": 8
+   },
+   "16": {
+    "_src": "interp",
+    "mpCost": 864,
+    "lifeCost": 46
+   },
+   "17": {
+    "_src": "interp",
+    "mpCost": 956,
+    "lifeCost": 52
+   },
+   "18": {
+    "_src": "interp",
+    "mpCost": 1048,
+    "lifeCost": 58
+   },
+   "19": {
+    "_src": "packet",
+    "mpCost": 1140,
+    "lifeCost": 64,
+    "_reqLevel": 149,
+    "_powerStars": 8
+   },
+   "20": {
+    "_src": "packet",
+    "mpCost": 1232,
+    "lifeCost": 70,
+    "_reqLevel": 149,
+    "_powerStars": 3
+   }
+  },
+  "observed": 8
+ },
+ "173500": {
+  "maxLevel": 11,
+  "levels": {
+   "10": {
+    "_src": "packet",
+    "mpCost": 312,
+    "lifeCost": 80,
+    "_reqLevel": 103,
+    "_powerStars": 2
+   },
+   "11": {
+    "_src": "packet",
+    "mpCost": 358,
+    "lifeCost": 96,
+    "_reqLevel": 103,
+    "_powerStars": 7
+   }
+  },
+  "observed": 2
+ },
+ "185200": {
+  "maxLevel": 10,
+  "levels": {
+   "10": {
+    "_src": "packet",
+    "mpCost": 312,
+    "lifeCost": 1,
+    "_powerStars": 1
+   }
+  },
+  "observed": 1
+ },
+ "185600": {
+  "maxLevel": 14,
+  "levels": {
+   "13": {
+    "_src": "packet",
+    "mpCost": 969,
+    "lifeCost": 32,
+    "_reqLevel": 116,
+    "_powerStars": 4
+   },
+   "14": {
+    "_src": "packet",
+    "mpCost": 1092,
+    "lifeCost": 36,
+    "_reqLevel": 116,
+    "_powerStars": 8
+   }
+  },
+  "observed": 2
+ },
+ "1701100": {
+  "maxLevel": 11,
+  "levels": {
+   "6": {
+    "_src": "packet",
+    "mpCost": 223,
+    "lifeCost": 24,
+    "_reqLevel": 64,
+    "_powerStars": 8
+   },
+   "7": {
+    "_src": "packet",
+    "mpCost": 270,
+    "lifeCost": 28,
+    "_reqLevel": 64,
+    "_powerStars": 3
+   },
+   "8": {
+    "_src": "interp",
+    "mpCost": 334,
+    "lifeCost": 32
+   },
+   "9": {
+    "_src": "packet",
+    "mpCost": 397,
+    "lifeCost": 36,
+    "_reqLevel": 94,
+    "_powerStars": 1
+   },
+   "10": {
+    "_src": "packet",
+    "mpCost": 454,
+    "lifeCost": 40,
+    "_reqLevel": 104,
+    "_powerStars": 6
+   },
+   "11": {
+    "_src": "packet",
+    "mpCost": 568,
+    "lifeCost": 48,
+    "_reqLevel": 104,
+    "_powerStars": 2
+   }
+  },
+  "observed": 5
+ },
+ "1701200": {
+  "maxLevel": 11,
+  "levels": {
+   "10": {
+    "_src": "packet",
+    "mpCost": 454,
+    "lifeCost": 40,
+    "_reqLevel": 104,
+    "_powerStars": 6
+   },
+   "11": {
+    "_src": "packet",
+    "mpCost": 568,
+    "lifeCost": 48,
+    "_reqLevel": 104,
+    "_powerStars": 2
+   }
+  },
+  "observed": 2
+ },
+ "1701400": {
+  "maxLevel": 11,
+  "levels": {
+   "10": {
+    "_src": "packet",
+    "mpCost": 454,
+    "lifeCost": 40,
+    "_reqLevel": 104,
+    "_powerStars": 6
+   },
+   "11": {
+    "_src": "packet",
+    "mpCost": 568,
+    "lifeCost": 48,
+    "_reqLevel": 104,
+    "_powerStars": 2
+   }
+  },
+  "observed": 2
+ },
+ "1701800": {
+  "maxLevel": 10,
+  "levels": {
+   "1": {
+    "_src": "packet",
+    "mpCost": 32,
+    "_reqLevel": 17,
+    "_powerStars": 2
+   },
+   "2": {
+    "_src": "packet",
+    "mpCost": 49,
+    "_reqLevel": 17,
+    "_powerStars": 4
+   }
+  },
+  "observed": 2
+ },
+ "1701900": {
+  "maxLevel": 20,
+  "levels": {
+   "1": {
+    "mpCost": 32,
+    "lifeCost": 10,
+    "_src": "family"
+   },
+   "2": {
+    "mpCost": 49,
+    "lifeCost": 20,
+    "_src": "family"
+   },
+   "3": {
+    "mpCost": 73,
+    "lifeCost": 30,
+    "_src": "family"
+   },
+   "4": {
+    "mpCost": 99,
+    "lifeCost": 40,
+    "_src": "family"
+   },
+   "5": {
+    "mpCost": 128,
+    "lifeCost": 50,
+    "_src": "family"
+   },
+   "6": {
+    "mpCost": 159,
+    "lifeCost": 60,
+    "_src": "family"
+   },
+   "7": {
+    "mpCost": 193,
+    "lifeCost": 70,
+    "_src": "family"
+   },
+   "8": {
+    "mpCost": 229,
+    "lifeCost": 80,
+    "_src": "family"
+   },
+   "9": {
+    "mpCost": 266,
+    "lifeCost": 90,
+    "_src": "family"
+   },
+   "10": {
+    "mpCost": 312,
+    "lifeCost": 100,
+    "_src": "family"
+   },
+   "11": {
+    "mpCost": 496,
+    "lifeCost": 120,
+    "_src": "family"
+   },
+   "19": {
+    "_src": "packet",
+    "mpCost": 1084,
+    "lifeCost": 280,
+    "_reqLevel": 146,
+    "_powerStars": 7
+   },
+   "20": {
+    "_src": "packet",
+    "mpCost": 1204,
+    "lifeCost": 300,
+    "_reqLevel": 146,
+    "_powerStars": 4
+   }
+  },
+  "observed": 2
+ },
+ "1702500": {
+  "maxLevel": 11,
+  "levels": {
+   "10": {
+    "_src": "packet",
+    "mpCost": 454,
+    "lifeCost": 60,
+    "_reqLevel": 104,
+    "_powerStars": 6
+   },
+   "11": {
+    "_src": "packet",
+    "mpCost": 568,
+    "lifeCost": 72,
+    "_reqLevel": 104,
+    "_powerStars": 2
+   }
+  },
+  "observed": 2
+ },
+ "1702600": {
+  "maxLevel": 11,
+  "levels": {
+   "10": {
+    "_src": "packet",
+    "mpCost": 468,
+    "lifeCost": 100,
+    "_reqLevel": 101,
+    "_powerStars": 2
+   },
+   "11": {
+    "_src": "packet",
+    "mpCost": 644,
+    "lifeCost": 120,
+    "_reqLevel": 101,
+    "_powerStars": 10
+   }
+  },
+  "observed": 2
+ },
+ "1702900": {
+  "maxLevel": 11,
+  "levels": {
+   "9": {
+    "_src": "packet",
+    "mpCost": 397,
+    "lifeCost": 54,
+    "_reqLevel": 94,
+    "_powerStars": 1
+   },
+   "10": {
+    "_src": "packet",
+    "mpCost": 454,
+    "lifeCost": 60,
+    "_reqLevel": 104,
+    "_powerStars": 6
+   },
+   "11": {
+    "_src": "packet",
+    "mpCost": 568,
+    "lifeCost": 72,
+    "_reqLevel": 104,
+    "_powerStars": 2
+   }
+  },
+  "observed": 3
+ },
+ "1704100": {
+  "maxLevel": 5,
+  "levels": {
+   "1": {
+    "_src": "packet",
+    "mpCost": 23,
+    "lifeCost": 10,
+    "_powerStars": 8
+   },
+   "2": {
+    "_src": "packet",
+    "mpCost": 56,
+    "lifeCost": 20,
+    "_powerStars": 7
+   },
+   "3": {
+    "_src": "packet",
+    "mpCost": 85,
+    "lifeCost": 30,
+    "_powerStars": 5
+   },
+   "4": {
+    "_src": "interp",
+    "mpCost": 125,
+    "lifeCost": 40
+   },
+   "5": {
+    "_src": "packet",
+    "mpCost": 164,
+    "lifeCost": 50,
+    "_powerStars": 1
+   }
+  },
+  "observed": 4
+ },
+ "1705100": {
+  "maxLevel": 5,
+  "levels": {
+   "1": {
+    "_src": "packet",
+    "mpCost": 23,
+    "lifeCost": 10,
+    "_powerStars": 8
+   },
+   "2": {
+    "_src": "interp",
+    "mpCost": 58,
+    "lifeCost": 20
+   },
+   "3": {
+    "_src": "interp",
+    "mpCost": 94,
+    "lifeCost": 30
+   },
+   "4": {
+    "_src": "interp",
+    "mpCost": 129,
+    "lifeCost": 40
+   },
+   "5": {
+    "_src": "packet",
+    "mpCost": 164,
+    "lifeCost": 50,
+    "_powerStars": 1
+   }
+  },
+  "observed": 2
+ },
+ "1712800": {
+  "maxLevel": 11,
+  "levels": {
+   "10": {
+    "_src": "packet",
+    "mpCost": 104,
+    "lifeCost": 60,
+    "_reqLevel": 102,
+    "_powerStars": 1
+   },
+   "11": {
+    "_src": "packet",
+    "mpCost": 164,
+    "lifeCost": 72,
+    "_reqLevel": 102,
+    "_powerStars": 4
+   }
+  },
+  "observed": 2
+ },
+ "1712900": {
+  "maxLevel": 11,
+  "levels": {
+   "10": {
+    "_src": "packet",
+    "mpCost": 104,
+    "lifeCost": 60,
+    "_reqLevel": 104,
+    "_powerStars": 1
+   },
+   "11": {
+    "_src": "packet",
+    "mpCost": 164,
+    "lifeCost": 72,
+    "_reqLevel": 104,
+    "_powerStars": 5
+   }
+  },
+  "observed": 2
+ },
+ "1713000": {
+  "maxLevel": 12,
+  "levels": {
+   "11": {
+    "_src": "packet",
+    "mpCost": 644,
+    "lifeCost": 120,
+    "_reqLevel": 109,
+    "_powerStars": 10
+   },
+   "12": {
+    "_src": "packet",
+    "mpCost": 820,
+    "lifeCost": 140,
+    "_reqLevel": 109,
+    "_powerStars": 9
+   }
+  },
+  "observed": 2
+ },
+ "1719000": {
+  "maxLevel": 15,
+  "levels": {
+   "14": {
+    "_src": "packet",
+    "mpCost": 484,
+    "lifeCost": 108,
+    "_reqLevel": 124,
+    "_powerStars": 8
+   },
+   "15": {
+    "_src": "packet",
+    "mpCost": 604,
+    "lifeCost": 120,
+    "_reqLevel": 124,
+    "_powerStars": 1
+   }
+  },
+  "observed": 2
+ },
+ "1732100": {
+  "maxLevel": 17,
+  "levels": {
+   "10": {
+    "_src": "packet",
+    "mpCost": 392,
+    "lifeCost": 11,
+    "_reqLevel": 101,
+    "_powerStars": 3
+   },
+   "11": {
+    "_src": "packet",
+    "mpCost": 432,
+    "lifeCost": 12,
+    "_reqLevel": 101,
+    "_powerStars": 12
+   },
+   "12": {
+    "_src": "interp",
+    "mpCost": 472,
+    "lifeCost": 13
+   },
+   "13": {
+    "_src": "interp",
+    "mpCost": 512,
+    "lifeCost": 14
+   },
+   "14": {
+    "_src": "interp",
+    "mpCost": 552,
+    "lifeCost": 15
+   },
+   "15": {
+    "_src": "interp",
+    "mpCost": 592,
+    "lifeCost": 16
+   },
+   "16": {
+    "_src": "packet",
+    "mpCost": 632,
+    "lifeCost": 17,
+    "_reqLevel": 131,
+    "_powerStars": 8
+   },
+   "17": {
+    "_src": "packet",
+    "mpCost": 672,
+    "lifeCost": 18,
+    "_reqLevel": 131,
+    "_powerStars": 8
+   }
+  },
+  "observed": 4
+ },
+ "1742500": {
+  "maxLevel": 11,
+  "levels": {
+   "10": {
+    "_src": "packet",
+    "mpCost": 0,
+    "_reqLevel": 100,
+    "_powerStars": 1
+   },
+   "11": {
+    "_src": "packet",
+    "mpCost": 0,
+    "_reqLevel": 100,
+    "_powerStars": 5
+   }
+  },
+  "observed": 2
+ },
+ "1808700": {
+  "maxLevel": 11,
+  "levels": {
+   "10": {
+    "_src": "packet",
+    "lifeCost": 20,
+    "_reqLevel": 102
+   },
+   "11": {
+    "_src": "packet",
+    "lifeCost": 20,
+    "_reqLevel": 102
+   }
+  },
+  "observed": 2
+ },
+ "1808900": {
+  "maxLevel": 11,
+  "levels": {
+   "10": {
+    "_src": "packet",
+    "lifeCost": 30,
+    "_reqLevel": 102
+   },
+   "11": {
+    "_src": "packet",
+    "lifeCost": 30,
+    "_reqLevel": 102
+   }
+  },
+  "observed": 2
+ },
+ "1900012": {
+  "maxLevel": 11,
+  "levels": {
+   "1": {
+    "mpCost": 32,
+    "lifeCost": 10,
+    "_src": "family"
+   },
+   "2": {
+    "mpCost": 49,
+    "lifeCost": 20,
+    "_src": "family"
+   },
+   "3": {
+    "mpCost": 73,
+    "lifeCost": 30,
+    "_src": "family"
+   },
+   "4": {
+    "mpCost": 99,
+    "lifeCost": 40,
+    "_src": "family"
+   },
+   "5": {
+    "mpCost": 128,
+    "lifeCost": 50,
+    "_src": "family"
+   },
+   "6": {
+    "mpCost": 159,
+    "lifeCost": 60,
+    "_src": "family"
+   },
+   "7": {
+    "mpCost": 193,
+    "lifeCost": 70,
+    "_src": "family"
+   },
+   "8": {
+    "mpCost": 229,
+    "lifeCost": 80,
+    "_src": "family"
+   },
+   "9": {
+    "mpCost": 266,
+    "lifeCost": 90,
+    "_src": "family"
+   },
+   "10": {
+    "mpCost": 312,
+    "lifeCost": 100,
+    "_src": "family"
+   },
+   "11": {
+    "mpCost": 496,
+    "lifeCost": 120,
+    "_src": "family"
+   }
+  }
+ },
+ "1900014": {
+  "maxLevel": 11,
+  "levels": {
+   "1": {
+    "mpCost": 32,
+    "lifeCost": 10,
+    "_src": "family"
+   },
+   "2": {
+    "mpCost": 49,
+    "lifeCost": 20,
+    "_src": "family"
+   },
+   "3": {
+    "mpCost": 73,
+    "lifeCost": 30,
+    "_src": "family"
+   },
+   "4": {
+    "mpCost": 99,
+    "lifeCost": 40,
+    "_src": "family"
+   },
+   "5": {
+    "mpCost": 128,
+    "lifeCost": 50,
+    "_src": "family"
+   },
+   "6": {
+    "mpCost": 159,
+    "lifeCost": 60,
+    "_src": "family"
+   },
+   "7": {
+    "mpCost": 193,
+    "lifeCost": 70,
+    "_src": "family"
+   },
+   "8": {
+    "mpCost": 229,
+    "lifeCost": 80,
+    "_src": "family"
+   },
+   "9": {
+    "mpCost": 266,
+    "lifeCost": 90,
+    "_src": "family"
+   },
+   "10": {
+    "mpCost": 312,
+    "lifeCost": 100,
+    "_src": "family"
+   },
+   "11": {
+    "mpCost": 496,
+    "lifeCost": 120,
+    "_src": "family"
+   }
+  }
+ },
+ "1900016": {
+  "maxLevel": 11,
+  "levels": {
+   "1": {
+    "mpCost": 32,
+    "lifeCost": 2,
+    "_src": "family"
+   },
+   "2": {
+    "mpCost": 49,
+    "lifeCost": 4,
+    "_src": "family"
+   },
+   "3": {
+    "mpCost": 73,
+    "lifeCost": 6,
+    "_src": "family"
+   },
+   "4": {
+    "mpCost": 99,
+    "lifeCost": 8,
+    "_src": "family"
+   },
+   "5": {
+    "mpCost": 133,
+    "lifeCost": 10,
+    "_src": "family"
+   },
+   "6": {
+    "mpCost": 186,
+    "lifeCost": 12,
+    "_src": "family"
+   },
+   "7": {
+    "mpCost": 251,
+    "lifeCost": 14,
+    "_src": "family"
+   },
+   "8": {
+    "mpCost": 344,
+    "lifeCost": 16,
+    "_src": "family"
+   },
+   "9": {
+    "mpCost": 452,
+    "lifeCost": 18,
+    "_src": "family"
+   },
+   "10": {
+    "mpCost": 624,
+    "lifeCost": 20,
+    "_src": "family"
+   },
+   "11": {
+    "mpCost": 724,
+    "lifeCost": 26,
+    "_src": "family"
+   }
+  }
+ },
+ "10010001": {
+  "maxLevel": 10,
+  "levels": {
+   "1": {
+    "mpCost": 45,
+    "cd": 0,
+    "power": 0.95,
+    "heal": 0,
+    "params": {
+     "dmgBase": 1,
+     "dmgPerL": 0,
+     "magBase": 20,
+     "magPerL": 0,
+     "elemBuffs": [
+      "burn",
+      "freeze",
+      "weak",
+      "slow"
+     ],
+     "elemProb": 0.4,
+     "elemDur": 3,
+     "highDurBase": 7,
+     "highDurPerL": 0,
+     "highDurCishanDiv": 2,
+     "lowDurBase": 3,
+     "lowDurPerL": 0,
+     "lowDurXwPer": 12000,
+     "rageBase": 13,
+     "ragePerL": 0,
+     "ragePctBase": 80,
+     "ragePctPerL": 0
+    }
+   },
+   "2": {
+    "mpCost": 45,
+    "cd": 0,
+    "power": 0.95,
+    "heal": 0,
+    "params": {
+     "dmgBase": 1.05,
+     "dmgPerL": 0,
+     "magBase": 70,
+     "magPerL": 0,
+     "elemBuffs": [
+      "burn",
+      "freeze",
+      "weak",
+      "slow"
+     ],
+     "elemProb": 0.4,
+     "elemDur": 3,
+     "highDurBase": 7,
+     "highDurPerL": 0,
+     "highDurCishanDiv": 2,
+     "lowDurBase": 3,
+     "lowDurPerL": 0,
+     "lowDurXwPer": 12000,
+     "rageBase": 23.3,
+     "ragePerL": 0,
+     "ragePctBase": 82,
+     "ragePctPerL": 0
+    }
+   },
+   "3": {
+    "mpCost": 45,
+    "cd": 0,
+    "power": 0.95,
+    "heal": 0,
+    "params": {
+     "dmgBase": 1.1,
+     "dmgPerL": 0,
+     "magBase": 120,
+     "magPerL": 0,
+     "elemBuffs": [
+      "burn",
+      "freeze",
+      "weak",
+      "slow"
+     ],
+     "elemProb": 0.4,
+     "elemDur": 3,
+     "highDurBase": 7,
+     "highDurPerL": 0,
+     "highDurCishanDiv": 2,
+     "lowDurBase": 3,
+     "lowDurPerL": 0,
+     "lowDurXwPer": 12000,
+     "rageBase": 33.6,
+     "ragePerL": 0,
+     "ragePctBase": 84,
+     "ragePctPerL": 0
+    }
+   },
+   "4": {
+    "mpCost": 45,
+    "cd": 0,
+    "power": 0.95,
+    "heal": 0,
+    "params": {
+     "dmgBase": 1.15,
+     "dmgPerL": 0,
+     "magBase": 170,
+     "magPerL": 0,
+     "elemBuffs": [
+      "burn",
+      "freeze",
+      "weak",
+      "slow"
+     ],
+     "elemProb": 0.4,
+     "elemDur": 3,
+     "highDurBase": 7,
+     "highDurPerL": 0,
+     "highDurCishanDiv": 2,
+     "lowDurBase": 3,
+     "lowDurPerL": 0,
+     "lowDurXwPer": 12000,
+     "rageBase": 43.9,
+     "ragePerL": 0,
+     "ragePctBase": 86,
+     "ragePctPerL": 0
+    }
+   },
+   "5": {
+    "mpCost": 45,
+    "cd": 0,
+    "power": 0.95,
+    "heal": 0,
+    "params": {
+     "dmgBase": 1.2,
+     "dmgPerL": 0,
+     "magBase": 220,
+     "magPerL": 0,
+     "elemBuffs": [
+      "burn",
+      "freeze",
+      "weak",
+      "slow"
+     ],
+     "elemProb": 0.4,
+     "elemDur": 3,
+     "highDurBase": 7,
+     "highDurPerL": 0,
+     "highDurCishanDiv": 2,
+     "lowDurBase": 3,
+     "lowDurPerL": 0,
+     "lowDurXwPer": 12000,
+     "rageBase": 54.2,
+     "ragePerL": 0,
+     "ragePctBase": 88,
+     "ragePctPerL": 0
+    }
+   },
+   "6": {
+    "mpCost": 45,
+    "cd": 0,
+    "power": 0.95,
+    "heal": 0,
+    "params": {
+     "dmgBase": 1.25,
+     "dmgPerL": 0,
+     "magBase": 270,
+     "magPerL": 0,
+     "elemBuffs": [
+      "burn",
+      "freeze",
+      "weak",
+      "slow"
+     ],
+     "elemProb": 0.4,
+     "elemDur": 3,
+     "highDurBase": 7,
+     "highDurPerL": 0,
+     "highDurCishanDiv": 2,
+     "lowDurBase": 3,
+     "lowDurPerL": 0,
+     "lowDurXwPer": 12000,
+     "rageBase": 64.5,
+     "ragePerL": 0,
+     "ragePctBase": 90,
+     "ragePctPerL": 0
+    }
+   },
+   "7": {
+    "mpCost": 45,
+    "cd": 0,
+    "power": 0.95,
+    "heal": 0,
+    "params": {
+     "dmgBase": 1.3,
+     "dmgPerL": 0,
+     "magBase": 320,
+     "magPerL": 0,
+     "elemBuffs": [
+      "burn",
+      "freeze",
+      "weak",
+      "slow"
+     ],
+     "elemProb": 0.4,
+     "elemDur": 3,
+     "highDurBase": 7,
+     "highDurPerL": 0,
+     "highDurCishanDiv": 2,
+     "lowDurBase": 3,
+     "lowDurPerL": 0,
+     "lowDurXwPer": 12000,
+     "rageBase": 74.8,
+     "ragePerL": 0,
+     "ragePctBase": 92,
+     "ragePctPerL": 0
+    }
+   },
+   "8": {
+    "mpCost": 45,
+    "cd": 0,
+    "power": 0.95,
+    "heal": 0,
+    "params": {
+     "dmgBase": 1.35,
+     "dmgPerL": 0,
+     "magBase": 370,
+     "magPerL": 0,
+     "elemBuffs": [
+      "burn",
+      "freeze",
+      "weak",
+      "slow"
+     ],
+     "elemProb": 0.4,
+     "elemDur": 3,
+     "highDurBase": 7,
+     "highDurPerL": 0,
+     "highDurCishanDiv": 2,
+     "lowDurBase": 3,
+     "lowDurPerL": 0,
+     "lowDurXwPer": 12000,
+     "rageBase": 85.1,
+     "ragePerL": 0,
+     "ragePctBase": 94,
+     "ragePctPerL": 0
+    }
+   },
+   "9": {
+    "mpCost": 45,
+    "cd": 0,
+    "power": 0.95,
+    "heal": 0,
+    "params": {
+     "dmgBase": 1.4,
+     "dmgPerL": 0,
+     "magBase": 420,
+     "magPerL": 0,
+     "elemBuffs": [
+      "burn",
+      "freeze",
+      "weak",
+      "slow"
+     ],
+     "elemProb": 0.4,
+     "elemDur": 3,
+     "highDurBase": 7,
+     "highDurPerL": 0,
+     "highDurCishanDiv": 2,
+     "lowDurBase": 3,
+     "lowDurPerL": 0,
+     "lowDurXwPer": 12000,
+     "rageBase": 95.4,
+     "ragePerL": 0,
+     "ragePctBase": 96,
+     "ragePctPerL": 0
+    }
+   },
+   "10": {
+    "mpCost": 45,
+    "cd": 0,
+    "power": 0.95,
+    "heal": 0,
+    "params": {
+     "dmgBase": 1.45,
+     "dmgPerL": 0,
+     "magBase": 470,
+     "magPerL": 0,
+     "elemBuffs": [
+      "burn",
+      "freeze",
+      "weak",
+      "slow"
+     ],
+     "elemProb": 0.4,
+     "elemDur": 3,
+     "highDurBase": 7,
+     "highDurPerL": 0,
+     "highDurCishanDiv": 2,
+     "lowDurBase": 3,
+     "lowDurPerL": 0,
+     "lowDurXwPer": 12000,
+     "rageBase": 105.7,
+     "ragePerL": 0,
+     "ragePctBase": 98,
+     "ragePctPerL": 0
+    }
+   }
+  }
+ },
+ "10011001": {
+  "maxLevel": 10,
+  "levels": {
+   "1": {
+    "mpCost": 45,
+    "cd": 0,
+    "power": 0.95,
+    "heal": 0,
+    "params": {
+     "dmgBase": 1,
+     "dmgPerL": 0,
+     "magBase": 20,
+     "magPerL": 0,
+     "elemBuffs": [
+      "burn",
+      "freeze",
+      "weak",
+      "slow"
+     ],
+     "elemProb": 0.4,
+     "elemDur": 3,
+     "highDurBase": 7,
+     "highDurPerL": 0,
+     "highDurCishanDiv": 2,
+     "lowDurBase": 3,
+     "lowDurPerL": 0,
+     "lowDurXwPer": 12000,
+     "rageBase": 13,
+     "ragePerL": 0,
+     "ragePctBase": 80,
+     "ragePctPerL": 0
+    }
+   },
+   "2": {
+    "mpCost": 45,
+    "cd": 0,
+    "power": 0.95,
+    "heal": 0,
+    "params": {
+     "dmgBase": 1.05,
+     "dmgPerL": 0,
+     "magBase": 70,
+     "magPerL": 0,
+     "elemBuffs": [
+      "burn",
+      "freeze",
+      "weak",
+      "slow"
+     ],
+     "elemProb": 0.4,
+     "elemDur": 3,
+     "highDurBase": 7,
+     "highDurPerL": 0,
+     "highDurCishanDiv": 2,
+     "lowDurBase": 3,
+     "lowDurPerL": 0,
+     "lowDurXwPer": 12000,
+     "rageBase": 23.3,
+     "ragePerL": 0,
+     "ragePctBase": 82,
+     "ragePctPerL": 0
+    }
+   },
+   "3": {
+    "mpCost": 45,
+    "cd": 0,
+    "power": 0.95,
+    "heal": 0,
+    "params": {
+     "dmgBase": 1.1,
+     "dmgPerL": 0,
+     "magBase": 120,
+     "magPerL": 0,
+     "elemBuffs": [
+      "burn",
+      "freeze",
+      "weak",
+      "slow"
+     ],
+     "elemProb": 0.4,
+     "elemDur": 3,
+     "highDurBase": 7,
+     "highDurPerL": 0,
+     "highDurCishanDiv": 2,
+     "lowDurBase": 3,
+     "lowDurPerL": 0,
+     "lowDurXwPer": 12000,
+     "rageBase": 33.6,
+     "ragePerL": 0,
+     "ragePctBase": 84,
+     "ragePctPerL": 0
+    }
+   },
+   "4": {
+    "mpCost": 45,
+    "cd": 0,
+    "power": 0.95,
+    "heal": 0,
+    "params": {
+     "dmgBase": 1.15,
+     "dmgPerL": 0,
+     "magBase": 170,
+     "magPerL": 0,
+     "elemBuffs": [
+      "burn",
+      "freeze",
+      "weak",
+      "slow"
+     ],
+     "elemProb": 0.4,
+     "elemDur": 3,
+     "highDurBase": 7,
+     "highDurPerL": 0,
+     "highDurCishanDiv": 2,
+     "lowDurBase": 3,
+     "lowDurPerL": 0,
+     "lowDurXwPer": 12000,
+     "rageBase": 43.9,
+     "ragePerL": 0,
+     "ragePctBase": 86,
+     "ragePctPerL": 0
+    }
+   },
+   "5": {
+    "mpCost": 45,
+    "cd": 0,
+    "power": 0.95,
+    "heal": 0,
+    "params": {
+     "dmgBase": 1.2,
+     "dmgPerL": 0,
+     "magBase": 220,
+     "magPerL": 0,
+     "elemBuffs": [
+      "burn",
+      "freeze",
+      "weak",
+      "slow"
+     ],
+     "elemProb": 0.4,
+     "elemDur": 3,
+     "highDurBase": 7,
+     "highDurPerL": 0,
+     "highDurCishanDiv": 2,
+     "lowDurBase": 3,
+     "lowDurPerL": 0,
+     "lowDurXwPer": 12000,
+     "rageBase": 54.2,
+     "ragePerL": 0,
+     "ragePctBase": 88,
+     "ragePctPerL": 0
+    }
+   },
+   "6": {
+    "mpCost": 45,
+    "cd": 0,
+    "power": 0.95,
+    "heal": 0,
+    "params": {
+     "dmgBase": 1.25,
+     "dmgPerL": 0,
+     "magBase": 270,
+     "magPerL": 0,
+     "elemBuffs": [
+      "burn",
+      "freeze",
+      "weak",
+      "slow"
+     ],
+     "elemProb": 0.4,
+     "elemDur": 3,
+     "highDurBase": 7,
+     "highDurPerL": 0,
+     "highDurCishanDiv": 2,
+     "lowDurBase": 3,
+     "lowDurPerL": 0,
+     "lowDurXwPer": 12000,
+     "rageBase": 64.5,
+     "ragePerL": 0,
+     "ragePctBase": 90,
+     "ragePctPerL": 0
+    }
+   },
+   "7": {
+    "mpCost": 45,
+    "cd": 0,
+    "power": 0.95,
+    "heal": 0,
+    "params": {
+     "dmgBase": 1.3,
+     "dmgPerL": 0,
+     "magBase": 320,
+     "magPerL": 0,
+     "elemBuffs": [
+      "burn",
+      "freeze",
+      "weak",
+      "slow"
+     ],
+     "elemProb": 0.4,
+     "elemDur": 3,
+     "highDurBase": 7,
+     "highDurPerL": 0,
+     "highDurCishanDiv": 2,
+     "lowDurBase": 3,
+     "lowDurPerL": 0,
+     "lowDurXwPer": 12000,
+     "rageBase": 74.8,
+     "ragePerL": 0,
+     "ragePctBase": 92,
+     "ragePctPerL": 0
+    }
+   },
+   "8": {
+    "mpCost": 45,
+    "cd": 0,
+    "power": 0.95,
+    "heal": 0,
+    "params": {
+     "dmgBase": 1.35,
+     "dmgPerL": 0,
+     "magBase": 370,
+     "magPerL": 0,
+     "elemBuffs": [
+      "burn",
+      "freeze",
+      "weak",
+      "slow"
+     ],
+     "elemProb": 0.4,
+     "elemDur": 3,
+     "highDurBase": 7,
+     "highDurPerL": 0,
+     "highDurCishanDiv": 2,
+     "lowDurBase": 3,
+     "lowDurPerL": 0,
+     "lowDurXwPer": 12000,
+     "rageBase": 85.1,
+     "ragePerL": 0,
+     "ragePctBase": 94,
+     "ragePctPerL": 0
+    }
+   },
+   "9": {
+    "mpCost": 45,
+    "cd": 0,
+    "power": 0.95,
+    "heal": 0,
+    "params": {
+     "dmgBase": 1.4,
+     "dmgPerL": 0,
+     "magBase": 420,
+     "magPerL": 0,
+     "elemBuffs": [
+      "burn",
+      "freeze",
+      "weak",
+      "slow"
+     ],
+     "elemProb": 0.4,
+     "elemDur": 3,
+     "highDurBase": 7,
+     "highDurPerL": 0,
+     "highDurCishanDiv": 2,
+     "lowDurBase": 3,
+     "lowDurPerL": 0,
+     "lowDurXwPer": 12000,
+     "rageBase": 95.4,
+     "ragePerL": 0,
+     "ragePctBase": 96,
+     "ragePctPerL": 0
+    }
+   },
+   "10": {
+    "mpCost": 45,
+    "cd": 0,
+    "power": 0.95,
+    "heal": 0,
+    "params": {
+     "dmgBase": 1.45,
+     "dmgPerL": 0,
+     "magBase": 470,
+     "magPerL": 0,
+     "elemBuffs": [
+      "burn",
+      "freeze",
+      "weak",
+      "slow"
+     ],
+     "elemProb": 0.4,
+     "elemDur": 3,
+     "highDurBase": 7,
+     "highDurPerL": 0,
+     "highDurCishanDiv": 2,
+     "lowDurBase": 3,
+     "lowDurPerL": 0,
+     "lowDurXwPer": 12000,
+     "rageBase": 105.7,
+     "ragePerL": 0,
+     "ragePctBase": 98,
+     "ragePctPerL": 0
+    }
+   }
+  }
+ },
+ "10012001": {
+  "maxLevel": 10,
+  "levels": {
+   "1": {
+    "mpCost": 45,
+    "cd": 0,
+    "power": 0.95,
+    "heal": 0,
+    "params": {
+     "dmgBase": 1,
+     "dmgPerL": 0,
+     "magBase": 20,
+     "magPerL": 0,
+     "elemBuffs": [
+      "burn",
+      "freeze",
+      "weak",
+      "slow"
+     ],
+     "elemProb": 0.4,
+     "elemDur": 3,
+     "highDurBase": 7,
+     "highDurPerL": 0,
+     "highDurCishanDiv": 2,
+     "lowDurBase": 3,
+     "lowDurPerL": 0,
+     "lowDurXwPer": 12000,
+     "rageBase": 13,
+     "ragePerL": 0,
+     "ragePctBase": 80,
+     "ragePctPerL": 0
+    }
+   },
+   "2": {
+    "mpCost": 45,
+    "cd": 0,
+    "power": 0.95,
+    "heal": 0,
+    "params": {
+     "dmgBase": 1.05,
+     "dmgPerL": 0,
+     "magBase": 70,
+     "magPerL": 0,
+     "elemBuffs": [
+      "burn",
+      "freeze",
+      "weak",
+      "slow"
+     ],
+     "elemProb": 0.4,
+     "elemDur": 3,
+     "highDurBase": 7,
+     "highDurPerL": 0,
+     "highDurCishanDiv": 2,
+     "lowDurBase": 3,
+     "lowDurPerL": 0,
+     "lowDurXwPer": 12000,
+     "rageBase": 23.3,
+     "ragePerL": 0,
+     "ragePctBase": 82,
+     "ragePctPerL": 0
+    }
+   },
+   "3": {
+    "mpCost": 45,
+    "cd": 0,
+    "power": 0.95,
+    "heal": 0,
+    "params": {
+     "dmgBase": 1.1,
+     "dmgPerL": 0,
+     "magBase": 120,
+     "magPerL": 0,
+     "elemBuffs": [
+      "burn",
+      "freeze",
+      "weak",
+      "slow"
+     ],
+     "elemProb": 0.4,
+     "elemDur": 3,
+     "highDurBase": 7,
+     "highDurPerL": 0,
+     "highDurCishanDiv": 2,
+     "lowDurBase": 3,
+     "lowDurPerL": 0,
+     "lowDurXwPer": 12000,
+     "rageBase": 33.6,
+     "ragePerL": 0,
+     "ragePctBase": 84,
+     "ragePctPerL": 0
+    }
+   },
+   "4": {
+    "mpCost": 45,
+    "cd": 0,
+    "power": 0.95,
+    "heal": 0,
+    "params": {
+     "dmgBase": 1.15,
+     "dmgPerL": 0,
+     "magBase": 170,
+     "magPerL": 0,
+     "elemBuffs": [
+      "burn",
+      "freeze",
+      "weak",
+      "slow"
+     ],
+     "elemProb": 0.4,
+     "elemDur": 3,
+     "highDurBase": 7,
+     "highDurPerL": 0,
+     "highDurCishanDiv": 2,
+     "lowDurBase": 3,
+     "lowDurPerL": 0,
+     "lowDurXwPer": 12000,
+     "rageBase": 43.9,
+     "ragePerL": 0,
+     "ragePctBase": 86,
+     "ragePctPerL": 0
+    }
+   },
+   "5": {
+    "mpCost": 45,
+    "cd": 0,
+    "power": 0.95,
+    "heal": 0,
+    "params": {
+     "dmgBase": 1.2,
+     "dmgPerL": 0,
+     "magBase": 220,
+     "magPerL": 0,
+     "elemBuffs": [
+      "burn",
+      "freeze",
+      "weak",
+      "slow"
+     ],
+     "elemProb": 0.4,
+     "elemDur": 3,
+     "highDurBase": 7,
+     "highDurPerL": 0,
+     "highDurCishanDiv": 2,
+     "lowDurBase": 3,
+     "lowDurPerL": 0,
+     "lowDurXwPer": 12000,
+     "rageBase": 54.2,
+     "ragePerL": 0,
+     "ragePctBase": 88,
+     "ragePctPerL": 0
+    }
+   },
+   "6": {
+    "mpCost": 45,
+    "cd": 0,
+    "power": 0.95,
+    "heal": 0,
+    "params": {
+     "dmgBase": 1.25,
+     "dmgPerL": 0,
+     "magBase": 270,
+     "magPerL": 0,
+     "elemBuffs": [
+      "burn",
+      "freeze",
+      "weak",
+      "slow"
+     ],
+     "elemProb": 0.4,
+     "elemDur": 3,
+     "highDurBase": 7,
+     "highDurPerL": 0,
+     "highDurCishanDiv": 2,
+     "lowDurBase": 3,
+     "lowDurPerL": 0,
+     "lowDurXwPer": 12000,
+     "rageBase": 64.5,
+     "ragePerL": 0,
+     "ragePctBase": 90,
+     "ragePctPerL": 0
+    }
+   },
+   "7": {
+    "mpCost": 45,
+    "cd": 0,
+    "power": 0.95,
+    "heal": 0,
+    "params": {
+     "dmgBase": 1.3,
+     "dmgPerL": 0,
+     "magBase": 320,
+     "magPerL": 0,
+     "elemBuffs": [
+      "burn",
+      "freeze",
+      "weak",
+      "slow"
+     ],
+     "elemProb": 0.4,
+     "elemDur": 3,
+     "highDurBase": 7,
+     "highDurPerL": 0,
+     "highDurCishanDiv": 2,
+     "lowDurBase": 3,
+     "lowDurPerL": 0,
+     "lowDurXwPer": 12000,
+     "rageBase": 74.8,
+     "ragePerL": 0,
+     "ragePctBase": 92,
+     "ragePctPerL": 0
+    }
+   },
+   "8": {
+    "mpCost": 45,
+    "cd": 0,
+    "power": 0.95,
+    "heal": 0,
+    "params": {
+     "dmgBase": 1.35,
+     "dmgPerL": 0,
+     "magBase": 370,
+     "magPerL": 0,
+     "elemBuffs": [
+      "burn",
+      "freeze",
+      "weak",
+      "slow"
+     ],
+     "elemProb": 0.4,
+     "elemDur": 3,
+     "highDurBase": 7,
+     "highDurPerL": 0,
+     "highDurCishanDiv": 2,
+     "lowDurBase": 3,
+     "lowDurPerL": 0,
+     "lowDurXwPer": 12000,
+     "rageBase": 85.1,
+     "ragePerL": 0,
+     "ragePctBase": 94,
+     "ragePctPerL": 0
+    }
+   },
+   "9": {
+    "mpCost": 45,
+    "cd": 0,
+    "power": 0.95,
+    "heal": 0,
+    "params": {
+     "dmgBase": 1.4,
+     "dmgPerL": 0,
+     "magBase": 420,
+     "magPerL": 0,
+     "elemBuffs": [
+      "burn",
+      "freeze",
+      "weak",
+      "slow"
+     ],
+     "elemProb": 0.4,
+     "elemDur": 3,
+     "highDurBase": 7,
+     "highDurPerL": 0,
+     "highDurCishanDiv": 2,
+     "lowDurBase": 3,
+     "lowDurPerL": 0,
+     "lowDurXwPer": 12000,
+     "rageBase": 95.4,
+     "ragePerL": 0,
+     "ragePctBase": 96,
+     "ragePctPerL": 0
+    }
+   },
+   "10": {
+    "mpCost": 45,
+    "cd": 0,
+    "power": 0.95,
+    "heal": 0,
+    "params": {
+     "dmgBase": 1.45,
+     "dmgPerL": 0,
+     "magBase": 470,
+     "magPerL": 0,
+     "elemBuffs": [
+      "burn",
+      "freeze",
+      "weak",
+      "slow"
+     ],
+     "elemProb": 0.4,
+     "elemDur": 3,
+     "highDurBase": 7,
+     "highDurPerL": 0,
+     "highDurCishanDiv": 2,
+     "lowDurBase": 3,
+     "lowDurPerL": 0,
+     "lowDurXwPer": 12000,
+     "rageBase": 105.7,
+     "ragePerL": 0,
+     "ragePctBase": 98,
+     "ragePctPerL": 0
+    }
+   }
+  }
+ },
+ "10013001": {
+  "maxLevel": 10,
+  "levels": {
+   "1": {
+    "mpCost": 45,
+    "cd": 0,
+    "power": 0.95,
+    "heal": 0,
+    "params": {
+     "dmgBase": 1,
+     "dmgPerL": 0,
+     "magBase": 20,
+     "magPerL": 0,
+     "elemBuffs": [
+      "burn",
+      "freeze",
+      "weak",
+      "slow"
+     ],
+     "elemProb": 0.4,
+     "elemDur": 3,
+     "highDurBase": 7,
+     "highDurPerL": 0,
+     "highDurCishanDiv": 2,
+     "lowDurBase": 3,
+     "lowDurPerL": 0,
+     "lowDurXwPer": 12000,
+     "rageBase": 13,
+     "ragePerL": 0,
+     "ragePctBase": 80,
+     "ragePctPerL": 0
+    }
+   },
+   "2": {
+    "mpCost": 45,
+    "cd": 0,
+    "power": 0.95,
+    "heal": 0,
+    "params": {
+     "dmgBase": 1.05,
+     "dmgPerL": 0,
+     "magBase": 70,
+     "magPerL": 0,
+     "elemBuffs": [
+      "burn",
+      "freeze",
+      "weak",
+      "slow"
+     ],
+     "elemProb": 0.4,
+     "elemDur": 3,
+     "highDurBase": 7,
+     "highDurPerL": 0,
+     "highDurCishanDiv": 2,
+     "lowDurBase": 3,
+     "lowDurPerL": 0,
+     "lowDurXwPer": 12000,
+     "rageBase": 23.3,
+     "ragePerL": 0,
+     "ragePctBase": 82,
+     "ragePctPerL": 0
+    }
+   },
+   "3": {
+    "mpCost": 45,
+    "cd": 0,
+    "power": 0.95,
+    "heal": 0,
+    "params": {
+     "dmgBase": 1.1,
+     "dmgPerL": 0,
+     "magBase": 120,
+     "magPerL": 0,
+     "elemBuffs": [
+      "burn",
+      "freeze",
+      "weak",
+      "slow"
+     ],
+     "elemProb": 0.4,
+     "elemDur": 3,
+     "highDurBase": 7,
+     "highDurPerL": 0,
+     "highDurCishanDiv": 2,
+     "lowDurBase": 3,
+     "lowDurPerL": 0,
+     "lowDurXwPer": 12000,
+     "rageBase": 33.6,
+     "ragePerL": 0,
+     "ragePctBase": 84,
+     "ragePctPerL": 0
+    }
+   },
+   "4": {
+    "mpCost": 45,
+    "cd": 0,
+    "power": 0.95,
+    "heal": 0,
+    "params": {
+     "dmgBase": 1.15,
+     "dmgPerL": 0,
+     "magBase": 170,
+     "magPerL": 0,
+     "elemBuffs": [
+      "burn",
+      "freeze",
+      "weak",
+      "slow"
+     ],
+     "elemProb": 0.4,
+     "elemDur": 3,
+     "highDurBase": 7,
+     "highDurPerL": 0,
+     "highDurCishanDiv": 2,
+     "lowDurBase": 3,
+     "lowDurPerL": 0,
+     "lowDurXwPer": 12000,
+     "rageBase": 43.9,
+     "ragePerL": 0,
+     "ragePctBase": 86,
+     "ragePctPerL": 0
+    }
+   },
+   "5": {
+    "mpCost": 45,
+    "cd": 0,
+    "power": 0.95,
+    "heal": 0,
+    "params": {
+     "dmgBase": 1.2,
+     "dmgPerL": 0,
+     "magBase": 220,
+     "magPerL": 0,
+     "elemBuffs": [
+      "burn",
+      "freeze",
+      "weak",
+      "slow"
+     ],
+     "elemProb": 0.4,
+     "elemDur": 3,
+     "highDurBase": 7,
+     "highDurPerL": 0,
+     "highDurCishanDiv": 2,
+     "lowDurBase": 3,
+     "lowDurPerL": 0,
+     "lowDurXwPer": 12000,
+     "rageBase": 54.2,
+     "ragePerL": 0,
+     "ragePctBase": 88,
+     "ragePctPerL": 0
+    }
+   },
+   "6": {
+    "mpCost": 45,
+    "cd": 0,
+    "power": 0.95,
+    "heal": 0,
+    "params": {
+     "dmgBase": 1.25,
+     "dmgPerL": 0,
+     "magBase": 270,
+     "magPerL": 0,
+     "elemBuffs": [
+      "burn",
+      "freeze",
+      "weak",
+      "slow"
+     ],
+     "elemProb": 0.4,
+     "elemDur": 3,
+     "highDurBase": 7,
+     "highDurPerL": 0,
+     "highDurCishanDiv": 2,
+     "lowDurBase": 3,
+     "lowDurPerL": 0,
+     "lowDurXwPer": 12000,
+     "rageBase": 64.5,
+     "ragePerL": 0,
+     "ragePctBase": 90,
+     "ragePctPerL": 0
+    }
+   },
+   "7": {
+    "mpCost": 45,
+    "cd": 0,
+    "power": 0.95,
+    "heal": 0,
+    "params": {
+     "dmgBase": 1.3,
+     "dmgPerL": 0,
+     "magBase": 320,
+     "magPerL": 0,
+     "elemBuffs": [
+      "burn",
+      "freeze",
+      "weak",
+      "slow"
+     ],
+     "elemProb": 0.4,
+     "elemDur": 3,
+     "highDurBase": 7,
+     "highDurPerL": 0,
+     "highDurCishanDiv": 2,
+     "lowDurBase": 3,
+     "lowDurPerL": 0,
+     "lowDurXwPer": 12000,
+     "rageBase": 74.8,
+     "ragePerL": 0,
+     "ragePctBase": 92,
+     "ragePctPerL": 0
+    }
+   },
+   "8": {
+    "mpCost": 45,
+    "cd": 0,
+    "power": 0.95,
+    "heal": 0,
+    "params": {
+     "dmgBase": 1.35,
+     "dmgPerL": 0,
+     "magBase": 370,
+     "magPerL": 0,
+     "elemBuffs": [
+      "burn",
+      "freeze",
+      "weak",
+      "slow"
+     ],
+     "elemProb": 0.4,
+     "elemDur": 3,
+     "highDurBase": 7,
+     "highDurPerL": 0,
+     "highDurCishanDiv": 2,
+     "lowDurBase": 3,
+     "lowDurPerL": 0,
+     "lowDurXwPer": 12000,
+     "rageBase": 85.1,
+     "ragePerL": 0,
+     "ragePctBase": 94,
+     "ragePctPerL": 0
+    }
+   },
+   "9": {
+    "mpCost": 45,
+    "cd": 0,
+    "power": 0.95,
+    "heal": 0,
+    "params": {
+     "dmgBase": 1.4,
+     "dmgPerL": 0,
+     "magBase": 420,
+     "magPerL": 0,
+     "elemBuffs": [
+      "burn",
+      "freeze",
+      "weak",
+      "slow"
+     ],
+     "elemProb": 0.4,
+     "elemDur": 3,
+     "highDurBase": 7,
+     "highDurPerL": 0,
+     "highDurCishanDiv": 2,
+     "lowDurBase": 3,
+     "lowDurPerL": 0,
+     "lowDurXwPer": 12000,
+     "rageBase": 95.4,
+     "ragePerL": 0,
+     "ragePctBase": 96,
+     "ragePctPerL": 0
+    }
+   },
+   "10": {
+    "mpCost": 45,
+    "cd": 0,
+    "power": 0.95,
+    "heal": 0,
+    "params": {
+     "dmgBase": 1.45,
+     "dmgPerL": 0,
+     "magBase": 470,
+     "magPerL": 0,
+     "elemBuffs": [
+      "burn",
+      "freeze",
+      "weak",
+      "slow"
+     ],
+     "elemProb": 0.4,
+     "elemDur": 3,
+     "highDurBase": 7,
+     "highDurPerL": 0,
+     "highDurCishanDiv": 2,
+     "lowDurBase": 3,
+     "lowDurPerL": 0,
+     "lowDurXwPer": 12000,
+     "rageBase": 105.7,
+     "ragePerL": 0,
+     "ragePctBase": 98,
+     "ragePctPerL": 0
+    }
+   }
+  }
+ },
+ "10020000": {
+  "maxLevel": 10,
+  "levels": {
+   "1": {
+    "mpCost": 40,
+    "cd": 3,
+    "power": 0.5,
+    "heal": 0,
+    "params": {
+     "dmgBase": 0.5,
+     "dmgPerL": 0,
+     "layerBonus": 1,
+     "constTerm": 0.1,
+     "magBase": 20,
+     "magPerL": 0,
+     "maxLayers": 4,
+     "elemKinds": [
+      "burn",
+      "freeze",
+      "weak",
+      "slow"
+     ]
+    }
+   },
+   "2": {
+    "mpCost": 40,
+    "cd": 3,
+    "power": 0.5,
+    "heal": 0,
+    "params": {
+     "dmgBase": 0.52,
+     "dmgPerL": 0,
+     "layerBonus": 1,
+     "constTerm": 0.1,
+     "magBase": 70,
+     "magPerL": 0,
+     "maxLayers": 4,
+     "elemKinds": [
+      "burn",
+      "freeze",
+      "weak",
+      "slow"
+     ]
+    }
+   },
+   "3": {
+    "mpCost": 40,
+    "cd": 3,
+    "power": 0.5,
+    "heal": 0,
+    "params": {
+     "dmgBase": 0.54,
+     "dmgPerL": 0,
+     "layerBonus": 1,
+     "constTerm": 0.1,
+     "magBase": 120,
+     "magPerL": 0,
+     "maxLayers": 4,
+     "elemKinds": [
+      "burn",
+      "freeze",
+      "weak",
+      "slow"
+     ]
+    }
+   },
+   "4": {
+    "mpCost": 40,
+    "cd": 3,
+    "power": 0.5,
+    "heal": 0,
+    "params": {
+     "dmgBase": 0.56,
+     "dmgPerL": 0,
+     "layerBonus": 1,
+     "constTerm": 0.1,
+     "magBase": 170,
+     "magPerL": 0,
+     "maxLayers": 4,
+     "elemKinds": [
+      "burn",
+      "freeze",
+      "weak",
+      "slow"
+     ]
+    }
+   },
+   "5": {
+    "mpCost": 40,
+    "cd": 3,
+    "power": 0.5,
+    "heal": 0,
+    "params": {
+     "dmgBase": 0.58,
+     "dmgPerL": 0,
+     "layerBonus": 1,
+     "constTerm": 0.1,
+     "magBase": 220,
+     "magPerL": 0,
+     "maxLayers": 4,
+     "elemKinds": [
+      "burn",
+      "freeze",
+      "weak",
+      "slow"
+     ]
+    }
+   },
+   "6": {
+    "mpCost": 40,
+    "cd": 3,
+    "power": 0.5,
+    "heal": 0,
+    "params": {
+     "dmgBase": 0.6,
+     "dmgPerL": 0,
+     "layerBonus": 1,
+     "constTerm": 0.1,
+     "magBase": 270,
+     "magPerL": 0,
+     "maxLayers": 4,
+     "elemKinds": [
+      "burn",
+      "freeze",
+      "weak",
+      "slow"
+     ]
+    }
+   },
+   "7": {
+    "mpCost": 40,
+    "cd": 3,
+    "power": 0.5,
+    "heal": 0,
+    "params": {
+     "dmgBase": 0.62,
+     "dmgPerL": 0,
+     "layerBonus": 1,
+     "constTerm": 0.1,
+     "magBase": 320,
+     "magPerL": 0,
+     "maxLayers": 4,
+     "elemKinds": [
+      "burn",
+      "freeze",
+      "weak",
+      "slow"
+     ]
+    }
+   },
+   "8": {
+    "mpCost": 40,
+    "cd": 3,
+    "power": 0.5,
+    "heal": 0,
+    "params": {
+     "dmgBase": 0.64,
+     "dmgPerL": 0,
+     "layerBonus": 1,
+     "constTerm": 0.1,
+     "magBase": 370,
+     "magPerL": 0,
+     "maxLayers": 4,
+     "elemKinds": [
+      "burn",
+      "freeze",
+      "weak",
+      "slow"
+     ]
+    }
+   },
+   "9": {
+    "mpCost": 40,
+    "cd": 3,
+    "power": 0.5,
+    "heal": 0,
+    "params": {
+     "dmgBase": 0.66,
+     "dmgPerL": 0,
+     "layerBonus": 1,
+     "constTerm": 0.1,
+     "magBase": 420,
+     "magPerL": 0,
+     "maxLayers": 4,
+     "elemKinds": [
+      "burn",
+      "freeze",
+      "weak",
+      "slow"
+     ]
+    }
+   },
+   "10": {
+    "mpCost": 40,
+    "cd": 3,
+    "power": 0.5,
+    "heal": 0,
+    "params": {
+     "dmgBase": 0.68,
+     "dmgPerL": 0,
+     "layerBonus": 1,
+     "constTerm": 0.1,
+     "magBase": 470,
+     "magPerL": 0,
+     "maxLayers": 4,
+     "elemKinds": [
+      "burn",
+      "freeze",
+      "weak",
+      "slow"
+     ]
+    }
+   }
+  }
+ },
+ "10030000": {
+  "maxLevel": 10,
+  "levels": {
+   "1": {
+    "mpCost": 55,
+    "cd": 4,
+    "power": 0.45,
+    "heal": 0,
+    "params": {
+     "coefPrimaryBase": 0.5,
+     "coefPrimaryPerL": 0,
+     "coefOtherBase": 0.3,
+     "coefOtherPerL": 0,
+     "magBase": 20,
+     "magPerL": 0,
+     "selfDur": 3,
+     "defAddPct": 0.25
+    }
+   },
+   "2": {
+    "mpCost": 55,
+    "cd": 4,
+    "power": 0.45,
+    "heal": 0,
+    "params": {
+     "coefPrimaryBase": 0.55,
+     "coefPrimaryPerL": 0,
+     "coefOtherBase": 0.33,
+     "coefOtherPerL": 0,
+     "magBase": 70,
+     "magPerL": 0,
+     "selfDur": 3,
+     "defAddPct": 0.25
+    }
+   },
+   "3": {
+    "mpCost": 55,
+    "cd": 4,
+    "power": 0.45,
+    "heal": 0,
+    "params": {
+     "coefPrimaryBase": 0.6,
+     "coefPrimaryPerL": 0,
+     "coefOtherBase": 0.36,
+     "coefOtherPerL": 0,
+     "magBase": 120,
+     "magPerL": 0,
+     "selfDur": 3,
+     "defAddPct": 0.25
+    }
+   },
+   "4": {
+    "mpCost": 55,
+    "cd": 4,
+    "power": 0.45,
+    "heal": 0,
+    "params": {
+     "coefPrimaryBase": 0.65,
+     "coefPrimaryPerL": 0,
+     "coefOtherBase": 0.39,
+     "coefOtherPerL": 0,
+     "magBase": 170,
+     "magPerL": 0,
+     "selfDur": 3,
+     "defAddPct": 0.25
+    }
+   },
+   "5": {
+    "mpCost": 55,
+    "cd": 4,
+    "power": 0.45,
+    "heal": 0,
+    "params": {
+     "coefPrimaryBase": 0.7,
+     "coefPrimaryPerL": 0,
+     "coefOtherBase": 0.42,
+     "coefOtherPerL": 0,
+     "magBase": 220,
+     "magPerL": 0,
+     "selfDur": 3,
+     "defAddPct": 0.25
+    }
+   },
+   "6": {
+    "mpCost": 55,
+    "cd": 4,
+    "power": 0.45,
+    "heal": 0,
+    "params": {
+     "coefPrimaryBase": 0.75,
+     "coefPrimaryPerL": 0,
+     "coefOtherBase": 0.45,
+     "coefOtherPerL": 0,
+     "magBase": 270,
+     "magPerL": 0,
+     "selfDur": 3,
+     "defAddPct": 0.25
+    }
+   },
+   "7": {
+    "mpCost": 55,
+    "cd": 4,
+    "power": 0.45,
+    "heal": 0,
+    "params": {
+     "coefPrimaryBase": 0.8,
+     "coefPrimaryPerL": 0,
+     "coefOtherBase": 0.48,
+     "coefOtherPerL": 0,
+     "magBase": 320,
+     "magPerL": 0,
+     "selfDur": 3,
+     "defAddPct": 0.25
+    }
+   },
+   "8": {
+    "mpCost": 55,
+    "cd": 4,
+    "power": 0.45,
+    "heal": 0,
+    "params": {
+     "coefPrimaryBase": 0.85,
+     "coefPrimaryPerL": 0,
+     "coefOtherBase": 0.51,
+     "coefOtherPerL": 0,
+     "magBase": 370,
+     "magPerL": 0,
+     "selfDur": 3,
+     "defAddPct": 0.25
+    }
+   },
+   "9": {
+    "mpCost": 55,
+    "cd": 4,
+    "power": 0.45,
+    "heal": 0,
+    "params": {
+     "coefPrimaryBase": 0.9,
+     "coefPrimaryPerL": 0,
+     "coefOtherBase": 0.54,
+     "coefOtherPerL": 0,
+     "magBase": 420,
+     "magPerL": 0,
+     "selfDur": 3,
+     "defAddPct": 0.25
+    }
+   },
+   "10": {
+    "mpCost": 55,
+    "cd": 4,
+    "power": 0.45,
+    "heal": 0,
+    "params": {
+     "coefPrimaryBase": 0.95,
+     "coefPrimaryPerL": 0,
+     "coefOtherBase": 0.57,
+     "coefOtherPerL": 0,
+     "magBase": 470,
+     "magPerL": 0,
+     "selfDur": 3,
+     "defAddPct": 0.25
+    }
+   }
+  }
+ },
+ "10030017": {
+  "maxLevel": 10,
+  "levels": {
+   "1": {
+    "mpCost": 45,
+    "cd": 0,
+    "power": 0.95,
+    "heal": 0,
+    "params": {
+     "dmgBase": 1,
+     "dmgPerL": 0,
+     "magBase": 20,
+     "magPerL": 0,
+     "elemBuffs": [
+      "burn",
+      "freeze",
+      "weak",
+      "slow"
+     ],
+     "elemProb": 0.4,
+     "elemDur": 3,
+     "highDurBase": 7,
+     "highDurPerL": 0,
+     "highDurCishanDiv": 2,
+     "lowDurBase": 3,
+     "lowDurPerL": 0,
+     "lowDurXwPer": 12000,
+     "rageBase": 13,
+     "ragePerL": 0,
+     "ragePctBase": 80,
+     "ragePctPerL": 0
+    }
+   },
+   "2": {
+    "mpCost": 45,
+    "cd": 0,
+    "power": 0.95,
+    "heal": 0,
+    "params": {
+     "dmgBase": 1.05,
+     "dmgPerL": 0,
+     "magBase": 70,
+     "magPerL": 0,
+     "elemBuffs": [
+      "burn",
+      "freeze",
+      "weak",
+      "slow"
+     ],
+     "elemProb": 0.4,
+     "elemDur": 3,
+     "highDurBase": 7,
+     "highDurPerL": 0,
+     "highDurCishanDiv": 2,
+     "lowDurBase": 3,
+     "lowDurPerL": 0,
+     "lowDurXwPer": 12000,
+     "rageBase": 23.3,
+     "ragePerL": 0,
+     "ragePctBase": 82,
+     "ragePctPerL": 0
+    }
+   },
+   "3": {
+    "mpCost": 45,
+    "cd": 0,
+    "power": 0.95,
+    "heal": 0,
+    "params": {
+     "dmgBase": 1.1,
+     "dmgPerL": 0,
+     "magBase": 120,
+     "magPerL": 0,
+     "elemBuffs": [
+      "burn",
+      "freeze",
+      "weak",
+      "slow"
+     ],
+     "elemProb": 0.4,
+     "elemDur": 3,
+     "highDurBase": 7,
+     "highDurPerL": 0,
+     "highDurCishanDiv": 2,
+     "lowDurBase": 3,
+     "lowDurPerL": 0,
+     "lowDurXwPer": 12000,
+     "rageBase": 33.6,
+     "ragePerL": 0,
+     "ragePctBase": 84,
+     "ragePctPerL": 0
+    }
+   },
+   "4": {
+    "mpCost": 45,
+    "cd": 0,
+    "power": 0.95,
+    "heal": 0,
+    "params": {
+     "dmgBase": 1.15,
+     "dmgPerL": 0,
+     "magBase": 170,
+     "magPerL": 0,
+     "elemBuffs": [
+      "burn",
+      "freeze",
+      "weak",
+      "slow"
+     ],
+     "elemProb": 0.4,
+     "elemDur": 3,
+     "highDurBase": 7,
+     "highDurPerL": 0,
+     "highDurCishanDiv": 2,
+     "lowDurBase": 3,
+     "lowDurPerL": 0,
+     "lowDurXwPer": 12000,
+     "rageBase": 43.9,
+     "ragePerL": 0,
+     "ragePctBase": 86,
+     "ragePctPerL": 0
+    }
+   },
+   "5": {
+    "mpCost": 45,
+    "cd": 0,
+    "power": 0.95,
+    "heal": 0,
+    "params": {
+     "dmgBase": 1.2,
+     "dmgPerL": 0,
+     "magBase": 220,
+     "magPerL": 0,
+     "elemBuffs": [
+      "burn",
+      "freeze",
+      "weak",
+      "slow"
+     ],
+     "elemProb": 0.4,
+     "elemDur": 3,
+     "highDurBase": 7,
+     "highDurPerL": 0,
+     "highDurCishanDiv": 2,
+     "lowDurBase": 3,
+     "lowDurPerL": 0,
+     "lowDurXwPer": 12000,
+     "rageBase": 54.2,
+     "ragePerL": 0,
+     "ragePctBase": 88,
+     "ragePctPerL": 0
+    }
+   },
+   "6": {
+    "mpCost": 45,
+    "cd": 0,
+    "power": 0.95,
+    "heal": 0,
+    "params": {
+     "dmgBase": 1.25,
+     "dmgPerL": 0,
+     "magBase": 270,
+     "magPerL": 0,
+     "elemBuffs": [
+      "burn",
+      "freeze",
+      "weak",
+      "slow"
+     ],
+     "elemProb": 0.4,
+     "elemDur": 3,
+     "highDurBase": 7,
+     "highDurPerL": 0,
+     "highDurCishanDiv": 2,
+     "lowDurBase": 3,
+     "lowDurPerL": 0,
+     "lowDurXwPer": 12000,
+     "rageBase": 64.5,
+     "ragePerL": 0,
+     "ragePctBase": 90,
+     "ragePctPerL": 0
+    }
+   },
+   "7": {
+    "mpCost": 45,
+    "cd": 0,
+    "power": 0.95,
+    "heal": 0,
+    "params": {
+     "dmgBase": 1.3,
+     "dmgPerL": 0,
+     "magBase": 320,
+     "magPerL": 0,
+     "elemBuffs": [
+      "burn",
+      "freeze",
+      "weak",
+      "slow"
+     ],
+     "elemProb": 0.4,
+     "elemDur": 3,
+     "highDurBase": 7,
+     "highDurPerL": 0,
+     "highDurCishanDiv": 2,
+     "lowDurBase": 3,
+     "lowDurPerL": 0,
+     "lowDurXwPer": 12000,
+     "rageBase": 74.8,
+     "ragePerL": 0,
+     "ragePctBase": 92,
+     "ragePctPerL": 0
+    }
+   },
+   "8": {
+    "mpCost": 45,
+    "cd": 0,
+    "power": 0.95,
+    "heal": 0,
+    "params": {
+     "dmgBase": 1.35,
+     "dmgPerL": 0,
+     "magBase": 370,
+     "magPerL": 0,
+     "elemBuffs": [
+      "burn",
+      "freeze",
+      "weak",
+      "slow"
+     ],
+     "elemProb": 0.4,
+     "elemDur": 3,
+     "highDurBase": 7,
+     "highDurPerL": 0,
+     "highDurCishanDiv": 2,
+     "lowDurBase": 3,
+     "lowDurPerL": 0,
+     "lowDurXwPer": 12000,
+     "rageBase": 85.1,
+     "ragePerL": 0,
+     "ragePctBase": 94,
+     "ragePctPerL": 0
+    }
+   },
+   "9": {
+    "mpCost": 45,
+    "cd": 0,
+    "power": 0.95,
+    "heal": 0,
+    "params": {
+     "dmgBase": 1.4,
+     "dmgPerL": 0,
+     "magBase": 420,
+     "magPerL": 0,
+     "elemBuffs": [
+      "burn",
+      "freeze",
+      "weak",
+      "slow"
+     ],
+     "elemProb": 0.4,
+     "elemDur": 3,
+     "highDurBase": 7,
+     "highDurPerL": 0,
+     "highDurCishanDiv": 2,
+     "lowDurBase": 3,
+     "lowDurPerL": 0,
+     "lowDurXwPer": 12000,
+     "rageBase": 95.4,
+     "ragePerL": 0,
+     "ragePctBase": 96,
+     "ragePctPerL": 0
+    }
+   },
+   "10": {
+    "mpCost": 45,
+    "cd": 0,
+    "power": 0.95,
+    "heal": 0,
+    "params": {
+     "dmgBase": 1.45,
+     "dmgPerL": 0,
+     "magBase": 470,
+     "magPerL": 0,
+     "elemBuffs": [
+      "burn",
+      "freeze",
+      "weak",
+      "slow"
+     ],
+     "elemProb": 0.4,
+     "elemDur": 3,
+     "highDurBase": 7,
+     "highDurPerL": 0,
+     "highDurCishanDiv": 2,
+     "lowDurBase": 3,
+     "lowDurPerL": 0,
+     "lowDurXwPer": 12000,
+     "rageBase": 105.7,
+     "ragePerL": 0,
+     "ragePctBase": 98,
+     "ragePctPerL": 0
+    }
+   }
+  }
+ },
+ "10040000": {
+  "maxLevel": 10,
+  "levels": {
+   "1": {
+    "mpCost": 60,
+    "cd": 5,
+    "power": 1.95,
+    "heal": 0,
+    "params": {
+     "dmgBase": 2,
+     "dmgPerL": 0,
+     "magBase": 300,
+     "magPerL": 0,
+     "burn": {
+      "prob": 0.4,
+      "durBase": 3,
+      "durPerL": 0,
+      "durXwPer": 12000
+     }
+    }
+   },
+   "2": {
+    "mpCost": 60,
+    "cd": 5,
+    "power": 1.95,
+    "heal": 0,
+    "params": {
+     "dmgBase": 2.05,
+     "dmgPerL": 0,
+     "magBase": 335,
+     "magPerL": 0,
+     "burn": {
+      "prob": 0.4,
+      "durBase": 3,
+      "durPerL": 0,
+      "durXwPer": 12000
+     }
+    }
+   },
+   "3": {
+    "mpCost": 60,
+    "cd": 5,
+    "power": 1.95,
+    "heal": 0,
+    "params": {
+     "dmgBase": 2.1,
+     "dmgPerL": 0,
+     "magBase": 370,
+     "magPerL": 0,
+     "burn": {
+      "prob": 0.4,
+      "durBase": 3,
+      "durPerL": 0,
+      "durXwPer": 12000
+     }
+    }
+   },
+   "4": {
+    "mpCost": 60,
+    "cd": 5,
+    "power": 1.95,
+    "heal": 0,
+    "params": {
+     "dmgBase": 2.15,
+     "dmgPerL": 0,
+     "magBase": 405,
+     "magPerL": 0,
+     "burn": {
+      "prob": 0.4,
+      "durBase": 3,
+      "durPerL": 0,
+      "durXwPer": 12000
+     }
+    }
+   },
+   "5": {
+    "mpCost": 60,
+    "cd": 5,
+    "power": 1.95,
+    "heal": 0,
+    "params": {
+     "dmgBase": 2.2,
+     "dmgPerL": 0,
+     "magBase": 440,
+     "magPerL": 0,
+     "burn": {
+      "prob": 0.4,
+      "durBase": 3,
+      "durPerL": 0,
+      "durXwPer": 12000
+     }
+    }
+   },
+   "6": {
+    "mpCost": 60,
+    "cd": 5,
+    "power": 1.95,
+    "heal": 0,
+    "params": {
+     "dmgBase": 2.25,
+     "dmgPerL": 0,
+     "magBase": 475,
+     "magPerL": 0,
+     "burn": {
+      "prob": 0.4,
+      "durBase": 3,
+      "durPerL": 0,
+      "durXwPer": 12000
+     }
+    }
+   },
+   "7": {
+    "mpCost": 60,
+    "cd": 5,
+    "power": 1.95,
+    "heal": 0,
+    "params": {
+     "dmgBase": 2.3,
+     "dmgPerL": 0,
+     "magBase": 510,
+     "magPerL": 0,
+     "burn": {
+      "prob": 0.4,
+      "durBase": 3,
+      "durPerL": 0,
+      "durXwPer": 12000
+     }
+    }
+   },
+   "8": {
+    "mpCost": 60,
+    "cd": 5,
+    "power": 1.95,
+    "heal": 0,
+    "params": {
+     "dmgBase": 2.35,
+     "dmgPerL": 0,
+     "magBase": 545,
+     "magPerL": 0,
+     "burn": {
+      "prob": 0.4,
+      "durBase": 3,
+      "durPerL": 0,
+      "durXwPer": 12000
+     }
+    }
+   },
+   "9": {
+    "mpCost": 60,
+    "cd": 5,
+    "power": 1.95,
+    "heal": 0,
+    "params": {
+     "dmgBase": 2.4,
+     "dmgPerL": 0,
+     "magBase": 580,
+     "magPerL": 0,
+     "burn": {
+      "prob": 0.4,
+      "durBase": 3,
+      "durPerL": 0,
+      "durXwPer": 12000
+     }
+    }
+   },
+   "10": {
+    "mpCost": 60,
+    "cd": 5,
+    "power": 1.95,
+    "heal": 0,
+    "params": {
+     "dmgBase": 2.45,
+     "dmgPerL": 0,
+     "magBase": 615,
+     "magPerL": 0,
+     "burn": {
+      "prob": 0.4,
+      "durBase": 3,
+      "durPerL": 0,
+      "durXwPer": 12000
+     }
+    }
+   }
+  }
+ },
+ "20010000": {
+  "maxLevel": 10,
+  "levels": {
+   "1": {
+    "mpCost": 40,
+    "cd": 3,
+    "power": 0.98,
+    "heal": 0,
+    "params": {
+     "dmgBase": 1,
+     "dmgPerL": 0,
+     "magBase": 30,
+     "magPerL": 0
+    }
+   },
+   "2": {
+    "mpCost": 40,
+    "cd": 3,
+    "power": 0.98,
+    "heal": 0,
+    "params": {
+     "dmgBase": 1.02,
+     "dmgPerL": 0,
+     "magBase": 105,
+     "magPerL": 0
+    }
+   },
+   "3": {
+    "mpCost": 40,
+    "cd": 3,
+    "power": 0.98,
+    "heal": 0,
+    "params": {
+     "dmgBase": 1.04,
+     "dmgPerL": 0,
+     "magBase": 180,
+     "magPerL": 0
+    }
+   },
+   "4": {
+    "mpCost": 40,
+    "cd": 3,
+    "power": 0.98,
+    "heal": 0,
+    "params": {
+     "dmgBase": 1.06,
+     "dmgPerL": 0,
+     "magBase": 255,
+     "magPerL": 0
+    }
+   },
+   "5": {
+    "mpCost": 40,
+    "cd": 3,
+    "power": 0.98,
+    "heal": 0,
+    "params": {
+     "dmgBase": 1.08,
+     "dmgPerL": 0,
+     "magBase": 330,
+     "magPerL": 0
+    }
+   },
+   "6": {
+    "mpCost": 40,
+    "cd": 3,
+    "power": 0.98,
+    "heal": 0,
+    "params": {
+     "dmgBase": 1.1,
+     "dmgPerL": 0,
+     "magBase": 405,
+     "magPerL": 0
+    }
+   },
+   "7": {
+    "mpCost": 40,
+    "cd": 3,
+    "power": 0.98,
+    "heal": 0,
+    "params": {
+     "dmgBase": 1.12,
+     "dmgPerL": 0,
+     "magBase": 480,
+     "magPerL": 0
+    }
+   },
+   "8": {
+    "mpCost": 40,
+    "cd": 3,
+    "power": 0.98,
+    "heal": 0,
+    "params": {
+     "dmgBase": 1.14,
+     "dmgPerL": 0,
+     "magBase": 555,
+     "magPerL": 0
+    }
+   },
+   "9": {
+    "mpCost": 40,
+    "cd": 3,
+    "power": 0.98,
+    "heal": 0,
+    "params": {
+     "dmgBase": 1.16,
+     "dmgPerL": 0,
+     "magBase": 630,
+     "magPerL": 0
+    }
+   },
+   "10": {
+    "mpCost": 40,
+    "cd": 3,
+    "power": 0.98,
+    "heal": 0,
+    "params": {
+     "dmgBase": 1.18,
+     "dmgPerL": 0,
+     "magBase": 705,
+     "magPerL": 0
+    }
+   }
+  }
+ },
+ "20020000": {
+  "maxLevel": 10,
+  "levels": {
+   "1": {
+    "mpCost": 45,
+    "cd": 4,
+    "power": 0.3,
+    "heal": 0,
+    "params": {
+     "confProb": 0.4,
+     "durBase": 3,
+     "durPerL": 0,
+     "durXwPer": 12000
+    }
+   },
+   "2": {
+    "mpCost": 45,
+    "cd": 4,
+    "power": 0.3,
+    "heal": 0,
+    "params": {
+     "confProb": 0.4,
+     "durBase": 3,
+     "durPerL": 0,
+     "durXwPer": 12000
+    }
+   },
+   "3": {
+    "mpCost": 45,
+    "cd": 4,
+    "power": 0.3,
+    "heal": 0,
+    "params": {
+     "confProb": 0.4,
+     "durBase": 3,
+     "durPerL": 0,
+     "durXwPer": 12000
+    }
+   },
+   "4": {
+    "mpCost": 45,
+    "cd": 4,
+    "power": 0.3,
+    "heal": 0,
+    "params": {
+     "confProb": 0.4,
+     "durBase": 3,
+     "durPerL": 0,
+     "durXwPer": 12000
+    }
+   },
+   "5": {
+    "mpCost": 45,
+    "cd": 4,
+    "power": 0.3,
+    "heal": 0,
+    "params": {
+     "confProb": 0.4,
+     "durBase": 3,
+     "durPerL": 0,
+     "durXwPer": 12000
+    }
+   },
+   "6": {
+    "mpCost": 45,
+    "cd": 4,
+    "power": 0.3,
+    "heal": 0,
+    "params": {
+     "confProb": 0.4,
+     "durBase": 3,
+     "durPerL": 0,
+     "durXwPer": 12000
+    }
+   },
+   "7": {
+    "mpCost": 45,
+    "cd": 4,
+    "power": 0.3,
+    "heal": 0,
+    "params": {
+     "confProb": 0.4,
+     "durBase": 3,
+     "durPerL": 0,
+     "durXwPer": 12000
+    }
+   },
+   "8": {
+    "mpCost": 45,
+    "cd": 4,
+    "power": 0.3,
+    "heal": 0,
+    "params": {
+     "confProb": 0.4,
+     "durBase": 3,
+     "durPerL": 0,
+     "durXwPer": 12000
+    }
+   },
+   "9": {
+    "mpCost": 45,
+    "cd": 4,
+    "power": 0.3,
+    "heal": 0,
+    "params": {
+     "confProb": 0.4,
+     "durBase": 3,
+     "durPerL": 0,
+     "durXwPer": 12000
+    }
+   },
+   "10": {
+    "mpCost": 45,
+    "cd": 4,
+    "power": 0.3,
+    "heal": 0,
+    "params": {
+     "confProb": 0.4,
+     "durBase": 3,
+     "durPerL": 0,
+     "durXwPer": 12000
+    }
+   }
+  }
+ },
+ "20030000": {
+  "maxLevel": 10,
+  "levels": {
+   "1": {
+    "mpCost": 40,
+    "cd": 4,
+    "power": 0,
+    "heal": 0,
+    "params": {
+     "atkBaseCoef": 0.14,
+     "atkPerLCoef": 0.01,
+     "constPerL": 88,
+     "constTerm": -68,
+     "defFactor": 0.5,
+     "durBase": 3,
+     "durPerL": 0,
+     "durXwPer": 12000
+    }
+   },
+   "2": {
+    "mpCost": 40,
+    "cd": 4,
+    "power": 0,
+    "heal": 0,
+    "params": {
+     "atkBaseCoef": 0.14,
+     "atkPerLCoef": 0.01,
+     "constPerL": 88,
+     "constTerm": -68,
+     "defFactor": 0.5,
+     "durBase": 3,
+     "durPerL": 0,
+     "durXwPer": 12000
+    }
+   },
+   "3": {
+    "mpCost": 40,
+    "cd": 4,
+    "power": 0,
+    "heal": 0,
+    "params": {
+     "atkBaseCoef": 0.14,
+     "atkPerLCoef": 0.01,
+     "constPerL": 88,
+     "constTerm": -68,
+     "defFactor": 0.5,
+     "durBase": 3,
+     "durPerL": 0,
+     "durXwPer": 12000
+    }
+   },
+   "4": {
+    "mpCost": 40,
+    "cd": 4,
+    "power": 0,
+    "heal": 0,
+    "params": {
+     "atkBaseCoef": 0.14,
+     "atkPerLCoef": 0.01,
+     "constPerL": 88,
+     "constTerm": -68,
+     "defFactor": 0.5,
+     "durBase": 3,
+     "durPerL": 0,
+     "durXwPer": 12000
+    }
+   },
+   "5": {
+    "mpCost": 40,
+    "cd": 4,
+    "power": 0,
+    "heal": 0,
+    "params": {
+     "atkBaseCoef": 0.14,
+     "atkPerLCoef": 0.01,
+     "constPerL": 88,
+     "constTerm": -68,
+     "defFactor": 0.5,
+     "durBase": 3,
+     "durPerL": 0,
+     "durXwPer": 12000
+    }
+   },
+   "6": {
+    "mpCost": 40,
+    "cd": 4,
+    "power": 0,
+    "heal": 0,
+    "params": {
+     "atkBaseCoef": 0.14,
+     "atkPerLCoef": 0.01,
+     "constPerL": 88,
+     "constTerm": -68,
+     "defFactor": 0.5,
+     "durBase": 3,
+     "durPerL": 0,
+     "durXwPer": 12000
+    }
+   },
+   "7": {
+    "mpCost": 40,
+    "cd": 4,
+    "power": 0,
+    "heal": 0,
+    "params": {
+     "atkBaseCoef": 0.14,
+     "atkPerLCoef": 0.01,
+     "constPerL": 88,
+     "constTerm": -68,
+     "defFactor": 0.5,
+     "durBase": 3,
+     "durPerL": 0,
+     "durXwPer": 12000
+    }
+   },
+   "8": {
+    "mpCost": 40,
+    "cd": 4,
+    "power": 0,
+    "heal": 0,
+    "params": {
+     "atkBaseCoef": 0.14,
+     "atkPerLCoef": 0.01,
+     "constPerL": 88,
+     "constTerm": -68,
+     "defFactor": 0.5,
+     "durBase": 3,
+     "durPerL": 0,
+     "durXwPer": 12000
+    }
+   },
+   "9": {
+    "mpCost": 40,
+    "cd": 4,
+    "power": 0,
+    "heal": 0,
+    "params": {
+     "atkBaseCoef": 0.14,
+     "atkPerLCoef": 0.01,
+     "constPerL": 88,
+     "constTerm": -68,
+     "defFactor": 0.5,
+     "durBase": 3,
+     "durPerL": 0,
+     "durXwPer": 12000
+    }
+   },
+   "10": {
+    "mpCost": 40,
+    "cd": 4,
+    "power": 0,
+    "heal": 0,
+    "params": {
+     "atkBaseCoef": 0.14,
+     "atkPerLCoef": 0.01,
+     "constPerL": 88,
+     "constTerm": -68,
+     "defFactor": 0.5,
+     "durBase": 3,
+     "durPerL": 0,
+     "durXwPer": 12000
+    }
+   }
+  }
+ },
+ "20040000": {
+  "maxLevel": 10,
+  "levels": {
+   "1": {
+    "mpCost": 55,
+    "cd": 5,
+    "power": 0.3,
+    "heal": 0,
+    "params": {
+     "sleepProb": 0.4,
+     "durBase": 5,
+     "durPerL": 0,
+     "durXwPer": 12000,
+     "healBase": 1.5,
+     "healPerL": 0
+    }
+   },
+   "2": {
+    "mpCost": 55,
+    "cd": 5,
+    "power": 0.3,
+    "heal": 0,
+    "params": {
+     "sleepProb": 0.4,
+     "durBase": 5,
+     "durPerL": 0,
+     "durXwPer": 12000,
+     "healBase": 1.55,
+     "healPerL": 0
+    }
+   },
+   "3": {
+    "mpCost": 55,
+    "cd": 5,
+    "power": 0.3,
+    "heal": 0,
+    "params": {
+     "sleepProb": 0.4,
+     "durBase": 5,
+     "durPerL": 0,
+     "durXwPer": 12000,
+     "healBase": 1.6,
+     "healPerL": 0
+    }
+   },
+   "4": {
+    "mpCost": 55,
+    "cd": 5,
+    "power": 0.3,
+    "heal": 0,
+    "params": {
+     "sleepProb": 0.4,
+     "durBase": 5,
+     "durPerL": 0,
+     "durXwPer": 12000,
+     "healBase": 1.65,
+     "healPerL": 0
+    }
+   },
+   "5": {
+    "mpCost": 55,
+    "cd": 5,
+    "power": 0.3,
+    "heal": 0,
+    "params": {
+     "sleepProb": 0.4,
+     "durBase": 5,
+     "durPerL": 0,
+     "durXwPer": 12000,
+     "healBase": 1.7,
+     "healPerL": 0
+    }
+   },
+   "6": {
+    "mpCost": 55,
+    "cd": 5,
+    "power": 0.3,
+    "heal": 0,
+    "params": {
+     "sleepProb": 0.4,
+     "durBase": 5,
+     "durPerL": 0,
+     "durXwPer": 12000,
+     "healBase": 1.75,
+     "healPerL": 0
+    }
+   },
+   "7": {
+    "mpCost": 55,
+    "cd": 5,
+    "power": 0.3,
+    "heal": 0,
+    "params": {
+     "sleepProb": 0.4,
+     "durBase": 5,
+     "durPerL": 0,
+     "durXwPer": 12000,
+     "healBase": 1.8,
+     "healPerL": 0
+    }
+   },
+   "8": {
+    "mpCost": 55,
+    "cd": 5,
+    "power": 0.3,
+    "heal": 0,
+    "params": {
+     "sleepProb": 0.4,
+     "durBase": 5,
+     "durPerL": 0,
+     "durXwPer": 12000,
+     "healBase": 1.85,
+     "healPerL": 0
+    }
+   },
+   "9": {
+    "mpCost": 55,
+    "cd": 5,
+    "power": 0.3,
+    "heal": 0,
+    "params": {
+     "sleepProb": 0.4,
+     "durBase": 5,
+     "durPerL": 0,
+     "durXwPer": 12000,
+     "healBase": 1.9,
+     "healPerL": 0
+    }
+   },
+   "10": {
+    "mpCost": 55,
+    "cd": 5,
+    "power": 0.3,
+    "heal": 0,
+    "params": {
+     "sleepProb": 0.4,
+     "durBase": 5,
+     "durPerL": 0,
+     "durXwPer": 12000,
+     "healBase": 1.95,
+     "healPerL": 0
+    }
+   }
+  }
+ },
+ "30010000": {
+  "maxLevel": 10,
+  "levels": {
+   "1": {
+    "mpCost": 40,
+    "cd": 3,
+    "power": 0.98,
+    "heal": 0,
+    "params": {
+     "dmgBase": 1,
+     "dmgPerL": 0,
+     "magBase": 20,
+     "magPerL": 0
+    }
+   },
+   "2": {
+    "mpCost": 40,
+    "cd": 3,
+    "power": 0.98,
+    "heal": 0,
+    "params": {
+     "dmgBase": 1.02,
+     "dmgPerL": 0,
+     "magBase": 70,
+     "magPerL": 0
+    }
+   },
+   "3": {
+    "mpCost": 40,
+    "cd": 3,
+    "power": 0.98,
+    "heal": 0,
+    "params": {
+     "dmgBase": 1.04,
+     "dmgPerL": 0,
+     "magBase": 120,
+     "magPerL": 0
+    }
+   },
+   "4": {
+    "mpCost": 40,
+    "cd": 3,
+    "power": 0.98,
+    "heal": 0,
+    "params": {
+     "dmgBase": 1.06,
+     "dmgPerL": 0,
+     "magBase": 170,
+     "magPerL": 0
+    }
+   },
+   "5": {
+    "mpCost": 40,
+    "cd": 3,
+    "power": 0.98,
+    "heal": 0,
+    "params": {
+     "dmgBase": 1.08,
+     "dmgPerL": 0,
+     "magBase": 220,
+     "magPerL": 0
+    }
+   },
+   "6": {
+    "mpCost": 40,
+    "cd": 3,
+    "power": 0.98,
+    "heal": 0,
+    "params": {
+     "dmgBase": 1.1,
+     "dmgPerL": 0,
+     "magBase": 270,
+     "magPerL": 0
+    }
+   },
+   "7": {
+    "mpCost": 40,
+    "cd": 3,
+    "power": 0.98,
+    "heal": 0,
+    "params": {
+     "dmgBase": 1.12,
+     "dmgPerL": 0,
+     "magBase": 320,
+     "magPerL": 0
+    }
+   },
+   "8": {
+    "mpCost": 40,
+    "cd": 3,
+    "power": 0.98,
+    "heal": 0,
+    "params": {
+     "dmgBase": 1.14,
+     "dmgPerL": 0,
+     "magBase": 370,
+     "magPerL": 0
+    }
+   },
+   "9": {
+    "mpCost": 40,
+    "cd": 3,
+    "power": 0.98,
+    "heal": 0,
+    "params": {
+     "dmgBase": 1.16,
+     "dmgPerL": 0,
+     "magBase": 420,
+     "magPerL": 0
+    }
+   },
+   "10": {
+    "mpCost": 40,
+    "cd": 3,
+    "power": 0.98,
+    "heal": 0,
+    "params": {
+     "dmgBase": 1.18,
+     "dmgPerL": 0,
+     "magBase": 470,
+     "magPerL": 0
+    }
+   }
+  }
+ },
+ "30020000": {
+  "maxLevel": 10,
+  "levels": {
+   "1": {
+    "mpCost": 50,
+    "cd": 4,
+    "power": 0,
+    "heal": 320,
+    "params": {
+     "healBase": 1,
+     "healPerL": 0,
+     "magBase": 20,
+     "magPerL": 0,
+     "critHealBase": 2,
+     "critHealPerL": 0
+    }
+   },
+   "2": {
+    "mpCost": 50,
+    "cd": 4,
+    "power": 0,
+    "heal": 320,
+    "params": {
+     "healBase": 1.075,
+     "healPerL": 0,
+     "magBase": 70,
+     "magPerL": 0,
+     "critHealBase": 2.15,
+     "critHealPerL": 0
+    }
+   },
+   "3": {
+    "mpCost": 50,
+    "cd": 4,
+    "power": 0,
+    "heal": 320,
+    "params": {
+     "healBase": 1.15,
+     "healPerL": 0,
+     "magBase": 120,
+     "magPerL": 0,
+     "critHealBase": 2.3,
+     "critHealPerL": 0
+    }
+   },
+   "4": {
+    "mpCost": 50,
+    "cd": 4,
+    "power": 0,
+    "heal": 320,
+    "params": {
+     "healBase": 1.225,
+     "healPerL": 0,
+     "magBase": 170,
+     "magPerL": 0,
+     "critHealBase": 2.45,
+     "critHealPerL": 0
+    }
+   },
+   "5": {
+    "mpCost": 50,
+    "cd": 4,
+    "power": 0,
+    "heal": 320,
+    "params": {
+     "healBase": 1.3,
+     "healPerL": 0,
+     "magBase": 220,
+     "magPerL": 0,
+     "critHealBase": 2.6,
+     "critHealPerL": 0
+    }
+   },
+   "6": {
+    "mpCost": 50,
+    "cd": 4,
+    "power": 0,
+    "heal": 320,
+    "params": {
+     "healBase": 1.375,
+     "healPerL": 0,
+     "magBase": 270,
+     "magPerL": 0,
+     "critHealBase": 2.75,
+     "critHealPerL": 0
+    }
+   },
+   "7": {
+    "mpCost": 50,
+    "cd": 4,
+    "power": 0,
+    "heal": 320,
+    "params": {
+     "healBase": 1.45,
+     "healPerL": 0,
+     "magBase": 320,
+     "magPerL": 0,
+     "critHealBase": 2.9,
+     "critHealPerL": 0
+    }
+   },
+   "8": {
+    "mpCost": 50,
+    "cd": 4,
+    "power": 0,
+    "heal": 320,
+    "params": {
+     "healBase": 1.525,
+     "healPerL": 0,
+     "magBase": 370,
+     "magPerL": 0,
+     "critHealBase": 3.05,
+     "critHealPerL": 0
+    }
+   },
+   "9": {
+    "mpCost": 50,
+    "cd": 4,
+    "power": 0,
+    "heal": 320,
+    "params": {
+     "healBase": 1.6,
+     "healPerL": 0,
+     "magBase": 420,
+     "magPerL": 0,
+     "critHealBase": 3.2,
+     "critHealPerL": 0
+    }
+   },
+   "10": {
+    "mpCost": 50,
+    "cd": 4,
+    "power": 0,
+    "heal": 320,
+    "params": {
+     "healBase": 1.675,
+     "healPerL": 0,
+     "magBase": 470,
+     "magPerL": 0,
+     "critHealBase": 3.35,
+     "critHealPerL": 0
+    }
+   }
+  }
+ },
+ "30030000": {
+  "maxLevel": 10,
+  "levels": {
+   "1": {
+    "mpCost": 50,
+    "cd": 4,
+    "power": 0,
+    "heal": 0,
+    "params": {
+     "friendSuccessNormal": 0.95,
+     "friendSuccessInsight": 0.6,
+     "healBase": 19,
+     "healPerL": 0,
+     "dur": 3,
+     "enemySuccessNormal": 0.95,
+     "enemySuccessInsight": 0.6,
+     "enemyXwGap": 96000,
+     "dispelLPlus": 3
+    }
+   },
+   "2": {
+    "mpCost": 50,
+    "cd": 4,
+    "power": 0,
+    "heal": 0,
+    "params": {
+     "friendSuccessNormal": 0.95,
+     "friendSuccessInsight": 0.6,
+     "healBase": 89,
+     "healPerL": 0,
+     "dur": 3,
+     "enemySuccessNormal": 0.95,
+     "enemySuccessInsight": 0.6,
+     "enemyXwGap": 96000,
+     "dispelLPlus": 3
+    }
+   },
+   "3": {
+    "mpCost": 50,
+    "cd": 4,
+    "power": 0,
+    "heal": 0,
+    "params": {
+     "friendSuccessNormal": 0.95,
+     "friendSuccessInsight": 0.6,
+     "healBase": 159,
+     "healPerL": 0,
+     "dur": 3,
+     "enemySuccessNormal": 0.95,
+     "enemySuccessInsight": 0.6,
+     "enemyXwGap": 96000,
+     "dispelLPlus": 3
+    }
+   },
+   "4": {
+    "mpCost": 50,
+    "cd": 4,
+    "power": 0,
+    "heal": 0,
+    "params": {
+     "friendSuccessNormal": 0.95,
+     "friendSuccessInsight": 0.6,
+     "healBase": 229,
+     "healPerL": 0,
+     "dur": 3,
+     "enemySuccessNormal": 0.95,
+     "enemySuccessInsight": 0.6,
+     "enemyXwGap": 96000,
+     "dispelLPlus": 3
+    }
+   },
+   "5": {
+    "mpCost": 50,
+    "cd": 4,
+    "power": 0,
+    "heal": 0,
+    "params": {
+     "friendSuccessNormal": 0.95,
+     "friendSuccessInsight": 0.6,
+     "healBase": 299,
+     "healPerL": 0,
+     "dur": 3,
+     "enemySuccessNormal": 0.95,
+     "enemySuccessInsight": 0.6,
+     "enemyXwGap": 96000,
+     "dispelLPlus": 3
+    }
+   },
+   "6": {
+    "mpCost": 50,
+    "cd": 4,
+    "power": 0,
+    "heal": 0,
+    "params": {
+     "friendSuccessNormal": 0.95,
+     "friendSuccessInsight": 0.6,
+     "healBase": 369,
+     "healPerL": 0,
+     "dur": 3,
+     "enemySuccessNormal": 0.95,
+     "enemySuccessInsight": 0.6,
+     "enemyXwGap": 96000,
+     "dispelLPlus": 3
+    }
+   },
+   "7": {
+    "mpCost": 50,
+    "cd": 4,
+    "power": 0,
+    "heal": 0,
+    "params": {
+     "friendSuccessNormal": 0.95,
+     "friendSuccessInsight": 0.6,
+     "healBase": 439,
+     "healPerL": 0,
+     "dur": 3,
+     "enemySuccessNormal": 0.95,
+     "enemySuccessInsight": 0.6,
+     "enemyXwGap": 96000,
+     "dispelLPlus": 3
+    }
+   },
+   "8": {
+    "mpCost": 50,
+    "cd": 4,
+    "power": 0,
+    "heal": 0,
+    "params": {
+     "friendSuccessNormal": 0.95,
+     "friendSuccessInsight": 0.6,
+     "healBase": 509,
+     "healPerL": 0,
+     "dur": 3,
+     "enemySuccessNormal": 0.95,
+     "enemySuccessInsight": 0.6,
+     "enemyXwGap": 96000,
+     "dispelLPlus": 3
+    }
+   },
+   "9": {
+    "mpCost": 50,
+    "cd": 4,
+    "power": 0,
+    "heal": 0,
+    "params": {
+     "friendSuccessNormal": 0.95,
+     "friendSuccessInsight": 0.6,
+     "healBase": 579,
+     "healPerL": 0,
+     "dur": 3,
+     "enemySuccessNormal": 0.95,
+     "enemySuccessInsight": 0.6,
+     "enemyXwGap": 96000,
+     "dispelLPlus": 3
+    }
+   },
+   "10": {
+    "mpCost": 50,
+    "cd": 4,
+    "power": 0,
+    "heal": 0,
+    "params": {
+     "friendSuccessNormal": 0.95,
+     "friendSuccessInsight": 0.6,
+     "healBase": 649,
+     "healPerL": 0,
+     "dur": 3,
+     "enemySuccessNormal": 0.95,
+     "enemySuccessInsight": 0.6,
+     "enemyXwGap": 96000,
+     "dispelLPlus": 3
+    }
+   }
+  }
+ },
+ "30060000": {
+  "maxLevel": 10,
+  "levels": {
+   "1": {
+    "mpCost": 55,
+    "cd": 5,
+    "power": 0,
+    "heal": 0,
+    "params": {
+     "highDurBase": 7,
+     "highDurPerL": 0,
+     "highDurCishanDiv": 2,
+     "lowDurBase": 3,
+     "lowDurPerL": 0,
+     "lowDurXwPer": 12000,
+     "healBase": 1.5,
+     "healPerL": 0,
+     "magBase": 300,
+     "magPerL": 0,
+     "critHealBase": 3,
+     "critHealPerL": 0,
+     "critRate": 30
+    }
+   },
+   "2": {
+    "mpCost": 55,
+    "cd": 5,
+    "power": 0,
+    "heal": 0,
+    "params": {
+     "highDurBase": 7,
+     "highDurPerL": 0,
+     "highDurCishanDiv": 2,
+     "lowDurBase": 3,
+     "lowDurPerL": 0,
+     "lowDurXwPer": 12000,
+     "healBase": 1.55,
+     "healPerL": 0,
+     "magBase": 530,
+     "magPerL": 0,
+     "critHealBase": 3.1,
+     "critHealPerL": 0,
+     "critRate": 30
+    }
+   },
+   "3": {
+    "mpCost": 55,
+    "cd": 5,
+    "power": 0,
+    "heal": 0,
+    "params": {
+     "highDurBase": 7,
+     "highDurPerL": 0,
+     "highDurCishanDiv": 2,
+     "lowDurBase": 3,
+     "lowDurPerL": 0,
+     "lowDurXwPer": 12000,
+     "healBase": 1.6,
+     "healPerL": 0,
+     "magBase": 760,
+     "magPerL": 0,
+     "critHealBase": 3.2,
+     "critHealPerL": 0,
+     "critRate": 30
+    }
+   },
+   "4": {
+    "mpCost": 55,
+    "cd": 5,
+    "power": 0,
+    "heal": 0,
+    "params": {
+     "highDurBase": 7,
+     "highDurPerL": 0,
+     "highDurCishanDiv": 2,
+     "lowDurBase": 3,
+     "lowDurPerL": 0,
+     "lowDurXwPer": 12000,
+     "healBase": 1.65,
+     "healPerL": 0,
+     "magBase": 990,
+     "magPerL": 0,
+     "critHealBase": 3.3,
+     "critHealPerL": 0,
+     "critRate": 30
+    }
+   },
+   "5": {
+    "mpCost": 55,
+    "cd": 5,
+    "power": 0,
+    "heal": 0,
+    "params": {
+     "highDurBase": 7,
+     "highDurPerL": 0,
+     "highDurCishanDiv": 2,
+     "lowDurBase": 3,
+     "lowDurPerL": 0,
+     "lowDurXwPer": 12000,
+     "healBase": 1.7,
+     "healPerL": 0,
+     "magBase": 1220,
+     "magPerL": 0,
+     "critHealBase": 3.4,
+     "critHealPerL": 0,
+     "critRate": 30
+    }
+   },
+   "6": {
+    "mpCost": 55,
+    "cd": 5,
+    "power": 0,
+    "heal": 0,
+    "params": {
+     "highDurBase": 7,
+     "highDurPerL": 0,
+     "highDurCishanDiv": 2,
+     "lowDurBase": 3,
+     "lowDurPerL": 0,
+     "lowDurXwPer": 12000,
+     "healBase": 1.75,
+     "healPerL": 0,
+     "magBase": 1450,
+     "magPerL": 0,
+     "critHealBase": 3.5,
+     "critHealPerL": 0,
+     "critRate": 30
+    }
+   },
+   "7": {
+    "mpCost": 55,
+    "cd": 5,
+    "power": 0,
+    "heal": 0,
+    "params": {
+     "highDurBase": 7,
+     "highDurPerL": 0,
+     "highDurCishanDiv": 2,
+     "lowDurBase": 3,
+     "lowDurPerL": 0,
+     "lowDurXwPer": 12000,
+     "healBase": 1.8,
+     "healPerL": 0,
+     "magBase": 1680,
+     "magPerL": 0,
+     "critHealBase": 3.6,
+     "critHealPerL": 0,
+     "critRate": 30
+    }
+   },
+   "8": {
+    "mpCost": 55,
+    "cd": 5,
+    "power": 0,
+    "heal": 0,
+    "params": {
+     "highDurBase": 7,
+     "highDurPerL": 0,
+     "highDurCishanDiv": 2,
+     "lowDurBase": 3,
+     "lowDurPerL": 0,
+     "lowDurXwPer": 12000,
+     "healBase": 1.85,
+     "healPerL": 0,
+     "magBase": 1910,
+     "magPerL": 0,
+     "critHealBase": 3.7,
+     "critHealPerL": 0,
+     "critRate": 30
+    }
+   },
+   "9": {
+    "mpCost": 55,
+    "cd": 5,
+    "power": 0,
+    "heal": 0,
+    "params": {
+     "highDurBase": 7,
+     "highDurPerL": 0,
+     "highDurCishanDiv": 2,
+     "lowDurBase": 3,
+     "lowDurPerL": 0,
+     "lowDurXwPer": 12000,
+     "healBase": 1.9,
+     "healPerL": 0,
+     "magBase": 2140,
+     "magPerL": 0,
+     "critHealBase": 3.8,
+     "critHealPerL": 0,
+     "critRate": 30
+    }
+   },
+   "10": {
+    "mpCost": 55,
+    "cd": 5,
+    "power": 0,
+    "heal": 0,
+    "params": {
+     "highDurBase": 7,
+     "highDurPerL": 0,
+     "highDurCishanDiv": 2,
+     "lowDurBase": 3,
+     "lowDurPerL": 0,
+     "lowDurXwPer": 12000,
+     "healBase": 1.95,
+     "healPerL": 0,
+     "magBase": 2370,
+     "magPerL": 0,
+     "critHealBase": 3.9,
+     "critHealPerL": 0,
+     "critRate": 30
+    }
+   }
+  }
+ },
+ "40010000": {
+  "maxLevel": 10,
+  "levels": {
+   "1": {
+    "mpCost": 40,
+    "cd": 3,
+    "power": 0.98,
+    "heal": 0,
+    "params": {
+     "dmgBase": 1,
+     "dmgPerL": 0,
+     "magBase": 24,
+     "magPerL": 0
+    }
+   },
+   "2": {
+    "mpCost": 40,
+    "cd": 3,
+    "power": 0.98,
+    "heal": 0,
+    "params": {
+     "dmgBase": 1.02,
+     "dmgPerL": 0,
+     "magBase": 84,
+     "magPerL": 0
+    }
+   },
+   "3": {
+    "mpCost": 40,
+    "cd": 3,
+    "power": 0.98,
+    "heal": 0,
+    "params": {
+     "dmgBase": 1.04,
+     "dmgPerL": 0,
+     "magBase": 144,
+     "magPerL": 0
+    }
+   },
+   "4": {
+    "mpCost": 40,
+    "cd": 3,
+    "power": 0.98,
+    "heal": 0,
+    "params": {
+     "dmgBase": 1.06,
+     "dmgPerL": 0,
+     "magBase": 204,
+     "magPerL": 0
+    }
+   },
+   "5": {
+    "mpCost": 40,
+    "cd": 3,
+    "power": 0.98,
+    "heal": 0,
+    "params": {
+     "dmgBase": 1.08,
+     "dmgPerL": 0,
+     "magBase": 264,
+     "magPerL": 0
+    }
+   },
+   "6": {
+    "mpCost": 40,
+    "cd": 3,
+    "power": 0.98,
+    "heal": 0,
+    "params": {
+     "dmgBase": 1.1,
+     "dmgPerL": 0,
+     "magBase": 324,
+     "magPerL": 0
+    }
+   },
+   "7": {
+    "mpCost": 40,
+    "cd": 3,
+    "power": 0.98,
+    "heal": 0,
+    "params": {
+     "dmgBase": 1.12,
+     "dmgPerL": 0,
+     "magBase": 384,
+     "magPerL": 0
+    }
+   },
+   "8": {
+    "mpCost": 40,
+    "cd": 3,
+    "power": 0.98,
+    "heal": 0,
+    "params": {
+     "dmgBase": 1.14,
+     "dmgPerL": 0,
+     "magBase": 444,
+     "magPerL": 0
+    }
+   },
+   "9": {
+    "mpCost": 40,
+    "cd": 3,
+    "power": 0.98,
+    "heal": 0,
+    "params": {
+     "dmgBase": 1.16,
+     "dmgPerL": 0,
+     "magBase": 504,
+     "magPerL": 0
+    }
+   },
+   "10": {
+    "mpCost": 40,
+    "cd": 3,
+    "power": 0.98,
+    "heal": 0,
+    "params": {
+     "dmgBase": 1.18,
+     "dmgPerL": 0,
+     "magBase": 564,
+     "magPerL": 0
+    }
+   }
+  }
+ },
+ "40020000": {
+  "maxLevel": 10,
+  "levels": {
+   "1": {
+    "mpCost": 50,
+    "cd": 5,
+    "power": 0,
+    "heal": 0,
+    "params": {
+     "highDurBase": 7,
+     "highDurPerL": 0,
+     "highDurCishanDiv": 2,
+     "lowDurBase": 3,
+     "lowDurPerL": 0,
+     "lowDurXwPer": 12000,
+     "defBaseCoef": 0.114,
+     "defPerLCoef": 0.006,
+     "constTerm": -12.4,
+     "constPerL": 22.4,
+     "atkFactor": 0.5,
+     "magFactor": 0.5,
+     "recoverFactor": 0.5,
+     "spdDiv": 3
+    }
+   },
+   "2": {
+    "mpCost": 50,
+    "cd": 5,
+    "power": 0,
+    "heal": 0,
+    "params": {
+     "highDurBase": 7,
+     "highDurPerL": 0,
+     "highDurCishanDiv": 2,
+     "lowDurBase": 3,
+     "lowDurPerL": 0,
+     "lowDurXwPer": 12000,
+     "defBaseCoef": 0.114,
+     "defPerLCoef": 0.006,
+     "constTerm": -12.4,
+     "constPerL": 22.4,
+     "atkFactor": 0.5,
+     "magFactor": 0.5,
+     "recoverFactor": 0.5,
+     "spdDiv": 3
+    }
+   },
+   "3": {
+    "mpCost": 50,
+    "cd": 5,
+    "power": 0,
+    "heal": 0,
+    "params": {
+     "highDurBase": 7,
+     "highDurPerL": 0,
+     "highDurCishanDiv": 2,
+     "lowDurBase": 3,
+     "lowDurPerL": 0,
+     "lowDurXwPer": 12000,
+     "defBaseCoef": 0.114,
+     "defPerLCoef": 0.006,
+     "constTerm": -12.4,
+     "constPerL": 22.4,
+     "atkFactor": 0.5,
+     "magFactor": 0.5,
+     "recoverFactor": 0.5,
+     "spdDiv": 3
+    }
+   },
+   "4": {
+    "mpCost": 50,
+    "cd": 5,
+    "power": 0,
+    "heal": 0,
+    "params": {
+     "highDurBase": 7,
+     "highDurPerL": 0,
+     "highDurCishanDiv": 2,
+     "lowDurBase": 3,
+     "lowDurPerL": 0,
+     "lowDurXwPer": 12000,
+     "defBaseCoef": 0.114,
+     "defPerLCoef": 0.006,
+     "constTerm": -12.4,
+     "constPerL": 22.4,
+     "atkFactor": 0.5,
+     "magFactor": 0.5,
+     "recoverFactor": 0.5,
+     "spdDiv": 3
+    }
+   },
+   "5": {
+    "mpCost": 50,
+    "cd": 5,
+    "power": 0,
+    "heal": 0,
+    "params": {
+     "highDurBase": 7,
+     "highDurPerL": 0,
+     "highDurCishanDiv": 2,
+     "lowDurBase": 3,
+     "lowDurPerL": 0,
+     "lowDurXwPer": 12000,
+     "defBaseCoef": 0.114,
+     "defPerLCoef": 0.006,
+     "constTerm": -12.4,
+     "constPerL": 22.4,
+     "atkFactor": 0.5,
+     "magFactor": 0.5,
+     "recoverFactor": 0.5,
+     "spdDiv": 3
+    }
+   },
+   "6": {
+    "mpCost": 50,
+    "cd": 5,
+    "power": 0,
+    "heal": 0,
+    "params": {
+     "highDurBase": 7,
+     "highDurPerL": 0,
+     "highDurCishanDiv": 2,
+     "lowDurBase": 3,
+     "lowDurPerL": 0,
+     "lowDurXwPer": 12000,
+     "defBaseCoef": 0.114,
+     "defPerLCoef": 0.006,
+     "constTerm": -12.4,
+     "constPerL": 22.4,
+     "atkFactor": 0.5,
+     "magFactor": 0.5,
+     "recoverFactor": 0.5,
+     "spdDiv": 3
+    }
+   },
+   "7": {
+    "mpCost": 50,
+    "cd": 5,
+    "power": 0,
+    "heal": 0,
+    "params": {
+     "highDurBase": 7,
+     "highDurPerL": 0,
+     "highDurCishanDiv": 2,
+     "lowDurBase": 3,
+     "lowDurPerL": 0,
+     "lowDurXwPer": 12000,
+     "defBaseCoef": 0.114,
+     "defPerLCoef": 0.006,
+     "constTerm": -12.4,
+     "constPerL": 22.4,
+     "atkFactor": 0.5,
+     "magFactor": 0.5,
+     "recoverFactor": 0.5,
+     "spdDiv": 3
+    }
+   },
+   "8": {
+    "mpCost": 50,
+    "cd": 5,
+    "power": 0,
+    "heal": 0,
+    "params": {
+     "highDurBase": 7,
+     "highDurPerL": 0,
+     "highDurCishanDiv": 2,
+     "lowDurBase": 3,
+     "lowDurPerL": 0,
+     "lowDurXwPer": 12000,
+     "defBaseCoef": 0.114,
+     "defPerLCoef": 0.006,
+     "constTerm": -12.4,
+     "constPerL": 22.4,
+     "atkFactor": 0.5,
+     "magFactor": 0.5,
+     "recoverFactor": 0.5,
+     "spdDiv": 3
+    }
+   },
+   "9": {
+    "mpCost": 50,
+    "cd": 5,
+    "power": 0,
+    "heal": 0,
+    "params": {
+     "highDurBase": 7,
+     "highDurPerL": 0,
+     "highDurCishanDiv": 2,
+     "lowDurBase": 3,
+     "lowDurPerL": 0,
+     "lowDurXwPer": 12000,
+     "defBaseCoef": 0.114,
+     "defPerLCoef": 0.006,
+     "constTerm": -12.4,
+     "constPerL": 22.4,
+     "atkFactor": 0.5,
+     "magFactor": 0.5,
+     "recoverFactor": 0.5,
+     "spdDiv": 3
+    }
+   },
+   "10": {
+    "mpCost": 50,
+    "cd": 5,
+    "power": 0,
+    "heal": 0,
+    "params": {
+     "highDurBase": 7,
+     "highDurPerL": 0,
+     "highDurCishanDiv": 2,
+     "lowDurBase": 3,
+     "lowDurPerL": 0,
+     "lowDurXwPer": 12000,
+     "defBaseCoef": 0.114,
+     "defPerLCoef": 0.006,
+     "constTerm": -12.4,
+     "constPerL": 22.4,
+     "atkFactor": 0.5,
+     "magFactor": 0.5,
+     "recoverFactor": 0.5,
+     "spdDiv": 3
+    }
+   }
+  }
+ },
+ "40030000": {
+  "maxLevel": 10,
+  "levels": {
+   "1": {
+    "mpCost": 55,
+    "cd": 5,
+    "power": 0,
+    "heal": 0,
+    "params": {
+     "highDurBase": 7,
+     "highDurPerL": 0,
+     "highDurCishanDiv": 2,
+     "lowDurBase": 3,
+     "lowDurPerL": 0,
+     "lowDurXwPer": 12000,
+     "shieldBase": 1,
+     "shieldPerL": 0,
+     "magBase": 30,
+     "magPerL": 0
+    }
+   },
+   "2": {
+    "mpCost": 55,
+    "cd": 5,
+    "power": 0,
+    "heal": 0,
+    "params": {
+     "highDurBase": 7,
+     "highDurPerL": 0,
+     "highDurCishanDiv": 2,
+     "lowDurBase": 3,
+     "lowDurPerL": 0,
+     "lowDurXwPer": 12000,
+     "shieldBase": 1.05,
+     "shieldPerL": 0,
+     "magBase": 105,
+     "magPerL": 0
+    }
+   },
+   "3": {
+    "mpCost": 55,
+    "cd": 5,
+    "power": 0,
+    "heal": 0,
+    "params": {
+     "highDurBase": 7,
+     "highDurPerL": 0,
+     "highDurCishanDiv": 2,
+     "lowDurBase": 3,
+     "lowDurPerL": 0,
+     "lowDurXwPer": 12000,
+     "shieldBase": 1.1,
+     "shieldPerL": 0,
+     "magBase": 180,
+     "magPerL": 0
+    }
+   },
+   "4": {
+    "mpCost": 55,
+    "cd": 5,
+    "power": 0,
+    "heal": 0,
+    "params": {
+     "highDurBase": 7,
+     "highDurPerL": 0,
+     "highDurCishanDiv": 2,
+     "lowDurBase": 3,
+     "lowDurPerL": 0,
+     "lowDurXwPer": 12000,
+     "shieldBase": 1.15,
+     "shieldPerL": 0,
+     "magBase": 255,
+     "magPerL": 0
+    }
+   },
+   "5": {
+    "mpCost": 55,
+    "cd": 5,
+    "power": 0,
+    "heal": 0,
+    "params": {
+     "highDurBase": 7,
+     "highDurPerL": 0,
+     "highDurCishanDiv": 2,
+     "lowDurBase": 3,
+     "lowDurPerL": 0,
+     "lowDurXwPer": 12000,
+     "shieldBase": 1.2,
+     "shieldPerL": 0,
+     "magBase": 330,
+     "magPerL": 0
+    }
+   },
+   "6": {
+    "mpCost": 55,
+    "cd": 5,
+    "power": 0,
+    "heal": 0,
+    "params": {
+     "highDurBase": 7,
+     "highDurPerL": 0,
+     "highDurCishanDiv": 2,
+     "lowDurBase": 3,
+     "lowDurPerL": 0,
+     "lowDurXwPer": 12000,
+     "shieldBase": 1.25,
+     "shieldPerL": 0,
+     "magBase": 405,
+     "magPerL": 0
+    }
+   },
+   "7": {
+    "mpCost": 55,
+    "cd": 5,
+    "power": 0,
+    "heal": 0,
+    "params": {
+     "highDurBase": 7,
+     "highDurPerL": 0,
+     "highDurCishanDiv": 2,
+     "lowDurBase": 3,
+     "lowDurPerL": 0,
+     "lowDurXwPer": 12000,
+     "shieldBase": 1.3,
+     "shieldPerL": 0,
+     "magBase": 480,
+     "magPerL": 0
+    }
+   },
+   "8": {
+    "mpCost": 55,
+    "cd": 5,
+    "power": 0,
+    "heal": 0,
+    "params": {
+     "highDurBase": 7,
+     "highDurPerL": 0,
+     "highDurCishanDiv": 2,
+     "lowDurBase": 3,
+     "lowDurPerL": 0,
+     "lowDurXwPer": 12000,
+     "shieldBase": 1.35,
+     "shieldPerL": 0,
+     "magBase": 555,
+     "magPerL": 0
+    }
+   },
+   "9": {
+    "mpCost": 55,
+    "cd": 5,
+    "power": 0,
+    "heal": 0,
+    "params": {
+     "highDurBase": 7,
+     "highDurPerL": 0,
+     "highDurCishanDiv": 2,
+     "lowDurBase": 3,
+     "lowDurPerL": 0,
+     "lowDurXwPer": 12000,
+     "shieldBase": 1.4,
+     "shieldPerL": 0,
+     "magBase": 630,
+     "magPerL": 0
+    }
+   },
+   "10": {
+    "mpCost": 55,
+    "cd": 5,
+    "power": 0,
+    "heal": 0,
+    "params": {
+     "highDurBase": 7,
+     "highDurPerL": 0,
+     "highDurCishanDiv": 2,
+     "lowDurBase": 3,
+     "lowDurPerL": 0,
+     "lowDurXwPer": 12000,
+     "shieldBase": 1.45,
+     "shieldPerL": 0,
+     "magBase": 705,
+     "magPerL": 0
+    }
+   }
+  }
+ },
+ "40040000": {
+  "maxLevel": 10,
+  "levels": {
+   "1": {
+    "mpCost": 45,
+    "cd": 4,
+    "power": 0,
+    "heal": 0,
+    "params": {
+     "highDurBase": 7,
+     "highDurPerL": 0,
+     "highDurCishanDiv": 2,
+     "lowDurBase": 3,
+     "lowDurPerL": 0,
+     "lowDurXwPer": 12000,
+     "rageBase": 13,
+     "ragePerL": 0,
+     "ragePctBase": 80,
+     "ragePctPerL": 0
+    }
+   },
+   "2": {
+    "mpCost": 45,
+    "cd": 4,
+    "power": 0,
+    "heal": 0,
+    "params": {
+     "highDurBase": 7,
+     "highDurPerL": 0,
+     "highDurCishanDiv": 2,
+     "lowDurBase": 3,
+     "lowDurPerL": 0,
+     "lowDurXwPer": 12000,
+     "rageBase": 23.3,
+     "ragePerL": 0,
+     "ragePctBase": 82,
+     "ragePctPerL": 0
+    }
+   },
+   "3": {
+    "mpCost": 45,
+    "cd": 4,
+    "power": 0,
+    "heal": 0,
+    "params": {
+     "highDurBase": 7,
+     "highDurPerL": 0,
+     "highDurCishanDiv": 2,
+     "lowDurBase": 3,
+     "lowDurPerL": 0,
+     "lowDurXwPer": 12000,
+     "rageBase": 33.6,
+     "ragePerL": 0,
+     "ragePctBase": 84,
+     "ragePctPerL": 0
+    }
+   },
+   "4": {
+    "mpCost": 45,
+    "cd": 4,
+    "power": 0,
+    "heal": 0,
+    "params": {
+     "highDurBase": 7,
+     "highDurPerL": 0,
+     "highDurCishanDiv": 2,
+     "lowDurBase": 3,
+     "lowDurPerL": 0,
+     "lowDurXwPer": 12000,
+     "rageBase": 43.9,
+     "ragePerL": 0,
+     "ragePctBase": 86,
+     "ragePctPerL": 0
+    }
+   },
+   "5": {
+    "mpCost": 45,
+    "cd": 4,
+    "power": 0,
+    "heal": 0,
+    "params": {
+     "highDurBase": 7,
+     "highDurPerL": 0,
+     "highDurCishanDiv": 2,
+     "lowDurBase": 3,
+     "lowDurPerL": 0,
+     "lowDurXwPer": 12000,
+     "rageBase": 54.2,
+     "ragePerL": 0,
+     "ragePctBase": 88,
+     "ragePctPerL": 0
+    }
+   },
+   "6": {
+    "mpCost": 45,
+    "cd": 4,
+    "power": 0,
+    "heal": 0,
+    "params": {
+     "highDurBase": 7,
+     "highDurPerL": 0,
+     "highDurCishanDiv": 2,
+     "lowDurBase": 3,
+     "lowDurPerL": 0,
+     "lowDurXwPer": 12000,
+     "rageBase": 64.5,
+     "ragePerL": 0,
+     "ragePctBase": 90,
+     "ragePctPerL": 0
+    }
+   },
+   "7": {
+    "mpCost": 45,
+    "cd": 4,
+    "power": 0,
+    "heal": 0,
+    "params": {
+     "highDurBase": 7,
+     "highDurPerL": 0,
+     "highDurCishanDiv": 2,
+     "lowDurBase": 3,
+     "lowDurPerL": 0,
+     "lowDurXwPer": 12000,
+     "rageBase": 74.8,
+     "ragePerL": 0,
+     "ragePctBase": 92,
+     "ragePctPerL": 0
+    }
+   },
+   "8": {
+    "mpCost": 45,
+    "cd": 4,
+    "power": 0,
+    "heal": 0,
+    "params": {
+     "highDurBase": 7,
+     "highDurPerL": 0,
+     "highDurCishanDiv": 2,
+     "lowDurBase": 3,
+     "lowDurPerL": 0,
+     "lowDurXwPer": 12000,
+     "rageBase": 85.1,
+     "ragePerL": 0,
+     "ragePctBase": 94,
+     "ragePctPerL": 0
+    }
+   },
+   "9": {
+    "mpCost": 45,
+    "cd": 4,
+    "power": 0,
+    "heal": 0,
+    "params": {
+     "highDurBase": 7,
+     "highDurPerL": 0,
+     "highDurCishanDiv": 2,
+     "lowDurBase": 3,
+     "lowDurPerL": 0,
+     "lowDurXwPer": 12000,
+     "rageBase": 95.4,
+     "ragePerL": 0,
+     "ragePctBase": 96,
+     "ragePctPerL": 0
+    }
+   },
+   "10": {
+    "mpCost": 45,
+    "cd": 4,
+    "power": 0,
+    "heal": 0,
+    "params": {
+     "highDurBase": 7,
+     "highDurPerL": 0,
+     "highDurCishanDiv": 2,
+     "lowDurBase": 3,
+     "lowDurPerL": 0,
+     "lowDurXwPer": 12000,
+     "rageBase": 105.7,
+     "ragePerL": 0,
+     "ragePctBase": 98,
+     "ragePctPerL": 0
+    }
+   }
+  }
+ },
+ "50010000": {
+  "maxLevel": 10,
+  "levels": {
+   "1": {
+    "mpCost": 35,
+    "cd": 2,
+    "power": 1,
+    "heal": 0,
+    "params": {
+     "dmgBase": 1,
+     "dmgPerL": 0,
+     "atkBase": 24,
+     "atkPerL": 0,
+     "stun": {
+      "link": true,
+      "prob": 0.4,
+      "dur": 1,
+      "xwCmp": ">"
+     }
+    }
+   },
+   "2": {
+    "mpCost": 35,
+    "cd": 2,
+    "power": 1,
+    "heal": 0,
+    "params": {
+     "dmgBase": 1.025,
+     "dmgPerL": 0,
+     "atkBase": 84,
+     "atkPerL": 0,
+     "stun": {
+      "link": true,
+      "prob": 0.4,
+      "dur": 1,
+      "xwCmp": ">"
+     }
+    }
+   },
+   "3": {
+    "mpCost": 35,
+    "cd": 2,
+    "power": 1,
+    "heal": 0,
+    "params": {
+     "dmgBase": 1.05,
+     "dmgPerL": 0,
+     "atkBase": 144,
+     "atkPerL": 0,
+     "stun": {
+      "link": true,
+      "prob": 0.4,
+      "dur": 1,
+      "xwCmp": ">"
+     }
+    }
+   },
+   "4": {
+    "mpCost": 35,
+    "cd": 2,
+    "power": 1,
+    "heal": 0,
+    "params": {
+     "dmgBase": 1.075,
+     "dmgPerL": 0,
+     "atkBase": 204,
+     "atkPerL": 0,
+     "stun": {
+      "link": true,
+      "prob": 0.4,
+      "dur": 1,
+      "xwCmp": ">"
+     }
+    }
+   },
+   "5": {
+    "mpCost": 35,
+    "cd": 2,
+    "power": 1,
+    "heal": 0,
+    "params": {
+     "dmgBase": 1.1,
+     "dmgPerL": 0,
+     "atkBase": 264,
+     "atkPerL": 0,
+     "stun": {
+      "link": true,
+      "prob": 0.4,
+      "dur": 1,
+      "xwCmp": ">"
+     }
+    }
+   },
+   "6": {
+    "mpCost": 35,
+    "cd": 2,
+    "power": 1,
+    "heal": 0,
+    "params": {
+     "dmgBase": 1.125,
+     "dmgPerL": 0,
+     "atkBase": 324,
+     "atkPerL": 0,
+     "stun": {
+      "link": true,
+      "prob": 0.4,
+      "dur": 1,
+      "xwCmp": ">"
+     }
+    }
+   },
+   "7": {
+    "mpCost": 35,
+    "cd": 2,
+    "power": 1,
+    "heal": 0,
+    "params": {
+     "dmgBase": 1.15,
+     "dmgPerL": 0,
+     "atkBase": 384,
+     "atkPerL": 0,
+     "stun": {
+      "link": true,
+      "prob": 0.4,
+      "dur": 1,
+      "xwCmp": ">"
+     }
+    }
+   },
+   "8": {
+    "mpCost": 35,
+    "cd": 2,
+    "power": 1,
+    "heal": 0,
+    "params": {
+     "dmgBase": 1.175,
+     "dmgPerL": 0,
+     "atkBase": 444,
+     "atkPerL": 0,
+     "stun": {
+      "link": true,
+      "prob": 0.4,
+      "dur": 1,
+      "xwCmp": ">"
+     }
+    }
+   },
+   "9": {
+    "mpCost": 35,
+    "cd": 2,
+    "power": 1,
+    "heal": 0,
+    "params": {
+     "dmgBase": 1.2,
+     "dmgPerL": 0,
+     "atkBase": 504,
+     "atkPerL": 0,
+     "stun": {
+      "link": true,
+      "prob": 0.4,
+      "dur": 1,
+      "xwCmp": ">"
+     }
+    }
+   },
+   "10": {
+    "mpCost": 35,
+    "cd": 2,
+    "power": 1,
+    "heal": 0,
+    "params": {
+     "dmgBase": 1.225,
+     "dmgPerL": 0,
+     "atkBase": 564,
+     "atkPerL": 0,
+     "stun": {
+      "link": true,
+      "prob": 0.4,
+      "dur": 1,
+      "xwCmp": ">"
+     }
+    }
+   }
+  }
+ },
+ "50020000": {
+  "maxLevel": 10,
+  "levels": {
+   "1": {
+    "mpCost": 40,
+    "cd": 3,
+    "power": 1,
+    "heal": 0,
+    "params": {
+     "dmgBase": 1,
+     "dmgPerL": 0,
+     "atkBase": 7,
+     "atkPerL": 0
+    }
+   },
+   "2": {
+    "mpCost": 40,
+    "cd": 3,
+    "power": 1,
+    "heal": 0,
+    "params": {
+     "dmgBase": 1.02,
+     "dmgPerL": 0,
+     "atkBase": 14,
+     "atkPerL": 0
+    }
+   },
+   "3": {
+    "mpCost": 40,
+    "cd": 3,
+    "power": 1,
+    "heal": 0,
+    "params": {
+     "dmgBase": 1.04,
+     "dmgPerL": 0,
+     "atkBase": 21,
+     "atkPerL": 0
+    }
+   },
+   "4": {
+    "mpCost": 40,
+    "cd": 3,
+    "power": 1,
+    "heal": 0,
+    "params": {
+     "dmgBase": 1.06,
+     "dmgPerL": 0,
+     "atkBase": 28,
+     "atkPerL": 0
+    }
+   },
+   "5": {
+    "mpCost": 40,
+    "cd": 3,
+    "power": 1,
+    "heal": 0,
+    "params": {
+     "dmgBase": 1.08,
+     "dmgPerL": 0,
+     "atkBase": 35,
+     "atkPerL": 0
+    }
+   },
+   "6": {
+    "mpCost": 40,
+    "cd": 3,
+    "power": 1,
+    "heal": 0,
+    "params": {
+     "dmgBase": 1.1,
+     "dmgPerL": 0,
+     "atkBase": 42,
+     "atkPerL": 0
+    }
+   },
+   "7": {
+    "mpCost": 40,
+    "cd": 3,
+    "power": 1,
+    "heal": 0,
+    "params": {
+     "dmgBase": 1.12,
+     "dmgPerL": 0,
+     "atkBase": 49,
+     "atkPerL": 0
+    }
+   },
+   "8": {
+    "mpCost": 40,
+    "cd": 3,
+    "power": 1,
+    "heal": 0,
+    "params": {
+     "dmgBase": 1.14,
+     "dmgPerL": 0,
+     "atkBase": 56,
+     "atkPerL": 0
+    }
+   },
+   "9": {
+    "mpCost": 40,
+    "cd": 3,
+    "power": 1,
+    "heal": 0,
+    "params": {
+     "dmgBase": 1.16,
+     "dmgPerL": 0,
+     "atkBase": 63,
+     "atkPerL": 0
+    }
+   },
+   "10": {
+    "mpCost": 40,
+    "cd": 3,
+    "power": 1,
+    "heal": 0,
+    "params": {
+     "dmgBase": 1.18,
+     "dmgPerL": 0,
+     "atkBase": 70,
+     "atkPerL": 0
+    }
+   }
+  }
+ },
+ "50030000": {
+  "maxLevel": 10,
+  "levels": {
+   "1": {
+    "mpCost": 45,
+    "cd": 4,
+    "power": 0.85,
+    "heal": 0,
+    "params": {
+     "dmgBase": 0.85,
+     "dmgPerL": 0,
+     "atkBase": 24,
+     "atkPerL": 0,
+     "lowHpPct": 0.2,
+     "lowHpMult": 2
+    }
+   },
+   "2": {
+    "mpCost": 45,
+    "cd": 4,
+    "power": 0.85,
+    "heal": 0,
+    "params": {
+     "dmgBase": 0.86,
+     "dmgPerL": 0,
+     "atkBase": 84,
+     "atkPerL": 0,
+     "lowHpPct": 0.2,
+     "lowHpMult": 2
+    }
+   },
+   "3": {
+    "mpCost": 45,
+    "cd": 4,
+    "power": 0.85,
+    "heal": 0,
+    "params": {
+     "dmgBase": 0.87,
+     "dmgPerL": 0,
+     "atkBase": 144,
+     "atkPerL": 0,
+     "lowHpPct": 0.2,
+     "lowHpMult": 2
+    }
+   },
+   "4": {
+    "mpCost": 45,
+    "cd": 4,
+    "power": 0.85,
+    "heal": 0,
+    "params": {
+     "dmgBase": 0.88,
+     "dmgPerL": 0,
+     "atkBase": 204,
+     "atkPerL": 0,
+     "lowHpPct": 0.2,
+     "lowHpMult": 2
+    }
+   },
+   "5": {
+    "mpCost": 45,
+    "cd": 4,
+    "power": 0.85,
+    "heal": 0,
+    "params": {
+     "dmgBase": 0.89,
+     "dmgPerL": 0,
+     "atkBase": 264,
+     "atkPerL": 0,
+     "lowHpPct": 0.2,
+     "lowHpMult": 2
+    }
+   },
+   "6": {
+    "mpCost": 45,
+    "cd": 4,
+    "power": 0.85,
+    "heal": 0,
+    "params": {
+     "dmgBase": 0.9,
+     "dmgPerL": 0,
+     "atkBase": 324,
+     "atkPerL": 0,
+     "lowHpPct": 0.2,
+     "lowHpMult": 2
+    }
+   },
+   "7": {
+    "mpCost": 45,
+    "cd": 4,
+    "power": 0.85,
+    "heal": 0,
+    "params": {
+     "dmgBase": 0.91,
+     "dmgPerL": 0,
+     "atkBase": 384,
+     "atkPerL": 0,
+     "lowHpPct": 0.2,
+     "lowHpMult": 2
+    }
+   },
+   "8": {
+    "mpCost": 45,
+    "cd": 4,
+    "power": 0.85,
+    "heal": 0,
+    "params": {
+     "dmgBase": 0.92,
+     "dmgPerL": 0,
+     "atkBase": 444,
+     "atkPerL": 0,
+     "lowHpPct": 0.2,
+     "lowHpMult": 2
+    }
+   },
+   "9": {
+    "mpCost": 45,
+    "cd": 4,
+    "power": 0.85,
+    "heal": 0,
+    "params": {
+     "dmgBase": 0.93,
+     "dmgPerL": 0,
+     "atkBase": 504,
+     "atkPerL": 0,
+     "lowHpPct": 0.2,
+     "lowHpMult": 2
+    }
+   },
+   "10": {
+    "mpCost": 45,
+    "cd": 4,
+    "power": 0.85,
+    "heal": 0,
+    "params": {
+     "dmgBase": 0.94,
+     "dmgPerL": 0,
+     "atkBase": 564,
+     "atkPerL": 0,
+     "lowHpPct": 0.2,
+     "lowHpMult": 2
+    }
+   }
+  }
+ },
+ "50050000": {
+  "maxLevel": 10,
+  "levels": {
+   "1": {
+    "mpCost": 55,
+    "cd": 4,
+    "power": 1.5,
+    "heal": 0,
+    "params": {
+     "dmgBase": 1.5,
+     "dmgPerL": 0,
+     "atkBase": 300,
+     "atkPerL": 0,
+     "buffBonusKind": [
+      "xianqi",
+      "haotian",
+      "defending"
+     ],
+     "buffBonusMult": 1.5,
+     "breakarmor": {
+      "prob": 0.4,
+      "durBase": 3,
+      "durPerL": 0,
+      "durXwPer": 12000
+     }
+    }
+   },
+   "2": {
+    "mpCost": 55,
+    "cd": 4,
+    "power": 1.5,
+    "heal": 0,
+    "params": {
+     "dmgBase": 1.55,
+     "dmgPerL": 0,
+     "atkBase": 370,
+     "atkPerL": 0,
+     "buffBonusKind": [
+      "xianqi",
+      "haotian",
+      "defending"
+     ],
+     "buffBonusMult": 1.5,
+     "breakarmor": {
+      "prob": 0.4,
+      "durBase": 3,
+      "durPerL": 0,
+      "durXwPer": 12000
+     }
+    }
+   },
+   "3": {
+    "mpCost": 55,
+    "cd": 4,
+    "power": 1.5,
+    "heal": 0,
+    "params": {
+     "dmgBase": 1.6,
+     "dmgPerL": 0,
+     "atkBase": 440,
+     "atkPerL": 0,
+     "buffBonusKind": [
+      "xianqi",
+      "haotian",
+      "defending"
+     ],
+     "buffBonusMult": 1.5,
+     "breakarmor": {
+      "prob": 0.4,
+      "durBase": 3,
+      "durPerL": 0,
+      "durXwPer": 12000
+     }
+    }
+   },
+   "4": {
+    "mpCost": 55,
+    "cd": 4,
+    "power": 1.5,
+    "heal": 0,
+    "params": {
+     "dmgBase": 1.65,
+     "dmgPerL": 0,
+     "atkBase": 510,
+     "atkPerL": 0,
+     "buffBonusKind": [
+      "xianqi",
+      "haotian",
+      "defending"
+     ],
+     "buffBonusMult": 1.5,
+     "breakarmor": {
+      "prob": 0.4,
+      "durBase": 3,
+      "durPerL": 0,
+      "durXwPer": 12000
+     }
+    }
+   },
+   "5": {
+    "mpCost": 55,
+    "cd": 4,
+    "power": 1.5,
+    "heal": 0,
+    "params": {
+     "dmgBase": 1.7,
+     "dmgPerL": 0,
+     "atkBase": 580,
+     "atkPerL": 0,
+     "buffBonusKind": [
+      "xianqi",
+      "haotian",
+      "defending"
+     ],
+     "buffBonusMult": 1.5,
+     "breakarmor": {
+      "prob": 0.4,
+      "durBase": 3,
+      "durPerL": 0,
+      "durXwPer": 12000
+     }
+    }
+   },
+   "6": {
+    "mpCost": 55,
+    "cd": 4,
+    "power": 1.5,
+    "heal": 0,
+    "params": {
+     "dmgBase": 1.75,
+     "dmgPerL": 0,
+     "atkBase": 650,
+     "atkPerL": 0,
+     "buffBonusKind": [
+      "xianqi",
+      "haotian",
+      "defending"
+     ],
+     "buffBonusMult": 1.5,
+     "breakarmor": {
+      "prob": 0.4,
+      "durBase": 3,
+      "durPerL": 0,
+      "durXwPer": 12000
+     }
+    }
+   },
+   "7": {
+    "mpCost": 55,
+    "cd": 4,
+    "power": 1.5,
+    "heal": 0,
+    "params": {
+     "dmgBase": 1.8,
+     "dmgPerL": 0,
+     "atkBase": 720,
+     "atkPerL": 0,
+     "buffBonusKind": [
+      "xianqi",
+      "haotian",
+      "defending"
+     ],
+     "buffBonusMult": 1.5,
+     "breakarmor": {
+      "prob": 0.4,
+      "durBase": 3,
+      "durPerL": 0,
+      "durXwPer": 12000
+     }
+    }
+   },
+   "8": {
+    "mpCost": 55,
+    "cd": 4,
+    "power": 1.5,
+    "heal": 0,
+    "params": {
+     "dmgBase": 1.85,
+     "dmgPerL": 0,
+     "atkBase": 790,
+     "atkPerL": 0,
+     "buffBonusKind": [
+      "xianqi",
+      "haotian",
+      "defending"
+     ],
+     "buffBonusMult": 1.5,
+     "breakarmor": {
+      "prob": 0.4,
+      "durBase": 3,
+      "durPerL": 0,
+      "durXwPer": 12000
+     }
+    }
+   },
+   "9": {
+    "mpCost": 55,
+    "cd": 4,
+    "power": 1.5,
+    "heal": 0,
+    "params": {
+     "dmgBase": 1.9,
+     "dmgPerL": 0,
+     "atkBase": 860,
+     "atkPerL": 0,
+     "buffBonusKind": [
+      "xianqi",
+      "haotian",
+      "defending"
+     ],
+     "buffBonusMult": 1.5,
+     "breakarmor": {
+      "prob": 0.4,
+      "durBase": 3,
+      "durPerL": 0,
+      "durXwPer": 12000
+     }
+    }
+   },
+   "10": {
+    "mpCost": 55,
+    "cd": 4,
+    "power": 1.5,
+    "heal": 0,
+    "params": {
+     "dmgBase": 1.95,
+     "dmgPerL": 0,
+     "atkBase": 930,
+     "atkPerL": 0,
+     "buffBonusKind": [
+      "xianqi",
+      "haotian",
+      "defending"
+     ],
+     "buffBonusMult": 1.5,
+     "breakarmor": {
+      "prob": 0.4,
+      "durBase": 3,
+      "durPerL": 0,
+      "durXwPer": 12000
+     }
+    }
+   }
+  }
+ },
+ "60010000": {
+  "maxLevel": 10,
+  "levels": {
+   "1": {
+    "mpCost": 30,
+    "cd": 3,
+    "power": 0.3,
+    "heal": 0,
+    "params": {
+     "taunt": {
+      "successNormal": 0.95,
+      "successInsight": 0.6,
+      "dur": 3,
+      "addValor": 1
+     }
+    }
+   },
+   "2": {
+    "mpCost": 30,
+    "cd": 3,
+    "power": 0.3,
+    "heal": 0,
+    "params": {
+     "taunt": {
+      "successNormal": 0.95,
+      "successInsight": 0.6,
+      "dur": 3,
+      "addValor": 1
+     }
+    }
+   },
+   "3": {
+    "mpCost": 30,
+    "cd": 3,
+    "power": 0.3,
+    "heal": 0,
+    "params": {
+     "taunt": {
+      "successNormal": 0.95,
+      "successInsight": 0.6,
+      "dur": 3,
+      "addValor": 1
+     }
+    }
+   },
+   "4": {
+    "mpCost": 30,
+    "cd": 3,
+    "power": 0.3,
+    "heal": 0,
+    "params": {
+     "taunt": {
+      "successNormal": 0.95,
+      "successInsight": 0.6,
+      "dur": 3,
+      "addValor": 1
+     }
+    }
+   },
+   "5": {
+    "mpCost": 30,
+    "cd": 3,
+    "power": 0.3,
+    "heal": 0,
+    "params": {
+     "taunt": {
+      "successNormal": 0.95,
+      "successInsight": 0.6,
+      "dur": 3,
+      "addValor": 1
+     }
+    }
+   },
+   "6": {
+    "mpCost": 30,
+    "cd": 3,
+    "power": 0.3,
+    "heal": 0,
+    "params": {
+     "taunt": {
+      "successNormal": 0.95,
+      "successInsight": 0.6,
+      "dur": 3,
+      "addValor": 1
+     }
+    }
+   },
+   "7": {
+    "mpCost": 30,
+    "cd": 3,
+    "power": 0.3,
+    "heal": 0,
+    "params": {
+     "taunt": {
+      "successNormal": 0.95,
+      "successInsight": 0.6,
+      "dur": 3,
+      "addValor": 1
+     }
+    }
+   },
+   "8": {
+    "mpCost": 30,
+    "cd": 3,
+    "power": 0.3,
+    "heal": 0,
+    "params": {
+     "taunt": {
+      "successNormal": 0.95,
+      "successInsight": 0.6,
+      "dur": 3,
+      "addValor": 1
+     }
+    }
+   },
+   "9": {
+    "mpCost": 30,
+    "cd": 3,
+    "power": 0.3,
+    "heal": 0,
+    "params": {
+     "taunt": {
+      "successNormal": 0.95,
+      "successInsight": 0.6,
+      "dur": 3,
+      "addValor": 1
+     }
+    }
+   },
+   "10": {
+    "mpCost": 30,
+    "cd": 3,
+    "power": 0.3,
+    "heal": 0,
+    "params": {
+     "taunt": {
+      "successNormal": 0.95,
+      "successInsight": 0.6,
+      "dur": 3,
+      "addValor": 1
+     }
+    }
+   }
+  }
+ },
+ "60020000": {
+  "maxLevel": 10,
+  "levels": {
+   "1": {
+    "mpCost": 50,
+    "cd": 4,
+    "power": 1.3,
+    "heal": 0,
+    "params": {
+     "dmgBase": 1.3,
+     "dmgPerL": 0,
+     "atkBase": 200,
+     "atkPerL": 0,
+     "hpRatioFloor": 0.2
+    }
+   },
+   "2": {
+    "mpCost": 50,
+    "cd": 4,
+    "power": 1.3,
+    "heal": 0,
+    "params": {
+     "dmgBase": 1.33,
+     "dmgPerL": 0,
+     "atkBase": 230,
+     "atkPerL": 0,
+     "hpRatioFloor": 0.2
+    }
+   },
+   "3": {
+    "mpCost": 50,
+    "cd": 4,
+    "power": 1.3,
+    "heal": 0,
+    "params": {
+     "dmgBase": 1.36,
+     "dmgPerL": 0,
+     "atkBase": 260,
+     "atkPerL": 0,
+     "hpRatioFloor": 0.2
+    }
+   },
+   "4": {
+    "mpCost": 50,
+    "cd": 4,
+    "power": 1.3,
+    "heal": 0,
+    "params": {
+     "dmgBase": 1.39,
+     "dmgPerL": 0,
+     "atkBase": 290,
+     "atkPerL": 0,
+     "hpRatioFloor": 0.2
+    }
+   },
+   "5": {
+    "mpCost": 50,
+    "cd": 4,
+    "power": 1.3,
+    "heal": 0,
+    "params": {
+     "dmgBase": 1.42,
+     "dmgPerL": 0,
+     "atkBase": 320,
+     "atkPerL": 0,
+     "hpRatioFloor": 0.2
+    }
+   },
+   "6": {
+    "mpCost": 50,
+    "cd": 4,
+    "power": 1.3,
+    "heal": 0,
+    "params": {
+     "dmgBase": 1.45,
+     "dmgPerL": 0,
+     "atkBase": 350,
+     "atkPerL": 0,
+     "hpRatioFloor": 0.2
+    }
+   },
+   "7": {
+    "mpCost": 50,
+    "cd": 4,
+    "power": 1.3,
+    "heal": 0,
+    "params": {
+     "dmgBase": 1.48,
+     "dmgPerL": 0,
+     "atkBase": 380,
+     "atkPerL": 0,
+     "hpRatioFloor": 0.2
+    }
+   },
+   "8": {
+    "mpCost": 50,
+    "cd": 4,
+    "power": 1.3,
+    "heal": 0,
+    "params": {
+     "dmgBase": 1.51,
+     "dmgPerL": 0,
+     "atkBase": 410,
+     "atkPerL": 0,
+     "hpRatioFloor": 0.2
+    }
+   },
+   "9": {
+    "mpCost": 50,
+    "cd": 4,
+    "power": 1.3,
+    "heal": 0,
+    "params": {
+     "dmgBase": 1.54,
+     "dmgPerL": 0,
+     "atkBase": 440,
+     "atkPerL": 0,
+     "hpRatioFloor": 0.2
+    }
+   },
+   "10": {
+    "mpCost": 50,
+    "cd": 4,
+    "power": 1.3,
+    "heal": 0,
+    "params": {
+     "dmgBase": 1.57,
+     "dmgPerL": 0,
+     "atkBase": 470,
+     "atkPerL": 0,
+     "hpRatioFloor": 0.2
+    }
+   }
+  }
+ },
+ "60030000": {
+  "maxLevel": 10,
+  "levels": {
+   "1": {
+    "mpCost": 40,
+    "cd": 3,
+    "power": 0.7,
+    "heal": 0,
+    "params": {
+     "valorCost": 5,
+     "dmgBase": 0.7,
+     "dmgPerL": 0,
+     "atkBase": 20,
+     "atkPerL": 0,
+     "perValorMult": 1
+    }
+   },
+   "2": {
+    "mpCost": 40,
+    "cd": 3,
+    "power": 0.7,
+    "heal": 0,
+    "params": {
+     "valorCost": 5,
+     "dmgBase": 0.7,
+     "dmgPerL": 0,
+     "atkBase": 70,
+     "atkPerL": 0,
+     "perValorMult": 1
+    }
+   },
+   "3": {
+    "mpCost": 40,
+    "cd": 3,
+    "power": 0.7,
+    "heal": 0,
+    "params": {
+     "valorCost": 5,
+     "dmgBase": 0.7,
+     "dmgPerL": 0,
+     "atkBase": 120,
+     "atkPerL": 0,
+     "perValorMult": 1
+    }
+   },
+   "4": {
+    "mpCost": 40,
+    "cd": 3,
+    "power": 0.7,
+    "heal": 0,
+    "params": {
+     "valorCost": 5,
+     "dmgBase": 0.7,
+     "dmgPerL": 0,
+     "atkBase": 170,
+     "atkPerL": 0,
+     "perValorMult": 1
+    }
+   },
+   "5": {
+    "mpCost": 40,
+    "cd": 3,
+    "power": 0.7,
+    "heal": 0,
+    "params": {
+     "valorCost": 5,
+     "dmgBase": 0.7,
+     "dmgPerL": 0,
+     "atkBase": 220,
+     "atkPerL": 0,
+     "perValorMult": 1
+    }
+   },
+   "6": {
+    "mpCost": 40,
+    "cd": 3,
+    "power": 0.7,
+    "heal": 0,
+    "params": {
+     "valorCost": 5,
+     "dmgBase": 0.7,
+     "dmgPerL": 0,
+     "atkBase": 270,
+     "atkPerL": 0,
+     "perValorMult": 1
+    }
+   },
+   "7": {
+    "mpCost": 40,
+    "cd": 3,
+    "power": 0.7,
+    "heal": 0,
+    "params": {
+     "valorCost": 5,
+     "dmgBase": 0.7,
+     "dmgPerL": 0,
+     "atkBase": 320,
+     "atkPerL": 0,
+     "perValorMult": 1
+    }
+   },
+   "8": {
+    "mpCost": 40,
+    "cd": 3,
+    "power": 0.7,
+    "heal": 0,
+    "params": {
+     "valorCost": 5,
+     "dmgBase": 0.7,
+     "dmgPerL": 0,
+     "atkBase": 370,
+     "atkPerL": 0,
+     "perValorMult": 1
+    }
+   },
+   "9": {
+    "mpCost": 40,
+    "cd": 3,
+    "power": 0.7,
+    "heal": 0,
+    "params": {
+     "valorCost": 5,
+     "dmgBase": 0.7,
+     "dmgPerL": 0,
+     "atkBase": 420,
+     "atkPerL": 0,
+     "perValorMult": 1
+    }
+   },
+   "10": {
+    "mpCost": 40,
+    "cd": 3,
+    "power": 0.7,
+    "heal": 0,
+    "params": {
+     "valorCost": 5,
+     "dmgBase": 0.7,
+     "dmgPerL": 0,
+     "atkBase": 470,
+     "atkPerL": 0,
+     "perValorMult": 1
+    }
+   }
+  }
+ },
+ "60040000": {
+  "maxLevel": 10,
+  "levels": {
+   "1": {
+    "mpCost": 45,
+    "cd": 5,
+    "power": 0,
+    "heal": 0,
+    "params": {
+     "reduceBase": 25,
+     "reducePerL": 0,
+     "fullProb": 0.3,
+     "minLevel": 11,
+     "durBase": 3,
+     "durPerL": 0,
+     "durXwPer": 12000
+    }
+   },
+   "2": {
+    "mpCost": 45,
+    "cd": 5,
+    "power": 0,
+    "heal": 0,
+    "params": {
+     "reduceBase": 27.5,
+     "reducePerL": 0,
+     "fullProb": 0.3,
+     "minLevel": 11,
+     "durBase": 3,
+     "durPerL": 0,
+     "durXwPer": 12000
+    }
+   },
+   "3": {
+    "mpCost": 45,
+    "cd": 5,
+    "power": 0,
+    "heal": 0,
+    "params": {
+     "reduceBase": 30,
+     "reducePerL": 0,
+     "fullProb": 0.3,
+     "minLevel": 11,
+     "durBase": 3,
+     "durPerL": 0,
+     "durXwPer": 12000
+    }
+   },
+   "4": {
+    "mpCost": 45,
+    "cd": 5,
+    "power": 0,
+    "heal": 0,
+    "params": {
+     "reduceBase": 32.5,
+     "reducePerL": 0,
+     "fullProb": 0.3,
+     "minLevel": 11,
+     "durBase": 3,
+     "durPerL": 0,
+     "durXwPer": 12000
+    }
+   },
+   "5": {
+    "mpCost": 45,
+    "cd": 5,
+    "power": 0,
+    "heal": 0,
+    "params": {
+     "reduceBase": 35,
+     "reducePerL": 0,
+     "fullProb": 0.3,
+     "minLevel": 11,
+     "durBase": 3,
+     "durPerL": 0,
+     "durXwPer": 12000
+    }
+   },
+   "6": {
+    "mpCost": 45,
+    "cd": 5,
+    "power": 0,
+    "heal": 0,
+    "params": {
+     "reduceBase": 37.5,
+     "reducePerL": 0,
+     "fullProb": 0.3,
+     "minLevel": 11,
+     "durBase": 3,
+     "durPerL": 0,
+     "durXwPer": 12000
+    }
+   },
+   "7": {
+    "mpCost": 45,
+    "cd": 5,
+    "power": 0,
+    "heal": 0,
+    "params": {
+     "reduceBase": 40,
+     "reducePerL": 0,
+     "fullProb": 0.3,
+     "minLevel": 11,
+     "durBase": 3,
+     "durPerL": 0,
+     "durXwPer": 12000
+    }
+   },
+   "8": {
+    "mpCost": 45,
+    "cd": 5,
+    "power": 0,
+    "heal": 0,
+    "params": {
+     "reduceBase": 42.5,
+     "reducePerL": 0,
+     "fullProb": 0.3,
+     "minLevel": 11,
+     "durBase": 3,
+     "durPerL": 0,
+     "durXwPer": 12000
+    }
+   },
+   "9": {
+    "mpCost": 45,
+    "cd": 5,
+    "power": 0,
+    "heal": 0,
+    "params": {
+     "reduceBase": 45,
+     "reducePerL": 0,
+     "fullProb": 0.3,
+     "minLevel": 11,
+     "durBase": 3,
+     "durPerL": 0,
+     "durXwPer": 12000
+    }
+   },
+   "10": {
+    "mpCost": 45,
+    "cd": 5,
+    "power": 0,
+    "heal": 0,
+    "params": {
+     "reduceBase": 47.5,
+     "reducePerL": 0,
+     "fullProb": 0.3,
+     "minLevel": 11,
+     "durBase": 3,
+     "durPerL": 0,
+     "durXwPer": 12000
+    }
+   }
+  }
+ },
+ "70010000": {
+  "maxLevel": 10,
+  "levels": {
+   "1": {
+    "mpCost": 35,
+    "cd": 3,
+    "power": 0.6,
+    "heal": 0,
+    "params": {
+     "dmgBase": 0.6,
+     "dmgPerL": 0,
+     "atkBase": 20,
+     "atkPerL": 0,
+     "poison": {
+      "dur": 3,
+      "dotBase": 0.27,
+      "dotPerL": 0
+     }
+    }
+   },
+   "2": {
+    "mpCost": 35,
+    "cd": 3,
+    "power": 0.6,
+    "heal": 0,
+    "params": {
+     "dmgBase": 0.615,
+     "dmgPerL": 0,
+     "atkBase": 70,
+     "atkPerL": 0,
+     "poison": {
+      "dur": 3,
+      "dotBase": 0.27675,
+      "dotPerL": 0
+     }
+    }
+   },
+   "3": {
+    "mpCost": 35,
+    "cd": 3,
+    "power": 0.6,
+    "heal": 0,
+    "params": {
+     "dmgBase": 0.63,
+     "dmgPerL": 0,
+     "atkBase": 120,
+     "atkPerL": 0,
+     "poison": {
+      "dur": 3,
+      "dotBase": 0.2835,
+      "dotPerL": 0
+     }
+    }
+   },
+   "4": {
+    "mpCost": 35,
+    "cd": 3,
+    "power": 0.6,
+    "heal": 0,
+    "params": {
+     "dmgBase": 0.645,
+     "dmgPerL": 0,
+     "atkBase": 170,
+     "atkPerL": 0,
+     "poison": {
+      "dur": 3,
+      "dotBase": 0.29025,
+      "dotPerL": 0
+     }
+    }
+   },
+   "5": {
+    "mpCost": 35,
+    "cd": 3,
+    "power": 0.6,
+    "heal": 0,
+    "params": {
+     "dmgBase": 0.66,
+     "dmgPerL": 0,
+     "atkBase": 220,
+     "atkPerL": 0,
+     "poison": {
+      "dur": 3,
+      "dotBase": 0.297,
+      "dotPerL": 0
+     }
+    }
+   },
+   "6": {
+    "mpCost": 35,
+    "cd": 3,
+    "power": 0.6,
+    "heal": 0,
+    "params": {
+     "dmgBase": 0.675,
+     "dmgPerL": 0,
+     "atkBase": 270,
+     "atkPerL": 0,
+     "poison": {
+      "dur": 3,
+      "dotBase": 0.30375,
+      "dotPerL": 0
+     }
+    }
+   },
+   "7": {
+    "mpCost": 35,
+    "cd": 3,
+    "power": 0.6,
+    "heal": 0,
+    "params": {
+     "dmgBase": 0.69,
+     "dmgPerL": 0,
+     "atkBase": 320,
+     "atkPerL": 0,
+     "poison": {
+      "dur": 3,
+      "dotBase": 0.3105,
+      "dotPerL": 0
+     }
+    }
+   },
+   "8": {
+    "mpCost": 35,
+    "cd": 3,
+    "power": 0.6,
+    "heal": 0,
+    "params": {
+     "dmgBase": 0.705,
+     "dmgPerL": 0,
+     "atkBase": 370,
+     "atkPerL": 0,
+     "poison": {
+      "dur": 3,
+      "dotBase": 0.31725,
+      "dotPerL": 0
+     }
+    }
+   },
+   "9": {
+    "mpCost": 35,
+    "cd": 3,
+    "power": 0.6,
+    "heal": 0,
+    "params": {
+     "dmgBase": 0.72,
+     "dmgPerL": 0,
+     "atkBase": 420,
+     "atkPerL": 0,
+     "poison": {
+      "dur": 3,
+      "dotBase": 0.324,
+      "dotPerL": 0
+     }
+    }
+   },
+   "10": {
+    "mpCost": 35,
+    "cd": 3,
+    "power": 0.6,
+    "heal": 0,
+    "params": {
+     "dmgBase": 0.735,
+     "dmgPerL": 0,
+     "atkBase": 470,
+     "atkPerL": 0,
+     "poison": {
+      "dur": 3,
+      "dotBase": 0.33075,
+      "dotPerL": 0
+     }
+    }
+   }
+  }
+ },
+ "70020000": {
+  "maxLevel": 10,
+  "levels": {
+   "1": {
+    "mpCost": 40,
+    "cd": 3,
+    "power": 0.7,
+    "heal": 0,
+    "params": {
+     "dmgBase": 0.7,
+     "dmgPerL": 0,
+     "atkBase": 20,
+     "atkPerL": 0,
+     "speedRatioCap": 3,
+     "selfDmgPct": 0.15
+    }
+   },
+   "2": {
+    "mpCost": 40,
+    "cd": 3,
+    "power": 0.7,
+    "heal": 0,
+    "params": {
+     "dmgBase": 0.71,
+     "dmgPerL": 0,
+     "atkBase": 70,
+     "atkPerL": 0,
+     "speedRatioCap": 3,
+     "selfDmgPct": 0.15
+    }
+   },
+   "3": {
+    "mpCost": 40,
+    "cd": 3,
+    "power": 0.7,
+    "heal": 0,
+    "params": {
+     "dmgBase": 0.72,
+     "dmgPerL": 0,
+     "atkBase": 120,
+     "atkPerL": 0,
+     "speedRatioCap": 3,
+     "selfDmgPct": 0.15
+    }
+   },
+   "4": {
+    "mpCost": 40,
+    "cd": 3,
+    "power": 0.7,
+    "heal": 0,
+    "params": {
+     "dmgBase": 0.73,
+     "dmgPerL": 0,
+     "atkBase": 170,
+     "atkPerL": 0,
+     "speedRatioCap": 3,
+     "selfDmgPct": 0.15
+    }
+   },
+   "5": {
+    "mpCost": 40,
+    "cd": 3,
+    "power": 0.7,
+    "heal": 0,
+    "params": {
+     "dmgBase": 0.74,
+     "dmgPerL": 0,
+     "atkBase": 220,
+     "atkPerL": 0,
+     "speedRatioCap": 3,
+     "selfDmgPct": 0.15
+    }
+   },
+   "6": {
+    "mpCost": 40,
+    "cd": 3,
+    "power": 0.7,
+    "heal": 0,
+    "params": {
+     "dmgBase": 0.75,
+     "dmgPerL": 0,
+     "atkBase": 270,
+     "atkPerL": 0,
+     "speedRatioCap": 3,
+     "selfDmgPct": 0.15
+    }
+   },
+   "7": {
+    "mpCost": 40,
+    "cd": 3,
+    "power": 0.7,
+    "heal": 0,
+    "params": {
+     "dmgBase": 0.76,
+     "dmgPerL": 0,
+     "atkBase": 320,
+     "atkPerL": 0,
+     "speedRatioCap": 3,
+     "selfDmgPct": 0.15
+    }
+   },
+   "8": {
+    "mpCost": 40,
+    "cd": 3,
+    "power": 0.7,
+    "heal": 0,
+    "params": {
+     "dmgBase": 0.77,
+     "dmgPerL": 0,
+     "atkBase": 370,
+     "atkPerL": 0,
+     "speedRatioCap": 3,
+     "selfDmgPct": 0.15
+    }
+   },
+   "9": {
+    "mpCost": 40,
+    "cd": 3,
+    "power": 0.7,
+    "heal": 0,
+    "params": {
+     "dmgBase": 0.78,
+     "dmgPerL": 0,
+     "atkBase": 420,
+     "atkPerL": 0,
+     "speedRatioCap": 3,
+     "selfDmgPct": 0.15
+    }
+   },
+   "10": {
+    "mpCost": 40,
+    "cd": 3,
+    "power": 0.7,
+    "heal": 0,
+    "params": {
+     "dmgBase": 0.79,
+     "dmgPerL": 0,
+     "atkBase": 470,
+     "atkPerL": 0,
+     "speedRatioCap": 3,
+     "selfDmgPct": 0.15
+    }
+   }
+  }
+ },
+ "70030000": {
+  "maxLevel": 10,
+  "levels": {
+   "1": {
+    "mpCost": 40,
+    "cd": 3,
+    "power": 0.4,
+    "heal": 0,
+    "params": {
+     "drainBase": 0.78,
+     "drainPerL": 0,
+     "atkBase": 120,
+     "atkPerL": 0,
+     "defReducePct": 0.25,
+     "dmgPerL": 0.05
+    }
+   },
+   "2": {
+    "mpCost": 40,
+    "cd": 3,
+    "power": 0.4,
+    "heal": 0,
+    "params": {
+     "drainBase": 0.81,
+     "drainPerL": 0,
+     "atkBase": 160,
+     "atkPerL": 0,
+     "defReducePct": 0.25,
+     "dmgPerL": 0.05
+    }
+   },
+   "3": {
+    "mpCost": 40,
+    "cd": 3,
+    "power": 0.4,
+    "heal": 0,
+    "params": {
+     "drainBase": 0.84,
+     "drainPerL": 0,
+     "atkBase": 200,
+     "atkPerL": 0,
+     "defReducePct": 0.25,
+     "dmgPerL": 0.05
+    }
+   },
+   "4": {
+    "mpCost": 40,
+    "cd": 3,
+    "power": 0.4,
+    "heal": 0,
+    "params": {
+     "drainBase": 0.87,
+     "drainPerL": 0,
+     "atkBase": 240,
+     "atkPerL": 0,
+     "defReducePct": 0.25,
+     "dmgPerL": 0.05
+    }
+   },
+   "5": {
+    "mpCost": 40,
+    "cd": 3,
+    "power": 0.4,
+    "heal": 0,
+    "params": {
+     "drainBase": 0.9,
+     "drainPerL": 0,
+     "atkBase": 280,
+     "atkPerL": 0,
+     "defReducePct": 0.25,
+     "dmgPerL": 0.05
+    }
+   },
+   "6": {
+    "mpCost": 40,
+    "cd": 3,
+    "power": 0.4,
+    "heal": 0,
+    "params": {
+     "drainBase": 0.93,
+     "drainPerL": 0,
+     "atkBase": 320,
+     "atkPerL": 0,
+     "defReducePct": 0.25,
+     "dmgPerL": 0.05
+    }
+   },
+   "7": {
+    "mpCost": 40,
+    "cd": 3,
+    "power": 0.4,
+    "heal": 0,
+    "params": {
+     "drainBase": 0.96,
+     "drainPerL": 0,
+     "atkBase": 360,
+     "atkPerL": 0,
+     "defReducePct": 0.25,
+     "dmgPerL": 0.05
+    }
+   },
+   "8": {
+    "mpCost": 40,
+    "cd": 3,
+    "power": 0.4,
+    "heal": 0,
+    "params": {
+     "drainBase": 0.99,
+     "drainPerL": 0,
+     "atkBase": 400,
+     "atkPerL": 0,
+     "defReducePct": 0.25,
+     "dmgPerL": 0.05
+    }
+   },
+   "9": {
+    "mpCost": 40,
+    "cd": 3,
+    "power": 0.4,
+    "heal": 0,
+    "params": {
+     "drainBase": 1.02,
+     "drainPerL": 0,
+     "atkBase": 440,
+     "atkPerL": 0,
+     "defReducePct": 0.25,
+     "dmgPerL": 0.05
+    }
+   },
+   "10": {
+    "mpCost": 40,
+    "cd": 3,
+    "power": 0.4,
+    "heal": 0,
+    "params": {
+     "drainBase": 1.05,
+     "drainPerL": 0,
+     "atkBase": 480,
+     "atkPerL": 0,
+     "defReducePct": 0.25,
+     "dmgPerL": 0.05
+    }
+   }
+  }
+ },
+ "70040000": {
+  "maxLevel": 10,
+  "levels": {
+   "1": {
+    "mpCost": 45,
+    "cd": 4,
+    "power": 0.6,
+    "heal": 0,
+    "params": {
+     "durBase": 3,
+     "durPerL": 0,
+     "durXwPer": 12000
+    }
+   },
+   "2": {
+    "mpCost": 45,
+    "cd": 4,
+    "power": 0.6,
+    "heal": 0,
+    "params": {
+     "durBase": 3,
+     "durPerL": 0,
+     "durXwPer": 12000
+    }
+   },
+   "3": {
+    "mpCost": 45,
+    "cd": 4,
+    "power": 0.6,
+    "heal": 0,
+    "params": {
+     "durBase": 3,
+     "durPerL": 0,
+     "durXwPer": 12000
+    }
+   },
+   "4": {
+    "mpCost": 45,
+    "cd": 4,
+    "power": 0.6,
+    "heal": 0,
+    "params": {
+     "durBase": 3,
+     "durPerL": 0,
+     "durXwPer": 12000
+    }
+   },
+   "5": {
+    "mpCost": 45,
+    "cd": 4,
+    "power": 0.6,
+    "heal": 0,
+    "params": {
+     "durBase": 3,
+     "durPerL": 0,
+     "durXwPer": 12000
+    }
+   },
+   "6": {
+    "mpCost": 45,
+    "cd": 4,
+    "power": 0.6,
+    "heal": 0,
+    "params": {
+     "durBase": 3,
+     "durPerL": 0,
+     "durXwPer": 12000
+    }
+   },
+   "7": {
+    "mpCost": 45,
+    "cd": 4,
+    "power": 0.6,
+    "heal": 0,
+    "params": {
+     "durBase": 3,
+     "durPerL": 0,
+     "durXwPer": 12000
+    }
+   },
+   "8": {
+    "mpCost": 45,
+    "cd": 4,
+    "power": 0.6,
+    "heal": 0,
+    "params": {
+     "durBase": 3,
+     "durPerL": 0,
+     "durXwPer": 12000
+    }
+   },
+   "9": {
+    "mpCost": 45,
+    "cd": 4,
+    "power": 0.6,
+    "heal": 0,
+    "params": {
+     "durBase": 3,
+     "durPerL": 0,
+     "durXwPer": 12000
+    }
+   },
+   "10": {
+    "mpCost": 45,
+    "cd": 4,
+    "power": 0.6,
+    "heal": 0,
+    "params": {
+     "durBase": 3,
+     "durPerL": 0,
+     "durXwPer": 12000
+    }
+   }
+  }
+ },
+ "80010000": {
+  "maxLevel": 10,
+  "levels": {
+   "1": {
+    "mpCost": 35,
+    "cd": 2,
+    "power": 0.8,
+    "heal": 0,
+    "params": {
+     "dmgBase": 0.8,
+     "dmgPerL": 0,
+     "atkBase": 20,
+     "atkPerL": 0,
+     "breakarmorMult": 2
+    }
+   },
+   "2": {
+    "mpCost": 35,
+    "cd": 2,
+    "power": 0.8,
+    "heal": 0,
+    "params": {
+     "dmgBase": 0.81,
+     "dmgPerL": 0,
+     "atkBase": 70,
+     "atkPerL": 0,
+     "breakarmorMult": 2
+    }
+   },
+   "3": {
+    "mpCost": 35,
+    "cd": 2,
+    "power": 0.8,
+    "heal": 0,
+    "params": {
+     "dmgBase": 0.82,
+     "dmgPerL": 0,
+     "atkBase": 120,
+     "atkPerL": 0,
+     "breakarmorMult": 2
+    }
+   },
+   "4": {
+    "mpCost": 35,
+    "cd": 2,
+    "power": 0.8,
+    "heal": 0,
+    "params": {
+     "dmgBase": 0.83,
+     "dmgPerL": 0,
+     "atkBase": 170,
+     "atkPerL": 0,
+     "breakarmorMult": 2
+    }
+   },
+   "5": {
+    "mpCost": 35,
+    "cd": 2,
+    "power": 0.8,
+    "heal": 0,
+    "params": {
+     "dmgBase": 0.84,
+     "dmgPerL": 0,
+     "atkBase": 220,
+     "atkPerL": 0,
+     "breakarmorMult": 2
+    }
+   },
+   "6": {
+    "mpCost": 35,
+    "cd": 2,
+    "power": 0.8,
+    "heal": 0,
+    "params": {
+     "dmgBase": 0.85,
+     "dmgPerL": 0,
+     "atkBase": 270,
+     "atkPerL": 0,
+     "breakarmorMult": 2
+    }
+   },
+   "7": {
+    "mpCost": 35,
+    "cd": 2,
+    "power": 0.8,
+    "heal": 0,
+    "params": {
+     "dmgBase": 0.86,
+     "dmgPerL": 0,
+     "atkBase": 320,
+     "atkPerL": 0,
+     "breakarmorMult": 2
+    }
+   },
+   "8": {
+    "mpCost": 35,
+    "cd": 2,
+    "power": 0.8,
+    "heal": 0,
+    "params": {
+     "dmgBase": 0.87,
+     "dmgPerL": 0,
+     "atkBase": 370,
+     "atkPerL": 0,
+     "breakarmorMult": 2
+    }
+   },
+   "9": {
+    "mpCost": 35,
+    "cd": 2,
+    "power": 0.8,
+    "heal": 0,
+    "params": {
+     "dmgBase": 0.88,
+     "dmgPerL": 0,
+     "atkBase": 420,
+     "atkPerL": 0,
+     "breakarmorMult": 2
+    }
+   },
+   "10": {
+    "mpCost": 35,
+    "cd": 2,
+    "power": 0.8,
+    "heal": 0,
+    "params": {
+     "dmgBase": 0.89,
+     "dmgPerL": 0,
+     "atkBase": 470,
+     "atkPerL": 0,
+     "breakarmorMult": 2
+    }
+   }
+  }
+ },
+ "80020000": {
+  "maxLevel": 10,
+  "levels": {
+   "1": {
+    "mpCost": 50,
+    "cd": 4,
+    "power": 0,
+    "heal": 0,
+    "params": {
+     "physReduceBase": 50,
+     "physReducePerL": 0,
+     "magHealBase": 50,
+     "magHealPerL": 0,
+     "bahuangDurBase": 1,
+     "bahuangDurPerL": 0,
+     "bahuangDurDiv": 3,
+     "neiliMult": 3,
+     "spdPct": 0.5
+    }
+   },
+   "2": {
+    "mpCost": 50,
+    "cd": 4,
+    "power": 0,
+    "heal": 0,
+    "params": {
+     "physReduceBase": 60,
+     "physReducePerL": 0,
+     "magHealBase": 60,
+     "magHealPerL": 0,
+     "bahuangDurBase": 1,
+     "bahuangDurPerL": 0,
+     "bahuangDurDiv": 3,
+     "neiliMult": 3,
+     "spdPct": 0.5
+    }
+   },
+   "3": {
+    "mpCost": 50,
+    "cd": 4,
+    "power": 0,
+    "heal": 0,
+    "params": {
+     "physReduceBase": 70,
+     "physReducePerL": 0,
+     "magHealBase": 70,
+     "magHealPerL": 0,
+     "bahuangDurBase": 1,
+     "bahuangDurPerL": 0,
+     "bahuangDurDiv": 3,
+     "neiliMult": 3,
+     "spdPct": 0.5
+    }
+   },
+   "4": {
+    "mpCost": 50,
+    "cd": 4,
+    "power": 0,
+    "heal": 0,
+    "params": {
+     "physReduceBase": 80,
+     "physReducePerL": 0,
+     "magHealBase": 80,
+     "magHealPerL": 0,
+     "bahuangDurBase": 1,
+     "bahuangDurPerL": 0,
+     "bahuangDurDiv": 3,
+     "neiliMult": 3,
+     "spdPct": 0.5
+    }
+   },
+   "5": {
+    "mpCost": 50,
+    "cd": 4,
+    "power": 0,
+    "heal": 0,
+    "params": {
+     "physReduceBase": 90,
+     "physReducePerL": 0,
+     "magHealBase": 90,
+     "magHealPerL": 0,
+     "bahuangDurBase": 1,
+     "bahuangDurPerL": 0,
+     "bahuangDurDiv": 3,
+     "neiliMult": 3,
+     "spdPct": 0.5
+    }
+   },
+   "6": {
+    "mpCost": 50,
+    "cd": 4,
+    "power": 0,
+    "heal": 0,
+    "params": {
+     "physReduceBase": 100,
+     "physReducePerL": 0,
+     "magHealBase": 100,
+     "magHealPerL": 0,
+     "bahuangDurBase": 1,
+     "bahuangDurPerL": 0,
+     "bahuangDurDiv": 3,
+     "neiliMult": 3,
+     "spdPct": 0.5
+    }
+   },
+   "7": {
+    "mpCost": 50,
+    "cd": 4,
+    "power": 0,
+    "heal": 0,
+    "params": {
+     "physReduceBase": 110,
+     "physReducePerL": 0,
+     "magHealBase": 110,
+     "magHealPerL": 0,
+     "bahuangDurBase": 1,
+     "bahuangDurPerL": 0,
+     "bahuangDurDiv": 3,
+     "neiliMult": 3,
+     "spdPct": 0.5
+    }
+   },
+   "8": {
+    "mpCost": 50,
+    "cd": 4,
+    "power": 0,
+    "heal": 0,
+    "params": {
+     "physReduceBase": 120,
+     "physReducePerL": 0,
+     "magHealBase": 120,
+     "magHealPerL": 0,
+     "bahuangDurBase": 1,
+     "bahuangDurPerL": 0,
+     "bahuangDurDiv": 3,
+     "neiliMult": 3,
+     "spdPct": 0.5
+    }
+   },
+   "9": {
+    "mpCost": 50,
+    "cd": 4,
+    "power": 0,
+    "heal": 0,
+    "params": {
+     "physReduceBase": 130,
+     "physReducePerL": 0,
+     "magHealBase": 130,
+     "magHealPerL": 0,
+     "bahuangDurBase": 1,
+     "bahuangDurPerL": 0,
+     "bahuangDurDiv": 3,
+     "neiliMult": 3,
+     "spdPct": 0.5
+    }
+   },
+   "10": {
+    "mpCost": 50,
+    "cd": 4,
+    "power": 0,
+    "heal": 0,
+    "params": {
+     "physReduceBase": 140,
+     "physReducePerL": 0,
+     "magHealBase": 140,
+     "magHealPerL": 0,
+     "bahuangDurBase": 1,
+     "bahuangDurPerL": 0,
+     "bahuangDurDiv": 3,
+     "neiliMult": 3,
+     "spdPct": 0.5
+    }
+   }
+  }
+ },
+ "80030000": {
+  "maxLevel": 10,
+  "levels": {
+   "1": {
+    "mpCost": 40,
+    "cd": 3,
+    "power": 0.95,
+    "heal": 0,
+    "params": {
+     "dmgBase": 1,
+     "dmgPerL": 0,
+     "atkBase": 180,
+     "atkPerL": 0,
+     "feihua": {
+      "dur": 3,
+      "dotBaseBase": 0.25,
+      "dotBasePerL": 0,
+      "mults": [
+       1,
+       2,
+       4
+      ]
+     }
+    }
+   },
+   "2": {
+    "mpCost": 40,
+    "cd": 3,
+    "power": 0.95,
+    "heal": 0,
+    "params": {
+     "dmgBase": 1.05,
+     "dmgPerL": 0,
+     "atkBase": 240,
+     "atkPerL": 0,
+     "feihua": {
+      "dur": 3,
+      "dotBaseBase": 0.3,
+      "dotBasePerL": 0,
+      "mults": [
+       1,
+       2,
+       4
+      ]
+     }
+    }
+   },
+   "3": {
+    "mpCost": 40,
+    "cd": 3,
+    "power": 0.95,
+    "heal": 0,
+    "params": {
+     "dmgBase": 1.1,
+     "dmgPerL": 0,
+     "atkBase": 300,
+     "atkPerL": 0,
+     "feihua": {
+      "dur": 3,
+      "dotBaseBase": 0.35,
+      "dotBasePerL": 0,
+      "mults": [
+       1,
+       2,
+       4
+      ]
+     }
+    }
+   },
+   "4": {
+    "mpCost": 40,
+    "cd": 3,
+    "power": 0.95,
+    "heal": 0,
+    "params": {
+     "dmgBase": 1.15,
+     "dmgPerL": 0,
+     "atkBase": 360,
+     "atkPerL": 0,
+     "feihua": {
+      "dur": 3,
+      "dotBaseBase": 0.4,
+      "dotBasePerL": 0,
+      "mults": [
+       1,
+       2,
+       4
+      ]
+     }
+    }
+   },
+   "5": {
+    "mpCost": 40,
+    "cd": 3,
+    "power": 0.95,
+    "heal": 0,
+    "params": {
+     "dmgBase": 1.2,
+     "dmgPerL": 0,
+     "atkBase": 420,
+     "atkPerL": 0,
+     "feihua": {
+      "dur": 3,
+      "dotBaseBase": 0.45,
+      "dotBasePerL": 0,
+      "mults": [
+       1,
+       2,
+       4
+      ]
+     }
+    }
+   },
+   "6": {
+    "mpCost": 40,
+    "cd": 3,
+    "power": 0.95,
+    "heal": 0,
+    "params": {
+     "dmgBase": 1.25,
+     "dmgPerL": 0,
+     "atkBase": 480,
+     "atkPerL": 0,
+     "feihua": {
+      "dur": 3,
+      "dotBaseBase": 0.5,
+      "dotBasePerL": 0,
+      "mults": [
+       1,
+       2,
+       4
+      ]
+     }
+    }
+   },
+   "7": {
+    "mpCost": 40,
+    "cd": 3,
+    "power": 0.95,
+    "heal": 0,
+    "params": {
+     "dmgBase": 1.3,
+     "dmgPerL": 0,
+     "atkBase": 540,
+     "atkPerL": 0,
+     "feihua": {
+      "dur": 3,
+      "dotBaseBase": 0.55,
+      "dotBasePerL": 0,
+      "mults": [
+       1,
+       2,
+       4
+      ]
+     }
+    }
+   },
+   "8": {
+    "mpCost": 40,
+    "cd": 3,
+    "power": 0.95,
+    "heal": 0,
+    "params": {
+     "dmgBase": 1.35,
+     "dmgPerL": 0,
+     "atkBase": 600,
+     "atkPerL": 0,
+     "feihua": {
+      "dur": 3,
+      "dotBaseBase": 0.6,
+      "dotBasePerL": 0,
+      "mults": [
+       1,
+       2,
+       4
+      ]
+     }
+    }
+   },
+   "9": {
+    "mpCost": 40,
+    "cd": 3,
+    "power": 0.95,
+    "heal": 0,
+    "params": {
+     "dmgBase": 1.4,
+     "dmgPerL": 0,
+     "atkBase": 660,
+     "atkPerL": 0,
+     "feihua": {
+      "dur": 3,
+      "dotBaseBase": 0.65,
+      "dotBasePerL": 0,
+      "mults": [
+       1,
+       2,
+       4
+      ]
+     }
+    }
+   },
+   "10": {
+    "mpCost": 40,
+    "cd": 3,
+    "power": 0.95,
+    "heal": 0,
+    "params": {
+     "dmgBase": 1.45,
+     "dmgPerL": 0,
+     "atkBase": 720,
+     "atkPerL": 0,
+     "feihua": {
+      "dur": 3,
+      "dotBaseBase": 0.7,
+      "dotBasePerL": 0,
+      "mults": [
+       1,
+       2,
+       4
+      ]
+     }
+    }
+   }
+  }
+ },
+ "80040000": {
+  "maxLevel": 10,
+  "levels": {
+   "1": {
+    "mpCost": 50,
+    "cd": 5,
+    "power": 0.6,
+    "heal": 0,
+    "params": {
+     "atkBase": 300,
+     "atkPerL": 0,
+     "thrBase": 3,
+     "thrPerL": 0,
+     "extBase": 2.25,
+     "extPerL": 0,
+     "ext2Base": 0.75,
+     "ext2PerL": 0,
+     "durBase": 5,
+     "durPerL": 0,
+     "durXwPer": 12000
+    }
+   },
+   "2": {
+    "mpCost": 50,
+    "cd": 5,
+    "power": 0.6,
+    "heal": 0,
+    "params": {
+     "atkBase": 370,
+     "atkPerL": 0,
+     "thrBase": 3.1,
+     "thrPerL": 0,
+     "extBase": 2.325,
+     "extPerL": 0,
+     "ext2Base": 0.775,
+     "ext2PerL": 0,
+     "durBase": 5,
+     "durPerL": 0,
+     "durXwPer": 12000
+    }
+   },
+   "3": {
+    "mpCost": 50,
+    "cd": 5,
+    "power": 0.6,
+    "heal": 0,
+    "params": {
+     "atkBase": 440,
+     "atkPerL": 0,
+     "thrBase": 3.2,
+     "thrPerL": 0,
+     "extBase": 2.4,
+     "extPerL": 0,
+     "ext2Base": 0.8,
+     "ext2PerL": 0,
+     "durBase": 5,
+     "durPerL": 0,
+     "durXwPer": 12000
+    }
+   },
+   "4": {
+    "mpCost": 50,
+    "cd": 5,
+    "power": 0.6,
+    "heal": 0,
+    "params": {
+     "atkBase": 510,
+     "atkPerL": 0,
+     "thrBase": 3.3,
+     "thrPerL": 0,
+     "extBase": 2.475,
+     "extPerL": 0,
+     "ext2Base": 0.825,
+     "ext2PerL": 0,
+     "durBase": 5,
+     "durPerL": 0,
+     "durXwPer": 12000
+    }
+   },
+   "5": {
+    "mpCost": 50,
+    "cd": 5,
+    "power": 0.6,
+    "heal": 0,
+    "params": {
+     "atkBase": 580,
+     "atkPerL": 0,
+     "thrBase": 3.4,
+     "thrPerL": 0,
+     "extBase": 2.55,
+     "extPerL": 0,
+     "ext2Base": 0.85,
+     "ext2PerL": 0,
+     "durBase": 5,
+     "durPerL": 0,
+     "durXwPer": 12000
+    }
+   },
+   "6": {
+    "mpCost": 50,
+    "cd": 5,
+    "power": 0.6,
+    "heal": 0,
+    "params": {
+     "atkBase": 650,
+     "atkPerL": 0,
+     "thrBase": 3.5,
+     "thrPerL": 0,
+     "extBase": 2.625,
+     "extPerL": 0,
+     "ext2Base": 0.875,
+     "ext2PerL": 0,
+     "durBase": 5,
+     "durPerL": 0,
+     "durXwPer": 12000
+    }
+   },
+   "7": {
+    "mpCost": 50,
+    "cd": 5,
+    "power": 0.6,
+    "heal": 0,
+    "params": {
+     "atkBase": 720,
+     "atkPerL": 0,
+     "thrBase": 3.6,
+     "thrPerL": 0,
+     "extBase": 2.7,
+     "extPerL": 0,
+     "ext2Base": 0.9,
+     "ext2PerL": 0,
+     "durBase": 5,
+     "durPerL": 0,
+     "durXwPer": 12000
+    }
+   },
+   "8": {
+    "mpCost": 50,
+    "cd": 5,
+    "power": 0.6,
+    "heal": 0,
+    "params": {
+     "atkBase": 790,
+     "atkPerL": 0,
+     "thrBase": 3.7,
+     "thrPerL": 0,
+     "extBase": 2.775,
+     "extPerL": 0,
+     "ext2Base": 0.925,
+     "ext2PerL": 0,
+     "durBase": 5,
+     "durPerL": 0,
+     "durXwPer": 12000
+    }
+   },
+   "9": {
+    "mpCost": 50,
+    "cd": 5,
+    "power": 0.6,
+    "heal": 0,
+    "params": {
+     "atkBase": 860,
+     "atkPerL": 0,
+     "thrBase": 3.8,
+     "thrPerL": 0,
+     "extBase": 2.85,
+     "extPerL": 0,
+     "ext2Base": 0.95,
+     "ext2PerL": 0,
+     "durBase": 5,
+     "durPerL": 0,
+     "durXwPer": 12000
+    }
+   },
+   "10": {
+    "mpCost": 50,
+    "cd": 5,
+    "power": 0.6,
+    "heal": 0,
+    "params": {
+     "atkBase": 930,
+     "atkPerL": 0,
+     "thrBase": 3.9,
+     "thrPerL": 0,
+     "extBase": 2.925,
+     "extPerL": 0,
+     "ext2Base": 0.975,
+     "ext2PerL": 0,
+     "durBase": 5,
+     "durPerL": 0,
+     "durXwPer": 12000
+    }
+   }
+  }
+ },
+ "_source": {
+  "note": "宠物技能逐级消耗，逆向自抓包 sdesc（op224/573/81）",
+  "generated": "2026-09-20",
+  "packet": "15 skills with >=3 observed levels"
+ },
+ "_family": {
+  "note": "族名匹配补齐（推定）：同核心名技能共享标准曲线×档位；仅补空缺等级，观测级不受影响",
+  "generated": "2026-09-20"
+ }
+}

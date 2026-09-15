@@ -1,0 +1,1961 @@
+{
+ "meta": {
+  "desc": "物品 type 数字码语义枚举（逆向产物，勿手改，重跑 _verify/gen_item_types.py）",
+  "generatedFrom": [
+   "config/items.json（desc「绑定部位」+ 名称 + 【用途】）",
+   "update/i18n/zh_CN/Lang/zh_CN.as（Lang 数字键文案）",
+   "deobfuscated/globals/GlobalsGlobal06.as（VIEW_ARM_BG_* 常量名与 ID）",
+   "deobfuscated/globals/GlobalsGlobal08.as（BAG_* 背包枚举）",
+   "deobfuscated/panel/property/player/ViewArm.as（装备栏 19 槽布局）",
+   "deobfuscated/manager/ItemManager.as（类型谓词族 + isEquipedItem/isBaGuaItem）",
+   "deobfuscated/manager/CursorManager.as（protectPlayerBag 可加锁白名单）",
+   "数据解析/输出/JSON/实体/item__物品实例.json（bagId=0 index↔type 1:1）",
+   "数据解析/输出/JSON/实体/item__物品模板.json"
+  ],
+  "rules": [
+   "type 0~13 = 装备部位，证据等级「确证」（desc 绑定部位 100% 覆盖 + Lang 文案 + AS3 常量名 三方一致）",
+   "部位主名取 desc 口径（玩家在物品上看到的「绑定部位」），面板底图口径存 zhAliases（仅 type3 衣服/上衣、type9 首饰/饰品 两处不同）",
+   "type 14 零样本；ItemManager.isEquipedItem 允许 0<=v<=14，GlobalsGlobal08 存在 BAG_WUHUN=131 且 GlobalsGlobal06 存在 VIEW_ARM_BG_WUHUN=473 ⇒ type 14 = 武魂 为强候选，但 ViewArm 19 槽不含武魂、无任何样本，标「待逆向」",
+   "谓词区间内但零样本的 type（如 17/20~22/25~29/31/67/68/144/200~208）语义按谓词登记，样本缺失处标「待逆向」",
+   "非装备 type 语义由真实物品名 + desc【用途】文本推定，标「推定」；被 AS3 谓词直接命中的标「确证」；不据此臆造数值公式",
+   "npc_task_reward.type / item 系列表的 type 字段均指向本表（数据字典.md 已回填）"
+  ],
+  "equipTypeMax": 14,
+  "bagPlayerAttr": 0,
+  "bagPlayerBagItem": 1,
+  "slotsPerBag": 216,
+  "equipSlotTotal": 19,
+  "generatedAt": "2026-09-17 10:04:02"
+ },
+ "equip": {
+  "0": {
+   "type": 0,
+   "zh": "武器",
+   "zhAliases": [],
+   "slots": 1,
+   "isEquip": true,
+   "as3BgConst": "VIEW_ARM_BG_ARM",
+   "as3BgId": 20241,
+   "as3BgText": "武器",
+   "viewArmLayoutKeys": [
+    "ViewArm_equip08"
+   ],
+   "viewArmImgs": [
+    "panel_equip08"
+   ],
+   "bindSlotInDesc": "武器",
+   "bindSlotSamples": 401,
+   "descSlotConflicts": [],
+   "samples": [
+    "新无尚云灭",
+    "鬼头刀",
+    "朴刀",
+    "柴刀",
+    "青铜刀",
+    "黑铁刀"
+   ],
+   "count": 809,
+   "confidence": "确证",
+   "evidence": "desc 绑定部位 401/401 条一致(武器)；VIEW_ARM_BG_ARM=20241(武器)"
+  },
+  "1": {
+   "type": 1,
+   "zh": "头饰",
+   "zhAliases": [],
+   "slots": 1,
+   "isEquip": true,
+   "as3BgConst": "VIEW_ARM_BG_TIRE",
+   "as3BgId": 20242,
+   "as3BgText": "头饰",
+   "viewArmLayoutKeys": [
+    "ViewArm_equip00"
+   ],
+   "viewArmImgs": [
+    "panel_equip00"
+   ],
+   "bindSlotInDesc": "头饰",
+   "bindSlotSamples": 144,
+   "descSlotConflicts": [],
+   "samples": [
+    "灵宝无量冠",
+    "红玉头巾",
+    "银丝蟒纹巾",
+    "兽皮小帽",
+    "虎纹小帽",
+    "赤尖帽"
+   ],
+   "count": 292,
+   "confidence": "确证",
+   "evidence": "desc 绑定部位 144/144 条一致(头饰)；VIEW_ARM_BG_TIRE=20242(头饰)"
+  },
+  "2": {
+   "type": 2,
+   "zh": "项链",
+   "zhAliases": [],
+   "slots": 1,
+   "isEquip": true,
+   "as3BgConst": "VIEW_ARM_BG_NECKLACE",
+   "as3BgId": 20243,
+   "as3BgText": "项链",
+   "viewArmLayoutKeys": [
+    "ViewArm_equip05"
+   ],
+   "viewArmImgs": [
+    "panel_equip05"
+   ],
+   "bindSlotInDesc": "项链",
+   "bindSlotSamples": 1,
+   "descSlotConflicts": [],
+   "samples": [
+    "神奇项链",
+    "神奇项链",
+    "地狱项圈-阴",
+    "虎啸项链",
+    "神奇项链",
+    "地狱项圈-阴"
+   ],
+   "count": 7,
+   "confidence": "确证",
+   "evidence": "desc 绑定部位 1/1 条一致(项链)；VIEW_ARM_BG_NECKLACE=20243(项链)"
+  },
+  "3": {
+   "type": 3,
+   "zh": "衣服",
+   "zhAliases": [
+    "上衣"
+   ],
+   "slots": 1,
+   "isEquip": true,
+   "as3BgConst": "VIEW_ARM_BG_CLOTH",
+   "as3BgId": 20244,
+   "as3BgText": "上衣",
+   "viewArmLayoutKeys": [
+    "ViewArm_equip01"
+   ],
+   "viewArmImgs": [
+    "panel_equip01"
+   ],
+   "bindSlotInDesc": "衣服",
+   "bindSlotSamples": 144,
+   "descSlotConflicts": [],
+   "samples": [
+    "太冥宝甲",
+    "红玉长袍",
+    "绢绸长袍",
+    "兽皮轻衫",
+    "虎纹短衫",
+    "星云战甲"
+   ],
+   "count": 292,
+   "confidence": "确证",
+   "evidence": "desc 绑定部位 144/144 条一致(衣服)；VIEW_ARM_BG_CLOTH=20244(上衣)"
+  },
+  "4": {
+   "type": 4,
+   "zh": "手镯",
+   "zhAliases": [],
+   "slots": 2,
+   "isEquip": true,
+   "as3BgConst": "VIEW_ARM_BG_BRACELET",
+   "as3BgId": 20245,
+   "as3BgText": "手镯",
+   "viewArmLayoutKeys": [
+    "ViewArm_equip03",
+    "ViewArm_equip03_2"
+   ],
+   "viewArmImgs": [
+    "panel_equip03"
+   ],
+   "bindSlotInDesc": "手镯",
+   "bindSlotSamples": 1,
+   "descSlotConflicts": [],
+   "samples": [
+    "虎纹护腕",
+    "虎纹护腕",
+    "虎纹护腕",
+    "乱世鹏怒手环",
+    "乱世鹏怒手环",
+    "高级鹏怒手环"
+   ],
+   "count": 12,
+   "confidence": "确证",
+   "evidence": "desc 绑定部位 1/1 条一致(手镯)；VIEW_ARM_BG_BRACELET=20245(手镯)"
+  },
+  "5": {
+   "type": 5,
+   "zh": "腰带",
+   "zhAliases": [],
+   "slots": 1,
+   "isEquip": true,
+   "as3BgConst": "VIEW_ARM_BG_GIRDLE",
+   "as3BgId": 20246,
+   "as3BgText": "腰带",
+   "viewArmLayoutKeys": [
+    "ViewArm_equip02"
+   ],
+   "viewArmImgs": [
+    "panel_equip02"
+   ],
+   "bindSlotInDesc": "腰带",
+   "bindSlotSamples": 143,
+   "descSlotConflicts": [],
+   "samples": [
+    "太冥腰带",
+    "红玉腰带",
+    "银丝蟒纹带",
+    "兽皮腰带",
+    "虎纹腰带",
+    "星云腰带"
+   ],
+   "count": 291,
+   "confidence": "确证",
+   "evidence": "desc 绑定部位 143/143 条一致(腰带)；VIEW_ARM_BG_GIRDLE=20246(腰带)"
+  },
+  "6": {
+   "type": 6,
+   "zh": "戒指",
+   "zhAliases": [],
+   "slots": 2,
+   "isEquip": true,
+   "as3BgConst": "VIEW_ARM_BG_FINGERRING",
+   "as3BgId": 20247,
+   "as3BgText": "戒指",
+   "viewArmLayoutKeys": [
+    "ViewArm_equip04",
+    "ViewArm_equip04_2"
+   ],
+   "viewArmImgs": [
+    "panel_equip04"
+   ],
+   "bindSlotInDesc": "戒指",
+   "bindSlotSamples": 24,
+   "descSlotConflicts": [],
+   "samples": [
+    "观心戒指",
+    "红玉戒指",
+    "檀香木戒指",
+    "鱼骨戒指",
+    "五色戒指",
+    "紫晶戒指"
+   ],
+   "count": 57,
+   "confidence": "确证",
+   "evidence": "desc 绑定部位 24/24 条一致(戒指)；VIEW_ARM_BG_FINGERRING=20247(戒指)"
+  },
+  "7": {
+   "type": 7,
+   "zh": "裤子",
+   "zhAliases": [],
+   "slots": 1,
+   "isEquip": true,
+   "as3BgConst": "VIEW_ARM_BG_PANTS",
+   "as3BgId": 20248,
+   "as3BgText": "裤子",
+   "viewArmLayoutKeys": [
+    "ViewArm_equip06"
+   ],
+   "viewArmImgs": [
+    "panel_equip06"
+   ],
+   "bindSlotInDesc": "裤子",
+   "bindSlotSamples": 144,
+   "descSlotConflicts": [],
+   "samples": [
+    "太冥护腿",
+    "红玉裤",
+    "绢绸裤",
+    "兽皮护腿",
+    "虎纹护腿",
+    "星云护腿"
+   ],
+   "count": 292,
+   "confidence": "确证",
+   "evidence": "desc 绑定部位 144/144 条一致(裤子)；VIEW_ARM_BG_PANTS=20248(裤子)"
+  },
+  "8": {
+   "type": 8,
+   "zh": "鞋子",
+   "zhAliases": [],
+   "slots": 1,
+   "isEquip": true,
+   "as3BgConst": "VIEW_ARM_BG_SHOES",
+   "as3BgId": 20249,
+   "as3BgText": "鞋子",
+   "viewArmLayoutKeys": [
+    "ViewArm_equip07"
+   ],
+   "viewArmImgs": [
+    "panel_equip07"
+   ],
+   "bindSlotInDesc": "鞋子",
+   "bindSlotSamples": 144,
+   "descSlotConflicts": [],
+   "samples": [
+    "太冥短靴",
+    "红玉靴",
+    "绢丝鞋",
+    "兽皮鞋",
+    "虎纹鞋",
+    "狼牙鞋"
+   ],
+   "count": 293,
+   "confidence": "确证",
+   "evidence": "desc 绑定部位 144/144 条一致(鞋子)；VIEW_ARM_BG_SHOES=20249(鞋子)"
+  },
+  "9": {
+   "type": 9,
+   "zh": "首饰",
+   "zhAliases": [
+    "饰品"
+   ],
+   "slots": 4,
+   "isEquip": true,
+   "as3BgConst": "VIEW_ARM_BG_ACCOUTERMENT",
+   "as3BgId": 20250,
+   "as3BgText": "饰品",
+   "viewArmLayoutKeys": [
+    "ViewArm_equip10",
+    "ViewArm_equip10_2",
+    "ViewArm_equip10_3",
+    "ViewArm_equip10_4"
+   ],
+   "viewArmImgs": [
+    "panel_equip10"
+   ],
+   "bindSlotInDesc": "首饰",
+   "bindSlotSamples": 30,
+   "descSlotConflicts": [],
+   "samples": [
+    "黑暗之羽",
+    "闪耀的避水珠",
+    "凛风饰物",
+    "苍穹之羽",
+    "流星碎片",
+    "红玉饰物"
+   ],
+   "count": 84,
+   "confidence": "确证",
+   "evidence": "desc 绑定部位 30/30 条一致(首饰)；VIEW_ARM_BG_ACCOUTERMENT=20250(饰品)"
+  },
+  "10": {
+   "type": 10,
+   "zh": "时装",
+   "zhAliases": [],
+   "slots": 1,
+   "isEquip": true,
+   "as3BgConst": "VIEW_ARM_BG_FASHION",
+   "as3BgId": 20251,
+   "as3BgText": "时装",
+   "viewArmLayoutKeys": [
+    "ViewArm_equip09"
+   ],
+   "viewArmImgs": [
+    "panel_equip09"
+   ],
+   "bindSlotInDesc": "时装",
+   "bindSlotSamples": 1,
+   "descSlotConflicts": [],
+   "samples": [
+    "都市情缘时装体验版（女）",
+    "都市情缘时装体验版（女）",
+    "教授思密达（30天）",
+    "女神么么哒（30天）",
+    "教授思密达（30天）",
+    "都市情缘时装体验版（女）"
+   ],
+   "count": 8,
+   "confidence": "确证",
+   "evidence": "desc 绑定部位 1/1 条一致(时装)；VIEW_ARM_BG_FASHION=20251(时装)"
+  },
+  "11": {
+   "type": 11,
+   "zh": "护肩",
+   "zhAliases": [],
+   "slots": 1,
+   "isEquip": true,
+   "as3BgConst": "VIEW_ARM_BG_SHOULDER",
+   "as3BgId": 129,
+   "as3BgText": "护肩",
+   "viewArmLayoutKeys": [
+    "ViewArm_equip11"
+   ],
+   "viewArmImgs": [
+    "panel_equip11"
+   ],
+   "bindSlotInDesc": "护肩",
+   "bindSlotSamples": 1,
+   "descSlotConflicts": [],
+   "samples": [
+    "凛风护肩",
+    "凛风护肩",
+    "白虹护肩",
+    "黄龙护肩",
+    "凛风护肩",
+    "白虹护肩"
+   ],
+   "count": 7,
+   "confidence": "确证",
+   "evidence": "desc 绑定部位 1/1 条一致(护肩)；VIEW_ARM_BG_SHOULDER=129(护肩)"
+  },
+  "12": {
+   "type": 12,
+   "zh": "披风",
+   "zhAliases": [],
+   "slots": 1,
+   "isEquip": true,
+   "as3BgConst": "VIEW_ARM_BG_MANTLE",
+   "as3BgId": 130,
+   "as3BgText": "披风",
+   "viewArmLayoutKeys": [
+    "ViewArm_equip12"
+   ],
+   "viewArmImgs": [
+    "panel_equip12"
+   ],
+   "bindSlotInDesc": "披风",
+   "bindSlotSamples": 3,
+   "descSlotConflicts": [],
+   "samples": [
+    "威凛披风",
+    "虎魄披风",
+    "凛风披风",
+    "凛风披风",
+    "威凛披风",
+    "虎魄披风"
+   ],
+   "count": 13,
+   "confidence": "确证",
+   "evidence": "desc 绑定部位 3/3 条一致(披风)；VIEW_ARM_BG_MANTLE=130(披风)"
+  },
+  "13": {
+   "type": 13,
+   "zh": "翅膀",
+   "zhAliases": [],
+   "slots": 1,
+   "isEquip": true,
+   "as3BgConst": "VIEW_ARM_BG_WING",
+   "as3BgId": 404,
+   "as3BgText": "翅膀",
+   "viewArmLayoutKeys": [
+    "ViewArm_equip13"
+   ],
+   "viewArmImgs": [
+    "panel_equip13"
+   ],
+   "bindSlotInDesc": "翅膀",
+   "bindSlotSamples": 1,
+   "descSlotConflicts": [],
+   "samples": [
+    "天使之翼（三阶）",
+    "天使之翼（二阶）+4",
+    "天使之翼（三阶）",
+    "小天使之翼（一阶）",
+    "天使之翼（二阶）+4",
+    "天使之翼（三阶）"
+   ],
+   "count": 7,
+   "confidence": "确证",
+   "evidence": "desc 绑定部位 1/1 条一致(翅膀)；VIEW_ARM_BG_WING=404(翅膀)"
+  }
+ },
+ "other": {
+  "15": {
+   "type": 15,
+   "zh": "怪物素材（宠物相关）",
+   "slots": 0,
+   "isEquip": false,
+   "samples": [
+    "普通的野猪獠牙",
+    "普通的犀牛利角",
+    "精良的犀牛利角",
+    "普通的野猪獠牙",
+    "普通的犀牛利角",
+    "精良的犀牛利角"
+   ],
+   "count": 6,
+   "rightClickUse": false,
+   "useHints": [],
+   "confidence": "推定",
+   "evidence": "样本: 普通的野猪獠牙 / 精良的犀牛利角；在 protectPlayerBag 可加锁白名单内",
+   "lockable": true
+  },
+  "16": {
+   "type": 16,
+   "zh": "护卫/元神道具",
+   "slots": 0,
+   "isEquip": false,
+   "samples": [
+    "四象护卫-玄武（一阶）",
+    "四象护卫-白虎（一阶）",
+    "四象护卫-青龙（一阶）",
+    "四象护卫-朱雀（一阶）",
+    "四象护卫-玄武（一阶）",
+    "四象护卫-白虎（一阶）"
+   ],
+   "count": 8,
+   "rightClickUse": false,
+   "useHints": [],
+   "confidence": "推定",
+   "evidence": "样本: 四象护卫-玄武/青龙/白虎/朱雀（一阶）；可加锁",
+   "lockable": true
+  },
+  "17": {
+   "type": 17,
+   "zh": "（isPartnerItem 命中）",
+   "slots": 0,
+   "isEquip": false,
+   "samples": [],
+   "count": 0,
+   "rightClickUse": false,
+   "useHints": [],
+   "confidence": "待逆向",
+   "evidence": "ItemManager.isPartnerItem: value == 67 || value == 68 || value == 17",
+   "lockable": false
+  },
+  "18": {
+   "type": 18,
+   "zh": "五元素符",
+   "slots": 0,
+   "isEquip": false,
+   "samples": [
+    "火符（二等）",
+    "金符（三等）",
+    "火符（四等）",
+    "金符（三等）",
+    "水符（一等）",
+    "金符（三等）"
+   ],
+   "count": 27,
+   "rightClickUse": false,
+   "useHints": [],
+   "confidence": "确证",
+   "evidence": "ItemManager.isFiveElementItem(v==18) 确证；样本: 金符/木符/水符/火符/土符",
+   "lockable": true
+  },
+  "19": {
+   "type": 19,
+   "zh": "如意类装备",
+   "slots": 0,
+   "isEquip": false,
+   "samples": [
+    "武如意（法）（二阶）+4",
+    "武如意（法）（二阶）+4"
+   ],
+   "count": 2,
+   "rightClickUse": false,
+   "useHints": [],
+   "confidence": "确证",
+   "evidence": "ViewArm 有独立「如意」槽（第 26 位，非 19 槽内）；样本: 武如意（法）（二阶）+4",
+   "lockable": true
+  },
+  "20": {
+   "type": 20,
+   "zh": "（isPetItem 区间命中）",
+   "slots": 0,
+   "isEquip": false,
+   "samples": [],
+   "count": 0,
+   "rightClickUse": false,
+   "useHints": [],
+   "confidence": "待逆向",
+   "evidence": "ItemManager.isPetItem: value >= 20 && value <= 40 && value != 30 && value != 31",
+   "lockable": false
+  },
+  "21": {
+   "type": 21,
+   "zh": "（isPetItem 区间命中）",
+   "slots": 0,
+   "isEquip": false,
+   "samples": [],
+   "count": 0,
+   "rightClickUse": false,
+   "useHints": [],
+   "confidence": "待逆向",
+   "evidence": "ItemManager.isPetItem: value >= 20 && value <= 40 && value != 30 && value != 31",
+   "lockable": false
+  },
+  "22": {
+   "type": 22,
+   "zh": "（isPetItem 区间命中）",
+   "slots": 0,
+   "isEquip": false,
+   "samples": [],
+   "count": 0,
+   "rightClickUse": false,
+   "useHints": [],
+   "confidence": "待逆向",
+   "evidence": "ItemManager.isPetItem: value >= 20 && value <= 40 && value != 30 && value != 31",
+   "lockable": false
+  },
+  "23": {
+   "type": 23,
+   "zh": "宠物成长丹药",
+   "slots": 0,
+   "isEquip": false,
+   "samples": [
+    "万化秘露",
+    "宠物富贵经验卷轴",
+    "原始天灵元丹",
+    "宠物至尊经验神符",
+    "原始天灵元丹",
+    "原始宠物内丹"
+   ],
+   "count": 148,
+   "rightClickUse": true,
+   "useHints": [
+    "重新生成宠物技能 出售单价：1两银票",
+    "点击右键使用 出售单价：1文银票",
+    "将原始内丹放入宠物内丹栏中即可幻化成真正的宠物内丹. 评价"
+   ],
+   "confidence": "确证",
+   "evidence": "isPetItem 区间内(20~40)；用途: 打开宠物面板点击右键使用；可加锁",
+   "lockable": true
+  },
+  "24": {
+   "type": 24,
+   "zh": "宠物寿命·忠诚道具",
+   "slots": 0,
+   "isEquip": false,
+   "samples": [
+    "宠物寿命储存水晶",
+    "微型宠物忠诚晶石",
+    "微型宠物忠诚晶石",
+    "微型宠物忠诚晶石",
+    "微型宠物忠诚晶石",
+    "宠物寿命储存水晶"
+   ],
+   "count": 6,
+   "rightClickUse": true,
+   "useHints": [
+    "打开宠物面板，点击右键使用 +10000 寿命池剩余 出售"
+   ],
+   "confidence": "确证",
+   "evidence": "isPetItem 区间内(20~40)；样本: 宠物寿命储存水晶 / 微型宠物忠诚晶石",
+   "lockable": false
+  },
+  "25": {
+   "type": 25,
+   "zh": "（isPetItem 区间命中）",
+   "slots": 0,
+   "isEquip": false,
+   "samples": [],
+   "count": 0,
+   "rightClickUse": false,
+   "useHints": [],
+   "confidence": "待逆向",
+   "evidence": "ItemManager.isPetItem: value >= 20 && value <= 40 && value != 30 && value != 31",
+   "lockable": false
+  },
+  "26": {
+   "type": 26,
+   "zh": "（isPetItem 区间命中）",
+   "slots": 0,
+   "isEquip": false,
+   "samples": [],
+   "count": 0,
+   "rightClickUse": false,
+   "useHints": [],
+   "confidence": "待逆向",
+   "evidence": "ItemManager.isPetItem: value >= 20 && value <= 40 && value != 30 && value != 31",
+   "lockable": false
+  },
+  "27": {
+   "type": 27,
+   "zh": "（isPetItem 区间命中）",
+   "slots": 0,
+   "isEquip": false,
+   "samples": [],
+   "count": 0,
+   "rightClickUse": false,
+   "useHints": [],
+   "confidence": "待逆向",
+   "evidence": "ItemManager.isPetItem: value >= 20 && value <= 40 && value != 30 && value != 31",
+   "lockable": false
+  },
+  "28": {
+   "type": 28,
+   "zh": "（isPetItem 区间命中）",
+   "slots": 0,
+   "isEquip": false,
+   "samples": [],
+   "count": 0,
+   "rightClickUse": false,
+   "useHints": [],
+   "confidence": "待逆向",
+   "evidence": "ItemManager.isPetItem: value >= 20 && value <= 40 && value != 30 && value != 31",
+   "lockable": false
+  },
+  "29": {
+   "type": 29,
+   "zh": "（isPetItem 区间命中）",
+   "slots": 0,
+   "isEquip": false,
+   "samples": [],
+   "count": 0,
+   "rightClickUse": false,
+   "useHints": [],
+   "confidence": "待逆向",
+   "evidence": "ItemManager.isPetItem: value >= 20 && value <= 40 && value != 30 && value != 31",
+   "lockable": false
+  },
+  "30": {
+   "type": 30,
+   "zh": "骑宠道具（洗髓/进化）",
+   "slots": 0,
+   "isEquip": false,
+   "samples": [
+    "骑宠洗髓丹（灵品）",
+    "骑宠洗髓丹（灵品）"
+   ],
+   "count": 2,
+   "rightClickUse": false,
+   "useHints": [],
+   "confidence": "确证",
+   "evidence": "ItemManager.isRidePetItem(v==30||v==31) 确证；样本: 骑宠洗髓丹（灵品）",
+   "lockable": false
+  },
+  "31": {
+   "type": 31,
+   "zh": "（isPetItem 区间命中）",
+   "slots": 0,
+   "isEquip": false,
+   "samples": [],
+   "count": 0,
+   "rightClickUse": false,
+   "useHints": [],
+   "confidence": "待逆向",
+   "evidence": "ItemManager.isPetItem: value >= 20 && value <= 40 && value != 30 && value != 31",
+   "lockable": false
+  },
+  "32": {
+   "type": 32,
+   "zh": "（isPetItem 区间命中）",
+   "slots": 0,
+   "isEquip": false,
+   "samples": [],
+   "count": 0,
+   "rightClickUse": false,
+   "useHints": [],
+   "confidence": "待逆向",
+   "evidence": "ItemManager.isPetItem: value >= 20 && value <= 40 && value != 30 && value != 31",
+   "lockable": false
+  },
+  "33": {
+   "type": 33,
+   "zh": "（isPetItem 区间命中）",
+   "slots": 0,
+   "isEquip": false,
+   "samples": [],
+   "count": 0,
+   "rightClickUse": false,
+   "useHints": [],
+   "confidence": "待逆向",
+   "evidence": "ItemManager.isPetItem: value >= 20 && value <= 40 && value != 30 && value != 31",
+   "lockable": false
+  },
+  "34": {
+   "type": 34,
+   "zh": "（isPetItem 区间命中）",
+   "slots": 0,
+   "isEquip": false,
+   "samples": [],
+   "count": 0,
+   "rightClickUse": false,
+   "useHints": [],
+   "confidence": "待逆向",
+   "evidence": "ItemManager.isPetItem: value >= 20 && value <= 40 && value != 30 && value != 31",
+   "lockable": false
+  },
+  "35": {
+   "type": 35,
+   "zh": "（isPetItem 区间命中）",
+   "slots": 0,
+   "isEquip": false,
+   "samples": [],
+   "count": 0,
+   "rightClickUse": false,
+   "useHints": [],
+   "confidence": "待逆向",
+   "evidence": "ItemManager.isPetItem: value >= 20 && value <= 40 && value != 30 && value != 31",
+   "lockable": false
+  },
+  "36": {
+   "type": 36,
+   "zh": "（isPetItem 区间命中）",
+   "slots": 0,
+   "isEquip": false,
+   "samples": [],
+   "count": 0,
+   "rightClickUse": false,
+   "useHints": [],
+   "confidence": "待逆向",
+   "evidence": "ItemManager.isPetItem: value >= 20 && value <= 40 && value != 30 && value != 31",
+   "lockable": false
+  },
+  "37": {
+   "type": 37,
+   "zh": "（isPetItem 区间命中）",
+   "slots": 0,
+   "isEquip": false,
+   "samples": [],
+   "count": 0,
+   "rightClickUse": false,
+   "useHints": [],
+   "confidence": "待逆向",
+   "evidence": "ItemManager.isPetItem: value >= 20 && value <= 40 && value != 30 && value != 31",
+   "lockable": false
+  },
+  "38": {
+   "type": 38,
+   "zh": "（isPetItem 区间命中）",
+   "slots": 0,
+   "isEquip": false,
+   "samples": [],
+   "count": 0,
+   "rightClickUse": false,
+   "useHints": [],
+   "confidence": "待逆向",
+   "evidence": "ItemManager.isPetItem: value >= 20 && value <= 40 && value != 30 && value != 31",
+   "lockable": false
+  },
+  "39": {
+   "type": 39,
+   "zh": "（isPetItem 区间命中）",
+   "slots": 0,
+   "isEquip": false,
+   "samples": [],
+   "count": 0,
+   "rightClickUse": false,
+   "useHints": [],
+   "confidence": "待逆向",
+   "evidence": "ItemManager.isPetItem: value >= 20 && value <= 40 && value != 30 && value != 31",
+   "lockable": false
+  },
+  "40": {
+   "type": 40,
+   "zh": "即时消耗药品",
+   "slots": 0,
+   "isEquip": false,
+   "samples": [
+    "无瑕疵的融雪石",
+    "大碗茶",
+    "法力精髓",
+    "大瓶生命药水",
+    "金克木",
+    "生命之泉的甘霖"
+   ],
+   "count": 134,
+   "rightClickUse": true,
+   "useHints": [
+    "特制的专打雪域谜狐的融雪石 -27500 HP 出售单价：",
+    "点击右键使用 +450 MP 出售单价：1文银票",
+    "点击右键使用 +2000 MP 出售单价：1文银票"
+   ],
+   "confidence": "推定",
+   "evidence": "isPetItem 区间内(20~40)；用途: 点击右键使用 +MP/+HP；含战斗投掷物",
+   "lockable": false
+  },
+  "62": {
+   "type": 62,
+   "zh": "礼包·书籍·宝箱",
+   "slots": 0,
+   "isEquip": false,
+   "samples": [
+    "天书残片之八",
+    "技能经验书",
+    "九级技能卷轴包",
+    "富贵宝石袋",
+    "三等辅材包",
+    "远古魔魂封印"
+   ],
+   "count": 156,
+   "rightClickUse": true,
+   "useHints": [
+    "点击右键使用 出售单价：1文银票",
+    "点击右键使用 出售单价：1文银票",
+    "点击右键使用 出售单价：1文银票"
+   ],
+   "confidence": "推定",
+   "evidence": "用途: 点击右键使用；样本: 天书残片 / 技能经验书 / 各种宝箱",
+   "lockable": false
+  },
+  "63": {
+   "type": 63,
+   "zh": "增益·状态类消耗品",
+   "slots": 0,
+   "isEquip": false,
+   "samples": [
+    "弱效双倍经验药",
+    "技能熟练度双倍药",
+    "微效双倍经验药",
+    "强效唤妖灵符",
+    "驱魔香",
+    "强效四倍经验药"
+   ],
+   "count": 332,
+   "rightClickUse": true,
+   "useHints": [
+    "点击右键使用 出售单价：1两400文银票",
+    "点击右键使用 +2倍获得技能熟练度 出售单价：1文银票",
+    "点击右键使用 出售单价：1两银票"
+   ],
+   "confidence": "推定",
+   "evidence": "用途: 点击右键使用；样本: 双倍经验药 / 驱魔香 / 元气晶石",
+   "lockable": false
+  },
+  "67": {
+   "type": 67,
+   "zh": "（isPartnerItem 命中）",
+   "slots": 0,
+   "isEquip": false,
+   "samples": [],
+   "count": 0,
+   "rightClickUse": false,
+   "useHints": [],
+   "confidence": "待逆向",
+   "evidence": "ItemManager.isPartnerItem: value == 67 || value == 68 || value == 17",
+   "lockable": false
+  },
+  "68": {
+   "type": 68,
+   "zh": "（isPartnerItem 命中）",
+   "slots": 0,
+   "isEquip": false,
+   "samples": [],
+   "count": 0,
+   "rightClickUse": false,
+   "useHints": [],
+   "confidence": "待逆向",
+   "evidence": "ItemManager.isPartnerItem: value == 67 || value == 68 || value == 17",
+   "lockable": false
+  },
+  "80": {
+   "type": 80,
+   "zh": "任务物品",
+   "slots": 0,
+   "isEquip": false,
+   "samples": [
+    "冰淇淋",
+    "貂涎花瓣",
+    "青蛇王胆",
+    "雀鸟羽毛",
+    "舞月的解药",
+    "丢失的帮会货物"
+   ],
+   "count": 37,
+   "rightClickUse": false,
+   "useHints": [
+    "完成特定任务所需",
+    "回梦任务所需",
+    "回梦任务所需"
+   ],
+   "confidence": "推定",
+   "evidence": "用途: 任务所需 / 交还 NPC；样本: 冰淇淋 / 丢失的帮会货物",
+   "lockable": false
+  },
+  "81": {
+   "type": 81,
+   "zh": "精魂·宝石符",
+   "slots": 0,
+   "isEquip": false,
+   "samples": [
+    "金龙蛋",
+    "瘟疫精魂",
+    "石像的裂片",
+    "宝石洗孔符",
+    "开示丹之五彩宝衣",
+    "逐浪精魂"
+   ],
+   "count": 84,
+   "rightClickUse": false,
+   "useHints": [
+    "开启神宠系列任务；您也可以在淘宝行中寄售它 出售单价：1文",
+    "可出售给商人换取钱财 出售单价：400文银票",
+    "略微修补古国石窟的石像。需要很大数量。 出售单价：1文银票"
+   ],
+   "confidence": "推定",
+   "evidence": "样本: 金龙蛋 / 瘟疫精魂 / 宝石洗孔符 / 石像的裂片",
+   "lockable": false
+  },
+  "82": {
+   "type": 82,
+   "zh": "镶嵌宝石（天干系列）",
+   "slots": 0,
+   "isEquip": false,
+   "samples": [
+    "一级天拜石",
+    "三级天损石",
+    "三级天贵石",
+    "四级天寿石",
+    "三级天闲石",
+    "三级天猛石"
+   ],
+   "count": 29,
+   "rightClickUse": false,
+   "useHints": [
+    "可用于宝石镶嵌 “对应天蓝色宝石孔。” 出售单价：1文银票"
+   ],
+   "confidence": "推定",
+   "evidence": "用途: 可用于宝石镶嵌；样本: 天寿石 / 天贵石 / 天闲石",
+   "lockable": false
+  },
+  "98": {
+   "type": 98,
+   "zh": "打造材料",
+   "slots": 0,
+   "isEquip": false,
+   "samples": [
+    "麻布(三等)",
+    "麻布(五等)",
+    "何首乌(五等)",
+    "棉布(三等)",
+    "铜锭(一等)",
+    "青铜锭(一等)"
+   ],
+   "count": 76,
+   "rightClickUse": false,
+   "useHints": [
+    "可用于装备打造 出售单价：10文银票",
+    "可用于装备打造 出售单价：1文银票",
+    "可用于药品制作 出售单价：1文银票"
+   ],
+   "confidence": "推定",
+   "evidence": "用途: 可用于装备打造；样本: 麻布 / 何首乌 / 铜锭 / 青铜锭",
+   "lockable": false
+  },
+  "99": {
+   "type": 99,
+   "zh": "装备升星宝石",
+   "slots": 0,
+   "isEquip": false,
+   "samples": [
+    "升级宝石(精品)",
+    "升级宝石(灵品)",
+    "升级宝石(灵品)",
+    "升级宝石(灵品)",
+    "升级宝石(灵品)",
+    "升级宝石(精品)"
+   ],
+   "count": 6,
+   "rightClickUse": false,
+   "useHints": [
+    "可用于装备升星 出售单价：1文银票",
+    "可用于装备升星 出售单价：1文银票"
+   ],
+   "confidence": "推定",
+   "evidence": "用途: 可用于装备升星",
+   "lockable": false
+  },
+  "114": {
+   "type": 114,
+   "zh": "材料（厚皮系列）",
+   "slots": 0,
+   "isEquip": false,
+   "samples": [
+    "厚皮五级",
+    "厚皮五级"
+   ],
+   "count": 2,
+   "rightClickUse": false,
+   "useHints": [],
+   "confidence": "推定",
+   "evidence": "样本: 厚皮五级",
+   "lockable": false
+  },
+  "115": {
+   "type": 115,
+   "zh": "宠物资质仙丹",
+   "slots": 0,
+   "isEquip": false,
+   "samples": [
+    "凡品宠物仙丹（五等）",
+    "凡品宠物仙丹（四等）",
+    "凡品宠物仙丹（三等）",
+    "凡品宠物仙丹（二等）",
+    "凡品宠物仙丹（一等）",
+    "良品宠物仙丹（五等）"
+   ],
+   "count": 30,
+   "rightClickUse": false,
+   "useHints": [
+    "打开宠物面板，放入相应的资质栏中 +20 宠物资质 出售单",
+    "打开宠物面板，放入相应的资质栏中 +50 宠物资质 出售单",
+    "打开宠物面板，放入相应的资质栏中 +80 宠物资质 出售单"
+   ],
+   "confidence": "推定",
+   "evidence": "用途: 打开宠物面板放入资质栏 +宠物资质",
+   "lockable": false
+  },
+  "117": {
+   "type": 117,
+   "zh": "开箱道具（福袋/仙葫）",
+   "slots": 0,
+   "isEquip": false,
+   "samples": [
+    "富贵仙葫",
+    "至尊仙葫",
+    "泥沼覆盖的葫芦",
+    "朝云国遗失物资",
+    "聚宝盆",
+    "新年福袋"
+   ],
+   "count": 35,
+   "rightClickUse": true,
+   "useHints": [
+    "点击右键使用 出售单价：2两360文银票",
+    "点击右键使用 出售单价：4两760文银票",
+    "点击右键使用 出售单价：400文银票"
+   ],
+   "confidence": "推定",
+   "evidence": "用途: 点击右键使用；样本: 富贵仙葫 / 聚宝盆 / 新年福袋",
+   "lockable": false
+  },
+  "119": {
+   "type": 119,
+   "zh": "打造碎片（顶级/高级装备）",
+   "slots": 0,
+   "isEquip": false,
+   "samples": [
+    "上古神器碎片(四等)",
+    "魔性碎片(一等)",
+    "上古神器碎片(一等)",
+    "灵胄碎片(一等)",
+    "玄兵碎片(一等)",
+    "失落的锻造法局部"
+   ],
+   "count": 34,
+   "rightClickUse": false,
+   "useHints": [
+    "可用于打造顶级装备 出售单价：260文银票",
+    "可用于打造高级装备 出售单价：2两300文银票",
+    "可用于打造顶级装备 出售单价：7两500文银票"
+   ],
+   "confidence": "推定",
+   "evidence": "用途: 可用于打造顶级/高级装备",
+   "lockable": false
+  },
+  "120": {
+   "type": 120,
+   "zh": "宠物仙丹·耐力资质",
+   "slots": 0,
+   "isEquip": false,
+   "samples": [
+    "凡品长命宠物仙丹",
+    "良品增岁宠物仙丹",
+    "良品长命宠物仙丹",
+    "上品增岁宠物仙丹",
+    "上品长命宠物仙丹",
+    "精品增岁宠物仙丹"
+   ],
+   "count": 33,
+   "rightClickUse": false,
+   "useHints": [
+    "打开宠物面板，放入耐力资质栏中 +300 宠物资质 出售单",
+    "打开宠物面板，放入耐力资质栏中 +400 宠物资质 出售单",
+    "打开宠物面板，放入耐力资质栏中 +500 宠物资质 出售单"
+   ],
+   "confidence": "推定",
+   "evidence": "用途: 放入耐力资质长命/增岁栏 +宠物资质",
+   "lockable": false
+  },
+  "121": {
+   "type": 121,
+   "zh": "宠物仙丹·智力资质",
+   "slots": 0,
+   "isEquip": false,
+   "samples": [
+    "凡品聚魂宠物仙丹",
+    "良品精魂宠物仙丹",
+    "良品聚魂宠物仙丹",
+    "上品精魂宠物仙丹",
+    "上品聚魂宠物仙丹",
+    "精品精魂宠物仙丹"
+   ],
+   "count": 31,
+   "rightClickUse": false,
+   "useHints": [
+    "打开宠物面板，放入智力资质栏中 +300 宠物资质 出售单",
+    "打开宠物面板，放入智力资质栏中 +400 宠物资质 出售单",
+    "打开宠物面板，放入智力资质栏中 +500 宠物资质 出售单"
+   ],
+   "confidence": "推定",
+   "evidence": "用途: 放入智力资质聚魂/精魂栏 +宠物资质",
+   "lockable": false
+  },
+  "122": {
+   "type": 122,
+   "zh": "宠物仙丹·强壮资质",
+   "slots": 0,
+   "isEquip": false,
+   "samples": [
+    "凡品蛮力宠物仙丹",
+    "良品威力宠物仙丹",
+    "良品蛮力宠物仙丹",
+    "上品威力宠物仙丹",
+    "上品蛮力宠物仙丹",
+    "精品威力宠物仙丹"
+   ],
+   "count": 31,
+   "rightClickUse": false,
+   "useHints": [
+    "打开宠物面板，放入强壮资质栏中 +300 宠物资质 出售单",
+    "打开宠物面板，放入强壮资质栏中 +400 宠物资质 出售单",
+    "打开宠物面板，放入强壮资质栏中 +500 宠物资质 出售单"
+   ],
+   "confidence": "推定",
+   "evidence": "用途: 放入强壮资质蛮力/威力栏 +宠物资质",
+   "lockable": false
+  },
+  "123": {
+   "type": 123,
+   "zh": "宠物仙丹·敏捷资质",
+   "slots": 0,
+   "isEquip": false,
+   "samples": [
+    "凡品无影宠物仙丹",
+    "良品神行宠物仙丹",
+    "良品无影宠物仙丹",
+    "上品神行宠物仙丹",
+    "上品无影宠物仙丹",
+    "精品神行宠物仙丹"
+   ],
+   "count": 32,
+   "rightClickUse": false,
+   "useHints": [
+    "打开宠物面板，放入敏捷资质栏中 +300 宠物资质 出售单",
+    "打开宠物面板，放入敏捷资质栏中 +400 宠物资质 出售单",
+    "打开宠物面板，放入敏捷资质栏中 +500 宠物资质 出售单"
+   ],
+   "confidence": "推定",
+   "evidence": "用途: 放入敏捷资质无影/神行栏 +宠物资质",
+   "lockable": false
+  },
+  "124": {
+   "type": 124,
+   "zh": "宠物仙丹·信仰资质",
+   "slots": 0,
+   "isEquip": false,
+   "samples": [
+    "凡品定心宠物仙丹",
+    "良品定气宠物仙丹",
+    "良品定心宠物仙丹",
+    "上品定气宠物仙丹",
+    "上品定心宠物仙丹",
+    "精品定气宠物仙丹"
+   ],
+   "count": 31,
+   "rightClickUse": false,
+   "useHints": [
+    "打开宠物面板，放入信仰资质栏中 +300 宠物资质 出售单",
+    "打开宠物面板，放入信仰资质栏中 +400 宠物资质 出售单",
+    "打开宠物面板，放入信仰资质栏中 +500 宠物资质 出售单"
+   ],
+   "confidence": "推定",
+   "evidence": "用途: 放入信仰资质定心/定气栏 +宠物资质",
+   "lockable": false
+  },
+  "127": {
+   "type": 127,
+   "zh": "装备开光道具",
+   "slots": 0,
+   "isEquip": false,
+   "samples": [
+    "无名之泪（精品）",
+    "无名之泪（精品）"
+   ],
+   "count": 2,
+   "rightClickUse": false,
+   "useHints": [
+    "可通过装备改造界面为特定装备开光 出售单价：1文银票"
+   ],
+   "confidence": "推定",
+   "evidence": "用途: 可通过装备改造界面为特定装备开光",
+   "lockable": false
+  },
+  "129": {
+   "type": 129,
+   "zh": "装备属性改造道具",
+   "slots": 0,
+   "isEquip": false,
+   "samples": [
+    "凡品魔术棱柱（四等）",
+    "凡品魔术棱柱（三等）",
+    "凡品魔术棱柱（二等）",
+    "凡品魔术棱柱（一等）",
+    "良品魔术棱柱（四等）",
+    "良品魔术棱柱（三等）"
+   ],
+   "count": 48,
+   "rightClickUse": false,
+   "useHints": [
+    "装备属性改造所需物品 出售单价：1文银票",
+    "装备属性改造所需物品 出售单价：1文银票",
+    "装备属性改造所需物品 出售单价：1文银票"
+   ],
+   "confidence": "推定",
+   "evidence": "用途: 装备属性改造所需物品",
+   "lockable": false
+  },
+  "131": {
+   "type": 131,
+   "zh": "骑宠仙丹·增岁/长命",
+   "slots": 0,
+   "isEquip": false,
+   "samples": [
+    "神品增岁骑宠仙丹",
+    "神品增岁骑宠仙丹",
+    "神品增岁骑宠仙丹",
+    "骑宠玄品长命仙丹",
+    "骑宠玄品长命仙丹",
+    "骑宠玄品长命仙丹"
+   ],
+   "count": 13,
+   "rightClickUse": false,
+   "useHints": [],
+   "confidence": "推定",
+   "evidence": "样本: 神品增岁骑宠仙丹 / 骑宠玄品长命仙丹",
+   "lockable": false
+  },
+  "132": {
+   "type": 132,
+   "zh": "骑宠仙丹·精魂",
+   "slots": 0,
+   "isEquip": false,
+   "samples": [
+    "神品精魂骑宠仙丹",
+    "神品精魂骑宠仙丹",
+    "神品精魂骑宠仙丹",
+    "骑宠玄品聚魂仙丹",
+    "骑宠玄品聚魂仙丹",
+    "骑宠玄品聚魂仙丹"
+   ],
+   "count": 13,
+   "rightClickUse": false,
+   "useHints": [],
+   "confidence": "推定",
+   "evidence": "样本: 神品精魂骑宠仙丹",
+   "lockable": false
+  },
+  "133": {
+   "type": 133,
+   "zh": "骑宠仙丹·威力",
+   "slots": 0,
+   "isEquip": false,
+   "samples": [
+    "神品威力骑宠仙丹",
+    "神品威力骑宠仙丹",
+    "神品威力骑宠仙丹",
+    "骑宠玄品蛮力仙丹",
+    "骑宠玄品蛮力仙丹",
+    "骑宠玄品蛮力仙丹"
+   ],
+   "count": 13,
+   "rightClickUse": false,
+   "useHints": [],
+   "confidence": "推定",
+   "evidence": "样本: 神品威力骑宠仙丹",
+   "lockable": false
+  },
+  "134": {
+   "type": 134,
+   "zh": "骑宠仙丹·神行",
+   "slots": 0,
+   "isEquip": false,
+   "samples": [
+    "神品神行骑宠仙丹",
+    "神品神行骑宠仙丹",
+    "神品神行骑宠仙丹",
+    "骑宠玄品无影仙丹",
+    "骑宠玄品无影仙丹",
+    "骑宠玄品无影仙丹"
+   ],
+   "count": 13,
+   "rightClickUse": false,
+   "useHints": [],
+   "confidence": "推定",
+   "evidence": "样本: 神品神行骑宠仙丹",
+   "lockable": false
+  },
+  "135": {
+   "type": 135,
+   "zh": "骑宠仙丹·定气",
+   "slots": 0,
+   "isEquip": false,
+   "samples": [
+    "神品定气骑宠仙丹",
+    "神品定气骑宠仙丹",
+    "神品定气骑宠仙丹",
+    "骑宠玄品定心仙丹",
+    "骑宠玄品定心仙丹",
+    "骑宠玄品定心仙丹"
+   ],
+   "count": 13,
+   "rightClickUse": false,
+   "useHints": [],
+   "confidence": "推定",
+   "evidence": "样本: 神品定气骑宠仙丹",
+   "lockable": false
+  },
+  "136": {
+   "type": 136,
+   "zh": "宠物内丹升级石",
+   "slots": 0,
+   "isEquip": false,
+   "samples": [
+    "初阶1-3星通用宠物内丹升级石",
+    "初阶1-3星通用宠物内丹升级石",
+    "宠物内丹升级石",
+    "内丹变绿专用提品石",
+    "至尊宠物内丹升级石",
+    "初阶1-3星通用宠物内丹升级石"
+   ],
+   "count": 9,
+   "rightClickUse": false,
+   "useHints": [
+    "打开宠物面板的“查看详情”，在其中的“内丹”页点击“吞噬物"
+   ],
+   "confidence": "推定",
+   "evidence": "用途: 宠物面板内丹页使用",
+   "lockable": false
+  },
+  "137": {
+   "type": 137,
+   "zh": "温玉",
+   "slots": 0,
+   "isEquip": false,
+   "samples": [
+    "温玉",
+    "温玉"
+   ],
+   "count": 2,
+   "rightClickUse": false,
+   "useHints": [],
+   "confidence": "推定",
+   "evidence": "样本: 温玉",
+   "lockable": false
+  },
+  "139": {
+   "type": 139,
+   "zh": "附魔石（元魔石）",
+   "slots": 0,
+   "isEquip": false,
+   "samples": [
+    "物防元魔石（一级附魔石）",
+    "物防元魔石（二级附魔石）",
+    "法防元魔石（三级附魔石）",
+    "物防元魔石（一级附魔石）",
+    "物防元魔石（二级附魔石）",
+    "法防元魔石（三级附魔石）"
+   ],
+   "count": 6,
+   "rightClickUse": false,
+   "useHints": [],
+   "confidence": "推定",
+   "evidence": "样本: 物防元魔石（一级附魔石）/ 法防元魔石",
+   "lockable": false
+  },
+  "141": {
+   "type": 141,
+   "zh": "魔瓶（白精灵系列）",
+   "slots": 0,
+   "isEquip": false,
+   "samples": [
+    "魔瓶（白精灵三阶）",
+    "魔瓶（白精灵三阶）"
+   ],
+   "count": 2,
+   "rightClickUse": false,
+   "useHints": [],
+   "confidence": "推定",
+   "evidence": "样本: 魔瓶（白精灵三阶）；可加锁",
+   "lockable": true
+  },
+  "144": {
+   "type": 144,
+   "zh": "（isNurseryItem 命中）",
+   "slots": 0,
+   "isEquip": false,
+   "samples": [],
+   "count": 0,
+   "rightClickUse": false,
+   "useHints": [],
+   "confidence": "待逆向",
+   "evidence": "ItemManager.isNurseryItem: value == 144",
+   "lockable": false
+  },
+  "200": {
+   "type": 200,
+   "zh": "（isBaGuaItem 区间命中）",
+   "slots": 0,
+   "isEquip": false,
+   "samples": [],
+   "count": 0,
+   "rightClickUse": false,
+   "useHints": [],
+   "confidence": "待逆向",
+   "evidence": "ItemManager.isBaGuaItem: value >= 200 && value <= 208",
+   "lockable": true
+  },
+  "201": {
+   "type": 201,
+   "zh": "（isBaGuaItem 区间命中）",
+   "slots": 0,
+   "isEquip": false,
+   "samples": [],
+   "count": 0,
+   "rightClickUse": false,
+   "useHints": [],
+   "confidence": "待逆向",
+   "evidence": "ItemManager.isBaGuaItem: value >= 200 && value <= 208",
+   "lockable": true
+  },
+  "202": {
+   "type": 202,
+   "zh": "（isBaGuaItem 区间命中）",
+   "slots": 0,
+   "isEquip": false,
+   "samples": [],
+   "count": 0,
+   "rightClickUse": false,
+   "useHints": [],
+   "confidence": "待逆向",
+   "evidence": "ItemManager.isBaGuaItem: value >= 200 && value <= 208",
+   "lockable": true
+  },
+  "203": {
+   "type": 203,
+   "zh": "（isBaGuaItem 区间命中）",
+   "slots": 0,
+   "isEquip": false,
+   "samples": [],
+   "count": 0,
+   "rightClickUse": false,
+   "useHints": [],
+   "confidence": "待逆向",
+   "evidence": "ItemManager.isBaGuaItem: value >= 200 && value <= 208",
+   "lockable": true
+  },
+  "204": {
+   "type": 204,
+   "zh": "（isBaGuaItem 区间命中）",
+   "slots": 0,
+   "isEquip": false,
+   "samples": [],
+   "count": 0,
+   "rightClickUse": false,
+   "useHints": [],
+   "confidence": "待逆向",
+   "evidence": "ItemManager.isBaGuaItem: value >= 200 && value <= 208",
+   "lockable": true
+  },
+  "205": {
+   "type": 205,
+   "zh": "（isBaGuaItem 区间命中）",
+   "slots": 0,
+   "isEquip": false,
+   "samples": [],
+   "count": 0,
+   "rightClickUse": false,
+   "useHints": [],
+   "confidence": "待逆向",
+   "evidence": "ItemManager.isBaGuaItem: value >= 200 && value <= 208",
+   "lockable": true
+  },
+  "206": {
+   "type": 206,
+   "zh": "（isBaGuaItem 区间命中）",
+   "slots": 0,
+   "isEquip": false,
+   "samples": [],
+   "count": 0,
+   "rightClickUse": false,
+   "useHints": [],
+   "confidence": "待逆向",
+   "evidence": "ItemManager.isBaGuaItem: value >= 200 && value <= 208",
+   "lockable": true
+  },
+  "207": {
+   "type": 207,
+   "zh": "（isBaGuaItem 区间命中）",
+   "slots": 0,
+   "isEquip": false,
+   "samples": [],
+   "count": 0,
+   "rightClickUse": false,
+   "useHints": [],
+   "confidence": "待逆向",
+   "evidence": "ItemManager.isBaGuaItem: value >= 200 && value <= 208",
+   "lockable": true
+  },
+  "208": {
+   "type": 208,
+   "zh": "（isBaGuaItem 区间命中）",
+   "slots": 0,
+   "isEquip": false,
+   "samples": [],
+   "count": 0,
+   "rightClickUse": false,
+   "useHints": [],
+   "confidence": "待逆向",
+   "evidence": "ItemManager.isBaGuaItem: value >= 200 && value <= 208",
+   "lockable": true
+  },
+  "-1": {
+   "type": -1,
+   "zh": "特殊/外显部件",
+   "slots": 0,
+   "isEquip": false,
+   "samples": [
+    "心",
+    "尾",
+    "心",
+    "尾"
+   ],
+   "count": 4,
+   "rightClickUse": false,
+   "useHints": [],
+   "confidence": "待逆向",
+   "evidence": "只在 bagId=129(BAG_RIDEPET_FATE) 出现（样本名「心」「尾」），非背包物品",
+   "lockable": false
+  }
+ },
+ "predicates": {
+  "isEquipedItem": {
+   "zh": "装备（装备栏 19 槽可承载的 type 集合）",
+   "usedBy": "attrPanel(装备栏) / CursorManager 可加锁",
+   "conditions": [
+    "value >= 0",
+    "value <= 14"
+   ],
+   "expr": "value >= 0 && value <= 14",
+   "eq": [],
+   "range": [
+    [
+     0,
+     14
+    ]
+   ],
+   "exclude": [],
+   "source": "deobfuscated/manager/ItemManager.as"
+  },
+  "isBaGuaItem": {
+   "zh": "八卦道具",
+   "usedBy": "viewBaGuaPanel(BAG_BAGUA=150) / viewOtherBaGuaPanel(BAG_OTHER_BAGUA=10001)",
+   "conditions": [
+    "value >= 200",
+    "value <= 208"
+   ],
+   "expr": "value >= 200 && value <= 208",
+   "eq": [],
+   "range": [
+    [
+     200,
+     208
+    ]
+   ],
+   "exclude": [],
+   "source": "deobfuscated/manager/ItemManager.as"
+  },
+  "isFiveElementItem": {
+   "zh": "五元素符（金/木/水/火/土）",
+   "usedBy": "facturePanel.armDecompose.panel_fiveElementsDecom(BAG_FIVE_ELEMENTS=158)",
+   "conditions": [
+    "value == 18"
+   ],
+   "expr": "value == 18",
+   "eq": [
+    18
+   ],
+   "range": [],
+   "exclude": [],
+   "source": "deobfuscated/manager/ItemManager.as"
+  },
+  "isPetItem": {
+   "zh": "宠物道具",
+   "usedBy": "petItemPanel（额外镜像进宠物道具面板）",
+   "conditions": [
+    "value >= 20",
+    "value <= 40",
+    "value != 30",
+    "value != 31"
+   ],
+   "expr": "value >= 20 && value <= 40 && value != 30 && value != 31",
+   "eq": [],
+   "range": [
+    [
+     20,
+     40
+    ]
+   ],
+   "exclude": [
+    30,
+    31
+   ],
+   "source": "deobfuscated/manager/ItemManager.as"
+  },
+  "isRidePetItem": {
+   "zh": "骑宠道具",
+   "usedBy": "ridePetItemPanel",
+   "conditions": [
+    "value == 30",
+    "value == 31"
+   ],
+   "expr": "value == 30 || value == 31",
+   "eq": [
+    30,
+    31
+   ],
+   "range": [],
+   "exclude": [],
+   "source": "deobfuscated/manager/ItemManager.as"
+  },
+  "isPartnerItem": {
+   "zh": "伙伴/护卫道具",
+   "usedBy": "partnerItemPanel",
+   "conditions": [
+    "value == 67",
+    "value == 68",
+    "value == 17"
+   ],
+   "expr": "value == 67 || value == 68 || value == 17",
+   "eq": [
+    67,
+    68,
+    17
+   ],
+   "range": [],
+   "exclude": [],
+   "source": "deobfuscated/manager/ItemManager.as"
+  },
+  "isNurseryItem": {
+   "zh": "蕴灵/培育道具",
+   "usedBy": "nurseryItemPanel",
+   "conditions": [
+    "value == 144"
+   ],
+   "expr": "value == 144",
+   "eq": [
+    144
+   ],
+   "range": [],
+   "exclude": [],
+   "source": "deobfuscated/manager/ItemManager.as"
+  },
+  "isHurtUpItem": {
+   "zh": "伤害提升道具",
+   "usedBy": "（与 isPartnerItem 在 68 上重合）",
+   "conditions": [
+    "value == 68"
+   ],
+   "expr": "value == 68",
+   "eq": [
+    68
+   ],
+   "range": [],
+   "exclude": [],
+   "source": "deobfuscated/manager/ItemManager.as"
+  }
+ },
+ "lockableTypes": {
+  "formula": "isEquipedItem(t) || t in [15, 16, 18, 19, 23, 141] || isBaGuaItem(t)",
+  "rawCondition": "this._sceneManager.itemManager.isEquipedItem(_loc3_) || _loc3_ == 141 || _loc3_ == 23 || _loc3_ == 15 || _loc3_ == 18 || _loc3_ == 16 || _loc3_ == 19 || this._sceneManager.itemManager.isBaGuaItem(_loc3_)",
+  "extraTypes": [
+   15,
+   16,
+   18,
+   19,
+   23,
+   141
+  ],
+  "source": "deobfuscated/manager/CursorManager.as protectPlayerBag"
+ },
+ "bagIds": {
+  "BAG_PLAYER_ATTR": 0,
+  "BAG_PLAYERBAGITEM": 1,
+  "BAG_STORE_ITEM": 10,
+  "BAG_SHOPITEM": 12,
+  "BAG_STONE_MAKE": 100,
+  "BAG_ARM_STUD": 101,
+  "BAG_ARM_UNSTUD": 102,
+  "BAG_ARM_MAKE": 103,
+  "BAG_SOURCE_MIX": 104,
+  "BAG_ARM_ADDSTAR": 105,
+  "BAG_ARM_POKE": 106,
+  "BAG_SHORTCUT": 108,
+  "BAG_PETSKILL_LEARN": 109,
+  "BAG_SENDMAIL": 110,
+  "BAG_READMAIL": 111,
+  "BAG_POTIONBREW": 112,
+  "BAG_ARM_DECOMPOSE": 113,
+  "BAG_ARM_UPGRADE": 114,
+  "BAG_AUTO_BATTLE": 115,
+  "BAG_CHESTPREOPEN": 116,
+  "BAG_PET_CHEST": 117,
+  "BAG_GUILD_ADDSTAR": 118,
+  "BAG_PET_DISCIPLINE": 119,
+  "BAG_ARM_CARVE": 120,
+  "BAG_EVOLU": 121,
+  "BAG_CHANGEHOLE": 122,
+  "BAG_ARM_CHARGE": 123,
+  "BAG_PET_PRACTICE": 124,
+  "BAG_EQUIP_EXCHANGE": 125,
+  "BAG_EQUIP_ENCHANT": 126,
+  "BAG_NEIDAN_APPRAISE": 127,
+  "BAG_GOLDENBEAN": 128,
+  "BAG_RIDEPET_FATE": 129,
+  "BAG_RIDEPET_FATE_FIND": 130,
+  "BAG_WUHUN": 131,
+  "BAG_ARM_STONE_CARVE": 132,
+  "BAG_COOKITEM": 133,
+  "BAG_COOKPANEL": 134,
+  "BAG_MYSTERY_SHOP": 135,
+  "BAG_SCRIPTPET": 136,
+  "BAG_ARM_MATRIEAL": 138,
+  "BAG_RAISE_ARMS": 139,
+  "BAG_ARM_POLISH": 140,
+  "BAG_DEMON_CARD": 141,
+  "BAG_DEMON_REFIN": 142,
+  "BAG_BEASTMAP": 143,
+  "BAG_WARRIORSEAL": 144,
+  "BAG_ARM_SUBLIME": 145,
+  "BAG_PET_DECOMPOSE": 146,
+  "BAG_SUPER_UPSTAR": 147,
+  "BAG_PET_GROUP": 148,
+  "BAG_BAGUA": 150,
+  "BAG_BAGUA_UPGRADE": 151,
+  "BAG_BAGUA_DECOMPOSE": 152,
+  "BAG_GANG_CONTRIBUTION": 153,
+  "BAG_CHANGE_COLOR": 154,
+  "BAG_HERO_EQUIPMENT": 155,
+  "BAG_HERO_EQUIPMENT_UPGRADE": 156,
+  "BAG_TRANSFORM_CARD": 157,
+  "BAG_FIVE_ELEMENTS": 158,
+  "BAG_REVELATION": 160,
+  "BAG_CULTIVATE_EGG": 161,
+  "BAG_STONE_MAKE_GEM": 162,
+  "BAG_STONE_DISASSEMBLE": 163,
+  "BAG_CARVE_GEM": 164,
+  "BAG_PET_VIEW_XIANDAN": 1000,
+  "BAG_PET_VIEW_NEIDAN": 1001,
+  "BAG_RIDEPET_FATE_ATTR": 1002,
+  "BAG_PET_EQUIP": 1003,
+  "BAG_OTHER_PLAYER_ARM": 10000,
+  "BAG_OTHER_BAGUA": 10001,
+  "BAG_OTHER_FIVEELEMENTS": 10002,
+  "BAG_COLLECT_MAP": 10003
+ },
+ "equipSlotNames": {
+  "0": "武器",
+  "1": "头饰",
+  "2": "项链",
+  "3": "衣服",
+  "4": "手镯",
+  "5": "腰带",
+  "6": "戒指",
+  "7": "裤子",
+  "8": "鞋子",
+  "9": "首饰",
+  "10": "时装",
+  "11": "护肩",
+  "12": "披风",
+  "13": "翅膀"
+ },
+ "equipSlotNamesPanel": {
+  "0": "武器",
+  "1": "头饰",
+  "2": "项链",
+  "3": "上衣",
+  "4": "手镯",
+  "5": "腰带",
+  "6": "戒指",
+  "7": "裤子",
+  "8": "鞋子",
+  "9": "饰品",
+  "10": "时装",
+  "11": "护肩",
+  "12": "披风",
+  "13": "翅膀"
+ },
+ "equipSlotKeys": [
+  "武器",
+  "头饰",
+  "项链",
+  "衣服",
+  "手镯1",
+  "手镯2",
+  "腰带",
+  "戒指1",
+  "戒指2",
+  "裤子",
+  "鞋子",
+  "首饰1",
+  "首饰2",
+  "首饰3",
+  "首饰4",
+  "时装",
+  "护肩",
+  "披风",
+  "翅膀"
+ ],
+ "equipSlotKeyAliases": {
+  "头盔": "头饰",
+  "护腕": "头饰",
+  "上衣": "衣服",
+  "手镯": "手镯1",
+  "戒指": "戒指1",
+  "饰品1": "首饰1",
+  "饰品2": "首饰2",
+  "饰品3": "首饰3",
+  "饰品4": "首饰4",
+  "佩饰1": "首饰1",
+  "佩饰2": "首饰2",
+  "佩饰3": "首饰3",
+  "佩饰4": "首饰4"
+ },
+ "equipSlotNameAliases": {
+  "上衣": "衣服",
+  "饰品": "首饰",
+  "头盔": "头饰",
+  "护腕": "头饰"
+ },
+ "equipSlotIndexType": [
+  0,
+  1,
+  2,
+  3,
+  4,
+  4,
+  5,
+  6,
+  6,
+  7,
+  8,
+  9,
+  9,
+  9,
+  9,
+  10,
+  11,
+  12,
+  13
+ ],
+ "langKeys": {
+  "equipBgByType": {
+   "0": 20241,
+   "1": 20242,
+   "2": 20243,
+   "3": 20244,
+   "4": 20245,
+   "5": 20246,
+   "6": 20247,
+   "7": 20248,
+   "8": 20249,
+   "9": 20250,
+   "10": 20251,
+   "11": 129,
+   "12": 130,
+   "13": 404
+  },
+  "contiguousBlock": "20241+type 覆盖 type 0~10；11/12/13 在 129/130/404"
+ }
+}

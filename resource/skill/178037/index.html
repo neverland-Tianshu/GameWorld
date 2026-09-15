@@ -1,0 +1,33 @@
+<!DOCTYPE html><html lang="zh"><head><meta charset="utf-8">
+<title>178037.swf.zip - 精灵拆分预览 (透明)</title>
+<style>body{background:#2b2b3a;color:#ddd;font-family:sans-serif;margin:20px}
+h2{color:#9cf} .grid{display:flex;flex-wrap:wrap;gap:14px}
+.card{background:#1c1c28;border:1px solid #3a3a4a;border-radius:8px;padding:10px;text-align:center}
+canvas{background:transparent;border:1px dashed #555;max-width:260px;max-height:260px}
+.lbl{font-size:12px;color:#aaa;margin-top:6px}
+.note{color:#f99;font-size:13px}</style></head>
+<body>
+<h2>178037.swf.zip</h2>
+<div class="note">背景已透明；每个精灵动画单独播放（rootDef 切换 definitionPool 中的精灵定义）。</div>
+<div class="grid" id="grid"></div>
+<button onclick="location.reload()">重播全部</button>
+<script src="../../../fanvas3-transparent.js"></script><script src="./swfData.js"></script>
+<script>
+var sprites = [12];
+var GENERIC_MAIN = 12;
+var GENERIC_BASE = "178037";
+var grid = document.getElementById('grid');
+function addCard(label, rootDef){
+  var card=document.createElement('div'); card.className='card';
+  if(rootDef===GENERIC_MAIN) card.style.borderColor='#6cf';
+  var cv=document.createElement('canvas'); cv.id='cv'+rootDef;
+  var lb=document.createElement('div'); lb.className='lbl'; lb.textContent=label;
+  card.appendChild(cv); card.appendChild(lb); grid.appendChild(card);
+  fanvas.play(cv.id, swfData, {rootDef:rootDef, transparent:true, cache:1, imagePath:'images/'});
+}
+addCard('舞台 root (def 0)', 0);
+sprites.forEach(function(i){
+  var lbl = (i===GENERIC_MAIN) ? (GENERIC_BASE + '  (主要精灵)') : ('精灵 def '+i);
+  addCard(lbl, i);
+});
+</script></body></html>

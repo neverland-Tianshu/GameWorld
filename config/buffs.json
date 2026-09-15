@@ -1,0 +1,1503 @@
+{
+ "poison": {
+  "id": "poison",
+  "name": "中毒",
+  "kind": "poison",
+  "duration": 3,
+  "dot": 28,
+  "color": "#7CFC9B"
+ },
+ "burn": {
+  "id": "burn",
+  "name": "灼烧",
+  "kind": "burn",
+  "duration": 3,
+  "dot": 32,
+  "color": "#ff8a50"
+ },
+ "atkup": {
+  "id": "atkup",
+  "name": "攻势",
+  "kind": "buff",
+  "duration": 3,
+  "atkPct": 20,
+  "color": "#ffd54f"
+ },
+ "defup": {
+  "id": "defup",
+  "name": "守势",
+  "kind": "buff",
+  "duration": 3,
+  "defPct": 20,
+  "color": "#9fd3ff"
+ },
+ "regen": {
+  "id": "regen",
+  "name": "回春",
+  "kind": "buff",
+  "duration": 3,
+  "heal": 40,
+  "color": "#7CFC9B"
+ },
+ "wisdom": {
+  "id": "wisdom",
+  "name": "智慧守护",
+  "kind": "wisdom",
+  "duration": 99,
+  "permanent": true,
+  "color": "#8ed6ff",
+  "_note": "天赋被动（宠物/怪物）：受击时先按比例减伤，再把一部分伤害转由 MP 承担；自身回合开始消耗寿命。参数由技能 184400 的 dataFormula 写入 data：{level, reducePct, mpShareFrac, mpShareFracLow, lifeCost}。BEFORE_DAMAGE 流水序：① cutPct 减伤 → ② 取分担比例(高) → ③ 算分担量 → ④ MP 不足则改用低比例重算 → ⑤ 实际承担量=min(分担量, 当前MP) → ⑥ 伤害扣除该量并扣蓝飘字。永久 buff：不随回合过期（fighter.addBuff/tickBuffs 的 permanent 守卫）。",
+  "triggers": [
+   {
+    "event": "BEFORE_DAMAGE",
+    "filter": "self",
+    "priority": 30,
+    "countAsLayer": false,
+    "conditions": [
+     {
+      "type": "compareRef",
+      "left": {
+       "ref": "event.value"
+      },
+      "op": ">",
+      "val": 0
+     }
+    ],
+    "actions": [
+     {
+      "type": "modifyValue",
+      "op": "cutPct",
+      "pct": {
+       "ref": "buff.data.reducePct"
+      },
+      "max": {
+       "ref": "event.value"
+      }
+     },
+     {
+      "type": "modifyVar",
+      "scope": "buff",
+      "varName": "__frac",
+      "op": "set",
+      "from": {
+       "ref": "buff.data.mpShareFrac"
+      }
+     },
+     {
+      "type": "modifyVar",
+      "scope": "buff",
+      "varName": "__share",
+      "op": "set",
+      "scaleFrom": "eventValue",
+      "coef": {
+       "ref": "buffVar.__frac"
+      }
+     },
+     {
+      "type": "modifyVar",
+      "scope": "buff",
+      "varName": "__frac",
+      "op": "set",
+      "from": {
+       "ref": "buff.data.mpShareFracLow"
+      },
+      "conditions": [
+       {
+        "type": "compareRef",
+        "left": {
+         "ref": "self.mp"
+        },
+        "op": "<",
+        "val": {
+         "ref": "buffVar.__share"
+        }
+       }
+      ]
+     },
+     {
+      "type": "modifyVar",
+      "scope": "buff",
+      "varName": "__share",
+      "op": "set",
+      "scaleFrom": "eventValue",
+      "coef": {
+       "ref": "buffVar.__frac"
+      },
+      "conditions": [
+       {
+        "type": "compareRef",
+        "left": {
+         "ref": "self.mp"
+        },
+        "op": "<",
+        "val": {
+         "ref": "buffVar.__share"
+        }
+       }
+      ]
+     },
+     {
+      "type": "modifyVar",
+      "scope": "buff",
+      "varName": "__pay",
+      "op": "set",
+      "from": {
+       "ref": "buffVar.__share"
+      },
+      "conditions": [
+       {
+        "type": "compareRef",
+        "left": {
+         "ref": "self.mp"
+        },
+        "op": ">=",
+        "val": {
+         "ref": "buffVar.__share"
+        }
+       }
+      ]
+     },
+     {
+      "type": "modifyVar",
+      "scope": "buff",
+      "varName": "__pay",
+      "op": "set",
+      "from": {
+       "ref": "self.mp"
+      },
+      "conditions": [
+       {
+        "type": "compareRef",
+        "left": {
+         "ref": "self.mp"
+        },
+        "op": "<",
+        "val": {
+         "ref": "buffVar.__share"
+        }
+       }
+      ]
+     },
+     {
+      "type": "modifyValue",
+      "op": "sub",
+      "value": {
+       "ref": "buffVar.__pay"
+      },
+      "conditions": [
+       {
+        "type": "compareRef",
+        "left": {
+         "ref": "self.mp"
+        },
+        "op": ">",
+        "val": 0
+       }
+      ]
+     },
+     {
+      "type": "resource",
+      "targetMode": "self",
+      "mpCost": {
+       "ref": "buffVar.__pay"
+      },
+      "conditions": [
+       {
+        "type": "compareVar",
+        "scope": "buff",
+        "varName": "__pay",
+        "op": ">",
+        "val": 0
+       }
+      ]
+     },
+     {
+      "type": "floatNum",
+      "targetMode": "self",
+      "text": "-{buffVar.__pay} 蓝",
+      "color": "#7fbfff",
+      "conditions": [
+       {
+        "type": "compareVar",
+        "scope": "buff",
+        "varName": "__pay",
+        "op": ">",
+        "val": 0
+       }
+      ]
+     },
+     {
+      "type": "log",
+      "text": "{target} 【{buff}】法力抵消 {buffVar.__pay} 点伤害（自身承 {value}）",
+      "conditions": [
+       {
+        "type": "compareVar",
+        "scope": "buff",
+        "varName": "__pay",
+        "op": ">",
+        "val": 0
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "event": "TURN_START",
+    "filter": "self",
+    "countAsLayer": false,
+    "actions": [
+     {
+      "type": "resource",
+      "targetMode": "self",
+      "lifeCost": {
+       "ref": "buff.data.lifeCost"
+      },
+      "conditions": [
+       {
+        "type": "compareRef",
+        "left": {
+         "ref": "buff.data.lifeCost"
+        },
+        "op": ">",
+        "val": 0
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ "stun": {
+  "id": "stun",
+  "name": "眩晕",
+  "kind": "stun",
+  "duration": 1,
+  "color": "#f7d358",
+  "_note": "阶段3 已迁移为 triggers 驱动（跳过行动）。引擎内保留 kind 回退以兼容未迁移配置。",
+  "triggers": [
+   {
+    "event": "TURN_START",
+    "filter": "self",
+    "countAsLayer": false,
+    "actions": [
+     {
+      "type": "skipTurn",
+      "reason": "眩晕",
+      "targetMode": "self"
+     }
+    ]
+   }
+  ]
+ },
+ "taunt": {
+  "id": "taunt",
+  "name": "嘲讽",
+  "kind": "taunt",
+  "duration": 3,
+  "color": "#ff9f43",
+  "_note": "阶段3 已迁移为 triggers 驱动（BEFORE_TARGETING 强制攻击嘲讽者）。参数 data.taunterId = 嘲讽者 id。filterOn:'source' 表示按【出手者】过滤（被嘲讽的是出手者本人）。",
+  "triggers": [
+   {
+    "event": "BEFORE_TARGETING",
+    "filterOn": "source",
+    "filter": "self",
+    "countAsLayer": false,
+    "conditions": [
+     {
+      "type": "isAlive",
+      "target": "buffOwner"
+     }
+    ],
+    "actions": [
+     {
+      "type": "forceTarget",
+      "idRef": {
+       "ref": "buff.data.taunterId"
+      }
+     }
+    ]
+   }
+  ]
+ },
+ "confusion": {
+  "id": "confusion",
+  "name": "混乱",
+  "kind": "confusion",
+  "duration": 3,
+  "color": "#c56cf0",
+  "_note": "阶段3 已迁移为 triggers 驱动。★ 混乱语义：出手时从【全场存活单位】（敌我通吃、排除自身）中随机取一个作为攻击目标（无差别随机攻击）；若全场除自身外无其他存活单位则按原目标出手。与嘲讽同事件但优先级更高(20)，故嘲讽(10)优先，与旧版判定顺序一致。（旧语义 random:'allies'=只打同阵营自相残杀 / 'enemies'=只换敌对目标，均已弃用，现统一为 'all' 无差别）",
+  "triggers": [
+   {
+    "event": "BEFORE_TARGETING",
+    "filterOn": "source",
+    "filter": "self",
+    "priority": 20,
+    "countAsLayer": false,
+    "actions": [
+     {
+      "type": "forceTarget",
+      "random": "all"
+     }
+    ]
+   }
+  ]
+ },
+ "sleep": {
+  "id": "sleep",
+  "name": "昏睡",
+  "kind": "sleep",
+  "duration": 5,
+  "heal": 0,
+  "color": "#74b9ff",
+  "_note": "阶段3 已迁移为 triggers 驱动：TURN_START 跳过行动 + TAKE_DAMAGE 受击提前苏醒（命中即解）。",
+  "triggers": [
+   {
+    "event": "TURN_START",
+    "filter": "self",
+    "countAsLayer": false,
+    "actions": [
+     {
+      "type": "skipTurn",
+      "reason": "昏睡",
+      "targetMode": "self"
+     }
+    ]
+   },
+   {
+    "event": "TAKE_DAMAGE",
+    "filter": "self",
+    "countAsLayer": false,
+    "conditions": [
+     {
+      "type": "isAlive",
+      "target": "self"
+     }
+    ],
+    "actions": [
+     {
+      "type": "playAnim",
+      "anim": "flower",
+      "via": "scene",
+      "targetMode": "self"
+     },
+     {
+      "type": "log",
+      "text": "{target} 因受击提前苏醒（昏睡解除）"
+     },
+     {
+      "type": "dispel",
+      "buffIds": [
+       "sleep"
+      ],
+      "targetMode": "self"
+     }
+    ]
+   }
+  ]
+ },
+ "breakarmor": {
+  "id": "breakarmor",
+  "name": "破甲",
+  "kind": "breakarmor",
+  "duration": 3,
+  "color": "#e17055"
+ },
+ "insight": {
+  "id": "insight",
+  "name": "识破",
+  "kind": "insight",
+  "duration": 3,
+  "color": "#a29bfe"
+ },
+ "neili": {
+  "id": "neili",
+  "name": "内力充沛",
+  "kind": "neili",
+  "duration": 3,
+  "color": "#00cec9"
+ },
+ "link": {
+  "id": "link",
+  "name": "同生共死",
+  "kind": "link",
+  "duration": 3,
+  "color": "#fd79a8",
+  "_note": "阶段3 已迁移为 triggers 驱动，并【按 PDF 系数】实现分摊：①先减免 (22.5+2.5×L)%（priority 20，与旧 onDamaged 第2步同序）；②减免后【剩余部分】由使用者与承受者分担，使用者分担 = 承受者分担 × (50.5−0.5×L)% → 承受者保留 keepFactor = 1/(1+k)、使用者分担 = 剩余×k/(1+k)。每次分担使用者 +1 侠义之心。参数由施加方写入 data：{userId, level, reducePct, shareFactor, keepFactor}。",
+  "triggers": [
+   {
+    "event": "BEFORE_DAMAGE",
+    "filter": "self",
+    "priority": 20,
+    "countAsLayer": false,
+    "actions": [
+     {
+      "type": "modifyValue",
+      "op": "cutPct",
+      "pct": {
+       "ref": "buff.data.reducePct"
+      }
+     },
+     {
+      "type": "log",
+      "text": "{target} 【{buff}】减伤 {delta}（减免后剩 {value}）"
+     },
+     {
+      "type": "modifyValue",
+      "op": "mul",
+      "coef": {
+       "ref": "buff.data.keepFactor"
+      }
+     },
+     {
+      "type": "rawDamage",
+      "targetMode": "buffOwner",
+      "flat": {
+       "ref": "event.delta"
+      },
+      "conditions": [
+       {
+        "type": "isAlive",
+        "target": "buffOwner"
+       }
+      ]
+     },
+     {
+      "type": "log",
+      "text": "{target} 承 {value}，{buffOwner} 分担 {delta}，获 1 侠义之心",
+      "conditions": [
+       {
+        "type": "isAlive",
+        "target": "buffOwner"
+       }
+      ]
+     },
+     {
+      "type": "resource",
+      "targetMode": "buffOwner",
+      "valor": 1,
+      "conditions": [
+       {
+        "type": "isAlive",
+        "target": "buffOwner"
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ "chuanxin": {
+  "id": "chuanxin",
+  "name": "穿心蚀骨",
+  "kind": "chuanxin",
+  "duration": 5,
+  "color": "#e84393",
+  "_note": "阶段3 已迁移为 triggers 驱动：①BEFORE_DAMAGE 累池 + 达阈值爆发（priority 60，pool -= extra 而非 threshold）；②BUFF_EXPIRE 到期清算（0.5×池余量 + extra2）。参数由施加方写入 data：{pool, threshold, extra, extra2}。",
+  "triggers": [
+   {
+    "event": "BEFORE_DAMAGE",
+    "filter": "self",
+    "priority": 60,
+    "countAsLayer": false,
+    "actions": [
+     {
+      "type": "modifyVar",
+      "scope": "buffData",
+      "varName": "pool",
+      "op": "add",
+      "from": "event.value"
+     },
+     {
+      "type": "modifyVar",
+      "scope": "buffData",
+      "varName": "__fire",
+      "op": "set",
+      "value": 0
+     },
+     {
+      "type": "modifyVar",
+      "scope": "buffData",
+      "varName": "__fire",
+      "op": "set",
+      "value": 1,
+      "conditions": [
+       {
+        "type": "compareVar",
+        "scope": "buffData",
+        "varName": "pool",
+        "op": ">=",
+        "val": {
+         "ref": "buff.data.threshold"
+        }
+       }
+      ]
+     },
+     {
+      "type": "modifyVar",
+      "scope": "buffData",
+      "varName": "pool",
+      "op": "sub",
+      "value": {
+       "ref": "buff.data.extra"
+      },
+      "conditions": [
+       {
+        "type": "compareVar",
+        "scope": "buffData",
+        "varName": "__fire",
+        "op": "==",
+        "val": 1
+       }
+      ]
+     },
+     {
+      "type": "rawDamage",
+      "targetMode": "self",
+      "flat": {
+       "ref": "buff.data.extra"
+      },
+      "conditions": [
+       {
+        "type": "compareVar",
+        "scope": "buffData",
+        "varName": "__fire",
+        "op": "==",
+        "val": 1
+       }
+      ]
+     },
+     {
+      "type": "log",
+      "text": "{target} 【{buff}】触发爆发 {buff.data.extra} 伤害",
+      "conditions": [
+       {
+        "type": "compareVar",
+        "scope": "buffData",
+        "varName": "__fire",
+        "op": "==",
+        "val": 1
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "event": "BUFF_EXPIRE",
+    "filter": "self",
+    "countAsLayer": false,
+    "actions": [
+     {
+      "type": "modifyVar",
+      "scope": "buff",
+      "varName": "__b",
+      "op": "set",
+      "scaleFrom": "eventValue",
+      "coef": 0.5,
+      "plus": {
+       "ref": "buff.data.extra2"
+      }
+     },
+     {
+      "type": "rawDamage",
+      "targetMode": "self",
+      "scaleFrom": "buffVar",
+      "fromVar": "__b",
+      "conditions": [
+       {
+        "type": "compareVar",
+        "scope": "buff",
+        "varName": "__b",
+        "op": ">",
+        "val": 0
+       }
+      ]
+     },
+     {
+      "type": "log",
+      "text": "{target} 【{buff}】爆发 {buffVar.__b} 伤害",
+      "conditions": [
+       {
+        "type": "compareVar",
+        "scope": "buff",
+        "varName": "__b",
+        "op": ">",
+        "val": 0
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ "fugu": {
+  "id": "fugu",
+  "name": "腐骨蚀心",
+  "kind": "fugu",
+  "duration": 3,
+  "color": "#6c5ce7",
+  "_note": "阶段3 已迁移为 triggers 驱动（受物理伤害时攻击者吸血）。参数由施加方写入 data：{level, coef, flat}；公式 h = coef×名义伤害 + flat + 攻击者.recover。与旧版 onDamaged 第4步同序，故同样挂 BEFORE_DAMAGE（保证与仙气护体等前置步骤的顺序一致）。",
+  "triggers": [
+   {
+    "event": "BEFORE_DAMAGE",
+    "filter": "self",
+    "priority": 50,
+    "countAsLayer": false,
+    "conditions": [
+     {
+      "type": "isMagic",
+      "value": false
+     },
+     {
+      "type": "isAlive",
+      "target": "eventSource"
+     }
+    ],
+    "actions": [
+     {
+      "type": "modifyVar",
+      "scope": "buff",
+      "varName": "__h",
+      "op": "set",
+      "scaleFrom": "eventValue",
+      "coef": {
+       "ref": "buff.data.coef"
+      },
+      "flat": {
+       "ref": "buff.data.flat"
+      },
+      "plus": {
+       "ref": "eventSource.recover"
+      }
+     },
+     {
+      "type": "modifyVar",
+      "scope": "buff",
+      "varName": "__hr",
+      "op": "set",
+      "scaleFrom": "buffVar",
+      "fromVar": "__h"
+     },
+     {
+      "type": "heal",
+      "targetMode": "eventSource",
+      "scaleFrom": "buffVar",
+      "fromVar": "__h"
+     },
+     {
+      "type": "log",
+      "text": "{source} 【{buff}】吸血 {buffVar.__hr} 生命"
+     }
+    ]
+   }
+  ]
+ },
+ "feihua": {
+  "id": "feihua",
+  "name": "飞花溅玉",
+  "kind": "feihua",
+  "duration": 3,
+  "color": "#55efc4"
+ },
+ "xianqi": {
+  "id": "xianqi",
+  "name": "仙气护体",
+  "kind": "xianqi",
+  "duration": 3,
+  "color": "#ffeaa7",
+  "_note": "阶段3 已迁移为 triggers 驱动（受击回血）。参数由施加方写入 data.heal（每击回血量）。★ 必须挂 BEFORE_DAMAGE：旧版在 onDamaged 第3步回血、第6步才扣血，即'先回血后扣血'；若挂 TAKE_DAMAGE 会在扣血后回血，满血时旧版被上限吞掉而新版能吃到，低血时甚至出现生死分歧。★ 2026-09-13 修复：仅当本击实际造成伤害才回血（trigger.conditions 门控 event.value>0）。此前被护盾(昊天 prio10)/同生(prio20)全吸收导致 value=0 仍回血——BEFORE_DAMAGE 流水线中护盾吸收先于本触发(prio40)把 value 减到0，故以 event.value>0 门控即可排除零伤害情形。",
+  "triggers": [
+   {
+    "event": "BEFORE_DAMAGE",
+    "filter": "self",
+    "priority": 40,
+    "countAsLayer": false,
+    "conditions": [
+     {
+      "type": "compareRef",
+      "left": {
+       "ref": "event.value"
+      },
+      "op": ">",
+      "val": 0
+     }
+    ],
+    "actions": [
+     {
+      "type": "modifyVar",
+      "scope": "buff",
+      "varName": "__h",
+      "op": "set",
+      "from": "buff.data.heal"
+     },
+     {
+      "type": "modifyVar",
+      "scope": "buff",
+      "varName": "__hr",
+      "op": "set",
+      "scaleFrom": "buffVar",
+      "fromVar": "__h"
+     },
+     {
+      "type": "heal",
+      "dmgType": "magic",
+      "targetMode": "self",
+      "scaleFrom": "buffVar",
+      "fromVar": "__h",
+      "conditions": [
+       {
+        "type": "compareVar",
+        "scope": "buff",
+        "varName": "__h",
+        "op": ">",
+        "val": 0
+       }
+      ]
+     },
+     {
+      "type": "log",
+      "text": "{target} 【{buff}】受击回复 {buffVar.__hr} 生命",
+      "conditions": [
+       {
+        "type": "compareVar",
+        "scope": "buff",
+        "varName": "__h",
+        "op": ">",
+        "val": 0
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ "haotian": {
+  "id": "haotian",
+  "name": "昊天罡气",
+  "kind": "haotian",
+  "duration": 3,
+  "color": "#fab1a0",
+  "_note": "阶段3 已迁移为 triggers 驱动（BEFORE_DAMAGE 护盾吸收 + 破盾反射）。参数由施加方写入 data：{shield, maxShield, level, reflect}。priority 10 与旧版 onDamaged 第1步同序。★ 破盾反射仅在「护盾被击破那一次攻击」触发（rawDamage/log 的 shield<=0 门控）：对齐技能描述「当敌方的攻击使罡气环绕消失时，攻击者将受到反射伤害」，避免每次普攻都扣怪血（曾致怪血条被清空）。",
+  "triggers": [
+   {
+    "event": "BEFORE_DAMAGE",
+    "filter": "self",
+    "priority": 10,
+    "countAsLayer": false,
+    "conditions": [
+     {
+      "type": "compareRef",
+      "left": {
+       "ref": "buff.data.shield"
+      },
+      "op": ">",
+      "val": 0
+     }
+    ],
+    "actions": [
+     {
+      "type": "modifyValue",
+      "op": "absorb",
+      "scope": "buff",
+      "varName": "shield",
+      "expireOnEmpty": true
+     },
+     {
+      "type": "log",
+      "text": "{target} 【{buff}】吸收 {delta} 伤害"
+     },
+     {
+      "type": "rawDamage",
+      "targetMode": "eventSource",
+      "dmgType": "phys",
+      "flat": {
+       "ref": "buff.data.reflect"
+      },
+      "conditions": [
+       {
+        "type": "isNormalAttack"
+       },
+       {
+        "type": "isAlive",
+        "target": "eventSource"
+       },
+       {
+        "type": "compareRef",
+        "left": {
+         "ref": "buff.data.reflect"
+        },
+        "op": ">",
+        "val": 0
+       },
+       {
+        "type": "compareRef",
+        "left": {
+         "ref": "buff.data.shield"
+        },
+        "op": "<=",
+        "val": 0
+       }
+      ]
+     },
+     {
+      "type": "log",
+      "text": "【{buff}】破盾反射 {buff.data.reflect} 伤害给 {source}",
+      "conditions": [
+       {
+        "type": "isNormalAttack"
+       },
+       {
+        "type": "isAlive",
+        "target": "eventSource"
+       },
+       {
+        "type": "compareRef",
+        "left": {
+         "ref": "buff.data.reflect"
+        },
+        "op": ">",
+        "val": 0
+       },
+       {
+        "type": "compareRef",
+        "left": {
+         "ref": "buff.data.shield"
+        },
+        "op": "<=",
+        "val": 0
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ "xianyin": {
+  "id": "xianyin",
+  "name": "仙音化雨",
+  "kind": "xianyin",
+  "duration": 3,
+  "color": "#81ecec"
+ },
+ "dongdi": {
+  "id": "dongdi",
+  "name": "恸地神咒",
+  "kind": "dongdi",
+  "duration": 3,
+  "color": "#fdcb6e"
+ },
+ "ningshen": {
+  "id": "ningshen",
+  "name": "凝神聚气",
+  "kind": "ningshen",
+  "duration": 3,
+  "color": "#a29bfe"
+ },
+ "bahuang": {
+  "id": "bahuang",
+  "name": "八荒六合",
+  "kind": "bahuang",
+  "duration": 3,
+  "color": "#0984e3",
+  "_note": "阶段3 已完整迁移（三条触发器）：①法术攻击增幅(BEFORE_DAMAGE, priority5, 作用于承受方法术伤害)；②物理减伤(BEFORE_DAMAGE, priority30)；③法术治疗增幅(BEFORE_HEAL, priority5, 作用于承受方法术治疗)。物理减伤 priority 30 与旧 onDamaged 同序；法术增幅用 priority 5 保证先于护盾/减免（对齐旧版在 deal 阶段就生效）。",
+  "triggers": [
+   {
+    "event": "BEFORE_DAMAGE",
+    "filter": "self",
+    "priority": 5,
+    "countAsLayer": false,
+    "conditions": [
+     {
+      "type": "isMagic"
+     },
+     {
+      "type": "compareRef",
+      "left": {
+       "ref": "buff.data.magAtkInc"
+      },
+      "op": ">",
+      "val": 0
+     }
+    ],
+    "actions": [
+     {
+      "type": "modifyValue",
+      "op": "addPct",
+      "pct": {
+       "ref": "buff.data.magAtkInc"
+      }
+     },
+     {
+      "type": "log",
+      "text": "{target} 【{buff}】承受法术攻击增幅 +{buff.data.magAtkInc}%（{before} → {value}）"
+     }
+    ]
+   },
+   {
+    "event": "BEFORE_DAMAGE",
+    "filter": "self",
+    "priority": 30,
+    "countAsLayer": false,
+    "conditions": [
+     {
+      "type": "isMagic",
+      "value": false
+     },
+     {
+      "type": "compareRef",
+      "left": {
+       "ref": "buff.data.physReduce"
+      },
+      "op": ">",
+      "val": 0
+     }
+    ],
+    "actions": [
+     {
+      "type": "modifyValue",
+      "op": "cutPct",
+      "pct": {
+       "ref": "buff.data.physReduce"
+      }
+     },
+     {
+      "type": "log",
+      "text": "{target} 【{buff}】物理伤害削减 {delta}（减伤 {buff.data.physReduce}%）"
+     }
+    ]
+   },
+   {
+    "event": "BEFORE_HEAL",
+    "filter": "self",
+    "priority": 5,
+    "countAsLayer": false,
+    "conditions": [
+     {
+      "type": "isMagic"
+     },
+     {
+      "type": "compareRef",
+      "left": {
+       "ref": "buff.data.magHealInc"
+      },
+      "op": ">",
+      "val": 0
+     }
+    ],
+    "actions": [
+     {
+      "type": "modifyValue",
+      "op": "addPct",
+      "pct": {
+       "ref": "buff.data.magHealInc"
+      }
+     }
+    ]
+   }
+  ]
+ },
+ "statbuff": {
+  "id": "statbuff",
+  "name": "属性增益",
+  "kind": "statbuff",
+  "duration": 3,
+  "color": "#dfe6e9"
+ },
+ "freeze": {
+  "id": "freeze",
+  "name": "冻伤",
+  "kind": "freeze",
+  "duration": 3,
+  "color": "#74b9ff"
+ },
+ "weak": {
+  "id": "weak",
+  "name": "虚弱",
+  "kind": "weak",
+  "duration": 3,
+  "color": "#b2bec3"
+ },
+ "slow": {
+  "id": "slow",
+  "name": "迟缓",
+  "kind": "slow",
+  "duration": 3,
+  "color": "#636e72"
+ },
+ "rx_thorns": {
+  "id": "rx_thorns",
+  "name": "反伤",
+  "kind": "thorns",
+  "duration": 9999,
+  "color": "#c8a2ff",
+  "_note": "TCA 标准范例（受击反伤）。参数由施加方通过 data 传入：{dmg:固定值, pct:比例}。引擎内已无 thorns 特例，全部由 triggers 驱动。",
+  "triggers": [
+   {
+    "event": "TAKE_DAMAGE",
+    "filter": "self",
+    "priority": 10,
+    "conditions": [
+     {
+      "type": "isAlive",
+      "target": "eventSource"
+     }
+    ],
+    "actions": [
+     {
+      "type": "modifyVar",
+      "scope": "buff",
+      "varName": "__d",
+      "op": "set",
+      "scaleFrom": "eventValue",
+      "coef": {
+       "ref": "buff.data.pct"
+      },
+      "flat": {
+       "ref": "buff.data.dmg"
+      }
+     },
+     {
+      "type": "log",
+      "text": "{victim} 【反伤】反射 {buffVar.__d} 伤害给 {source}",
+      "conditions": [
+       {
+        "type": "compareVar",
+        "scope": "buff",
+        "varName": "__d",
+        "op": ">",
+        "val": 0
+       }
+      ]
+     },
+     {
+      "type": "damage",
+      "dmgType": "phys",
+      "targetMode": "eventSource",
+      "scaleFrom": "buffVar",
+      "varName": "__d",
+      "viaNormalAttack": true,
+      "hitCheck": true,
+      "critCheck": false,
+      "conditions": [
+       {
+        "type": "compareVar",
+        "scope": "buff",
+        "varName": "__d",
+        "op": ">",
+        "val": 0
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ "huoyan": {
+  "id": "huoyan",
+  "name": "火焰环绕",
+  "kind": "thorns",
+  "duration": 3,
+  "color": "#ff6b3d",
+  "_note": "火焰环绕：反伤物理攻击。受【物理】攻击时按 damage 动作把 pct 比例的伤害反弹给攻击者（事件源）。data:{dmg:固定值, pct:比例}。仅物理(isMagic:false)触发——对齐「反伤物理攻击」语义。★ 反伤致死经 damage 动作→新增死亡路由(scene.onDeath)→_onEnemyDown 倒地(原地播放)，不再卡死/播移动。",
+  "triggers": [
+   {
+    "event": "TAKE_DAMAGE",
+    "filter": "self",
+    "priority": 10,
+    "conditions": [
+     {
+      "type": "isMagic",
+      "value": false
+     },
+     {
+      "type": "isAlive",
+      "target": "eventSource"
+     }
+    ],
+    "actions": [
+     {
+      "type": "modifyVar",
+      "scope": "buff",
+      "varName": "__d",
+      "op": "set",
+      "scaleFrom": "eventValue",
+      "coef": {
+       "ref": "buff.data.pct"
+      },
+      "flat": {
+       "ref": "buff.data.dmg"
+      }
+     },
+     {
+      "type": "log",
+      "text": "{victim} 【火焰环绕】反弹 {buffVar.__d} 物理伤害给 {source}",
+      "conditions": [
+       {
+        "type": "compareVar",
+        "scope": "buff",
+        "varName": "__d",
+        "op": ">",
+        "val": 0
+       }
+      ]
+     },
+     {
+      "type": "damage",
+      "dmgType": "phys",
+      "targetMode": "eventSource",
+      "scaleFrom": "buffVar",
+      "varName": "__d",
+      "viaNormalAttack": true,
+      "hitCheck": false,
+      "critCheck": false,
+      "conditions": [
+       {
+        "type": "compareVar",
+        "scope": "buff",
+        "varName": "__d",
+        "op": ">",
+        "val": 0
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ "rx_counter": {
+  "id": "rx_counter",
+  "name": "反击",
+  "kind": "counter",
+  "duration": 9999,
+  "color": "#ffb84d",
+  "_note": "TCA 标准范例（受普攻后反击）。参数 {dmg:固定值, pct:比例}。仅 skillType=normal（普攻及其派生）触发；默认不许在反击链中再次触发（安全基线）。",
+  "triggers": [
+   {
+    "event": "TAKE_DAMAGE",
+    "filter": "self",
+    "priority": 20,
+    "conditions": [
+     {
+      "type": "skillType",
+      "is": [
+       "normal"
+      ]
+     },
+     {
+      "type": "isAlive",
+      "target": "eventSource"
+     }
+    ],
+    "actions": [
+     {
+      "type": "modifyVar",
+      "scope": "buff",
+      "varName": "__d",
+      "op": "set",
+      "scaleFrom": "eventValue",
+      "coef": {
+       "ref": "buff.data.pct"
+      },
+      "flat": {
+       "ref": "buff.data.dmg"
+      }
+     },
+     {
+      "type": "playAnim",
+      "anim": "attack",
+      "targetMode": "self",
+      "resetStand": true,
+      "conditions": [
+       {
+        "type": "compareVar",
+        "scope": "buff",
+        "varName": "__d",
+        "op": ">",
+        "val": 0
+       }
+      ]
+     },
+     {
+      "type": "log",
+      "text": "{victim} 【反击】回击 {source} {buffVar.__d} 伤害",
+      "conditions": [
+       {
+        "type": "compareVar",
+        "scope": "buff",
+        "varName": "__d",
+        "op": ">",
+        "val": 0
+       }
+      ]
+     },
+     {
+      "type": "damage",
+      "dmgType": "phys",
+      "targetMode": "eventSource",
+      "scaleFrom": "buffVar",
+      "varName": "__d",
+      "viaNormalAttack": true,
+      "hitCheck": true,
+      "critCheck": false,
+      "conditions": [
+       {
+        "type": "compareVar",
+        "scope": "buff",
+        "varName": "__d",
+        "op": ">",
+        "val": 0
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ "rx_trigger": {
+  "id": "rx_trigger",
+  "name": "阈值触发",
+  "kind": "trigger",
+  "duration": 9999,
+  "color": "#7ed6df",
+  "_note": "TCA 标准范例（受击累计达阈值后自行释放指定技能）。参数 {threshold:阈值, skillId:技能ID}；池由 scope:'buff' 存放，多个单位各自独立。拆为两个触发器：①纯记账(不计入联动层数) ②达阈值(计层)。",
+  "triggers": [
+   {
+    "event": "TAKE_DAMAGE",
+    "filter": "self",
+    "priority": 30,
+    "countAsLayer": false,
+    "actions": [
+     {
+      "type": "modifyVar",
+      "scope": "buffData",
+      "varName": "pool",
+      "op": "add",
+      "from": "event.value"
+     }
+    ]
+   },
+   {
+    "event": "TAKE_DAMAGE",
+    "filter": "self",
+    "priority": 31,
+    "conditions": [
+     {
+      "type": "compareVar",
+      "scope": "buffData",
+      "varName": "pool",
+      "op": ">=",
+      "val": {
+       "ref": "buff.data.threshold"
+      }
+     }
+    ],
+    "actions": [
+     {
+      "type": "modifyVar",
+      "scope": "buffData",
+      "varName": "pool",
+      "op": "sub",
+      "value": {
+       "ref": "buff.data.threshold"
+      }
+     },
+     {
+      "type": "log",
+      "text": "{victim} 【阈值触发】释放技能 {buff.data.skillId}（联动继续）"
+     },
+     {
+      "type": "castSkill",
+      "skillId": {
+       "ref": "buff.data.skillId"
+      },
+      "targetOverride": "eventSource"
+     }
+    ]
+   }
+  ]
+ },
+ "bleed": {
+  "id": "bleed",
+  "name": "流血",
+  "kind": "bleed",
+  "duration": 3,
+  "dot": 30,
+  "color": "#ff6b6b",
+  "_note": "D 组补齐：宠物天赋大量使用\"流血效果\"，原版 buffs 无此项。dot 走 tickBuffs 既有路径（def.dot 或施加方写入 data.dot）。"
+ },
+ "talent_stat": {
+  "id": "talent_stat",
+  "name": "天赋属性",
+  "kind": "statbuff",
+  "duration": 99,
+  "permanent": true,
+  "color": "#8ed6ff",
+  "_note": "D 组宠物天赋通用 buff（2026-09-19）：数值由技能 passiveBuffs.dataFormula / 动作 statAddFormula/dataFormula 按等级 L 写入 data，触发器以 {ref:\"buff.data.x\"} 读回。"
+ },
+ "talent_buff": {
+  "id": "talent_buff",
+  "name": "属性增益",
+  "kind": "statbuff",
+  "duration": 3,
+  "color": "#8ed6ff",
+  "_note": "D 组宠物天赋通用 buff（2026-09-19）：数值由技能 passiveBuffs.dataFormula / 动作 statAddFormula/dataFormula 按等级 L 写入 data，触发器以 {ref:\"buff.data.x\"} 读回。"
+ },
+ "talent_debuff": {
+  "id": "talent_debuff",
+  "name": "属性减益",
+  "kind": "statbuff",
+  "duration": 3,
+  "color": "#fab1a0",
+  "_note": "D 组宠物天赋通用 buff（2026-09-19）：数值由技能 passiveBuffs.dataFormula / 动作 statAddFormula/dataFormula 按等级 L 写入 data，触发器以 {ref:\"buff.data.x\"} 读回。"
+ },
+ "talent_mpregen": {
+  "id": "talent_mpregen",
+  "name": "冥想",
+  "kind": "mpregen",
+  "duration": 99,
+  "permanent": true,
+  "color": "#74b9ff",
+  "_note": "D 组宠物天赋通用 buff（2026-09-19）：数值由技能 passiveBuffs.dataFormula / 动作 statAddFormula/dataFormula 按等级 L 写入 data，触发器以 {ref:\"buff.data.x\"} 读回。自身回合开始恢复 data.mp（= maxMp×(0.05+0.05×L)）。",
+  "triggers": [
+   {
+    "event": "TURN_START",
+    "filter": "self",
+    "countAsLayer": false,
+    "actions": [
+     {
+      "type": "resource",
+      "targetMode": "self",
+      "mp": {
+       "ref": "buff.data.mp"
+      }
+     }
+    ]
+   }
+  ]
+ },
+ "talent_mprayer": {
+  "id": "talent_mprayer",
+  "name": "智慧祷言",
+  "kind": "mprayer",
+  "duration": 99,
+  "permanent": true,
+  "color": "#74b9ff",
+  "_note": "D 组宠物天赋通用 buff（2026-09-19）：数值由技能 passiveBuffs.dataFormula / 动作 statAddFormula/dataFormula 按等级 L 写入 data，触发器以 {ref:\"buff.data.x\"} 读回。监听 LIFE_COST 事件（由 resource 动作的 lifeCost 分支广播），恢复自身 data.mp。",
+  "triggers": [
+   {
+    "event": "LIFE_COST",
+    "filter": "self",
+    "countAsLayer": false,
+    "actions": [
+     {
+      "type": "resource",
+      "targetMode": "self",
+      "mp": {
+       "ref": "buff.data.mp"
+      }
+     }
+    ]
+   }
+  ]
+ },
+ "talent_renew": {
+  "id": "talent_renew",
+  "name": "持续治疗",
+  "kind": "renew",
+  "duration": 3,
+  "color": "#7CFC9B",
+  "_note": "D 组宠物天赋通用 buff（2026-09-19）：数值由技能 passiveBuffs.dataFormula / 动作 statAddFormula/dataFormula 按等级 L 写入 data，触发器以 {ref:\"buff.data.x\"} 读回。自身回合开始按 maxHp×data.coef 回血。",
+  "triggers": [
+   {
+    "event": "TURN_START",
+    "filter": "self",
+    "countAsLayer": false,
+    "actions": [
+     {
+      "type": "heal",
+      "targetMode": "self",
+      "dmgType": "magic",
+      "scaleAttr": "maxHp",
+      "coef": {
+       "ref": "buff.data.coef"
+      }
+     }
+    ]
+   }
+  ]
+ },
+ "talent_revenge": {
+  "id": "talent_revenge",
+  "name": "复仇",
+  "kind": "revenge",
+  "duration": 99,
+  "permanent": true,
+  "color": "#e17055",
+  "_note": "D 组宠物天赋通用 buff（2026-09-19）：数值由技能 passiveBuffs.dataFormula / 动作 statAddFormula/dataFormula 按等级 L 写入 data，触发器以 {ref:\"buff.data.x\"} 读回。AFTER_ATTACK（filterOn:source + filter:self ⇒ 仅自身出手后），且仅当本次造成伤害（event.value>0）才追击。",
+  "triggers": [
+   {
+    "event": "AFTER_ATTACK",
+    "filterOn": "source",
+    "filter": "self",
+    "countAsLayer": false,
+    "conditions": [
+     {
+      "type": "compareRef",
+      "left": {
+       "ref": "event.value"
+      },
+      "op": ">",
+      "val": 0
+     }
+    ],
+    "actions": [
+     {
+      "type": "log",
+      "text": "{listener} 追加一次法术攻击（复仇）"
+     },
+     {
+      "type": "damage",
+      "dmgType": "magic",
+      "targetMode": "target",
+      "scaleAttr": "mag",
+      "coef": {
+       "ref": "buff.data.coef"
+      },
+      "critCheck": true
+     }
+    ]
+   }
+  ]
+ },
+ "talent_revive": {
+  "id": "talent_revive",
+  "name": "浴火重生",
+  "kind": "revive",
+  "duration": 99,
+  "permanent": true,
+  "color": "#ff9f43",
+  "_note": "D 组宠物天赋通用 buff（2026-09-19）：数值由技能 passiveBuffs.dataFormula / 动作 statAddFormula/dataFormula 按等级 L 写入 data，触发器以 {ref:\"buff.data.x\"} 读回。UNIT_DEATH（filter:self）时以 data.hp/data.mp 比例复活。revive 动作 allyOnly 默认 true ⇒ 怪物不触发（避免与 _onEnemyDown 击杀结算冲突）。",
+  "triggers": [
+   {
+    "event": "UNIT_DEATH",
+    "filter": "self",
+    "countAsLayer": false,
+    "actions": [
+     {
+      "type": "log",
+      "text": "{listener} 浴火重生！"
+     },
+     {
+      "type": "revive",
+      "targetMode": "self",
+      "hpPct": {
+       "ref": "buff.data.hp"
+      },
+      "mpPct": {
+       "ref": "buff.data.mp"
+      }
+     }
+    ]
+   }
+  ]
+ }
+}

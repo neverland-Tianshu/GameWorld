@@ -1,0 +1,1080 @@
+{
+ "meta": "PlayerPanel 配置真源 · 由 _verify/gen_player_panel_cfg.mjs 生成 · 布局=layout.xml / 文案=Lang.zh_CN.as / 数据=op20_SC_ROLE_INFO.csv(灰野兔) / 协议=NetNet.as",
+ "layout": {
+  "PlayerPanel": {
+   "PlayerPanel": {
+    "x": "55",
+    "y": "95",
+    "w": "295",
+    "h": "465"
+   },
+   "PlayerPanel_frame": {
+    "x": "15",
+    "y": "65",
+    "w": "265",
+    "h": "380"
+   },
+   "PlayerPanel_viewProperty": {
+    "x": "5",
+    "y": "30"
+   },
+   "PlayerPanel_viewPlayerAnti": {
+    "x": "5",
+    "y": "20"
+   },
+   "PlayerPanel_viewArm": {
+    "x": "3",
+    "y": "30"
+   },
+   "PlayerPanel_viewReputation": {
+    "x": "0",
+    "y": "20"
+   },
+   "PlayerPanel_viewPVP": {
+    "x": "5",
+    "y": "30"
+   },
+   "PlayerPanel_viewHeart": {
+    "x": "5",
+    "y": "30"
+   },
+   "PlayerPanel_viewBagde": {
+    "x": "5",
+    "y": "30"
+   },
+   "PlayerPanel_tabBar": {
+    "x": "19",
+    "y": "45",
+    "w": "51"
+   },
+   "PlayerPanel_openForBattle": {
+    "x": "500",
+    "y": "70"
+   },
+   "PlayerPanel_state": {
+    "x": "20",
+    "y": "50"
+   }
+  },
+  "ViewProperty": {
+   "ViewProperty_head": {
+    "x": "8",
+    "y": "18"
+   },
+   "ViewProperty_frame1": {
+    "x": "117",
+    "y": "5",
+    "w": "130",
+    "h": "145"
+   },
+   "ViewProperty_frame2": {
+    "x": "0",
+    "y": "5",
+    "w": "111",
+    "h": "300"
+   },
+   "ViewProperty_frame3": {
+    "x": "117",
+    "y": "160",
+    "w": "130",
+    "h": "145"
+   },
+   "ViewProperty_baseText": {
+    "x": "120",
+    "y": "8",
+    "w": "70",
+    "h": "17",
+    "align": "left"
+   },
+   "ViewProperty_pointText": {
+    "y": "160"
+   },
+   "ViewProperty_propertyText": {
+    "x": "3",
+    "y": "8"
+   },
+   "ViewProperty_physicsText": {
+    "y": "110"
+   },
+   "ViewProperty_magicText": {
+    "y": "200"
+   },
+   "ViewProperty_valueText1": {
+    "x": "53",
+    "w": "65"
+   },
+   "ViewProperty_valueText2": {
+    "x": "40",
+    "w": "80"
+   },
+   "ViewProperty_pointAdd": {
+    "x": "90",
+    "y": "3",
+    "h": "17"
+   },
+   "ViewProperty_pointMinus": {
+    "x": "105",
+    "y": "3",
+    "h": "17"
+   },
+   "ViewProperty_expInput": {
+    "x": "-59",
+    "y": "315",
+    "w": "194"
+   },
+   "ViewProperty_prestige": {
+    "x": "196",
+    "y": "310",
+    "w": "54"
+   },
+   "ViewProperty_nameInput": {
+    "x": "-59",
+    "y": "344",
+    "w": "194"
+   },
+   "ViewProperty_changeNameBtn": {
+    "x": "196",
+    "y": "339",
+    "w": "54"
+   },
+   "ViewProperty_ferocityBtn": {
+    "x": "117",
+    "y": "264",
+    "w": "45",
+    "h": "22"
+   },
+   "ViewProperty_balanceBtn": {
+    "x": "160",
+    "y": "264",
+    "w": "45",
+    "h": "22"
+   },
+   "ViewProperty_survivalBtn": {
+    "x": "203",
+    "y": "264",
+    "w": "45",
+    "h": "22"
+   },
+   "ViewProperty_confirmBtn": {
+    "x": "117",
+    "y": "284",
+    "w": "65",
+    "h": "22"
+   },
+   "ViewProperty_partnerBtn": {
+    "x": "183",
+    "y": "284",
+    "w": "65",
+    "h": "22"
+   }
+  },
+  "ViewArm": {
+   "ViewArm_bg": {
+    "x": "74",
+    "y": "20"
+   },
+   "ViewArm_baseCB": {
+    "x": "8",
+    "y": "245",
+    "w": "113",
+    "h": "130"
+   },
+   "ViewArm_magicCB": {
+    "x": "130",
+    "y": "245",
+    "w": "113",
+    "h": "130"
+   },
+   "ViewArm_list": {
+    "x": "50",
+    "y": "246",
+    "w": "122",
+    "h": "20"
+   },
+   "ViewArm_baseList": {
+    "x": "10",
+    "y": "265"
+   },
+   "ViewArm_magicList": {
+    "x": "132",
+    "y": "265"
+   },
+   "ViewArm_prop1": {
+    "x": "53",
+    "y": "2",
+    "h": "18"
+   },
+   "ViewArm_prop2": {
+    "x": "42"
+   },
+   "ViewArm_frameL": {
+    "x": "8",
+    "y": "263",
+    "w": "112",
+    "h": "100"
+   },
+   "ViewArm_frameR": {
+    "x": "130",
+    "y": "263",
+    "w": "112",
+    "h": "100"
+   },
+   "ViewArm_equip08": {
+    "x": "60",
+    "y": "10"
+   },
+   "ViewArm_equip00": {
+    "x": "10",
+    "y": "0"
+   },
+   "ViewArm_equip05": {
+    "x": "210",
+    "y": "0"
+   },
+   "ViewArm_equip01": {
+    "x": "10",
+    "y": "80"
+   },
+   "ViewArm_equip03": {
+    "x": "10",
+    "y": "120"
+   },
+   "ViewArm_equip03_2": {
+    "x": "210",
+    "y": "120"
+   },
+   "ViewArm_equip02": {
+    "x": "210",
+    "y": "80"
+   },
+   "ViewArm_equip04": {
+    "x": "10",
+    "y": "200"
+   },
+   "ViewArm_equip04_2": {
+    "x": "210",
+    "y": "200"
+   },
+   "ViewArm_equip06": {
+    "x": "10",
+    "y": "160"
+   },
+   "ViewArm_equip07": {
+    "x": "210",
+    "y": "160"
+   },
+   "ViewArm_equip10": {
+    "x": "50",
+    "y": "200"
+   },
+   "ViewArm_equip10_2": {
+    "x": "90",
+    "y": "200"
+   },
+   "ViewArm_equip10_3": {
+    "x": "130",
+    "y": "200"
+   },
+   "ViewArm_equip10_4": {
+    "x": "170",
+    "y": "200"
+   },
+   "ViewArm_equip09": {
+    "x": "160",
+    "y": "150"
+   },
+   "ViewArm_equip11": {
+    "x": "10",
+    "y": "40"
+   },
+   "ViewArm_equip12": {
+    "x": "210",
+    "y": "40"
+   },
+   "ViewArm_equip13": {
+    "x": "160",
+    "y": "10"
+   },
+   "ViewArm_equip14": {
+    "x": "60",
+    "y": "150"
+   }
+  },
+  "ViewHeart": {},
+  "ViewBagde": {
+   "ViewBagde_label": {
+    "h": "23"
+   },
+   "ViewBagde_accordion": {
+    "h": "360"
+   },
+   "ViewBagde_button": {
+    "x": "0",
+    "y": "0",
+    "w": "110"
+   },
+   "ViewBagde_list": {
+    "x": "0",
+    "y": "-3",
+    "w": "110",
+    "h": "3"
+   },
+   "ViewBagde_numFrame": {
+    "x": "130",
+    "y": "15",
+    "w": "50",
+    "h": "60"
+   },
+   "ViewBagde_iconFrame": {
+    "x": "200",
+    "y": "15",
+    "w": "50",
+    "h": "55"
+   },
+   "ViewBagde_getFrame": {
+    "x": "130",
+    "y": "80",
+    "w": "75",
+    "h": "125"
+   },
+   "ViewBagde_descFrame": {
+    "x": "130",
+    "y": "170",
+    "w": "187",
+    "h": "125"
+   },
+   "ViewBagde_text1": {
+    "x": "130",
+    "y": "30"
+   },
+   "ViewBagde_text2": {
+    "x": "130",
+    "y": "90",
+    "w": "120"
+   },
+   "ViewBagde_text3": {
+    "x": "130",
+    "y": "180",
+    "w": "120"
+   },
+   "ViewBagde_grid": {
+    "x": "204",
+    "y": "27"
+   },
+   "ViewBagde_itemBg": {
+    "x": "202",
+    "y": "25"
+   }
+  },
+  "ViewEssence": {
+   "ViewEssenceNeedInput": {
+    "x": "-57",
+    "y": "315",
+    "w": "120"
+   },
+   "ViewEssenceCurrInput": {
+    "x": "68",
+    "y": "315",
+    "w": "126"
+   },
+   "ViewEssenceButton": {
+    "x": "200",
+    "y": "337",
+    "w": "50",
+    "h": "25"
+   },
+   "ViewEssenceText": {
+    "x": "0",
+    "y": "340"
+   },
+   "ViewEssenceMoneyInput": {
+    "x": "53",
+    "y": "340"
+   }
+  }
+ },
+ "tabs": [
+  {
+   "id": "arm",
+   "key": "text_panel_player_gear",
+   "name": "装备"
+  },
+  {
+   "id": "prop",
+   "key": "text_panel_player_property",
+   "name": "角色"
+  },
+  {
+   "id": "heart",
+   "key": "text_panel_heart",
+   "name": "守护"
+  },
+  {
+   "id": "bagde",
+   "key": "text_panel_bagde",
+   "name": "徽章"
+  },
+  {
+   "id": "essence",
+   "key": "text_panel_essence",
+   "name": "元神"
+  }
+ ],
+ "viewOffset": {
+  "arm": {
+   "x": 3,
+   "y": 30
+  },
+  "prop": {
+   "x": 5,
+   "y": 30
+  },
+  "heart": {
+   "x": 5,
+   "y": 30
+  },
+  "bagde": {
+   "x": 5,
+   "y": 30
+  },
+  "essence": {
+   "x": -4,
+   "y": 30
+  }
+ },
+ "propItems": [
+  {
+   "k": "VIEW_PROP_NAME",
+   "v1": "name",
+   "v2": null,
+   "zh": "名　称:"
+  },
+  {
+   "k": "VIEW_PROP_CID",
+   "v1": "cid",
+   "v2": null,
+   "zh": "数字编码:"
+  },
+  {
+   "k": "VIEW_PROP_SEX",
+   "v1": "sex",
+   "v2": null,
+   "zh": "性　别:"
+  },
+  {
+   "k": "VIEW_PROP_LEVEL",
+   "v1": "level",
+   "v2": null,
+   "zh": "等　级:"
+  },
+  {
+   "k": "VIEW_PROP_JOB",
+   "v1": "job",
+   "v2": null,
+   "zh": "职　业:"
+  },
+  {
+   "k": "VIEW_PROP_POPULARITY",
+   "v1": "popularity",
+   "v2": null,
+   "zh": "人　气:"
+  },
+  {
+   "k": "VIEW_PROP_PARTY",
+   "v1": "party",
+   "v2": null,
+   "zh": "帮　会:"
+  },
+  {
+   "k": "VIEW_PROP_COUNTRY",
+   "v1": "",
+   "v2": null,
+   "zh": "帮会声望:"
+  },
+  {
+   "k": "VIEW_PROP_STRONG",
+   "v1": "strong",
+   "v2": null,
+   "zh": "强　壮:"
+  },
+  {
+   "k": "VIEW_PROP_VITALITY",
+   "v1": "vitality",
+   "v2": null,
+   "zh": "耐　力:"
+  },
+  {
+   "k": "VIEW_PROP_AGILE",
+   "v1": "agile",
+   "v2": null,
+   "zh": "敏　捷:"
+  },
+  {
+   "k": "VIEW_PROP_INTELLECT",
+   "v1": "intellect",
+   "v2": null,
+   "zh": "智　力:"
+  },
+  {
+   "k": "VIEW_PROP_BELIEF",
+   "v1": "belief",
+   "v2": null,
+   "zh": "信　仰:"
+  },
+  {
+   "k": "VIEW_PROP_LEFTPOINT",
+   "v1": "reallyRestPoint",
+   "v2": null,
+   "zh": "潜　力:"
+  },
+  {
+   "k": "VIEW_PROP_HP",
+   "v1": "hpCur",
+   "v2": "hpMax",
+   "zh": "生　命:"
+  },
+  {
+   "k": "VIEW_PROP_MP",
+   "v1": "mpCur",
+   "v2": "mpMax",
+   "zh": "法　力:"
+  },
+  {
+   "k": "VIEW_PROP_SP",
+   "v1": "spCur",
+   "v2": "spMax",
+   "zh": "怒　气:"
+  },
+  {
+   "k": "VIEW_PROP_SPEED",
+   "v1": "speed",
+   "v2": null,
+   "zh": "速　度:"
+  },
+  {
+   "k": "VIEW_PROP_RESTORE",
+   "v1": "restore",
+   "v2": null,
+   "zh": "恢　复:"
+  },
+  {
+   "k": "ARM_PROP_SPIRITUAL",
+   "v1": "spiritual",
+   "v2": null,
+   "zh": "修　为:"
+  },
+  {
+   "k": "ARM_PROP_VIGOUS",
+   "v1": "spirit",
+   "v2": null,
+   "zh": "活　力:"
+  },
+  {
+   "k": "VIEW_PROP_ATTACK",
+   "v1": "attack",
+   "v2": null,
+   "zh": "物理攻击:"
+  },
+  {
+   "k": "VIEW_PROP_DEFENSE",
+   "v1": "defense",
+   "v2": null,
+   "zh": "物理防御:"
+  },
+  {
+   "k": "VIEW_PROP_PHYHIT",
+   "v1": "phyHit",
+   "v2": null,
+   "zh": "物理命中:"
+  },
+  {
+   "k": "VIEW_PROP_PHYJOOK",
+   "v1": "phyJook",
+   "v2": null,
+   "zh": "物理闪避:"
+  },
+  {
+   "k": "VIEW_PROP_PHYBANG",
+   "v1": "phyBang",
+   "v2": null,
+   "zh": "物理爆击:"
+  },
+  {
+   "k": "VIEW_PROP_MAGICATTACK",
+   "v1": "magicAttack",
+   "v2": null,
+   "zh": "法术攻击:"
+  },
+  {
+   "k": "VIEW_PROP_MAGICDEF",
+   "v1": "magicDef",
+   "v2": null,
+   "zh": "法术防御:"
+  },
+  {
+   "k": "VIEW_PROP_MAGICHIT",
+   "v1": "magicHit",
+   "v2": null,
+   "zh": "法术命中:"
+  },
+  {
+   "k": "VIEW_PROP_MAGICJOOK",
+   "v1": "magicJook",
+   "v2": null,
+   "zh": "法术闪避:"
+  },
+  {
+   "k": "VIEW_PROP_MAGICBANG",
+   "v1": "magicBang",
+   "v2": null,
+   "zh": "法术爆击:"
+  },
+  {
+   "k": "VIEW_PROP_ANTIREEL",
+   "v1": "antiReel",
+   "v2": null,
+   "zh": "眩晕抗性:"
+  },
+  {
+   "k": "VIEW_PROP_ANTISLEEP",
+   "v1": "antiSleep",
+   "v2": null,
+   "zh": "睡眠抗性:"
+  },
+  {
+   "k": "VIEW_PROP_ANTIDRUNCK",
+   "v1": "antiDrunk",
+   "v2": null,
+   "zh": "酒醉抗性:"
+  },
+  {
+   "k": "VIEW_PROP_ANTICHAOS",
+   "v1": "antiChaos",
+   "v2": null,
+   "zh": "混乱抗性:"
+  },
+  {
+   "k": "VIEW_PROP_ANTIWEAK",
+   "v1": "antiWeak",
+   "v2": null,
+   "zh": "弱化抗性:"
+  },
+  {
+   "k": "VIEW_PROP_ANTITOIC",
+   "v1": "antiToxic",
+   "v2": null,
+   "zh": "中毒抗性:"
+  }
+ ],
+ "profile": {
+  "cid": "12345678",
+  "name": "猪大肠",
+  "nickName": "",
+  "party": "占位",
+  "repution": "22220",
+  "sex": "女",
+  "job": "术士(一转)",
+  "jobId": "4",
+  "coin": "0",
+  "money": "0",
+  "expCur": "12677563095",
+  "expMax": "13272136464",
+  "level": "139",
+  "hpCur": "28160",
+  "hpMax": "28160",
+  "mpCur": "21673",
+  "mpMax": "21673",
+  "spCur": "2720",
+  "spMax": "3365",
+  "silver": "43",
+  "silverNote": "954377342",
+  "gold": "0",
+  "goldNote": "920",
+  "score": "0",
+  "silverPay": "2",
+  "goldPay": "8",
+  "strong": "28",
+  "intellect": "87",
+  "vitality": "307",
+  "belief": "26",
+  "agile": "183",
+  "attack": "2164",
+  "defense": "159",
+  "speed": "467",
+  "spirit": "62",
+  "restore": "348",
+  "portraitImage": "125000",
+  "bodyImg": "135002",
+  "panelAvatar": "135008",
+  "weaponImg": "125010",
+  "reallyRestPoint": "63",
+  "channelMask": "63",
+  "settingMask": "268691038",
+  "petMax": "7",
+  "restSkillPT": "2",
+  "usedSkillPT": "231979",
+  "iceDef": "0",
+  "fireDef": "0",
+  "windDef": "0",
+  "dustDef": "0",
+  "antiDrunk": "0",
+  "antiSleep": "0",
+  "antiChaos": "0",
+  "antiSlow": "0",
+  "antiWeak": "0",
+  "antiReel": "0",
+  "antiToxic": "0",
+  "honorTitle": "天书战神",
+  "heartBonus": "7",
+  "braveHeart": "125",
+  "diligencyHeart": "125",
+  "confidentHeart": "125",
+  "penetrateHeart": "125",
+  "kindHeart": "140",
+  "pityHeart": "135",
+  "mercyHeart": "135",
+  "confuseHeart": "135",
+  "chestOpenCount": "0",
+  "hpAlert": "1",
+  "mpAlert": "1",
+  "petHpAlert": "1",
+  "petMpAlert": "1",
+  "isPayUser": "1",
+  "phyHit": "9335",
+  "phyBang": "366",
+  "phyJook": "145",
+  "magicAttack": "2148",
+  "magicDef": "676",
+  "magicHit": "11528",
+  "magicBang": "1666",
+  "magicJook": "859",
+  "currStoreNum": "30",
+  "state": "33554432",
+  "suitImg": "",
+  "hasSetLock": "0",
+  "popularity": "10532",
+  "designation": "",
+  "spiritual": "106897",
+  "ridePetMax": "3",
+  "ridePetImg": "400000",
+  "ridepetVariation": "0",
+  "field91": "1063466",
+  "field92": "52",
+  "field93": "44",
+  "field94": "10",
+  "field95": "30",
+  "field96": "10",
+  "wingsImg": "142001",
+  "isHideWing": "0",
+  "showsuit": "1",
+  "encircle": "0",
+  "field101": "0",
+  "field102": "0",
+  "newVipImg": "",
+  "medalImg": "",
+  "immortalImg": "700024",
+  "isScriptChange": "0",
+  "scriptChangeImg": "",
+  "field108": "-1",
+  "field0": "1",
+  "petChestNum": "0",
+  "PLAYER_PASSPORTID": "200000000",
+  "PLAYER_REGIONID": "1",
+  "PLAYER_SERVER_SID": "100",
+  "PLAYER_SERVER_ID": "1001",
+  "field6": "4",
+  "_出现次数": "1"
+ },
+ "lang": {
+  "text_panel_player_gear": {
+   "k": "text_panel_player_gear",
+   "zh": "装备"
+  },
+  "text_panel_player_property": {
+   "k": "text_panel_player_property",
+   "zh": "角色"
+  },
+  "text_panel_heart": {
+   "k": "text_panel_heart",
+   "zh": "守护"
+  },
+  "text_panel_bagde": {
+   "k": "text_panel_bagde",
+   "zh": "徽章"
+  },
+  "text_panel_essence": {
+   "k": "text_panel_essence",
+   "zh": "元神"
+  },
+  "VIEW_PROP_NAME": {
+   "k": "VIEW_PROP_NAME",
+   "zh": "名　称:"
+  },
+  "VIEW_PROP_CID": {
+   "k": "VIEW_PROP_CID",
+   "zh": "数字编码:"
+  },
+  "VIEW_PROP_SEX": {
+   "k": "VIEW_PROP_SEX",
+   "zh": "性　别:"
+  },
+  "VIEW_PROP_LEVEL": {
+   "k": "VIEW_PROP_LEVEL",
+   "zh": "等　级:"
+  },
+  "VIEW_PROP_JOB": {
+   "k": "VIEW_PROP_JOB",
+   "zh": "职　业:"
+  },
+  "VIEW_PROP_POPULARITY": {
+   "k": "VIEW_PROP_POPULARITY",
+   "zh": "人　气:"
+  },
+  "VIEW_PROP_PARTY": {
+   "k": "VIEW_PROP_PARTY",
+   "zh": "帮　会:"
+  },
+  "VIEW_PROP_COUNTRY": {
+   "k": "VIEW_PROP_COUNTRY",
+   "zh": "帮会声望:"
+  },
+  "VIEW_PROP_STRONG": {
+   "k": "VIEW_PROP_STRONG",
+   "zh": "强　壮:"
+  },
+  "VIEW_PROP_VITALITY": {
+   "k": "VIEW_PROP_VITALITY",
+   "zh": "耐　力:"
+  },
+  "VIEW_PROP_AGILE": {
+   "k": "VIEW_PROP_AGILE",
+   "zh": "敏　捷:"
+  },
+  "VIEW_PROP_INTELLECT": {
+   "k": "VIEW_PROP_INTELLECT",
+   "zh": "智　力:"
+  },
+  "VIEW_PROP_BELIEF": {
+   "k": "VIEW_PROP_BELIEF",
+   "zh": "信　仰:"
+  },
+  "VIEW_PROP_LEFTPOINT": {
+   "k": "VIEW_PROP_LEFTPOINT",
+   "zh": "潜　力:"
+  },
+  "VIEW_PROP_HP": {
+   "k": "VIEW_PROP_HP",
+   "zh": "生　命:"
+  },
+  "VIEW_PROP_MP": {
+   "k": "VIEW_PROP_MP",
+   "zh": "法　力:"
+  },
+  "VIEW_PROP_SP": {
+   "k": "VIEW_PROP_SP",
+   "zh": "怒　气:"
+  },
+  "VIEW_PROP_SPEED": {
+   "k": "VIEW_PROP_SPEED",
+   "zh": "速　度:"
+  },
+  "VIEW_PROP_RESTORE": {
+   "k": "VIEW_PROP_RESTORE",
+   "zh": "恢　复:"
+  },
+  "ARM_PROP_SPIRITUAL": {
+   "k": "ARM_PROP_SPIRITUAL",
+   "zh": "修　为:"
+  },
+  "ARM_PROP_VIGOUS": {
+   "k": "ARM_PROP_VIGOUS",
+   "zh": "活　力:"
+  },
+  "VIEW_PROP_ATTACK": {
+   "k": "VIEW_PROP_ATTACK",
+   "zh": "物理攻击:"
+  },
+  "VIEW_PROP_DEFENSE": {
+   "k": "VIEW_PROP_DEFENSE",
+   "zh": "物理防御:"
+  },
+  "VIEW_PROP_PHYHIT": {
+   "k": "VIEW_PROP_PHYHIT",
+   "zh": "物理命中:"
+  },
+  "VIEW_PROP_PHYJOOK": {
+   "k": "VIEW_PROP_PHYJOOK",
+   "zh": "物理闪避:"
+  },
+  "VIEW_PROP_PHYBANG": {
+   "k": "VIEW_PROP_PHYBANG",
+   "zh": "物理爆击:"
+  },
+  "VIEW_PROP_MAGICATTACK": {
+   "k": "VIEW_PROP_MAGICATTACK",
+   "zh": "法术攻击:"
+  },
+  "VIEW_PROP_MAGICDEF": {
+   "k": "VIEW_PROP_MAGICDEF",
+   "zh": "法术防御:"
+  },
+  "VIEW_PROP_MAGICHIT": {
+   "k": "VIEW_PROP_MAGICHIT",
+   "zh": "法术命中:"
+  },
+  "VIEW_PROP_MAGICJOOK": {
+   "k": "VIEW_PROP_MAGICJOOK",
+   "zh": "法术闪避:"
+  },
+  "VIEW_PROP_MAGICBANG": {
+   "k": "VIEW_PROP_MAGICBANG",
+   "zh": "法术爆击:"
+  },
+  "VIEW_PROP_ANTIREEL": {
+   "k": "VIEW_PROP_ANTIREEL",
+   "zh": "眩晕抗性:"
+  },
+  "VIEW_PROP_ANTISLEEP": {
+   "k": "VIEW_PROP_ANTISLEEP",
+   "zh": "睡眠抗性:"
+  },
+  "VIEW_PROP_ANTIDRUNCK": {
+   "k": "VIEW_PROP_ANTIDRUNCK",
+   "zh": "酒醉抗性:"
+  },
+  "VIEW_PROP_ANTICHAOS": {
+   "k": "VIEW_PROP_ANTICHAOS",
+   "zh": "混乱抗性:"
+  },
+  "VIEW_PROP_ANTIWEAK": {
+   "k": "VIEW_PROP_ANTIWEAK",
+   "zh": "弱化抗性:"
+  },
+  "VIEW_PROP_ANTITOIC": {
+   "k": "VIEW_PROP_ANTITOIC",
+   "zh": "中毒抗性:"
+  },
+  "VIEW_PROP_HPMAX": {
+   "k": "VIEW_PROP_HPMAX",
+   "zh": "【待填】"
+  },
+  "VIEW_PROP_MPMAX": {
+   "k": "VIEW_PROP_MPMAX",
+   "zh": "【待填】"
+  },
+  "ESSENCE_XUAN": {
+   "k": "ESSENCE_XUAN",
+   "zh": "玄"
+  },
+  "ESSENCE_BING": {
+   "k": "ESSENCE_BING",
+   "zh": "冰"
+  },
+  "ESSENCE_HUO": {
+   "k": "ESSENCE_HUO",
+   "zh": "火"
+  },
+  "ESSENCE_DU": {
+   "k": "ESSENCE_DU",
+   "zh": "毒"
+  },
+  "VIEW_ARM_BG_TIRE": {
+   "k": "VIEW_ARM_BG_TIRE",
+   "zh": "头饰"
+  },
+  "VIEW_ARM_BG_NECKLACE": {
+   "k": "VIEW_ARM_BG_NECKLACE",
+   "zh": "项链"
+  },
+  "VIEW_ARM_BG_CLOTH": {
+   "k": "VIEW_ARM_BG_CLOTH",
+   "zh": "上衣"
+  },
+  "VIEW_ARM_BG_BRACELET": {
+   "k": "VIEW_ARM_BG_BRACELET",
+   "zh": "手镯"
+  },
+  "VIEW_ARM_BG_GIRDLE": {
+   "k": "VIEW_ARM_BG_GIRDLE",
+   "zh": "腰带"
+  },
+  "VIEW_ARM_BG_FINGERRING": {
+   "k": "VIEW_ARM_BG_FINGERRING",
+   "zh": "戒指"
+  },
+  "VIEW_ARM_BG_PANTS": {
+   "k": "VIEW_ARM_BG_PANTS",
+   "zh": "裤子"
+  },
+  "VIEW_ARM_BG_SHOES": {
+   "k": "VIEW_ARM_BG_SHOES",
+   "zh": "鞋子"
+  },
+  "VIEW_ARM_BG_ACCOUTERMENT": {
+   "k": "VIEW_ARM_BG_ACCOUTERMENT",
+   "zh": "饰品"
+  },
+  "VIEW_ARM_BG_FASHION": {
+   "k": "VIEW_ARM_BG_FASHION",
+   "zh": "时装"
+  },
+  "VIEW_ARM_BG_SHOULDER": {
+   "k": "VIEW_ARM_BG_SHOULDER",
+   "zh": "护肩"
+  },
+  "VIEW_ARM_BG_MANTLE": {
+   "k": "VIEW_ARM_BG_MANTLE",
+   "zh": "披风"
+  },
+  "VIEW_ARM_BG_WING": {
+   "k": "VIEW_ARM_BG_WING",
+   "zh": "翅膀"
+  },
+  "HEART_UPLEVEL": {
+   "k": "HEART_UPLEVEL",
+   "zh": "升级需要:"
+  },
+  "ESSENCE_UPGRADE_NEED": {
+   "k": "ESSENCE_UPGRADE_NEED",
+   "zh": "<font color='#55d7bd'>需要元神:</font>"
+  },
+  "ESSENCE_CURR": {
+   "k": "ESSENCE_CURR",
+   "zh": "<font color='#55d7bd'>当前元神:</font>"
+  },
+  "ESSENCE_DEFENDER": {
+   "k": "ESSENCE_DEFENDER",
+   "zh": "{0}属性抗性："
+  },
+  "ESSENCE_PROP_LEVEL": {
+   "k": "ESSENCE_PROP_LEVEL",
+   "zh": "{0}属性等级：{1}"
+  },
+  "ESSENCE_TALENT_INFO": {
+   "k": "ESSENCE_TALENT_INFO",
+   "zh": "<font size='12'>{0}的力量觉醒了，通过元神升级{1}属性就可以体验到这股新力量。</font>"
+  }
+ },
+ "proto": {
+  "SC_ROLE_INFO": 20,
+  "SC_ROLE_START_POINT": 22,
+  "CS_GET_ROLE_INFO": 203,
+  "CS_QUERY_ROLE_INFO": 21,
+  "SC_ARENT_PLAYER_INFO": 1004,
+  "SC_OPEN_OTHER_PLAYER_PANEL": 1007,
+  "SC_MEDAL_INFO": 850,
+  "CS_UPGRADE_HEART": 189,
+  "SC_UPGRADE_HEART": 189,
+  "CS_WINGSHOW_INFO": 884,
+  "SC_WING_EVOLUTION": 772,
+  "CS_BAGUA_UPGRADE": 949,
+  "SC_BAGUA_INFO": 957,
+  "CS_ROLE_MOVE": 20
+ },
+ "formulas": {
+  "note": "属性点分配/守护升级/徽章/元神消耗公式原版在服务端，客户端不计算 → 单机版仅做数值展示与本地校验，公式待逆向标注。"
+ },
+ "res": {
+  "note": "资源图按 AS3 取图顺序实测，无对应图时由面板 onerror 隐藏，不臆造路径。"
+ }
+}

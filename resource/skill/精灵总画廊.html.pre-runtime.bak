@@ -1,0 +1,1038 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>技能精灵总画廊（优化版）</title>
+<script src="../../fanvas3-transparent.js"></script>
+<style>
+  * { box-sizing: border-box; }
+  body { margin:0; background:#101015; color:#ddd; font-family: system-ui, "Microsoft YaHei", sans-serif; }
+  header { position:sticky; top:0; z-index:50; background:#1b1b24; border-bottom:1px solid #333;
+           padding:10px 14px; display:flex; gap:12px; align-items:center; flex-wrap:wrap; }
+  header h1 { font-size:16px; margin:0; color:#9cf; white-space:nowrap; }
+  #count { color:#7c7; font-size:13px; white-space:nowrap; }
+  #filter { flex:1; min-width:160px; padding:7px 10px; background:#111; color:#eee; border:1px solid #555; border-radius:5px; }
+  .hint { font-size:12px; color:#f99; }
+  #grid { display:grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap:10px; padding:10px; }
+  .card { background:#1a1a22; border:1px solid #2e2e3a; border-radius:8px; overflow:hidden; position:relative; cursor:pointer; }
+  .card .stage { width:100%; height:170px; position:relative; overflow:hidden;
+                 background:repeating-conic-gradient(#222 0% 25%, #1b1b22 0% 50%) 50%/24px 24px; }
+  .card .stage canvas { position:absolute; display:block; }
+  .card .cap { padding:4px 6px; font-size:11px; color:#9cf; text-align:center; background:#181820; }
+  .card.loading .stage::after { content:"…"; position:absolute; inset:0; display:flex; align-items:center; justify-content:center; color:#555; font-size:24px; }
+  .card:hover { border-color:#6cf; }
+  /* ── 锚点标记（与角色模型总画廊同源）── */
+  .mk-origin { position:absolute; width:20px; height:20px; transform:translate(-50%,-50%); pointer-events:none; z-index:6;
+    background:
+      linear-gradient(#ff3b3b,#ff3b3b) center/2px 100% no-repeat,
+      linear-gradient(#ff3b3b,#ff3b3b) center/100% 2px no-repeat; }
+  .mk-foot { position:absolute; width:11px; height:11px; border-radius:50%; background:#ffd400;
+             transform:translate(-50%,-50%); pointer-events:none; z-index:7; box-shadow:0 0 3px #000; }
+  .mk-label { position:absolute; left:3px; bottom:3px; font-size:10px; line-height:1.2; color:#ffd9d9;
+              pointer-events:none; z-index:7; text-shadow:0 0 3px #000,0 0 3px #000; white-space:nowrap; }
+  /* ── 详情弹层（点击放大 + 水平翻转）── */
+  #modal { position:fixed; inset:0; z-index:100; background:rgba(0,0,0,.78); display:flex; align-items:center; justify-content:center; }
+  #modal.hidden { display:none; }
+  .mw { background:#17171f; border:1px solid #3a3a48; border-radius:10px; max-width:min(94vw,900px); max-height:92vh; overflow:auto; }
+  .mh { display:flex; align-items:center; gap:10px; padding:10px 14px; border-bottom:1px solid #2e2e3a; position:sticky; top:0; background:#17171f; }
+  .mh .t { font-size:15px; color:#9cf; }
+  .mh .x { margin-left:auto; }
+  .mb { display:flex; gap:14px; padding:14px; flex-wrap:wrap; }
+  #mstage { width:360px; height:360px; position:relative; flex:0 0 auto;
+            background:repeating-conic-gradient(#222 0% 25%, #1b1b22 0% 50%) 50%/28px 28px; border:1px solid #333; overflow:hidden; }
+  #mstage canvas { position:absolute; display:block; }
+  .mlabels { flex:1 1 260px; min-width:240px; }
+  .mdir { margin-bottom:8px; display:flex; gap:6px; align-items:center; flex-wrap:wrap; }
+  .mdir span { font-size:12px; color:#888; }
+  .mlabels button { padding:4px 8px; font-size:12px; background:#2c2c38; color:#cde; border:1px solid #444; border-radius:4px; cursor:pointer; }
+  .mlabels button:hover { background:#3d4c5c; }
+  .mlabels button.on { background:#1d6fa5; color:#fff; border-color:#6cf; }
+  .mtip { font-size:11px; color:#888; margin:8px 0 4px; }
+</style>
+</head>
+<body>
+<header>
+  <h1>技能精灵总画廊</h1>
+  <span id="count"></span>
+  <input id="filter" placeholder="筛选技能 ID（如 10001）…">
+  <button id="toggle" style="padding:6px 12px;background:#2196F3;color:#fff;border:0;border-radius:5px;cursor:pointer">暂停全部</button>
+</header>
+<div style="padding:6px 14px;font-size:12px;color:#bbb;background:#181820;border-bottom:1px solid #2a2a34">
+  运行：在 GameWorld 目录起服务 → <code>cd D:\tsqt\主程序\GameWorld</code> 后 <code>python -m http.server 8000</code> → 打开本页（进入视口即自动播放，离开即销毁；可一键暂停全部）。
+  <span style="color:#ff8a8a">红十字 = 锚点(Flash 原点 (0,0))</span> ·
+  <span style="color:#ffd400">黄点 = 同一锚点</span>：精灵在游戏中被 pin 到落点/目标的那一点（与技能/特效「原点对齐落点」同源）。
+  <b>点击任意卡片可放大查看，放大层支持水平翻转（LB / RT 为镜像）。</b>
+</div>
+<div id="grid"></div>
+
+<div id="modal" class="hidden">
+  <div class="mw">
+    <div class="mh">
+      <span class="t" id="mtitle">—</span>
+      <button class="x gray" id="mclose">关闭 ✕</button>
+    </div>
+    <div class="mb">
+      <div id="mstage"></div>
+      <div class="mlabels">
+        <div class="mdir">
+          <span>朝向：</span>
+          <button data-d="RB" class="on">RB</button><button data-d="LB">LB(镜像)</button>
+          <button data-d="LT">LT</button><button data-d="RT">RT(镜像)</button>
+        </div>
+        <div class="mtip">精灵锚点（红十字 = Flash 原点 (0,0)，与技能/特效落点同源）。LB / RT = 水平翻转。</div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+const SKILLS = [
+  {"id": "0", "main": 18},
+  {"id": "1", "main": 33},
+  {"id": "11", "main": 10},
+  {"id": "12", "main": 10},
+  {"id": "13", "main": 10},
+  {"id": "14", "main": 10},
+  {"id": "15", "main": 34},
+  {"id": "21", "main": 4},
+  {"id": "31", "main": 5},
+  {"id": "41", "main": 3},
+  {"id": "51", "main": 4},
+  {"id": "101", "main": 5},
+  {"id": "111", "main": 5},
+  {"id": "121", "main": 5},
+  {"id": "131", "main": 7},
+  {"id": "141", "main": 9},
+  {"id": "301", "main": 12},
+  {"id": "10001", "main": 10},
+  {"id": "10002", "main": 10},
+  {"id": "10003", "main": 10},
+  {"id": "10004", "main": 10},
+  {"id": "10005", "main": 10},
+  {"id": "10011", "main": 4},
+  {"id": "10030", "main": 17},
+  {"id": "10031", "main": 11},
+  {"id": "10032", "main": 11},
+  {"id": "10033", "main": 11},
+  {"id": "10034", "main": 11},
+  {"id": "10035", "main": 11},
+  {"id": "10041", "main": 9},
+  {"id": "10042", "main": 9},
+  {"id": "10043", "main": 9},
+  {"id": "10044", "main": 9},
+  {"id": "10045", "main": 9},
+  {"id": "10051", "main": 31},
+  {"id": "10071", "main": 4},
+  {"id": "10171", "main": 4},
+  {"id": "10201", "main": 13},
+  {"id": "10211", "main": 4},
+  {"id": "20021", "main": 4},
+  {"id": "20031", "main": 4},
+  {"id": "20041", "main": 11},
+  {"id": "20051", "main": 14},
+  {"id": "20052", "main": 14},
+  {"id": "20053", "main": 14},
+  {"id": "20054", "main": 14},
+  {"id": "20055", "main": 17},
+  {"id": "20061", "main": 4},
+  {"id": "20101", "main": 27},
+  {"id": "20111", "main": 106},
+  {"id": "20121", "main": 4},
+  {"id": "20131", "main": 27},
+  {"id": "20141", "main": 27},
+  {"id": "20151", "main": 55},
+  {"id": "20161", "main": 4},
+  {"id": "20201", "main": 2},
+  {"id": "20211", "main": 2},
+  {"id": "20221", "main": 7},
+  {"id": "30001", "main": 9},
+  {"id": "30011", "main": 4},
+  {"id": "30021", "main": 20},
+  {"id": "30101", "main": 15},
+  {"id": "30111", "main": 4},
+  {"id": "30121", "main": 34},
+  {"id": "30131", "main": 18},
+  {"id": "30201", "main": 8},
+  {"id": "30211", "main": 4},
+  {"id": "30231", "main": 30},
+  {"id": "30301", "main": 9},
+  {"id": "30311", "main": 4},
+  {"id": "30321", "main": 9},
+  {"id": "30331", "main": 9},
+  {"id": "30401", "main": 4},
+  {"id": "30411", "main": 35},
+  {"id": "30511", "main": 17},
+  {"id": "140001", "main": 9},
+  {"id": "140002", "main": 9},
+  {"id": "140003", "main": 11},
+  {"id": "140004", "main": 14},
+  {"id": "140005", "main": 14},
+  {"id": "140101", "main": 10},
+  {"id": "140102", "main": 10},
+  {"id": "140103", "main": 10},
+  {"id": "140104", "main": 10},
+  {"id": "140105", "main": 10},
+  {"id": "140201", "main": 11},
+  {"id": "140202", "main": 11},
+  {"id": "140203", "main": 11},
+  {"id": "140204", "main": 11},
+  {"id": "140205", "main": 11},
+  {"id": "140301", "main": 13},
+  {"id": "140401", "main": 15},
+  {"id": "150101", "main": 3},
+  {"id": "150201", "main": 4},
+  {"id": "170101", "main": 20},
+  {"id": "170201", "main": 9},
+  {"id": "170301", "main": 11},
+  {"id": "170302", "main": 11},
+  {"id": "170303", "main": 11},
+  {"id": "170304", "main": 11},
+  {"id": "170305", "main": 35},
+  {"id": "170401", "main": 13},
+  {"id": "170501", "main": 16},
+  {"id": "170601", "main": 20},
+  {"id": "170701", "main": 8},
+  {"id": "170702", "main": 7},
+  {"id": "170703", "main": 7},
+  {"id": "170704", "main": 8},
+  {"id": "170705", "main": 8},
+  {"id": "170801", "main": 12},
+  {"id": "170901", "main": 8},
+  {"id": "170902", "main": 8},
+  {"id": "170903", "main": 8},
+  {"id": "170904", "main": 9},
+  {"id": "170905", "main": 9},
+  {"id": "171001", "main": 11},
+  {"id": "171201", "main": 19},
+  {"id": "171301", "main": 19},
+  {"id": "171401", "main": 11},
+  {"id": "171501", "main": 7},
+  {"id": "171601", "main": 7},
+  {"id": "171801", "main": 15},
+  {"id": "171901", "main": 59},
+  {"id": "172001", "main": 19},
+  {"id": "172101", "main": 37},
+  {"id": "172301", "main": 17},
+  {"id": "172401", "main": 7},
+  {"id": "172601", "main": 4},
+  {"id": "172701", "main": 4},
+  {"id": "172801", "main": 4},
+  {"id": "172901", "main": 8},
+  {"id": "173001", "main": 10},
+  {"id": "173101", "main": 20},
+  {"id": "173401", "main": 20},
+  {"id": "173501", "main": 29},
+  {"id": "173601", "main": 22},
+  {"id": "173602", "main": 9},
+  {"id": "173603", "main": 20},
+  {"id": "173604", "main": 11},
+  {"id": "173605", "main": 55},
+  {"id": "173606", "main": 38},
+  {"id": "173607", "main": 39},
+  {"id": "173609", "main": 7},
+  {"id": "173610", "main": 34},
+  {"id": "173611", "main": 31},
+  {"id": "173612", "main": 9},
+  {"id": "173613", "main": 9},
+  {"id": "173614", "main": 28},
+  {"id": "173615", "main": 31},
+  {"id": "173616", "main": 31},
+  {"id": "173701", "main": 40},
+  {"id": "173801", "main": 18},
+  {"id": "173901", "main": 47},
+  {"id": "174001", "main": 17},
+  {"id": "174301", "main": 86},
+  {"id": "174401", "main": 41},
+  {"id": "174501", "main": 50},
+  {"id": "174601", "main": 45},
+  {"id": "174701", "main": 21},
+  {"id": "174901", "main": 23},
+  {"id": "175001", "main": 28},
+  {"id": "175101", "main": 19},
+  {"id": "175201", "main": 17},
+  {"id": "175301", "main": 28},
+  {"id": "175401", "main": 15},
+  {"id": "175501", "main": 8},
+  {"id": "175601", "main": 30},
+  {"id": "175801", "main": 38},
+  {"id": "176001", "main": 22},
+  {"id": "176101", "main": 39},
+  {"id": "176201", "main": 23},
+  {"id": "176301", "main": 37},
+  {"id": "176401", "main": 23},
+  {"id": "176501", "main": 16},
+  {"id": "176701", "main": 20},
+  {"id": "176801", "main": 20},
+  {"id": "177101", "main": 26},
+  {"id": "177201", "main": 11},
+  {"id": "177301", "main": 10},
+  {"id": "177401", "main": 46},
+  {"id": "177601", "main": 66},
+  {"id": "177701", "main": 18},
+  {"id": "177801", "main": 23},
+  {"id": "178000", "main": 16},
+  {"id": "178001", "main": 8},
+  {"id": "178002", "main": 9},
+  {"id": "178003", "main": 12},
+  {"id": "178004", "main": 7},
+  {"id": "178005", "main": 7},
+  {"id": "178006", "main": 7},
+  {"id": "178007", "main": 35},
+  {"id": "178008", "main": 21},
+  {"id": "178009", "main": 21},
+  {"id": "178010", "main": 21},
+  {"id": "178011", "main": 22},
+  {"id": "178012", "main": 12},
+  {"id": "178013", "main": 14},
+  {"id": "178014", "main": 17},
+  {"id": "178015", "main": 17},
+  {"id": "178017", "main": 10},
+  {"id": "178019", "main": 10},
+  {"id": "178020", "main": 13},
+  {"id": "178021", "main": 13},
+  {"id": "178022", "main": 13},
+  {"id": "178023", "main": 11},
+  {"id": "178025", "main": 12},
+  {"id": "178026", "main": 10},
+  {"id": "178027", "main": 13},
+  {"id": "178028", "main": 12},
+  {"id": "178029", "main": 14},
+  {"id": "178030", "main": 11},
+  {"id": "178031", "main": 15},
+  {"id": "178032", "main": 12},
+  {"id": "178033", "main": 12},
+  {"id": "178034", "main": 11},
+  {"id": "178035", "main": 13},
+  {"id": "178036", "main": 13},
+  {"id": "178037", "main": 12},
+  {"id": "178038", "main": 14},
+  {"id": "178039", "main": 13},
+  {"id": "178042", "main": 14},
+  {"id": "178043", "main": 15},
+  {"id": "178044", "main": 9},
+  {"id": "178045", "main": 8},
+  {"id": "178046", "main": 13},
+  {"id": "178047", "main": 11},
+  {"id": "178048", "main": 10},
+  {"id": "178050", "main": 12},
+  {"id": "178051", "main": 11},
+  {"id": "178052", "main": 15},
+  {"id": "178053", "main": 11},
+  {"id": "178054", "main": 11},
+  {"id": "178055", "main": 9},
+  {"id": "178059", "main": 8},
+  {"id": "178060", "main": 10},
+  {"id": "178061", "main": 14},
+  {"id": "178062", "main": 8},
+  {"id": "178063", "main": 11},
+  {"id": "178071", "main": 14},
+  {"id": "178072", "main": 16},
+  {"id": "178073", "main": 21},
+  {"id": "178074", "main": 20},
+  {"id": "178075", "main": 15},
+  {"id": "178077", "main": 21},
+  {"id": "178079", "main": 21},
+  {"id": "178081", "main": 11},
+  {"id": "178085", "main": 34},
+  {"id": "178087", "main": 46},
+  {"id": "178088", "main": 21},
+  {"id": "178089", "main": 23},
+  {"id": "178090", "main": 19},
+  {"id": "178093", "main": 15},
+  {"id": "178094", "main": 19},
+  {"id": "178095", "main": 32},
+  {"id": "178097", "main": 17},
+  {"id": "178098", "main": 9},
+  {"id": "178099", "main": 25},
+  {"id": "178100", "main": 31},
+  {"id": "178101", "main": 25},
+  {"id": "178102", "main": 16},
+  {"id": "178103", "main": 19},
+  {"id": "178105", "main": 23},
+  {"id": "178110", "main": 41},
+  {"id": "178112", "main": 39},
+  {"id": "178114", "main": 40},
+  {"id": "178115", "main": 66},
+  {"id": "178116", "main": 42},
+  {"id": "178117", "main": 16},
+  {"id": "178118", "main": 38},
+  {"id": "178119", "main": 37},
+  {"id": "178120", "main": 21},
+  {"id": "178121", "main": 29},
+  {"id": "178122", "main": 18},
+  {"id": "178123", "main": 27},
+  {"id": "178124", "main": 40},
+  {"id": "178126", "main": 47},
+  {"id": "178127", "main": 30},
+  {"id": "178128", "main": 57},
+  {"id": "178129", "main": 30},
+  {"id": "178130", "main": 84},
+  {"id": "178131", "main": 51},
+  {"id": "178132", "main": 17},
+  {"id": "178133", "main": 45},
+  {"id": "180101", "main": 4},
+  {"id": "180201", "main": 4},
+  {"id": "180401", "main": 4},
+  {"id": "180402", "main": 4},
+  {"id": "180403", "main": 4},
+  {"id": "180404", "main": 4},
+  {"id": "180405", "main": 4},
+  {"id": "180501", "main": 4},
+  {"id": "180601", "main": 4},
+  {"id": "182301", "main": 8},
+  {"id": "188001", "main": 14},
+  {"id": "210133", "main": 18},
+  {"id": "10010001", "main": 44},
+  {"id": "10011001", "main": 19},
+  {"id": "10012001", "main": 19},
+  {"id": "10013001", "main": 15},
+  {"id": "10020001", "main": 16},
+  {"id": "10040001", "main": 39},
+  {"id": "20010001", "main": 20},
+  {"id": "20020001", "main": 4},
+  {"id": "20030001", "main": 10},
+  {"id": "20040001", "main": 20},
+  {"id": "25000000", "main": 10},
+  {"id": "25000001", "main": 3},
+  {"id": "25000002", "main": 12},
+  {"id": "30010001", "main": 17},
+  {"id": "30010002", "main": 17},
+  {"id": "30010003", "main": 17},
+  {"id": "30010004", "main": 17},
+  {"id": "30010005", "main": 18},
+  {"id": "30020001", "main": 7},
+  {"id": "30030001", "main": 10},
+  {"id": "30040001", "main": 7},
+  {"id": "30060001", "main": 26},
+  {"id": "40010001", "main": 18},
+  {"id": "40020001", "main": 4},
+  {"id": "40030001", "main": 4},
+  {"id": "40040001", "main": 3},
+  {"id": "50010001", "main": 11},
+  {"id": "50010002", "main": 11},
+  {"id": "50010003", "main": 11},
+  {"id": "50010004", "main": 11},
+  {"id": "50010005", "main": 11},
+  {"id": "50020001", "main": 19},
+  {"id": "50030001", "main": 18},
+  {"id": "50050001", "main": 12},
+  {"id": "50050002", "main": 12},
+  {"id": "50050003", "main": 12},
+  {"id": "50050004", "main": 12},
+  {"id": "50050005", "main": 12},
+  {"id": "60010001", "main": 34},
+  {"id": "60020001", "main": 12},
+  {"id": "60030001", "main": 24},
+  {"id": "60040001", "main": 4},
+  {"id": "70010001", "main": 30},
+  {"id": "70040001", "main": 106},
+  {"id": "80020001", "main": 15},
+  {"id": "80030001", "main": 7},
+  {"id": "80040001", "main": 4},
+  {"id": "110000115", "main": 11},
+  {"id": "110000116", "main": 19},
+  {"id": "110000133", "main": 57},
+  {"id": "110000134", "main": 57},
+  {"id": "110002307", "main": 9},
+  {"id": "110002308", "main": 16},
+  {"id": "110002309", "main": 14},
+  {"id": "110002310", "main": 24},
+  {"id": "110002311", "main": 7},
+  {"id": "110002312", "main": 17},
+  {"id": "110002539", "main": 40},
+  {"id": "110002540", "main": 42},
+  {"id": "110040001", "main": 39},
+  {"id": "120040001", "main": 20},
+  {"id": "130060001", "main": 26},
+  {"id": "140040001", "main": 3},
+  {"id": "150050001", "main": 12},
+  {"id": "150050002", "main": 12},
+  {"id": "150050003", "main": 12},
+  {"id": "150050004", "main": 12},
+  {"id": "150050005", "main": 12},
+  {"id": "160040001", "main": 4},
+  {"id": "170040001", "main": 106},
+  {"id": "180040001", "main": 4},
+  {"id": "190040001", "main": 27},
+  {"id": "210020001", "main": 10},
+  {"id": "210020002", "main": 11},
+  {"id": "210020003", "main": 12},
+  {"id": "210020004", "main": 10},
+  {"id": "210020005", "main": 11},
+  {"id": "210030001", "main": 15},
+  {"id": "210030002", "main": 15},
+  {"id": "210030003", "main": 15},
+  {"id": "210040001", "main": 7},
+  {"id": "210040002", "main": 7},
+  {"id": "210040003", "main": 7},
+  {"id": "210040004", "main": 9},
+  {"id": "210040005", "main": 9},
+  {"id": "210050001", "main": 11},
+  {"id": "210050002", "main": 10},
+  {"id": "210050003", "main": 10},
+  {"id": "210050004", "main": 11},
+  {"id": "210050005", "main": 11},
+  {"id": "210060001", "main": 12},
+  {"id": "210060002", "main": 12},
+  {"id": "210060003", "main": 12},
+  {"id": "210060004", "main": 12},
+  {"id": "210060005", "main": 15},
+  {"id": "210070001", "main": 105},
+  {"id": "210070002", "main": 105},
+  {"id": "210070003", "main": 105},
+  {"id": "210070004", "main": 105},
+  {"id": "210070005", "main": 123},
+  {"id": "210080001", "main": 4},
+  {"id": "210080002", "main": 4},
+  {"id": "210080003", "main": 4},
+  {"id": "210080004", "main": 4},
+  {"id": "210080005", "main": 4},
+  {"id": "220010001", "main": 16},
+  {"id": "220010002", "main": 16},
+  {"id": "220010003", "main": 17},
+  {"id": "220010004", "main": 17},
+  {"id": "220010005", "main": 18},
+  {"id": "220020001", "main": 18},
+  {"id": "220020002", "main": 15},
+  {"id": "220020003", "main": 15},
+  {"id": "220020004", "main": 15},
+  {"id": "220020005", "main": 28},
+  {"id": "220030001", "main": 12},
+  {"id": "220040001", "main": 38},
+  {"id": "220050001", "main": 39},
+  {"id": "220060001", "main": 18},
+  {"id": "220060002", "main": 21},
+  {"id": "220060003", "main": 21},
+  {"id": "220060004", "main": 21},
+  {"id": "220060005", "main": 21},
+  {"id": "220070001", "main": 4},
+  {"id": "220070002", "main": 4},
+  {"id": "220070003", "main": 4},
+  {"id": "220070004", "main": 4},
+  {"id": "220070005", "main": 10},
+  {"id": "220080001", "main": 20},
+  {"id": "220080002", "main": 20},
+  {"id": "220080003", "main": 20},
+  {"id": "220080004", "main": 23},
+  {"id": "220080005", "main": 20},
+  {"id": "220090001", "main": 3},
+  {"id": "220090002", "main": 3},
+  {"id": "220090003", "main": 3},
+  {"id": "220090004", "main": 3},
+  {"id": "220090005", "main": 3},
+  {"id": "230010001", "main": 19},
+  {"id": "230010002", "main": 21},
+  {"id": "230010003", "main": 21},
+  {"id": "230010004", "main": 21},
+  {"id": "230010005", "main": 23},
+  {"id": "230020001", "main": 30},
+  {"id": "230030001", "main": 42},
+  {"id": "230030002", "main": 43},
+  {"id": "230030003", "main": 63},
+  {"id": "230030004", "main": 66},
+  {"id": "230030005", "main": 66},
+  {"id": "230040001", "main": 4},
+  {"id": "230040002", "main": 7},
+  {"id": "230040003", "main": 7},
+  {"id": "230040004", "main": 10},
+  {"id": "230040005", "main": 13},
+  {"id": "230050001", "main": 4},
+  {"id": "230050002", "main": 4},
+  {"id": "230050003", "main": 4},
+  {"id": "230050004", "main": 4},
+  {"id": "230050005", "main": 5},
+  {"id": "230060001", "main": 44},
+  {"id": "230060002", "main": 44},
+  {"id": "230060003", "main": 44},
+  {"id": "230060004", "main": 44},
+  {"id": "230060005", "main": 25},
+  {"id": "230070001", "main": 19},
+  {"id": "230070002", "main": 19},
+  {"id": "230070003", "main": 19},
+  {"id": "230070004", "main": 19},
+  {"id": "230070005", "main": 19},
+  {"id": "230080001", "main": 18},
+  {"id": "230080002", "main": 19},
+  {"id": "230080003", "main": 19},
+  {"id": "230080004", "main": 19},
+  {"id": "230080005", "main": 18},
+  {"id": "230090001", "main": 15},
+  {"id": "230090002", "main": 15},
+  {"id": "230090003", "main": 15},
+  {"id": "230090004", "main": 15},
+  {"id": "230090005", "main": 15},
+  {"id": "240010001", "main": 23},
+  {"id": "240010002", "main": 23},
+  {"id": "240010003", "main": 23},
+  {"id": "240010004", "main": 23},
+  {"id": "240010005", "main": 22},
+  {"id": "240030001", "main": 24},
+  {"id": "240030002", "main": 29},
+  {"id": "240030003", "main": 33},
+  {"id": "240030004", "main": 34},
+  {"id": "240030005", "main": 34},
+  {"id": "250010001", "main": 7},
+  {"id": "250010002", "main": 15},
+  {"id": "250010003", "main": 19},
+  {"id": "700010001", "main": 12},
+  {"id": "700010002", "main": 13},
+  {"id": "700010003", "main": 12},
+  {"id": "700010004", "main": 14},
+  {"id": "700010005", "main": 12},
+  {"id": "700020001", "main": 12},
+  {"id": "700020002", "main": 21},
+  {"id": "700020003", "main": 18},
+  {"id": "700020004", "main": 18},
+  {"id": "700020005", "main": 13},
+  {"id": "700030001", "main": 30},
+  {"id": "700030002", "main": 21},
+  {"id": "700030003", "main": 21},
+  {"id": "700030004", "main": 10},
+  {"id": "700030005", "main": 21},
+  {"id": "700030006", "main": 13},
+  {"id": "700040001", "main": 12},
+  {"id": "700040002", "main": 12},
+  {"id": "700040003", "main": 15},
+  {"id": "700040004", "main": 17},
+  {"id": "700040005", "main": 12},
+  {"id": "700040006", "main": 14},
+  {"id": "10030001_lr", "main": 40},
+  {"id": "10030001_rl", "main": 47},
+  {"id": "10061_lr", "main": 22},
+  {"id": "10061_rl", "main": 20},
+  {"id": "110002107待修复", "main": 25},
+  {"id": "140501_lr", "main": 31},
+  {"id": "140501_rl", "main": 31},
+  {"id": "171101_lr", "main": 8},
+  {"id": "171101_rl", "main": 8},
+  {"id": "172501_lr", "main": 10},
+  {"id": "172501_rl", "main": 10},
+  {"id": "173201_lr", "main": 8},
+  {"id": "173201_rl", "main": 8},
+  {"id": "173608待修复", "main": 18},
+  {"id": "174101_lr", "main": 20},
+  {"id": "174101_rl", "main": 20},
+  {"id": "174201_lr待修复", "main": 57},
+  {"id": "174201_rl待修复", "main": 57},
+  {"id": "174801待修复", "main": 27},
+  {"id": "175701_lr", "main": 45},
+  {"id": "175701_rl", "main": 45},
+  {"id": "175901_lr", "main": 10},
+  {"id": "175901_rl", "main": 10},
+  {"id": "176601待修复", "main": 10},
+  {"id": "176901待修复", "main": 8},
+  {"id": "177001待修复", "main": 4},
+  {"id": "177501_lr", "main": 79},
+  {"id": "177501_rl", "main": 72},
+  {"id": "177901_lr", "main": 10},
+  {"id": "177901_rl", "main": 10},
+  {"id": "178016_lr", "main": 12},
+  {"id": "178016_rl", "main": 12},
+  {"id": "178018_lr", "main": 12},
+  {"id": "178018_rl", "main": 12},
+  {"id": "178024_lr", "main": 11},
+  {"id": "178024_rl", "main": 11},
+  {"id": "178040_lr", "main": 13},
+  {"id": "178040_rl", "main": 13},
+  {"id": "178041_lr", "main": 13},
+  {"id": "178041_rl", "main": 13},
+  {"id": "178058_lr", "main": 10},
+  {"id": "178058_rl", "main": 10},
+  {"id": "178065_lr", "main": 10},
+  {"id": "178065_rl", "main": 10},
+  {"id": "178066_lr", "main": 9},
+  {"id": "178066_rl", "main": 9},
+  {"id": "178067_lr", "main": 13},
+  {"id": "178067_rl", "main": 13},
+  {"id": "178068_lr", "main": 27},
+  {"id": "178068_rl", "main": 27},
+  {"id": "178069_lr", "main": 10},
+  {"id": "178069_rl", "main": 10},
+  {"id": "178070_lr", "main": 10},
+  {"id": "178070_rl", "main": 10},
+  {"id": "178076_lr", "main": 16},
+  {"id": "178076_rl", "main": 16},
+  {"id": "178078_lr", "main": 26},
+  {"id": "178078_rl", "main": 26},
+  {"id": "178080_lr", "main": 26},
+  {"id": "178080_rl", "main": 26},
+  {"id": "178082_lr", "main": 30},
+  {"id": "178082_rl", "main": 30},
+  {"id": "178083_lr", "main": 13},
+  {"id": "178083_rl", "main": 13},
+  {"id": "178084_lr", "main": 15},
+  {"id": "178084_rl", "main": 15},
+  {"id": "178086_lr", "main": 11},
+  {"id": "178086_rl", "main": 11},
+  {"id": "178091_lr", "main": 21},
+  {"id": "178091_rl", "main": 21},
+  {"id": "178092_lr", "main": 10},
+  {"id": "178092_rl", "main": 10},
+  {"id": "178096_lr", "main": 21},
+  {"id": "178096_rl", "main": 21},
+  {"id": "178125_lr", "main": 35},
+  {"id": "178125_rl", "main": 35},
+  {"id": "188000待修复", "main": 12},
+  {"id": "20001_lr", "main": 8},
+  {"id": "20001_rl", "main": 8},
+  {"id": "200040001待修复", "main": 57},
+  {"id": "20011_lr", "main": 8},
+  {"id": "20011_rl", "main": 8},
+  {"id": "210010001_lr", "main": 29},
+  {"id": "210010001_rl", "main": 27},
+  {"id": "210010002_lr", "main": 29},
+  {"id": "210010002_rl", "main": 27},
+  {"id": "210010003_lr", "main": 29},
+  {"id": "210010003_rl", "main": 27},
+  {"id": "210010004_lr", "main": 29},
+  {"id": "210010004_rl", "main": 27},
+  {"id": "210010005_lr", "main": 29},
+  {"id": "210010005_rl", "main": 27},
+  {"id": "210030004待修复", "main": 15},
+  {"id": "210030005待修复", "main": 19},
+  {"id": "210090001_lr", "main": 25},
+  {"id": "210090001_rl", "main": 14},
+  {"id": "210090002_lr", "main": 28},
+  {"id": "210090002_rl", "main": 28},
+  {"id": "210090003_lr", "main": 28},
+  {"id": "210090003_rl", "main": 28},
+  {"id": "210090004_lr", "main": 28},
+  {"id": "210090004_rl", "main": 28},
+  {"id": "210090005_lr", "main": 30},
+  {"id": "210090005_rl", "main": 30},
+  {"id": "210132待修复", "main": 13},
+  {"id": "240020001_lr", "main": 50},
+  {"id": "240020001_rl", "main": 55},
+  {"id": "240020002_lr", "main": 50},
+  {"id": "240020002_rl", "main": 55},
+  {"id": "240020003_lr", "main": 50},
+  {"id": "240020003_rl", "main": 55},
+  {"id": "240020004_lr", "main": 50},
+  {"id": "240020004_rl", "main": 55},
+  {"id": "240020005_lr", "main": 50},
+  {"id": "240020005_rl", "main": 55},
+  {"id": "240040001_lr", "main": 18},
+  {"id": "240040001_rl", "main": 18},
+  {"id": "240040002_lr", "main": 21},
+  {"id": "240040002_rl", "main": 21},
+  {"id": "240040003_lr", "main": 21},
+  {"id": "240040003_rl", "main": 21},
+  {"id": "240040004_lr", "main": 21},
+  {"id": "240040004_rl", "main": 21},
+  {"id": "240040005_lr", "main": 21},
+  {"id": "240040005_rl", "main": 21},
+  {"id": "70020001_lr", "main": 29},
+  {"id": "70020001_rl", "main": 27},
+  {"id": "70030001_lr", "main": 24},
+  {"id": "70030001_rl", "main": 22}
+];
+const grid = document.getElementById('grid');
+const countEl = document.getElementById('count');
+const filterEl = document.getElementById('filter');
+const toggleBtn = document.getElementById('toggle');
+
+const MAX_LOADS = 16;          // 并发加载上限
+let loading = 0;
+const loadQueue = [];
+let io = null;
+let globalPaused = false;     // 全局暂停开关（默认 false = 可见即播放）
+const swfCache = {};           // id -> { text, blobMap }  blobMap 值带 '#.png' 后缀；保留不释放
+
+function parseSwf(text){ return new Function(text + "\n;return swfData;")(); }
+
+function deepReplace(obj, map){
+  if (Array.isArray(obj)){
+    for (let i=0;i<obj.length;i++){
+      if (typeof obj[i]==='string' && map[obj[i]]) obj[i]=map[obj[i]];
+      else if (obj[i] && typeof obj[i]==='object') deepReplace(obj[i], map);
+    }
+  } else if (obj && typeof obj==='object'){
+    for (const k in obj){
+      if (typeof obj[k]==='string' && map[obj[k]]) obj[k]=map[obj[k]];
+      else if (obj[k] && typeof obj[k]==='object') deepReplace(obj[k], map);
+    }
+  }
+}
+
+function fail(card){ card._state='idle'; card.classList.remove('loading'); }
+
+/* ═══════════ 并集合围盒 + 锚点（与角色模型总画廊同源）═══════════
+   精灵是单池特效精灵，脚点/锚点 = Flash 原点 (0,0)（与技能/特效「原点对齐落点」同源）；
+   仅当根时间轴在 (-256,-256) 放置精灵时才取 (256,256)。 */
+function mergeRect(a, b){
+  if (!a) return b; if (!b) return a;
+  const x = Math.min(a.x, b.x), y = Math.min(a.y, b.y);
+  return { x, y, width: Math.max(a.x+a.width, b.x+b.width)-x, height: Math.max(a.y+a.height, b.y+b.height)-y };
+}
+function unionRectOf(dp, idx, seen){
+  seen = seen || new Set();
+  if (seen.has(idx)) return null;
+  seen.add(idx);
+  const d = dp[idx]; if (!d) return null;
+  let r = (d.rect && (d.rect.width || d.rect.height)) ? { x:d.rect.x, y:d.rect.y, width:d.rect.width, height:d.rect.height } : null;
+  const fal = d.frameActionList;
+  if (fal && Array.isArray(fal)) for (const kf of fal) {
+    if (!kf) continue; const acts = Array.isArray(kf) ? kf.slice(1) : [];
+    for (const a of acts) if (Array.isArray(a) && a[0]==='pE' && a[1] && a[1].id != null) r = mergeRect(r, unionRectOf(dp, a[1].id, seen));
+  }
+  const dl = d.displayList || d.frames;
+  if (dl && Array.isArray(dl)) for (const fr of dl) {
+    if (!Array.isArray(fr)) continue;
+    for (const a of fr) if (Array.isArray(a) && a[0]==='pE' && a[1] && a[1].id != null) r = mergeRect(r, unionRectOf(dp, a[1].id, seen));
+  }
+  return r;
+}
+function topLevelPlaceLocal(swf){
+  const dp = swf && swf.definitionPool;
+  const d0 = dp && dp[0]; if (!d0) return null;
+  const lists = [];
+  if (Array.isArray(d0.frameActionList)) lists.push(d0.frameActionList);
+  const dl = d0.displayList || d0.frames; if (Array.isArray(dl)) lists.push(dl);
+  for (const list of lists) for (const fr of list) {
+    if (!Array.isArray(fr)) continue;
+    for (const a of fr) if (Array.isArray(a) && a[0] === 'pE' && a[1] && a[1].id != null) {
+      const m = a[1].m || a[1].matrix;
+      return { x: (a[1].x != null ? a[1].x : (Array.isArray(m) ? m[4] : 0)) || 0,
+               y: (a[1].y != null ? a[1].y : (Array.isArray(m) ? m[5] : 0)) || 0 };
+    }
+  }
+  return null;
+}
+function resolveFootForSprite(id, swf, renderRect){
+  const pl = topLevelPlaceLocal(swf);
+  if (pl && pl.x === -256 && pl.y === -256) return { x: 256, y: 256, src: 'rootPlace' };
+  return { x: 0, y: 0, src: 'roleOrigin' };
+}
+const DIR_MIRROR = { RB:false, LB:true, LT:false, RT:true };
+
+function clearStage(box){
+  const cvs = box.querySelectorAll('canvas');
+  for (let i = 0; i < cvs.length; i++) { try { fanvas.pause(cvs[i].id); } catch (e) {} }
+  while (box.firstChild) box.removeChild(box.firstChild);
+}
+function placeCanvas(cv, rect, box, stageW, stageH){
+  const k = Math.min(stageW / box.w, stageH / box.h);
+  let cssW, cssH, left, top;
+  if (rect && rect.width > 0) {
+    cssW = rect.width * k; cssH = rect.height * k;
+    left = (stageW - box.w*k)/2 + (rect.x - box.x)*k;
+    top  = (stageH - box.h*k)/2 + (rect.y - box.y)*k;
+  } else {
+    const s = Math.min(stageW / (cv.width||1), stageH / (cv.height||1));
+    cssW = (cv.width||0)*s; cssH = (cv.height||0)*s;
+    left = (stageW - cssW)/2; top = (stageH - cssH)/2;
+  }
+  cv.style.width = cssW + 'px'; cv.style.height = cssH + 'px';
+  cv.style.left = left + 'px'; cv.style.top = top + 'px';
+  return { k, left, top, cssW, cssH };
+}
+// 翻转轴 = 锚点(原点=脚点，红十字)。精灵脚点=(0,0) 多在 rect 之外，绕脚点翻转会把可见内容镜像到另一侧、
+// 偏出 stage 被 overflow:hidden 裁掉；故把 canvas 的 layout left 设为「让镜像后的可见包围盒居中于 stage」。
+function applyMirrorOrigin(cv, mirror, rect, box, pos, id, swf){
+  if (!mirror) { cv.style.transform = 'none'; return; }
+  if (!rect || !(rect.width > 0)) { cv.style.transformOrigin = 'center center'; cv.style.transform = 'scaleX(-1)'; return; }
+  const f = resolveFootForSprite(id, swf, rect);
+  const ox = (f.x - rect.x) * pos.k;
+  const cssW = rect.width * pos.k;
+  const stageW = cv.parentElement ? cv.parentElement.clientWidth : 0;
+  if (stageW) cv.style.left = (stageW / 2 - 2 * ox + cssW / 2) + 'px';
+  cv.style.transformOrigin = ox + 'px center';
+  cv.style.transform = 'scaleX(-1)';
+}
+const SRC_TXT = { rootPlace:'常规(根偏移-256)', roleOrigin:'精灵(Flash原点0,0)', center:'256约定', override:'标定覆盖' };
+function addAnchorMarkers(stage, box, stageW, stageH, id, swf, renderRect, mirror){
+  if (!(box && box.w > 0 && box.h > 0)) return;
+  const k = Math.min(stageW / box.w, stageH / box.h);
+  const bx = (stageW - box.w * k) / 2, by = (stageH - box.h * k) / 2;
+  const f = resolveFootForSprite(id, swf, renderRect);
+  let fx = bx + (f.x - box.x) * k, fy = by + (f.y - box.y) * k;
+  if (mirror && renderRect && renderRect.width > 0){
+    const ox = (f.x - renderRect.x) * k, cssW = renderRect.width * k;
+    fx = stageW / 2 - ox + cssW / 2;
+  }
+  const cross = document.createElement('div'); cross.className = 'mk-origin';
+  cross.style.left = fx + 'px'; cross.style.top = fy + 'px';
+  stage.appendChild(cross);
+  const dot = document.createElement('div'); dot.className = 'mk-foot';
+  dot.style.left = fx + 'px'; dot.style.top = fy + 'px';
+  stage.appendChild(dot);
+  const lbl = document.createElement('div'); lbl.className = 'mk-label';
+  lbl.textContent = '锚点(原点=脚点)(' + Math.round(f.x) + ',' + Math.round(f.y) + ') · ' + (SRC_TXT[f.src] || f.src);
+  stage.appendChild(lbl);
+}
+// 在指定 stage 播放一个精灵（rootDef=main），按统一包围盒落位 + 锚标 + 可选镜像
+function playSprite(stage, swf, main, mirror, id){
+  clearStage(stage);
+  const rect = unionRectOf(swf.definitionPool, main);
+  const box = (rect && rect.width > 0 && rect.height > 0) ? { x:rect.x, y:rect.y, w:rect.width, h:rect.height } : { x:0, y:0, w:512, h:512 };
+  if (rect && rect.width > 0 && rect.height > 0) swf.definitionPool[main].rect = rect;
+  const cv = document.createElement('canvas');
+  const cid = 'cv_' + id + '_' + Math.random().toString(36).slice(2,8);
+  cv.id = cid; cv.style.display = 'block';
+  stage.appendChild(cv);
+  fanvas.play(cid, swf, { rootDef: main, transparent:true, cache:1, imagePath:'' });
+  const stageW = stage.clientWidth, stageH = stage.clientHeight;
+  const pos = placeCanvas(cv, rect, box, stageW, stageH);
+  applyMirrorOrigin(cv, mirror, rect, box, pos, id, swf);
+  addAnchorMarkers(stage, box, stageW, stageH, id, swf, rect, mirror);
+  return { cv, cid };
+}
+
+async function loadSkill(card){
+  const id = card._id;
+  const myToken = ++card._token;           // 本次加载的令牌
+  card._state = 'loading'; card.classList.add('loading'); loading++;
+  try {
+    let cache = swfCache[id];
+    if (!cache){
+      let text;
+      try { text = await (await fetch('./' + id + '/swfData.js')).text(); }
+      catch(e){ fail(card); return; }       // 网络失败：置 idle 等下次
+      if (card._token !== myToken){ fail(card); return; }
+      const blobMap = {};
+      const swf0 = parseSwf(text);
+      const imgs = swf0.images || [];
+      await Promise.all(imgs.map(async nm=>{
+        try {
+          const buf = await (await fetch('./' + id + '/images/' + nm)).arrayBuffer();
+          blobMap[nm] = URL.createObjectURL(new Blob([buf], {type:'image/png'})) + "#.png";
+        } catch(e){}
+      }));
+      if (card._token !== myToken){          // 已失效：释放本地 blob，放弃
+        for (const k in blobMap) URL.revokeObjectURL(blobMap[k].split('#')[0]);
+        fail(card); return;
+      }
+      cache = { text, blobMap };
+      swfCache[id] = cache;                   // 缓存保留，blob 永不失活
+    }
+    // 播放前校验：令牌有效 且 容器仍在文档中（否则 appendChild 到脱离节点会崩）
+    if (card._token !== myToken || !card._stage.isConnected){ fail(card); return; }
+    const swf = parseSwf(cache.text);
+    deepReplace(swf, cache.blobMap);
+    const main = card._main == null ? 0 : card._main;
+    const r = playSprite(card._stage, swf, main, false, id);   // 卡片视图不翻转，仅显示锚标
+    card._cid = r.cid; card._canvas = r.cv;
+    card._state = 'ready'; card.classList.remove('loading');
+    // 可见区域同时播放：进入视口且在播放态即保持动画；否则暂停（滑出/全局暂停）
+    if (!(card._visible && !globalPaused)){ try{ fanvas.pause(card._cid); }catch(e){} }
+  } catch(e){
+    if (card._canvas){ card._canvas.remove(); card._canvas=null; }
+    fail(card);
+  } finally {
+    loading--; pump();
+  }
+}
+
+function unload(card){
+  if (card._state!=='ready' && card._state!=='loading') return;
+  if (card._cid){ try{ fanvas.pause(card._cid); }catch(e){} }
+  clearStage(card._stage);                 // 同时清掉画布与锚标 div
+  card._cid = null; card._canvas = null; card._state = 'idle';
+  // 注意：不 revoke blob，避免 in-flight 加载拿到失效 blob 导致 ERR_FILE_NOT_FOUND
+}
+
+function pump(){ while(loadQueue.length && loading < MAX_LOADS) loadSkill(loadQueue.shift()); }
+
+function makeCard(item){
+  const card = document.createElement('div');
+  card.className = 'card';
+  card._id = item.id; card._main = item.main; card._state = 'idle'; card._token = 0; card._visible = false;
+  const stage = document.createElement('div'); stage.className='stage';
+  const cap = document.createElement('div'); cap.className='cap'; cap.textContent = item.id;
+  card.appendChild(stage); card.appendChild(cap);
+  card._stage = stage;
+  card.addEventListener('click', () => openModal(item.id));   // 点击放大（含水平翻转）
+  return card;
+}
+
+function build(list){
+  if (io) io.disconnect();
+  loadQueue.length = 0; loading = 0; globalPaused = false; toggleBtn.textContent='暂停全部';
+  grid.innerHTML = '';
+  io = new IntersectionObserver((entries)=>{
+    entries.forEach(en=>{
+      const card = en.target;
+      card._visible = en.isIntersecting;
+      if (en.isIntersecting){
+        if (card._state==='ready'){ if(!globalPaused){ try{ fanvas.resume(card._cid); }catch(e){} } }
+        else if (card._state==='idle'){ if (loading < MAX_LOADS) loadSkill(card); else loadQueue.push(card); }
+      } else {
+        unload(card);
+        const i = loadQueue.indexOf(card); if (i>=0) loadQueue.splice(i,1);
+      }
+    });
+  }, { rootMargin: '300px 0px' });
+  list.forEach(item=>{ const card = makeCard(item); grid.appendChild(card); io.observe(card); });
+  countEl.textContent = '共 ' + list.length + ' 个技能';
+}
+
+toggleBtn.addEventListener('click', ()=>{
+  globalPaused = !globalPaused;
+  toggleBtn.textContent = globalPaused ? '播放全部' : '暂停全部';
+  Array.from(grid.children).forEach(card=>{
+    if (card._state==='ready'){ try{ globalPaused ? fanvas.pause(card._cid) : fanvas.resume(card._cid); }catch(e){} }
+  });
+});
+
+filterEl.addEventListener('input', ()=>{
+  const q = filterEl.value.trim();
+  build(q ? SKILLS.filter(x=>x.id.includes(q)) : SKILLS);
+});
+
+/* ═══════════ 点击放大 + 水平翻转 ═══════════ */
+const modal = document.getElementById('modal');
+const mstage = document.getElementById('mstage');
+const mtitle = document.getElementById('mtitle');
+const MAIN_BY_ID = {}; SKILLS.forEach(s => { MAIN_BY_ID[s.id] = s.main; });
+let mId = null, mCache = null, mDir = 'RB';
+
+async function loadCache(id){            // 与卡片共用 swfCache
+  if (swfCache[id]) return swfCache[id];
+  const text = await (await fetch('./' + id + '/swfData.js')).text();
+  const blobMap = {};
+  const swf0 = parseSwf(text);
+  await Promise.all((swf0.images||[]).map(async nm=>{
+    try { const buf = await (await fetch('./' + id + '/images/' + nm)).arrayBuffer();
+      blobMap[nm] = URL.createObjectURL(new Blob([buf], {type:'image/png'})) + "#.png"; } catch(e){}
+  }));
+  const cache = { text, blobMap };
+  swfCache[id] = cache;
+  return cache;
+}
+
+async function openModal(id){
+  mId = id; mDir = 'RB';
+  Array.from(document.querySelectorAll('.mdir button')).forEach(x => x.classList.toggle('on', x.dataset.d === 'RB'));
+  modal.classList.remove('hidden');
+  mtitle.textContent = id + ' 加载中…';
+  clearStage(mstage);
+  try { mCache = await loadCache(id); } catch(e){ mtitle.textContent = id + ' 加载失败'; return; }
+  renderModal();
+}
+function renderModal(){
+  if (!mCache) return;
+  const swf = parseSwf(mCache.text);
+  deepReplace(swf, mCache.blobMap);
+  const main = (MAIN_BY_ID[mId] != null) ? MAIN_BY_ID[mId] : 0;
+  playSprite(mstage, swf, main, DIR_MIRROR[mDir], mId);
+  mtitle.textContent = mId + '  ·  锚点=Flash原点(0,0)' + (DIR_MIRROR[mDir] ? '  ·  已水平翻转' : '');
+}
+function closeModal(){ modal.classList.add('hidden'); clearStage(mstage); mCache = null; }
+document.getElementById('mclose').onclick = closeModal;
+modal.addEventListener('click', e => { if (e.target === modal) closeModal(); });
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+Array.from(document.querySelectorAll('.mdir button')).forEach(b => {
+  b.onclick = () => {
+    mDir = b.dataset.d;
+    Array.from(document.querySelectorAll('.mdir button')).forEach(x => x.classList.toggle('on', x.dataset.d === mDir));
+    renderModal();
+  };
+});
+
+if (typeof fanvas === 'undefined'){
+  grid.innerHTML = '<p style="color:#f99;padding:20px">fanvas 库未加载：必须从 GameWorld 目录起本地服务器（见顶部说明），直接双击打开会因路径问题失败。</p>';
+} else {
+  build(SKILLS);
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,96 @@
+{
+  "_meta": {
+    "desc": "物品六大类（CategoryType）+ 二级明细（SubType）映射真源。背包面板与战斗药品面板的分类均从此表派生。",
+    "schema": 1,
+    "sources": [
+      "config/item_types.json（type 数字码语义枚举，逆向产物，本表按 type 归类，不改它）",
+      "config/items.json（1662 件物品模板，本表只读其 type/name/desc，不改它）",
+      "用户裁决 2026-10-03（AskUserQuestion 两轮：数据落点 / type→大类映射 / 武器不细分 / 战斗药品面板形态）"
+    ],
+    "rules": [
+      "按物品 type 数字码归类；items.json 与 item_types.json 一律不动。",
+      "subTypes 按数组顺序匹配：type 命中且（未配 match 或 name/desc 正则命中）即归该 subType；配了 match 的写在前，未配 match 的是该类型的兜底桶。",
+      "overrides 优先于 categories（用户裁决的逐件例外，如宠物内丹在 type23 内按名字挑出）。",
+      "未被任何大类收录的 type → 'other'，背包仅在该类有物品时显示「未分类」签。",
+      "match.name / match.desc 为 JS 正则字符串，对 items.json 的 name / desc 字段做 test 判定。"
+    ],
+    "userDecisions": [
+      "六大类与 type 归属由用户 2026-10-03 裁决；type81（精魂·宝石符）按用户微调从任务代币改到生产强化材料。",
+      "宠物内丹（type23 中名含「内丹/元丹」者）归穿戴装备类·宠物组（用户原话「宠物（宠物的内丹仙丹）」）。",
+      "武器 SubType 不细分为刀/剑/扇/杖/弓/弩（items.json 无武器种类字段，名字识别仅 172/402 命中，用户裁决只设一个「武器」）。",
+      "二级明细按用户列出的组口经命名：防具（头/胸/腿/腰/腕及其余穿戴位）、首饰（项链/戒指/护符）、宠物（内丹/仙丹）。"
+    ],
+    "emptyFramework": [
+      "大类2「特殊效果」（复活类）：当前 items.json 无对应物品，框架预留，背包有物品时才显示该子类签。",
+      "用户提到的大类1「HP/MP储备池」「回城符」：无对应物品（回城/复活类均为 0 件），恢复类药水在 type40 归大类2。"
+    ]
+  },
+
+  "overrides": [
+    { "type": 23, "match": { "name": "内丹|元丹" }, "category": "equip", "subType": "pet" }
+  ],
+
+  "categories": [
+    {
+      "key": "playerConsume", "id": 1,
+      "name": "人物消耗与功能道具", "short": "人物道具",
+      "types": [62, 63, 117],
+      "subTypes": [
+        { "key": "skillBook", "name": "技能书·秘籍", "types": [62], "match": { "name": "秘籍|技能书|技能经验|卷轴|残片|秘卷|天书|残页" } },
+        { "key": "giftBox",   "name": "礼包·福袋·宝箱", "types": [62, 117] },
+        { "key": "boost",     "name": "增益药·变身卡", "types": [63] }
+      ]
+    },
+    {
+      "key": "battleMed", "id": 2,
+      "name": "战斗药品", "short": "战斗药品",
+      "types": [40],
+      "subTypes": [
+        { "key": "hurt",    "name": "伤害", "types": [40], "match": { "desc": "-\\d+\\s*HP|HP减少|造成.{0,6}伤害|专打" } },
+        { "key": "restore", "name": "恢复", "types": [40] },
+        { "key": "special", "name": "特殊效果", "types": [], "note": "预留：复活类（当前 items.json 无对应物品）" }
+      ]
+    },
+    {
+      "key": "equip", "id": 3,
+      "name": "穿戴装备", "short": "穿戴装备",
+      "types": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 115, 120, 121, 122, 123, 124, 131, 132, 133, 134, 135],
+      "subTypes": [
+        { "key": "weapon",  "name": "武器", "types": [0] },
+        { "key": "armor",   "name": "防具", "types": [1, 3, 4, 5, 7, 8, 10, 11, 12, 13] },
+        { "key": "jewelry", "name": "首饰", "types": [2, 6, 9] },
+        { "key": "pet",     "name": "宠物内丹·仙丹", "short": "宠物", "types": [115, 120, 121, 122, 123, 124, 131, 132, 133, 134, 135] }
+      ]
+    },
+    {
+      "key": "petConsume", "id": 4,
+      "name": "宠物专属消耗与功能道具", "short": "宠物道具",
+      "types": [15, 16, 23, 24, 30, 31, 144],
+      "subTypes": [
+        { "key": "growth", "name": "成长·解绑", "types": [23] },
+        { "key": "life",   "name": "寿命·忠诚", "types": [24] },
+        { "key": "ride",   "name": "骑宠道具", "types": [30, 31] },
+        { "key": "misc",   "name": "护卫·元神·素材", "types": [15, 16, 144] }
+      ]
+    },
+    {
+      "key": "material", "id": 5,
+      "name": "生产与强化材料", "short": "强化材料",
+      "types": [18, 81, 82, 98, 99, 114, 119, 127, 129, 136, 137, 139, 141],
+      "subTypes": [
+        { "key": "craft",  "name": "打造材料", "types": [98, 114, 119] },
+        { "key": "gem",    "name": "宝石·镶嵌", "types": [82, 99] },
+        { "key": "refine", "name": "强化·改造·开光", "types": [18, 127, 129, 139] },
+        { "key": "misc",   "name": "其他材料", "types": [81, 136, 137, 141] }
+      ]
+    },
+    {
+      "key": "quest", "id": 6,
+      "name": "任务与活动代币", "short": "任务代币",
+      "types": [80],
+      "subTypes": [
+        { "key": "questItem", "name": "任务物品", "types": [80] }
+      ]
+    }
+  ]
+}

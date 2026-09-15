@@ -1,0 +1,854 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>角色模型总画廊</title>
+<script src="../../fanvas3-transparent.js"></script>
+<style>
+  * { box-sizing: border-box; }
+  body { margin:0; background:#101015; color:#ddd; font-family: system-ui, "Microsoft YaHei", sans-serif; }
+  header { position:sticky; top:0; z-index:50; background:#1b1b24; border-bottom:1px solid #333;
+           padding:10px 14px; display:flex; gap:10px; align-items:center; flex-wrap:wrap; }
+  header h1 { font-size:16px; margin:0; color:#9cf; white-space:nowrap; }
+  #count { color:#7c7; font-size:13px; white-space:nowrap; }
+  input[type=text], #filter { padding:7px 10px; background:#111; color:#eee; border:1px solid #555; border-radius:5px; }
+  #filter { flex:1; min-width:150px; }
+  select { padding:6px 8px; background:#111; color:#eee; border:1px solid #555; border-radius:5px; }
+  button { padding:6px 12px; background:#2196F3; color:#fff; border:0; border-radius:5px; cursor:pointer; }
+  button.gray { background:#444; }
+  label.chk { font-size:12px; color:#bbb; display:flex; align-items:center; gap:4px; white-space:nowrap; }
+  .hint { padding:6px 14px; font-size:12px; color:#e88; background:#181820; border-bottom:1px solid #2a2a34; }
+  .hint b { color:#9cf; font-weight:normal; }
+  #grid { display:grid; gap:10px; padding:10px; }
+  .card { background:#1a1a22; border:1px solid #2e2e3a; border-radius:8px; overflow:hidden; position:relative; cursor:pointer; }
+  .card .stage { width:100%; position:relative; overflow:hidden;
+                 background:repeating-conic-gradient(#222 0% 25%, #1b1b22 0% 50%) 50%/24px 24px; }
+  .card .stage canvas { position:absolute; display:block; }
+  .card .cap { padding:3px 5px; font-size:11px; color:#8cf; text-align:center; background:#181820;
+               white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .card .cap .nm { color:#fd8; }
+  .card .cap .lb { color:#9fe; }
+  .card .cap .em { color:#f88; }
+  .card.loading .stage::after { content:"…"; position:absolute; inset:0; display:flex; align-items:center;
+                                justify-content:center; color:#555; font-size:26px; }
+  .card.err .stage::after { content:"✕"; position:absolute; inset:0; display:flex; align-items:center;
+                            justify-content:center; color:#a55; font-size:22px; }
+  .card:hover { border-color:#6cf; }
+  /* ── 详情弹层 ── */
+  #modal { position:fixed; inset:0; z-index:100; background:rgba(0,0,0,.78); display:flex; align-items:center; justify-content:center; }
+  #modal.hidden { display:none; }
+  .mw { background:#17171f; border:1px solid #3a3a48; border-radius:10px; max-width:min(94vw,900px); max-height:92vh; overflow:auto; }
+  .mh { display:flex; align-items:center; gap:10px; padding:10px 14px; border-bottom:1px solid #2e2e3a; position:sticky; top:0; background:#17171f; }
+  .mh .t { font-size:15px; color:#9cf; }
+  .mh .x { margin-left:auto; }
+  .mb { display:flex; gap:14px; padding:14px; flex-wrap:wrap; }
+  #mstage { width:360px; height:360px; position:relative; flex:0 0 auto;
+            background:repeating-conic-gradient(#222 0% 25%, #1b1b22 0% 50%) 50%/28px 28px; border:1px solid #333; overflow:hidden; }
+  #mstage canvas { position:absolute; display:block; }
+  /* 骑宠双层翻转容器：bg+fg 两层共用同一世界坐标定位，镜像时绕脚点整体 scaleX(-1) */
+  .flipwrap { position:absolute; left:0; top:0; width:100%; height:100%; }
+  .flipwrap canvas { position:absolute; display:block; }
+  .mlabels { flex:1 1 260px; min-width:240px; }
+  .mdir { margin-bottom:8px; display:flex; gap:6px; align-items:center; flex-wrap:wrap; }
+  .mdir span { font-size:12px; color:#888; }
+  .mlabels .btns { display:flex; flex-wrap:wrap; gap:5px; }
+  .mlabels button { padding:4px 8px; font-size:12px; background:#2c2c38; color:#cde; border:1px solid #444; }
+  .mlabels button:hover { background:#3d4c5c; }
+  .mlabels button.on { background:#1d6fa5; color:#fff; border-color:#6cf; }
+  .mlabels button.empty { background:#24242c; color:#777; text-decoration:line-through; }
+  .mlabels button.empty::after { content:" 空"; color:#c66; font-size:10px; text-decoration:none; }
+  .mtip { font-size:11px; color:#888; margin:8px 0 4px; }
+  /* ── 锚点标记（2026-09-11：所有模型加十字标 + 脚点） ── */
+  .mk-origin { position:absolute; width:20px; height:20px; transform:translate(-50%,-50%); pointer-events:none; z-index:6;
+    background:
+      linear-gradient(#ff3b3b,#ff3b3b) center/2px 100% no-repeat,
+      linear-gradient(#ff3b3b,#ff3b3b) center/100% 2px no-repeat; }
+  .mk-foot { position:absolute; width:11px; height:11px; border-radius:50%; background:#ffd400;
+             transform:translate(-50%,-50%); pointer-events:none; z-index:7; box-shadow:0 0 3px #000; }
+  .mk-label { position:absolute; left:3px; bottom:3px; font-size:10px; line-height:1.2; color:#ffd9d9;
+              pointer-events:none; z-index:7; text-shadow:0 0 3px #000,0 0 3px #000; white-space:nowrap; }
+</style>
+</head>
+<body>
+<header>
+  <h1>角色模型总画廊</h1>
+  <span id="count"></span>
+  <input id="filter" placeholder="筛选 ID 或名称…">
+  <select id="action" title="选择要播放的动画"></select>
+  <select id="dir" title="朝向">
+    <option value="RB">朝向 RB</option>
+    <option value="LT">朝向 LT</option>
+    <option value="LB">朝向 LB(镜像RB)</option>
+    <option value="RT">朝向 RT(镜像LT)</option>
+  </select>
+  <select id="size" title="卡片尺寸">
+    <option value="s">小</option>
+    <option value="m" selected>中</option>
+    <option value="l">大</option>
+  </select>
+  <label class="chk"><input type="checkbox" id="onlyHas"> 仅显示有此动作的</label>
+  <label class="chk"><input type="checkbox" id="onlyRole"> 仅 Role 模型</label>
+  <button id="toggle">暂停全部</button>
+  <button id="rescan" class="gray">重新扫描目录</button>
+</header>
+<div class="hint">
+  运行：在 <b>D:\tsqt\主程序\GameWorld</b> 起服务（<b>python -m http.server 8000</b>）→ 打开
+  <b>http://localhost:8000/resource/char/角色模型总画廊.html</b>（直接双击打开会因跨域/路径失败）。
+  进入视口即自动播放、离开即销毁；点卡片看该模型的全部动画。
+  <span style="color:#ff8a8a">红十字 = 锚点(原点=脚点)</span> ·
+  <span style="color:#ffd400">黄点 = 同一锚点</span>。<b>锚点 = 模型被 pin 到地图格的那一点</b>：
+  常规角色锚点 = (256,256)（原始根时间轴在 (-256,-256) 放置角色精灵）；
+  单个 Role 精灵（图腾/传送阵/装饰物…）锚点 = (0,0)（根时间轴无该放置，与技能/特效锚定同源）。
+</div>
+<div id="grid"></div>
+
+<div id="modal" class="hidden">
+  <div class="mw">
+    <div class="mh">
+      <span class="t" id="mtitle">—</span>
+      <button class="x gray" id="mclose">关闭 ✕</button>
+    </div>
+    <div class="mb">
+      <div id="mstage"></div>
+      <div class="mlabels">
+        <div class="mdir">
+          <span>朝向：</span>
+          <button data-d="RB">RB</button><button data-d="LB">LB(镜像)</button>
+          <button data-d="LT">LT</button><button data-d="RT">RT(镜像)</button>
+        </div>
+        <div class="mtip">全部动画标签（灰删除线 = 无独立素材，游戏中由水平翻转生成）：</div>
+        <div class="btns" id="mbtns"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ═══════════ 数据：构建时烘焙（可用"重新扫描目录"动态刷新）═══════════ */
+const BAKED = [["10001",null],["10002",null],["20001",null],["20002",null],["30001",null],["30002",null],["40001",null],["40002",null],["100000",null],["100012",null],["100013",null],["100014",null],["100015",null],["100016",null],["100017",null],["101000","铁血卫·机器人"],["101001","杏林儿·机器人"],["101002",null],["101003",null],["101004",null],["101005",null],["101006",null],["102000","玄机子·机器人"],["102034",null],["102035",null],["102036",null],["102037",null],["102038",null],["102039",null],["103000",null],["103023",null],["103024",null],["103025",null],["103026",null],["103027",null],["103028",null],["104000",null],["104056",null],["104057",null],["104058",null],["104059",null],["104060",null],["104061",null],["105000",null],["105067",null],["105068",null],["105069",null],["105070",null],["105071",null],["105072",null],["106000",null],["106078",null],["106079",null],["106080",null],["106081",null],["106082",null],["106083",null],["107000",null],["107045",null],["107046",null],["107047",null],["107048",null],["107049",null],["107050",null],["107051",null],["108000",null],["109000",null],["110000",null],["110001",null],["110100",null],["110101",null],["110102",null],["110200",null],["110201",null],["110300",null],["110301",null],["110400",null],["110401",null],["110402",null],["111000",null],["111001",null],["111100",null],["111101",null],["111102",null],["111200",null],["111201",null],["111300",null],["111301",null],["111400",null],["111401",null],["111402",null],["112000",null],["112001",null],["112100",null],["112101",null],["112102",null],["112200",null],["112201",null],["112300",null],["112301",null],["112400",null],["112401",null],["112402",null],["113000",null],["113001",null],["113100",null],["113101",null],["113102",null],["113200",null],["113201",null],["113300",null],["113301",null],["113400",null],["113401",null],["113402",null],["114000",null],["114001",null],["114100",null],["114101",null],["114102",null],["114200",null],["114201",null],["114300",null],["114301",null],["114400",null],["114401",null],["114402",null],["115000",null],["115001",null],["115100",null],["115101",null],["115102",null],["115200",null],["115201",null],["115300",null],["115301",null],["115400",null],["115401",null],["115402",null],["116000",null],["116001",null],["116100",null],["116101",null],["116102",null],["116200",null],["116201",null],["116300",null],["116301",null],["116400",null],["116401",null],["116402",null],["117000",null],["117001",null],["117100",null],["117101",null],["117102",null],["117200",null],["117201",null],["117300",null],["117301",null],["117400",null],["117401",null],["117402",null],["120000",null],["120001",null],["120002",null],["120003",null],["120004",null],["120005",null],["120006",null],["120007",null],["120008",null],["120009",null],["120010",null],["120011",null],["121000",null],["121001",null],["121002",null],["121003",null],["121004",null],["121005",null],["121006",null],["121007",null],["121008",null],["121009",null],["121010",null],["121011",null],["122000",null],["122001",null],["122002",null],["122003",null],["122004",null],["122005",null],["122006",null],["122007",null],["122008",null],["122009",null],["122010",null],["122011",null],["123000",null],["123001",null],["123002",null],["123003",null],["123004",null],["123005",null],["123006",null],["123007",null],["123008",null],["123009",null],["123010",null],["123011",null],["124000",null],["124001",null],["124002",null],["124003",null],["124004",null],["124005",null],["124006",null],["124007",null],["124008",null],["124009",null],["124010",null],["124011",null],["125000",null],["125001",null],["125002",null],["125003",null],["125004",null],["125005",null],["125006",null],["125007",null],["125008",null],["125009",null],["125010","新月法杖"],["125011",null],["126000",null],["126001",null],["126002",null],["126003",null],["126004",null],["126005",null],["126006",null],["126007",null],["126008",null],["126009",null],["126010",null],["126011",null],["127000",null],["127001",null],["127002",null],["127003",null],["127004",null],["127005",null],["127006",null],["127007",null],["127008",null],["127009",null],["127010",null],["127011",null],["130000",null],["130001",null],["130002",null],["130003",null],["130005",null],["130006",null],["131000",null],["131001",null],["131002",null],["131003",null],["131005",null],["131006",null],["132000",null],["132001",null],["132002",null],["132003",null],["132005",null],["132006",null],["133000",null],["133001",null],["133002",null],["133003",null],["133005",null],["133006",null],["134000",null],["134001",null],["134002",null],["134003",null],["134005",null],["134006",null],["135000",null],["135001",null],["135002","猪大肠"],["135003",null],["135005",null],["135006",null],["136000",null],["136001",null],["136002",null],["136003",null],["136005",null],["136006",null],["137000",null],["137001",null],["137002",null],["137003",null],["137005",null],["137006",null],["140001",null],["140002",null],["140003",null],["140101",null],["140102",null],["140103",null],["140104",null],["140105",null],["140106",null],["140107",null],["140301",null],["140302",null],["140303",null],["140304",null],["140401",null],["140402",null],["140403",null],["140404",null],["142001",null],["142002",null],["144001",null],["144002",null],["144003",null],["149001",null],["149002",null],["149003",null],["149004",null],["149005",null],["149006",null],["149007",null],["149008",null],["149009",null],["149010",null],["178071",null],["190001",null],["190002",null],["190003",null],["190004",null],["190005",null],["190006",null],["190007",null],["190008",null],["190009",null],["190010",null],["190011",null],["190012",null],["190013",null],["190014",null],["190015",null],["190016",null],["190017",null],["190018",null],["190019",null],["190020",null],["190021",null],["190022",null],["190023",null],["190024",null],["190025",null],["190026",null],["190027",null],["190028",null],["190029",null],["190030",null],["190031",null],["190032",null],["190033",null],["190034",null],["190035",null],["190036",null],["190037",null],["190038",null],["190039",null],["190040",null],["190041",null],["190042",null],["190043",null],["190044",null],["190045",null],["190046",null],["190047",null],["190048",null],["190049",null],["190050",null],["190051",null],["190052",null],["190053",null],["190054",null],["190055",null],["190056",null],["190057",null],["190058",null],["190059",null],["190060",null],["190061",null],["190062",null],["190063",null],["190064",null],["190065",null],["200002",null],["200006",null],["200008",null],["200010",null],["200011",null],["200015",null],["200020",null],["200022",null],["200028",null],["200031",null],["200035",null],["200039",null],["200040",null],["200041",null],["200043",null],["200047",null],["200055",null],["200069",null],["200073",null],["200076",null],["200077",null],["200083",null],["200088",null],["200095",null],["200097",null],["200102",null],["200105",null],["200122",null],["200123",null],["200124",null],["200125",null],["201000",null],["201001",null],["201002",null],["201003",null],["201004",null],["201005",null],["201006",null],["201007",null],["201009",null],["201010",null],["201011",null],["201012",null],["201013",null],["201014",null],["201015",null],["201016",null],["201017",null],["201018",null],["201019",null],["201020",null],["201021",null],["201022",null],["201023",null],["201024",null],["201025",null],["201026",null],["201027",null],["201028",null],["201029",null],["201030",null],["201031",null],["201032",null],["201033",null],["201034",null],["201035",null],["201036",null],["201037",null],["202001",null],["202002",null],["202003",null],["202019",null],["202030",null],["202036",null],["205009",null],["205010",null],["205011",null],["205012",null],["208021",null],["210000",null],["210001",null],["210002",null],["210003",null],["210004",null],["210005",null],["210006",null],["210007",null],["210008",null],["210009",null],["210010",null],["210011",null],["210012",null],["210013",null],["210014",null],["210015",null],["210016",null],["210017",null],["210018",null],["210019",null],["210020",null],["210021",null],["210022",null],["210023",null],["210024",null],["210025",null],["210026",null],["210027",null],["210028",null],["210029",null],["210030",null],["210031",null],["210032",null],["210033",null],["210034",null],["210035",null],["210036",null],["210037",null],["210038",null],["210039",null],["210040",null],["210041",null],["210042",null],["210043",null],["210044",null],["210045",null],["210046",null],["210047",null],["210048",null],["210049",null],["210050",null],["210051",null],["210052",null],["210053",null],["210054",null],["210055",null],["210056",null],["210057",null],["210058",null],["210059",null],["210060",null],["210061",null],["210062",null],["210063",null],["210064",null],["210065",null],["210066",null],["210067",null],["210068",null],["210069",null],["210070",null],["210071",null],["210072",null],["210073",null],["210074",null],["210075",null],["210076",null],["210100",null],["210101",null],["210102",null],["210103",null],["210104",null],["210105",null],["210106",null],["210107",null],["210108",null],["210109",null],["210110",null],["210111",null],["210112",null],["210113",null],["210114",null],["210115",null],["210116",null],["210117",null],["210118",null],["210119",null],["210120",null],["210121",null],["210122",null],["210123",null],["210124",null],["210125",null],["210126",null],["210127",null],["210128",null],["210129",null],["210130",null],["210131",null],["210132",null],["210133",null],["210134",null],["210135",null],["210136",null],["210137",null],["210138",null],["210139",null],["210140",null],["210141",null],["210142",null],["210143",null],["210144",null],["210145",null],["210146",null],["210152",null],["240001",null],["240002",null],["240003",null],["240004",null],["240088",null],["290001",null],["290002",null],["300000",null],["300001",null],["300002",null],["300006",null],["300008",null],["300010",null],["300011",null],["300015",null],["300020","灰野兔"],["300022","野猫群"],["300023",null],["300024",null],["300025",null],["300028",null],["300029",null],["300030",null],["300031",null],["300032",null],["300035",null],["300039",null],["300040",null],["300041",null],["300043",null],["300047",null],["300055",null],["300069","密探头目"],["300073",null],["300074",null],["300075","黑龙"],["300076",null],["300077",null],["300083",null],["300088",null],["300095",null],["300097",null],["300102",null],["300105",null],["300122","火钳蟹头领"],["300123","黑钳蟹"],["300124","金钳蟹头领"],["300125","黑水鳄鱼"],["300126",null],["300150",null],["300151",null],["300152",null],["300153","朱雀雏鸟"],["300154",null],["300155",null],["300156",null],["300157",null],["300158",null],["300159",null],["300160",null],["300161",null],["300162",null],["300163",null],["300165",null],["300166",null],["300167",null],["300168","水滨蟹"],["300169",null],["300170",null],["300171",null],["300172",null],["300173",null],["300174",null],["300175",null],["300176",null],["300177",null],["300178","宝石蝎"],["300179",null],["300180",null],["300181",null],["300182",null],["300183",null],["300184",null],["300185",null],["300186",null],["300187",null],["300188",null],["300189","黄金港拳师首领"],["300190",null],["300191","黄金港剑士首领"],["300192","女剑灵"],["300193",null],["300194",null],["300195",null],["300196",null],["300197",null],["300198",null],["300199",null],["300200",null],["300201",null],["300202","蟹兵"],["300203",null],["300204",null],["300205","古怪猫妖"],["300206","荷童王"],["300207",null],["300208","大山鬼"],["300209","高级傀儡"],["300210",null],["300211",null],["300212","火云狮"],["300213",null],["300214",null],["300215",null],["300216",null],["300217",null],["300218",null],["300219",null],["300220",null],["300221",null],["300222",null],["300223",null],["300224",null],["300225",null],["300226",null],["300227",null],["300228",null],["300229",null],["300230",null],["300231",null],["300232",null],["300233",null],["300234",null],["300235",null],["300236",null],["300237",null],["300238",null],["300239",null],["300240",null],["300241",null],["300242",null],["300243",null],["300244","暗影女猎手"],["300245",null],["300246",null],["300247","魔族巨斧战士"],["300248",null],["300249",null],["300250",null],["300251",null],["300252",null],["300253",null],["300254",null],["300255",null],["300256",null],["300257",null],["300258",null],["300259",null],["300260",null],["300261",null],["300262",null],["300263",null],["300264",null],["300265",null],["300266",null],["300267",null],["300268",null],["300269",null],["300270",null],["300271",null],["300272",null],["300273",null],["300274","宠物之魂（高级）"],["300275",null],["300276",null],["300277",null],["300278",null],["300279",null],["300280",null],["300281",null],["300282",null],["300283",null],["300284",null],["300285",null],["300286",null],["300287",null],["300288",null],["300289",null],["300290",null],["300291",null],["300300",null],["300600",null],["300601",null],["300603",null],["300604",null],["300605",null],["300606",null],["300607",null],["300608","幽冥毒伞头目"],["300617",null],["300618",null],["300619",null],["300622",null],["300623",null],["300624","青鸾"],["300625",null],["300626","魅影骑士"],["300627",null],["300628",null],["300629",null],["300630",null],["300632",null],["300633",null],["300634",null],["300635",null],["300636",null],["300637",null],["300638",null],["300639",null],["300640",null],["300641",null],["300642",null],["300643",null],["300644",null],["300645",null],["300646",null],["300647",null],["300649",null],["300653",null],["300655",null],["300657",null],["300658",null],["300660",null],["300661",null],["300662",null],["300663",null],["300664","圣天使"],["300665",null],["300666",null],["300667",null],["300668",null],["300669",null],["300670",null],["300671",null],["300672",null],["300673",null],["300674",null],["300675",null],["300676",null],["300677",null],["300678",null],["300679",null],["300680",null],["300681",null],["300682",null],["300683",null],["300684",null],["300685",null],["300686",null],["300687",null],["300688",null],["300689",null],["300690",null],["300691",null],["300692","竹林隐士"],["300693",null],["300694",null],["300695",null],["300696",null],["300697",null],["300698",null],["300699",null],["300700",null],["300701",null],["300702",null],["300703",null],["300704",null],["300705",null],["300706",null],["300707",null],["300708",null],["300709",null],["300710",null],["300711",null],["300712",null],["300713",null],["300714",null],["300715",null],["300716",null],["300717","姮茗儿（捣药玉兔）"],["300718",null],["300720",null],["300722",null],["300724",null],["300725",null],["300726",null],["300727",null],["300728",null],["300732",null],["300733",null],["300734",null],["300735",null],["300736",null],["300737",null],["300738",null],["300739",null],["300740",null],["300741",null],["300742",null],["300743",null],["300744",null],["300745",null],["300746",null],["300750",null],["300751",null],["300752",null],["300753",null],["300754",null],["300755",null],["300756",null],["300757",null],["300758",null],["300759",null],["300760",null],["300761",null],["300762",null],["300763",null],["300764",null],["300765",null],["300766",null],["300767",null],["300768",null],["300769",null],["300770",null],["301000",null],["301001",null],["301002",null],["301003",null],["301004",null],["301005",null],["301006",null],["301007",null],["301009",null],["301010",null],["301011",null],["301012",null],["301013",null],["301014",null],["301015",null],["301016",null],["301017",null],["301018",null],["301019",null],["301020",null],["301021",null],["301022",null],["301023",null],["301024",null],["301025",null],["301026",null],["301027",null],["301028",null],["301029",null],["301030",null],["301031",null],["301032",null],["301033",null],["301034",null],["301035",null],["301036",null],["301037",null],["301073",null],["301076",null],["301077",null],["301083",null],["302001",null],["302007",null],["302008",null],["302009",null],["302010",null],["305009",null],["305010",null],["305011",null],["305012",null],["308021",null],["310016",null],["310017",null],["310018",null],["310019",null],["310020","魔族士兵头领"],["310021",null],["310022",null],["310023",null],["310024",null],["310025",null],["310026",null],["310027",null],["310028",null],["310029","蝎子宝宝"],["310030",null],["310031",null],["310032","甄族叛逃者头人"],["310033",null],["310034",null],["310035",null],["310036",null],["310037",null],["310038",null],["310039",null],["310040",null],["310041",null],["310042",null],["310043",null],["310045",null],["310046",null],["310047",null],["310048",null],["310049",null],["310050",null],["310051","水魅女王"],["310052",null],["310053",null],["310054",null],["310055",null],["310056",null],["310057",null],["310058",null],["310059",null],["310060",null],["310061",null],["310062",null],["310063",null],["310064",null],["310070","长老树精（精英）"],["310071","野人氏族头领（精英）"],["310072",null],["310073",null],["310074",null],["310075",null],["310076",null],["310077",null],["310078",null],["310079",null],["320000",null],["320001",null],["330000",null],["340001",null],["340002",null],["340003",null],["340004",null],["340008","小金龙"],["340009",null],["340010",null],["340011",null],["340012",null],["340013",null],["340014",null],["340015","花妖使者"],["340016",null],["340017",null],["340018",null],["340019",null],["340020",null],["340021",null],["340022","暗哨头目"],["340023",null],["340024",null],["340025",null],["340026",null],["340028",null],["340029",null],["340030",null],["340031",null],["340032",null],["340033",null],["340034",null],["340035",null],["340036",null],["340037",null],["340038",null],["340039",null],["340040",null],["340041",null],["340042",null],["340043",null],["340044",null],["340045",null],["340046",null],["340047",null],["340048",null],["340049",null],["340050",null],["340051",null],["340052",null],["340053",null],["340054",null],["340055",null],["340056",null],["340057","幽冥花煞头目"],["340058","混世魔王"],["340059",null],["340060",null],["340061",null],["340062",null],["340063",null],["340064","炙炎罗煞"],["340065",null],["340066",null],["340067",null],["340068",null],["340069",null],["340071",null],["340072",null],["340073",null],["340074",null],["340075",null],["340076","千年白蛇"],["340077",null],["340078",null],["340079",null],["340080",null],["340081",null],["340082",null],["400000","青焰虎"],["400001",null],["400002",null],["400003",null],["400004",null],["400005",null],["400006",null],["400007",null],["400008",null],["400009","天界战马"],["400010",null],["400011",null],["400012",null],["400013",null],["400014",null],["400017",null],["400019",null],["400020",null],["400021","白虎战骑"],["400022",null],["400023",null],["400024",null],["400025",null],["400026",null],["400027","银翅云纹吼"],["400028","妙法莲花"],["400029",null],["400030","地狱战狼"],["400031","幻化彩鱼"],["400032",null],["400033","百鸟之王"],["400034",null],["400035",null],["400036",null],["400037",null],["400038",null],["400039",null],["400040",null],["400041","欧特鲁斯"],["400042",null],["400043",null],["400044",null],["400045",null],["400046",null],["400047",null],["400048",null],["400049",null],["400050",null],["400051",null],["400052","金翼狂狮"],["400053","浪四海"],["400054",null],["400055",null],["400056","灵雨"],["400057",null],["400058",null],["400059",null],["400060",null],["400061",null],["400062",null],["400063","气球飞船"],["400064",null],["400065",null],["400066",null],["400067",null],["400068",null],["400069",null],["400070",null],["500000",null],["500001",null],["500002",null],["500003",null],["500004",null],["500005",null],["500006",null],["500007",null],["500008",null],["500009",null],["500010",null],["500011",null],["500012",null],["500013",null],["500014",null],["500015",null],["500016",null],["500017",null],["500018",null],["500019",null],["500020",null],["500021",null],["500022",null],["500023",null],["500024",null],["600000",null],["600001",null],["600002",null],["600003",null],["600004",null],["600005",null],["600006",null],["600007",null],["600008",null],["600009",null],["600010",null],["600011",null],["600012",null],["600013",null],["600014",null],["600015",null],["600016",null],["600017",null],["600018",null],["600019",null],["600020",null],["600021",null],["600022",null],["600023",null],["600024",null],["600025",null],["600026",null],["600027",null],["600028",null],["600029",null],["600030",null],["600031",null],["600032",null],["600033",null],["600034",null],["600035",null],["600036",null],["600037",null],["600038",null],["600039",null],["600040",null],["600041",null],["600042",null],["600043",null],["600044",null],["600045",null],["600046",null],["600047",null],["600048",null],["600049",null],["600050",null],["600051",null],["600052",null],["600053",null],["600054",null],["600055",null],["600056",null],["600057",null],["600058",null],["600059",null],["600060",null],["600061",null],["600062",null],["600063",null],["600064",null],["600065",null],["600066",null],["600067",null],["600068",null],["600069",null],["600070",null],["600071",null],["600072",null],["600073",null],["600074",null],["600075",null],["600076",null],["600077",null],["600078",null],["600079",null],["600080",null],["600081",null],["600082",null],["600083",null],["600084",null],["600085",null],["600086",null],["600087",null],["600088",null],["600089",null],["600090",null],["600091",null],["600092",null],["600093",null],["600094",null],["600095",null],["600096",null],["600097",null],["600098",null],["600099",null],["600100",null],["600101",null],["600102",null],["600103",null],["600104",null],["600105",null],["600106",null],["600108",null],["600109",null],["600110",null],["600111",null],["600112",null],["600113",null],["600114",null],["600115",null],["600116",null],["600117",null],["600118",null],["600119",null],["600120",null],["600121",null],["600122",null],["600123",null],["600124",null],["600125",null],["600126",null],["600127",null],["600128",null],["600129",null],["600130",null],["600131",null],["600132",null],["600133",null],["600134",null],["600135",null],["600136",null],["600137",null],["600138",null],["600139",null],["600140",null],["600141",null],["600142",null],["700000",null],["700001",null],["700002",null],["700003",null],["700004",null],["700005",null],["700006",null],["700007",null],["700008",null],["700009",null],["700010",null],["700011",null],["700012",null],["700013",null],["700014",null],["700015",null],["700016",null],["700017",null],["700018",null],["700019",null],["700020",null],["700021",null],["700022",null],["700023",null],["700024",null],["700025",null],["700026",null],["700027",null],["700028",null],["700029",null],["700030",null],["700031",null],["700032",null],["700033",null],["700034",null],["700035",null],["700101",null],["700102",null],["700103",null],["700104",null],["700105",null],["700106",null],["700107",null],["700108",null],["700109",null],["700110",null],["700111",null],["700112",null],["700113",null],["700114",null],["700115",null],["700116",null],["700117",null],["700118",null],["700119",null],["700120",null],["700121",null],["700122",null],["700123",null],["700124",null]];
+let MODELS = BAKED.map(x => ({ id: String(x[0]), name: x[1] || '' }));
+
+/* ═══════════ 常量 ═══════════ */
+const ACTIONS = [
+  ['stand','站立 stand'], ['walk','行走 walk'], ['attack','攻击 attack'], ['cast','施法 cast'],
+  ['down','倒地 down'], ['damage','受击 damage'], ['defend','防御 defend'],
+  ['sit','打坐 sit'], ['prep','蓄力 prep'], ['*','全部动画（轮播）']
+];
+const DIR_SRC    = { RB:'RB', LB:'RB', LT:'LT', RT:'LT' };   // 合成方向的源素材朝向
+const DIR_MIRROR = { RB:false, LB:true, LT:false, RT:true }; // 是否需要水平镜像
+const SIZES = { s:{h:120,col:118}, m:{h:180,col:158}, l:{h:260,col:220} };
+const MAX_LOADS = 12;
+const CACHE_MAX = 160;
+
+/* ═══════════ 脚点/锚点解析（与 js/core/loader.js 的 resolveFoot/rootAnchor 同源，画廊为独立工具不引游戏 loader）═══════════
+   规则（user 2026-09-11：「单个 Role 精灵的定位要和技能定位一样找原点脚点」；2026-09-12 删 ③ 兜底）：
+     ① dp[0] 顶层 PlaceObject == (-256,-256)            ⇒ 锚点 (256,256)（常规角色）
+        ★ 2026-09-17 补：dp[0] **取不到** pE 时（dp[0] 是空壳），改用 poolSet 定位「真根时间轴 def」再取其 place。
+          这批模型转换器把根时间轴 append 到了数组末尾（全量实测 72 个），原先一路掉到 (0,0)，与引擎同步修复。
+          ⚠ 顺序不可颠倒为"根 def 优先"：另有 239 个模型是 dp[0]→中间 MC→动作池 的三层结构，
+            优先读"放动作池的 def"会把它们正确的 (256,256) 打回 (0,0)。
+     ② 否则，渲染池内容中心 |cx| < 128（内容以原点为中心）⇒ 锚点 (0,0)（单个 Role 精灵）
+     ③ 兜底已删：无 place 且 |cx|>=128 一律 (0,0)（符号原点）。
+        例外：190019/190020/190053/190054 经 FOOT_OVERRIDE 显式钉 (256,256)（user 指定这四个多动作保持 256,256）。
+   复算脚本 _verify/scan_anchor_src.mjs；本次修复回归 _verify/verify_fix_rootdef73.mjs。 */
+const FOOT_OVERRIDE = {
+  210071: { x: 0, y: 0 },
+  // 与 loader.js 同源：这 4 个多动作模型原靠 ③(256,256) 兜底，删兜底后显式钉 (256,256)
+  190019: { x: 256, y: 256 }, 190020: { x: 256, y: 256 },
+  190053: { x: 256, y: 256 }, 190054: { x: 256, y: 256 },
+};
+const ROLE_CX_GUARD = 128;
+// 动作池集合 = index.html 里 const labels 的全部 pool（与 loader.actionPoolSet 同源）
+function actionPoolSetLocal(rec){
+  const s = new Set();
+  ((rec && rec.labels) || []).forEach(L => { if (L && L.pool != null) s.add(L.pool); });
+  return s;
+}
+// 定位「真根时间轴 def」：其 frameActionList 的 pE 引用 id 命中动作池 ≥ min(2, 池集大小)。与 loader.findRootTimelinePool 同源。
+function findRootTimelinePoolLocal(swf, poolSet){
+  const dp = swf && swf.definitionPool;
+  if (!dp || !poolSet || !poolSet.size) return -1;
+  const need = Math.min(2, poolSet.size);
+  for (let i = 0; i < dp.length; i++) {
+    const d = dp[i];
+    if (!d || !Array.isArray(d.frameActionList) || !d.frameActionList.length) continue;
+    const ids = new Set();
+    for (const kf of d.frameActionList) { if (!Array.isArray(kf)) continue;
+      for (const a of kf.slice(1)) if (Array.isArray(a) && a[0] === 'pE' && a[1] && a[1].id != null) ids.add(a[1].id); }
+    if (ids.size < need) continue;
+    let hit = 0; for (const id of ids) if (poolSet.has(id)) hit++;
+    if (hit >= need) return i;
+  }
+  return -1;
+}
+function firstPlaceOfLocal(d0){
+  if (!d0) return null;
+  const lists = [];
+  if (Array.isArray(d0.frameActionList)) lists.push(d0.frameActionList);
+  const dl = d0.displayList || d0.frames; if (Array.isArray(dl)) lists.push(dl);
+  for (const list of lists) for (const fr of list) {
+    if (!Array.isArray(fr)) continue;
+    for (const a of fr) if (Array.isArray(a) && a[0] === 'pE' && a[1] && a[1].id != null) {
+      const m = a[1].m || a[1].matrix;
+      return { x: (a[1].x != null ? a[1].x : (Array.isArray(m) ? m[4] : 0)) || 0,
+               y: (a[1].y != null ? a[1].y : (Array.isArray(m) ? m[5] : 0)) || 0 };
+    }
+  }
+  return null;
+}
+function topLevelPlaceLocal(swf, poolSet){
+  const dp = swf && swf.definitionPool; if (!dp) return null;
+  const p0 = firstPlaceOfLocal(dp[0]); if (p0) return p0;
+  if (poolSet && poolSet.size) { const i = findRootTimelinePoolLocal(swf, poolSet); if (i >= 0) return firstPlaceOfLocal(dp[i]); }
+  return null;
+}
+function resolveFootLocal(id, rec, renderRect){
+  const ov = FOOT_OVERRIDE[String(id)];
+  if (ov) return { x: ov.x, y: ov.y, src: 'override' };
+  // ★ 单 Role（无命名动作）盲推符号原点 (0,0)（user 2026-09-12：「role 盲推 0,0」）：覆盖规则① rootPlace
+  if (rec.hasNamed === false) return { x: 0, y: 0, src: 'roleOrigin' };
+  const pl = topLevelPlaceLocal(rec && rec.swf, actionPoolSetLocal(rec));
+  if (pl && pl.x === -256 && pl.y === -256) return { x: 256, y: 256, src: 'rootPlace' };
+  const cx = renderRect ? (renderRect.x + renderRect.width / 2) : 0;
+  if (Math.abs(cx) < ROLE_CX_GUARD) return { x: 0, y: 0, src: 'roleOrigin' };
+  // ③(256,256) 兜底已删（与 loader.js 同源）：无顶层 place 且 |cx|>=128 ⇒ 默认符号原点(0,0)
+  return { x: 0, y: 0, src: 'roleOrigin' };
+}
+
+/* ═══════════ DOM ═══════════ */
+const grid = document.getElementById('grid');
+const countEl = document.getElementById('count');
+const filterEl = document.getElementById('filter');
+const actionEl = document.getElementById('action');
+const dirEl = document.getElementById('dir');
+const sizeEl = document.getElementById('size');
+const onlyHasEl = document.getElementById('onlyHas');
+const onlyRoleEl = document.getElementById('onlyRole');
+const toggleBtn = document.getElementById('toggle');
+const rescanBtn = document.getElementById('rescan');
+
+ACTIONS.forEach(a => { const o = document.createElement('option'); o.value = a[0]; o.textContent = a[1]; actionEl.appendChild(o); });
+
+let curAction = 'stand', curDir = 'RB', curSize = 'm', globalPaused = false;
+let loading = 0, io = null, rotTimer = null;
+const loadQueue = [];
+const modelCache = new Map();   // id -> { labels, by, swf, poolRect, box }
+
+/* ═══════════ 并集包围盒（与 js/core/loader.js 同源）═══════════
+   转换模型的动画 MovieClip 只存「第 0 帧 pose 的 rect」，fanvas 按它设画布尺寸会导致
+   更大的 pose（挥刀/抬手）被裁切。这里在播放前用并集覆盖 rect，保证动画完整。      */
+function mergeRect(a, b){
+  if (!a) return b; if (!b) return a;
+  const x = Math.min(a.x, b.x), y = Math.min(a.y, b.y);
+  return { x, y, width: Math.max(a.x+a.width, b.x+b.width)-x, height: Math.max(a.y+a.height, b.y+b.height)-y };
+}
+function unionRectOf(dp, idx, seen){
+  seen = seen || new Set();
+  if (seen.has(idx)) return null;
+  seen.add(idx);
+  const d = dp[idx]; if (!d) return null;
+  let r = (d.rect && (d.rect.width || d.rect.height)) ? { x:d.rect.x, y:d.rect.y, width:d.rect.width, height:d.rect.height } : null;
+  const fal = d.frameActionList;
+  if (fal && Array.isArray(fal)) for (const kf of fal) {
+    if (!kf) continue; const acts = Array.isArray(kf) ? kf.slice(1) : [];
+    for (const a of acts) if (Array.isArray(a) && a[0]==='pE' && a[1] && a[1].id != null) r = mergeRect(r, unionRectOf(dp, a[1].id, seen));
+  }
+  const dl = d.displayList || d.frames;
+  if (dl && Array.isArray(dl)) for (const fr of dl) {
+    if (!Array.isArray(fr)) continue;
+    for (const a of fr) if (Array.isArray(a) && a[0]==='pE' && a[1] && a[1].id != null) r = mergeRect(r, unionRectOf(dp, a[1].id, seen));
+  }
+  return r;
+}
+
+// 单帧 Role 模型兜底：index.html 既无 const labels 也无 GENERIC_MAIN 时（如 210014），
+// 扫描 definitionPool 找"播放 Role 图形"的主动画：def 含 frameActionList 且其中 pE 引用了一个带 graphics 的 def。
+// 退而求其次：首个带 graphics 的 Role 单帧 def；再退：首个非舞台(非空) def。都找不到返回 null（真"无动画"）。
+function findCharMainPool(swfData) {
+  const dp = (swfData && swfData.definitionPool) || [];
+  const isGraphic = i => dp[i] && Array.isArray(dp[i].graphics) && dp[i].graphics.length > 0;
+  for (let i = 1; i < dp.length; i++) {
+    const d = dp[i];
+    if (!d || !Array.isArray(d.frameActionList)) continue;
+    let ok = false;
+    for (const kf of d.frameActionList) {
+      if (!Array.isArray(kf)) continue;
+      for (const a of kf.slice(1)) {
+        if (Array.isArray(a) && a[0] === 'pE' && a[1] && a[1].id != null && isGraphic(a[1].id)) { ok = true; break; }
+      }
+      if (ok) break;
+    }
+    if (ok) return i;
+  }
+  for (let i = 1; i < dp.length; i++) if (isGraphic(i)) return i;
+  for (let i = 1; i < dp.length; i++) {
+    const d = dp[i];
+    if (d && ((d.rect && (d.rect.width || d.rect.height)) || Array.isArray(d.frameActionList) || Array.isArray(d.graphics))) return i;
+  }
+  return null;
+}
+
+// 判断 Role 池是否"定格首帧"：单帧 Role / 瞬时"放置→移除"动画(末态被移除、循环会闪烁)定格首帧保持显示；
+// 真正多帧持续动画(末态仍有内容)照常循环播放。与 loader.js rolePoolLeavesEmpty 同源算法。
+function rolePoolLeavesEmpty(swfData, pool) {
+  const d = swfData && swfData.definitionPool && swfData.definitionPool[pool];
+  if (!d || !Array.isArray(d.frameActionList)) return true;
+  const total = d.totalFrames || d.frameActionList.length || 1;
+  if (total <= 1) return false;
+  const instName = (a) => {
+    if (!a) return null;
+    if (typeof a === 'string') return a;
+    if (a.n != null) return a.n;
+    if (a.id != null) return String(a.id);
+    return null;
+  };
+  const placed = new Set();
+  for (const kf of d.frameActionList) {
+    if (!Array.isArray(kf)) continue;
+    for (const a of kf.slice(1)) {
+      if (!Array.isArray(a)) continue;
+      if (a[0] === 'pE') { const n = instName(a[1]); if (n != null) placed.add(n); }
+      else if (a[0] === 'rE') { const n = instName(a[1]); if (n != null) placed.delete(n); }
+    }
+  }
+  return placed.size === 0;
+}
+
+/* ═══════════ 模型加载 ═══════════ */
+async function loadModel(id){
+  if (modelCache.has(id)) return modelCache.get(id);
+  const [html, txt] = await Promise.all([
+    fetch('./' + id + '/index.html').then(r => r.ok ? r.text() : '').catch(() => ''),
+    fetch('./' + id + '/swfData.js').then(r => { if (!r.ok) throw new Error('swfData 404'); return r.text(); })
+  ]);
+  const m = html.match(/const\s+labels\s*=\s*(\[[\s\S]*?\])\s*;/);
+  let labels = [];
+  if (m) { try { labels = JSON.parse(m[1]); } catch (e) {} }
+  // ★ 单 Role（无命名动作）判定：从【原始 const labels】看是否含非空命名动作（须在下面合成 roleLabel 注入前捕获）
+  const hasNamed = labels.some(L => L && !L.empty);
+  const swf = new Function(txt + '\n;return swfData;')();
+  // 兜底：单帧 Role 模型（蟠龙图腾/传送法阵/装饰物等）。优先用 index.html 显式声明的 GENERIC_MAIN；
+  // 若既无 const labels 也无 GENERIC_MAIN（如 210014），则扫描 definitionPool 找"播放 Role 的主动画"。
+  // 与技能加载动画(playSkill 走 GENERIC_MAIN)一致；只有 Role 也没有才算真"无动画"。
+  let roleLabel = null;
+  if (!labels.length) {
+    let pool = null;
+    const gm = (html.match(/GENERIC_MAIN\s*=\s*(\d+)/) || [])[1];
+    if (gm != null) pool = parseInt(gm, 10);
+    if (pool == null) pool = findCharMainPool(swf);
+    if (pool != null) { roleLabel = { label: 'Role', pool, empty: false }; labels = [roleLabel]; }
+  }
+  const by = {};
+  labels.forEach(L => { by[String(L.label).toLowerCase()] = L; });
+  // 每个 pool 的并集 rect（写回 swf，fanvas 据此设画布尺寸，避免 pose 被裁）
+  // ★ 骑宠新结构含 bg/fg 双层：bg 池也要算入，否则双层缩放/包围盒只按 fg 算会错位
+  const poolRect = {};
+  const seen = new Set();
+  labels.forEach(L => {
+    const pools = [L.pool];
+    if (L.bg != null && L.bg !== L.pool) pools.push(L.bg);
+    for (const p of pools) {
+      if (p == null || seen.has(p)) continue; seen.add(p);
+      const ur = unionRectOf(swf.definitionPool, p);
+      if (ur && ur.width > 0 && ur.height > 0) { poolRect[p] = ur; swf.definitionPool[p].rect = ur; }
+      else if (swf.definitionPool[p] && swf.definitionPool[p].rect) poolRect[p] = swf.definitionPool[p].rect;
+    }
+  });
+  const rec = { labels, by, swf, poolRect, box:null, _role: roleLabel, hasNamed };
+  modelCache.set(id, rec);
+  if (modelCache.size > CACHE_MAX) modelCache.delete(modelCache.keys().next().value);
+  return rec;
+}
+
+// 模型级统一包围盒：所有非空 pool 的并集 rect 再取并集 ⇒ 各动作共用同一世界坐标与缩放，切换时不忽大忽小
+// ★ 骑宠 bg 层一并纳入（否则统一缩放 k 不含 bg，两层比例不一致会错位）
+function modelBox(rec){
+  if (rec.box) return rec.box;
+  let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity, n = 0;
+  const seen = new Set();
+  rec.labels.forEach(L => {
+    const pools = [L.pool];
+    if (L.bg != null && L.bg !== L.pool) pools.push(L.bg);
+    for (const p of pools) {
+      if (L.empty || p == null || seen.has(p)) continue;
+      const r = rec.poolRect[p]; if (!r || !(r.width > 0 && r.height > 0)) continue;
+      seen.add(p); n++;
+      minX = Math.min(minX, r.x); minY = Math.min(minY, r.y);
+      maxX = Math.max(maxX, r.x + r.width); maxY = Math.max(maxY, r.y + r.height);
+    }
+  });
+  if (!n) { minX = 0; minY = 0; maxX = 512; maxY = 512; }
+  rec.box = { x:minX, y:minY, w:maxX-minX, h:maxY-minY };
+  return rec.box;
+}
+
+/* ═══════════ 动画标签选择 ═══════════ */
+function pickLabel(rec, action, src){
+  const alt = (src === 'RB') ? 'LT' : 'RB';
+  const cands = [action+src, action+alt, 'stand'+src, 'stand'+alt];
+  for (const c of cands) { const L = rec.by[c.toLowerCase()]; if (L && !L.empty) return L; }
+  for (const c of cands) { const L = rec.by[c.toLowerCase()]; if (L) return L; }   // 退而求其次（可能是空动画）
+  if (rec._role) return rec._role;   // 兜底：单帧 Role 模型，任意动作都回退到 Role 主精灵（与技能加载动画一致）
+  return null;
+}
+function labelForCard(card, rec){
+  if (curAction === '*') {
+    const list = rec.labels.filter(L => !L.empty);
+    if (!list.length) return null;
+    return list[(card._ai | 0) % list.length];
+  }
+  return pickLabel(rec, curAction, DIR_SRC[curDir]);
+}
+
+/* ═══════════ 渲染一张卡片 ═══════════ */
+// ⚠ 必须先 pause 再移除：fanvas 按 canvas 索引定时器，直接 remove 会让定时器常驻并继续跑
+//   （轮播/切换动作时会累积成百上千个孤儿定时器，主线程被吃光、页面卡死）。
+function clearStage(box){
+  const cvs = box.querySelectorAll('canvas');
+  for (let i = 0; i < cvs.length; i++) { try { fanvas.pause(cvs[i]); } catch (e) {} }
+  while (box.firstChild) box.removeChild(box.firstChild);
+}
+
+/* ═══════════ 骑宠双层（bg+fg 三明治）支持 ═══════════
+   新结构 labels（仅骑宠 4xxxxx）含 bg/fg/flip 字段：
+     bg = 骑手身后层（depth1）、fg = 骑手身前层（depth5）、pool 保留 = fg 主显示池。
+   单 canvas 消费者（loader.parseCharActions）只读 pool/empty ⇒ 游戏侧零改动。
+   镜像：单层走 applyMirrorOrigin（含「镜像后可见盒居中」补偿，为 Role 图腾设计）；
+        双层改用外层 .flipwrap 绕脚点整体 scaleX(-1) —— 两 canvas 共用同一 modelBox/k 定位，
+        若各自套用 applyMirrorOrigin 的平移公式，两层的相对偏移会与未镜像时不一致（已推导验证），破坏对齐。 */
+function isLayered(L){ return !!(L && (L.bg != null || L.fg != null)); }
+
+// 在 stage 上摆放某 label 的全部层（不播放，播放由调用方对返回的 layers 逐个 fanvas.play）
+// 返回 { layers:[{cv,pool}], box, mainRect }
+function placeAnim(stage, rec, L, mirror, id, stageW, stageH){
+  const layered = isLayered(L);
+  const wrap = layered ? document.createElement('div') : null;
+  if (wrap) { wrap.className = 'flipwrap'; stage.appendChild(wrap); }
+  const host = wrap || stage;
+  const specs = layered
+    ? [{ pool: L.bg, z: 1 }, { pool: L.fg, z: 2 }].filter(s => s.pool != null)
+    : [{ pool: L.pool, z: 0 }];
+  const layers = [];
+  for (const s of specs) {
+    const cv = document.createElement('canvas');
+    if (layered) cv.style.zIndex = String(s.z);
+    host.appendChild(cv);
+    layers.push({ cv, pool: s.pool });
+  }
+  const box = modelBox(rec);
+  const mainPool = layered ? (L.fg != null ? L.fg : L.bg) : L.pool;
+  const mainRect = rec.poolRect[mainPool];
+  if (!layered) {
+    const pos = placeCanvas(layers[0].cv, mainRect, box, stageW, stageH);
+    applyMirrorOrigin(layers[0].cv, mirror, mainRect, box, pos, id, rec);
+  } else {
+    for (const ly of layers) placeCanvas(ly.cv, rec.poolRect[ly.pool], box, stageW, stageH);
+    if (mirror) {
+      // 绕脚点整体翻转：transformOrigin = 脚点的 stage 像素位置
+      const f = resolveFootLocal(id, rec, mainRect);
+      const k = Math.min(stageW / box.w, stageH / box.h);
+      const ox = (stageW - box.w * k) / 2 + (f.x - box.x) * k;
+      const oy = (stageH - box.h * k) / 2 + (f.y - box.y) * k;
+      wrap.style.transformOrigin = ox + 'px ' + oy + 'px';
+      wrap.style.transform = 'scaleX(-1)';
+    }
+  }
+  // 双层绕脚点翻转 ⇒ 脚点屏幕位置不变，锚点标记按未镜像计算
+  addAnchorMarkers(stage, box, stageW, stageH, id, rec, mainRect, layered ? false : mirror);
+  return { layers, box, mainRect, wrap };
+}
+function pauseCard(card){
+  if (card._layers) for (const l of card._layers) { try { fanvas.pause(l.cv); } catch (e) {} }
+}
+function resumeCard(card){
+  if (card._layers) for (const l of card._layers) { try { fanvas.resume(l.cv); } catch (e) {} }
+}
+
+// 把 canvas 按「模型统一世界坐标 + 统一缩放」落位，避免各动作比例跳动
+function placeCanvas(cv, rect, box, stageW, stageH){
+  const k = Math.min(stageW / box.w, stageH / box.h);
+  let cssW, cssH, left, top;
+  if (rect && rect.width > 0) {
+    cssW = rect.width * k; cssH = rect.height * k;
+    left = (stageW - box.w*k)/2 + (rect.x - box.x)*k;
+    top  = (stageH - box.h*k)/2 + (rect.y - box.y)*k;
+  } else {                                   // 兜底：等比包含
+    const s = Math.min(stageW / (cv.width||1), stageH / (cv.height||1));
+    cssW = (cv.width||0)*s; cssH = (cv.height||0)*s;
+    left = (stageW - cssW)/2; top = (stageH - cssH)/2;
+  }
+  cv.style.width = cssW + 'px'; cv.style.height = cssH + 'px';
+  cv.style.left = left + 'px'; cv.style.top = top + 'px';
+  return { k, left, top, cssW, cssH };
+}
+
+// 翻转轴 = 锚点(原点=脚点，红十字)：与 in-game fighter._applyFlip 同源（见 12c）。
+// 画廊 canvas 只覆盖某 pool 的 rect 子区，故翻转轴须换算成 canvas 本地像素；
+// 否则会绕画布中心翻转、镜像后整体位移、脚点偏离红十字（user 报"翻转不正确"）。
+// ★ 修(2026-09-12)：仅绕脚点 scaleX(-1) 时，若脚点不在 rect 水平中心（Role 图腾/法阵/装饰物，
+//   脚点=(0,0) 常在 rect 之外），镜像后的可见内容会偏到另一侧、被 .stage{overflow:hidden} 裁掉
+//   （user 报"翻转时画面显示不完全"）。故把 canvas 的 layout left 调整为「让镜像后的可见包围盒居中于 stage」：
+//   可见盒 = [left + 2*ox - cssW, left + 2*ox]，令其居中 ⇒ left = stageW/2 - 2*ox + cssW/2。
+function applyMirrorOrigin(cv, mirror, rect, box, pos, id, rec){
+  if (!mirror) { cv.style.transform = 'none'; return; }
+  if (!rect || !(rect.width > 0)) { cv.style.transformOrigin = 'center center'; cv.style.transform = 'scaleX(-1)'; return; }
+  const f = resolveFootLocal(id, rec, rect);
+  const ox = (f.x - rect.x) * pos.k;          // 锚点 x 在 canvas 本地像素
+  const cssW = rect.width * pos.k;            // canvas 显示宽度
+  const stageW = cv.parentElement ? cv.parentElement.clientWidth : 0;
+  if (stageW) cv.style.left = (stageW / 2 - 2 * ox + cssW / 2) + 'px';
+  cv.style.transformOrigin = ox + 'px center';
+  cv.style.transform = 'scaleX(-1)';
+}
+
+// 在卡片 stage 上叠加锚点标记：红十字 = 锚点(原点=脚点，resolveFoot) —— 模型被 pin 到地图格的那一点。
+// 与 renderCard 共用同一 modelBox(rec) 与统一缩放 k，故 flash 坐标→stage 像素的换算与 placeCanvas 完全一致。
+// 常规模型锚点=(256,256)（= 画布中心，红黄重合）；单个 Role 精灵锚点=(0,0)（= 符号原点，与技能/特效同源）。
+// ★ 修(2026-09-12)：mirror 时 canvas 被平移使可见盒居中，脚点(原点)的可见屏幕位置需按镜像几何重算
+//   （脚点在 canvas 本地 x=ox，绕 ox 翻转后屏幕 x = left + ox，而 left 已设为 stageW/2 - 2*ox + cssW/2
+//   ⇒ 脚点屏幕 x = stageW/2 - ox + cssW/2），故此处 fx 同步取该值，保证红十字仍落在脚点。
+const SRC_TXT = { rootPlace: '常规(根偏移-256)', roleOrigin: '单Role(符号原点)', center: '256约定', override: '标定覆盖' };
+function addAnchorMarkers(stage, box, stageW, stageH, id, rec, renderRect, mirror){
+  if (!(box && box.w > 0 && box.h > 0)) return;
+  const k = Math.min(stageW / box.w, stageH / box.h);
+  const bx = (stageW - box.w * k) / 2, by = (stageH - box.h * k) / 2;
+  const f = resolveFootLocal(id, rec, renderRect);                    // 锚点(原点=脚点)
+  let fx = bx + (f.x - box.x) * k, fy = by + (f.y - box.y) * k;
+  if (mirror && renderRect && renderRect.width > 0){
+    const ox = (f.x - renderRect.x) * k, cssW = renderRect.width * k;
+    fx = stageW / 2 - ox + cssW / 2;
+  }
+  const cross = document.createElement('div'); cross.className = 'mk-origin';
+  cross.style.left = fx + 'px'; cross.style.top = fy + 'px';
+  stage.appendChild(cross);
+  const dot = document.createElement('div'); dot.className = 'mk-foot';
+  dot.style.left = fx + 'px'; dot.style.top = fy + 'px';
+  stage.appendChild(dot);
+  const lbl = document.createElement('div'); lbl.className = 'mk-label';
+  lbl.textContent = '锚点(原点=脚点)(' + Math.round(f.x) + ',' + Math.round(f.y) + ') · ' + (SRC_TXT[f.src] || f.src);
+  stage.appendChild(lbl);
+}
+
+function renderCard(card, rec){
+  clearStage(card._stage);
+  const L = labelForCard(card, rec);
+  const stageW = card._stage.clientWidth || SIZES[curSize].col;
+  const stageH = card._stage.clientHeight || SIZES[curSize].h;
+  if (!L) {
+    card._cap.innerHTML = card._id + ' <span class="em">无此动画</span>';
+    card._state = 'ready'; card.classList.remove('loading'); return;
+  }
+  const mirror = (curAction === '*') ? false : DIR_MIRROR[curDir];
+  const { layers } = placeAnim(card._stage, rec, L, mirror, card._id, stageW, stageH);
+  card._label = L; card._canvas = layers[layers.length - 1].cv; card._layers = layers;
+  // 首帧绘制完成才显形：fanvas 预加载图片期间画布是黑/空白，直接显示会闪黑块
+  let revealed = false;
+  const reveal = () => { if (!revealed) { revealed = true; layers.forEach(l => l.cv.style.visibility = ''); } };
+  const revealT = setTimeout(reveal, 4000);          // 兜底：万一 onFrame 不触发
+  for (const ly of layers) {
+    ly.cv.style.visibility = 'hidden';
+    try {
+      // Role 模型：仅当该 Role 池是"单帧/放置→移除"瞬时动画(末态为空、循环闪烁)时定格首帧保持显示；
+      // 真正多帧持续动画(末态仍有内容)照常循环播放。
+      const isRole = (L === rec._role);
+      const roleFrozen = isRole && rolePoolLeavesEmpty(rec.swf, ly.pool);
+      fanvas.play(ly.cv, rec.swf, { rootDef:ly.pool, transparent:true, cache:1, scale:1,
+                                    imagePath:'./' + card._id + '/images/', autoPlay:true,
+                                    onFrame(){ clearTimeout(revealT); reveal(); if (roleFrozen && !ly.cv._frozen) { ly.cv._frozen = true; try { fanvas.gotoAndStop(ly.cv, 0); } catch(e){} } } });
+    } catch (e) { clearTimeout(revealT); reveal(); card._err = true; }
+  }
+  const nm = card._name ? '<span class="nm">' + card._name + '</span> ' : '';
+  const em = L.empty ? ' <span class="em">⚠空</span>' : '';
+  card._cap.innerHTML = nm + card._id + ' <span class="lb">' + L.label + '</span>' + em;
+  card._state = 'ready'; card.classList.remove('loading');
+  if (!(card._visible && !globalPaused)) pauseCard(card);
+}
+
+function fail(card){ card._state = 'idle'; card.classList.remove('loading'); }
+
+async function loadCard(card){
+  const id = card._id, myToken = ++card._token;
+  card._state = 'loading'; card.classList.add('loading'); loading++;
+  try {
+    const rec = await loadModel(id);
+    if (card._token !== myToken || !card.isConnected) { fail(card); return; }
+    renderCard(card, rec);
+  } catch (e) {
+    card._err = true; card.classList.add('err');
+    clearStage(card._stage);
+    card._cap.innerHTML = card._id + ' <span class="em">加载失败</span>';
+    fail(card);
+  } finally { loading--; pump(); }
+}
+
+function unload(card){
+  if (card._state !== 'ready' && card._state !== 'loading') return;
+  pauseCard(card);
+  clearStage(card._stage);
+  card._layers = null; card._canvas = null;
+  card._state = 'idle';
+}
+function pump(){ while (loadQueue.length && loading < MAX_LOADS) loadCard(loadQueue.shift()); }
+
+function makeCard(m){
+  const card = document.createElement('div');
+  card.className = 'card';
+  card._id = m.id; card._name = m.name; card._state = 'idle'; card._token = 0;
+  card._visible = false; card._ai = 0;
+  const stage = document.createElement('div'); stage.className = 'stage';
+  stage.style.height = SIZES[curSize].h + 'px';
+  const cap = document.createElement('div'); cap.className = 'cap';
+  card.appendChild(stage); card.appendChild(cap);
+  card._stage = stage; card._cap = cap;
+  card.addEventListener('click', () => openModal(m.id, m.name));
+  return card;
+}
+
+function build(list){
+  if (io) io.disconnect();
+  loadQueue.length = 0; loading = 0;
+  grid.innerHTML = '';
+  grid.style.gridTemplateColumns = 'repeat(auto-fill, minmax(' + SIZES[curSize].col + 'px, 1fr))';
+  io = new IntersectionObserver(entries => {
+    entries.forEach(en => {
+      const card = en.target;
+      card._visible = en.isIntersecting;
+      if (en.isIntersecting) {
+        if (card._state === 'ready') { if (!globalPaused) resumeCard(card); }
+        else if (card._state === 'idle') { if (loading < MAX_LOADS) loadCard(card); else loadQueue.push(card); }
+      } else {
+        unload(card);
+        const i = loadQueue.indexOf(card); if (i >= 0) loadQueue.splice(i, 1);
+      }
+    });
+  }, { rootMargin: '120px 0px' });   // 别放太宽：可见卡片越多，同时跑的 fanvas 定时器越多
+  list.forEach(m => { const c = makeCard(m); grid.appendChild(c); io.observe(c); });
+  countEl.textContent = '共 ' + list.length + ' 个模型';
+}
+
+/* ── "单 Role 模型" 判定（供「仅 Role 模型」筛选）──
+   判定口径与 loadModel() 一致：index.html 无 `const labels`（或 labels 为空数组）⇒ 走 _role 单池兜底。
+   旧实现勾选时逐个 fetch 1428 个 index.html（单线程 http.server 下 >90s）：既慢，又会在 rescan 清空缓存后
+   把筛选【静默丢弃】（勾选仍亮着却显示全部模型）—— 即 user 报的"有时候会失效"。
+   现改为：优先读烘焙清单 _model_manifest.json（一次请求、瞬时）；清单里没有的 id（新增模型/无清单）才实时扫描。
+   由 scripts/gen_model_manifest.mjs 生成清单。 */
+const ROLE_SET = new Set();       // 已判定为"单个 Role 精灵"的 id
+const ROLE_COVERED = new Set();   // 已判定过的 id（含非 Role），用于增量扫描新模型
+let roleManifestLoaded = false;   // 烘焙清单是否已尝试加载
+let rolePrep = null;              // 进行中的准备 Promise
+
+async function rolePrepOnce(){
+  if (rolePrep) return rolePrep;
+  rolePrep = (async () => {
+    if (!roleManifestLoaded){
+      roleManifestLoaded = true;
+      try {
+        const r = await fetch('./_model_manifest.json', { cache: 'no-store' });
+        if (r.ok){
+          const j = await r.json();
+          for (const id in (j.models || {})){
+            ROLE_COVERED.add(id);
+            if (((j.models[id] || {}).n || 0) === 0) ROLE_SET.add(id);
+          }
+        }
+      } catch (e) { /* 清单不可用 ⇒ 退回实时扫描 */ }
+    }
+    const todo = MODELS.map(m => m.id).filter(id => !ROLE_COVERED.has(id));
+    if (todo.length){
+      let i = 0; const CONC = 16;
+      const worker = async () => {
+        while (i < todo.length){
+          const id = todo[i++];
+          try {
+            const r = await fetch('./' + id + '/index.html');
+            if (!r.ok) continue;                        // 记作"未判定"，下次重试
+            const t = await r.text();
+            const m = t.match(/labels\s*=\s*(\[[\s\S]*?\])\s*;/);
+            let isRole = true;
+            if (m) { try { const L = JSON.parse(m[1]); isRole = !Array.isArray(L) || L.length === 0; } catch (e) { isRole = true; } }
+            ROLE_COVERED.add(id);
+            if (isRole) ROLE_SET.add(id);
+          } catch (e) {}
+        }
+      };
+      await Promise.all(Array.from({ length: CONC }, worker));
+    }
+  })();
+  try { await rolePrep; } finally { rolePrep = null; }
+  return true;
+}
+function roleDataReady(){ return MODELS.every(m => ROLE_COVERED.has(m.id)); }
+
+function applyFilter(){
+  const q = filterEl.value.trim().toLowerCase();
+  let list = MODELS;
+  if (q) list = list.filter(m => m.id.indexOf(q) >= 0 || (m.name && m.name.toLowerCase().indexOf(q) >= 0));
+  if (onlyRoleEl.checked) {
+    // ★ 修：旧版 `if (onlyRoleEl.checked && roleScanCache)` 在缓存为空时【静默丢弃】筛选（rescan 后必现）。
+    //   现改为：数据未就绪则明确提示并自动准备，准备好后自动重跑筛选。
+    if (!roleDataReady()){
+      const pending = !!(rolePrep || !roleManifestLoaded);
+      build([]);
+      if (pending){
+        grid.innerHTML = '<p style="color:#9cf;padding:20px">正在准备 Role 模型清单…</p>';
+        countEl.textContent = '';
+        rolePrepOnce().then(() => applyFilter());
+      } else {
+        const miss = MODELS.filter(m => !ROLE_COVERED.has(m.id)).length;
+        grid.innerHTML = '<p style="color:#f99;padding:20px">Role 清单不完整：还有 ' + miss + ' 个模型未能判定（拉取 index.html 失败）。请确认从 GameWorld 目录起了服务器，再点「重新扫描目录」。</p>';
+        countEl.textContent = '';
+      }
+      return;
+    }
+    list = list.filter(m => ROLE_SET.has(m.id));
+  }
+  build(list);
+}
+
+/* 切换动作/朝向/尺寸：已加载的卡片重渲染（不重新下载） */
+function rerenderAll(){
+  Array.from(grid.children).forEach(card => {
+    if (card._state !== 'ready' && card._state !== 'loading') return;
+    const rec = modelCache.get(card._id);
+    if (!rec) return;
+    card._token++;                       // 作废进行中的渲染
+    renderCard(card, rec);
+  });
+}
+
+/* ═══════════ 详情弹层 ═══════════ */
+const modal = document.getElementById('modal');
+const mstage = document.getElementById('mstage');
+const mbtns = document.getElementById('mbtns');
+const mtitle = document.getElementById('mtitle');
+let mId = null, mRec = null, mDir = 'RB', mBase = null;   // mBase: 基准动作名（不含朝向）
+
+function renderModal(){
+  if (!mRec) return;
+  clearStage(mstage);
+  const src = DIR_SRC[mDir];
+  let L = pickLabel(mRec, mBase, src);
+  if (!L) { const any = mRec.labels.filter(x => !x.empty); L = any[0] || mRec.labels[0]; }
+  if (!L) return;
+  const { layers } = placeAnim(mstage, mRec, L, DIR_MIRROR[mDir], mId, mstage.clientWidth, mstage.clientHeight);
+  let revealed = false;
+  const reveal = () => { if (!revealed) { revealed = true; layers.forEach(l => l.cv.style.visibility = ''); } };
+  const revealT = setTimeout(reveal, 4000);
+  for (const ly of layers) {
+    ly.cv.style.visibility = 'hidden';
+    try {
+      fanvas.play(ly.cv, mRec.swf, { rootDef:ly.pool, transparent:true, cache:1, scale:1,
+                                     imagePath:'./' + mId + '/images/', autoPlay:true,
+                                     onFrame(){ clearTimeout(revealT); reveal(); } });
+    } catch (e) { clearTimeout(revealT); reveal(); }
+  }
+  mtitle.textContent = mId + (modal._name ? ' · ' + modal._name : '') + '  →  ' + L.label
+                     + '  (rootDef=' + (L.fg != null ? L.fg : L.pool) + (isLayered(L) ? ' bg=' + L.bg : '') + ')'
+                     + (L.empty ? '  ⚠ 空动画' : '');
+  Array.from(mbtns.children).forEach(b => b.classList.toggle('on', b.dataset.lb === L.label));
+}
+
+async function openModal(id, name){
+  mId = id; mRec = null; mBase = (curAction === '*') ? 'stand' : curAction; mDir = curDir;
+  modal._name = name || '';
+  modal.classList.remove('hidden');
+  mtitle.textContent = id + ' 加载中…';
+  mbtns.innerHTML = '';
+  clearStage(mstage);
+  try { mRec = await loadModel(id); } catch (e) { mtitle.textContent = id + ' 加载失败'; return; }
+  mRec.labels.forEach(L => {
+    const b = document.createElement('button');
+    b.textContent = L.label; b.dataset.lb = L.label;
+    if (L.empty) { b.className = 'empty'; b.title = '此动画无独立素材：游戏中由水平翻转生成（空方向）'; }
+    b.onclick = () => {
+      const mm = /^(.*?)(RB|LT|LB|RT)$/i.exec(L.label);
+      if (mm) { mBase = mm[1]; mDir = mm[2].toUpperCase(); }
+      renderModal();
+    };
+    mbtns.appendChild(b);
+  });
+  renderModal();
+}
+function closeModal(){ modal.classList.add('hidden'); clearStage(mstage); }
+document.getElementById('mclose').onclick = closeModal;
+modal.addEventListener('click', e => { if (e.target === modal) closeModal(); });
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+Array.from(document.querySelectorAll('.mdir button')).forEach(b => {
+  b.onclick = () => { mDir = b.dataset.d; renderModal(); };
+});
+
+/* ═══════════ 事件 ═══════════ */
+toggleBtn.onclick = () => {
+  globalPaused = !globalPaused;
+  toggleBtn.textContent = globalPaused ? '播放全部' : '暂停全部';
+  Array.from(grid.children).forEach(c => {
+    if (c._state === 'ready') { try { globalPaused ? pauseCard(c) : resumeCard(c); } catch (e) {} }
+  });
+};
+filterEl.addEventListener('input', applyFilter);
+actionEl.addEventListener('change', () => {
+  curAction = actionEl.value;
+  dirEl.disabled = (curAction === '*');
+  stopRotate();
+  if (curAction === '*') startRotate(); else { rerenderAll(); if (onlyHasEl.checked) applyFilter(); }
+});
+dirEl.addEventListener('change', () => { curDir = dirEl.value; if (curAction !== '*') rerenderAll(); });
+sizeEl.addEventListener('change', () => {
+  curSize = sizeEl.value;
+  grid.style.gridTemplateColumns = 'repeat(auto-fill, minmax(' + SIZES[curSize].col + 'px, 1fr))';
+  Array.from(grid.children).forEach(c => { c._stage.style.height = SIZES[curSize].h + 'px'; });
+  if (io) { io.disconnect(); Array.from(grid.children).forEach(c => io.observe(c)); }   // 触发重排与重播
+});
+onlyHasEl.addEventListener('change', () => { if (onlyHasEl.checked) applyFilter(); else applyFilter(); });
+
+onlyRoleEl.addEventListener('change', () => {
+  // 不再在此处禁用控件等扫描：applyFilter 会在缓存未就绪时显示"扫描中"并自动扫描、完成后重跑。
+  // （旧实现在此处 disable + await，若期间用户又改动其它筛选会丢事件；且 rescan 后缓存被清空时筛选被静默丢弃）
+  applyFilter();
+});
+
+function startRotate(){
+  if (rotTimer) return;
+  rotTimer = setInterval(() => {
+    Array.from(grid.children).forEach(c => {
+      if (c._state !== 'ready' || !c._visible) return;
+      const rec = modelCache.get(c._id); if (!rec) return;
+      c._ai = (c._ai | 0) + 1;
+      renderCard(c, rec);
+    });
+  }, 2400);   // 轮播要重建画布，代价高于普通播放，间隔别太短
+}
+function stopRotate(){ if (rotTimer) { clearInterval(rotTimer); rotTimer = null; } }
+
+/* 重新扫描目录：依赖 http.server 的目录列表；失败则沿用烘焙清单 */
+rescanBtn.addEventListener('click', async () => {
+  rescanBtn.disabled = true; rescanBtn.textContent = '扫描中…';
+  try {
+    const r = await fetch('./'); if (!r.ok) throw new Error('no listing');
+    const t = await r.text();
+    const set = new Set();
+    const re = /href="([^"]+?)\/?"/g; let m;
+    while ((m = re.exec(t))) {
+      const nm = decodeURIComponent(m[1]).replace(/\/$/, '');
+      if (/^\d+$/.test(nm)) set.add(nm);
+    }
+    if (!set.size) throw new Error('empty');
+    const old = new Map(MODELS.map(x => [x.id, x.name]));
+    MODELS = Array.from(set).sort((a, b) => (a.length - b.length) || a.localeCompare(b))
+                   .map(id => ({ id, name: old.get(id) || '' }));
+    // 新出现的 id 不在 ROLE_COVERED 里 ⇒ applyFilter 会自动增量判定（无需清空已缓存结果）
+    applyFilter();
+    rescanBtn.textContent = '扫描完成(' + MODELS.length + ')';
+  } catch (e) {
+    rescanBtn.textContent = '扫描失败(用内置清单)';
+  } finally { setTimeout(() => { rescanBtn.disabled = false; rescanBtn.textContent = '重新扫描目录'; }, 2500); }
+});
+
+if (typeof fanvas === 'undefined') {
+  grid.innerHTML = '<p style="color:#f99;padding:20px">fanvas 库未加载：必须从 GameWorld 目录起本地服务器（见顶部说明），直接双击打开会因路径问题失败。</p>';
+} else {
+  applyFilter();
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,1382 @@
+{
+  "_meta": {
+    "generatedBy": "_verify/gen_ridepet_advance_cfg.mjs",
+    "用途": "骑宠进阶子系统（RidePetAdvancePanel + RidePetInfo/RidePetWuRate/ViewRidePetSkill/RidePetFate/RidePetTalent）本地数据真源",
+    "数据来源": {
+      "坐骑实例": "数据解析/输出/CSV/Ridepet_坐骑/ridepet__坐骑.csv（真实抓包样本）",
+      "布局": "D:/tsqt/Game/update/i18n/zh_CN/layout.xml",
+      "文案": "update/i18n/zh_CN/Lang/zh_CN.as + deobfuscated/globals/GlobalsGlobal06.as",
+      "常量": "deobfuscated/globals/GlobalsGlobal05.as / GlobalsGlobal08.as / cache/CacheCache08.as",
+      "协议号": "deobfuscated/net/NetNet.as"
+    },
+    "注意": "抓包样本仅覆盖取样到的坐骑（2 只），非原版全表；数值公式见 formulas.待逆向（原版在服务端）。"
+  },
+  "proto": {
+    "CS_PET_XIANDAN_AUTOPUT": 205,
+    "CS_PET_FEED_UPGRADE": 237,
+    "CS_PET_UNLOCK": 257,
+    "CS_RIDEPET_SKILL": 336,
+    "CS_RIDEPET_FIND_FATE": 350,
+    "CS_RIDEPET_TALENT_OP": 976,
+    "CS_RIDEPET_TALENT_SAVE": 977,
+    "CS_RIDEPET_TALENT_ALL": 979,
+    "CS_RIDEPET_CHANGECOLOR_NEED": 958,
+    "SC_RIDEPET_INFO": 292,
+    "SC_RIDEPET_LIST": 293,
+    "SC_RIDEPET_FIND_FATE_INFO": 755,
+    "SC_RIDEPET_SLOT_OPEN": 757,
+    "SC_RIDEPET_CHANGECOLOR_NEED": 972,
+    "SC_PET_XIANDAN": 210,
+    "SC_PET_FEED_LIST": 230
+  },
+  "consts": {
+    "PANEL_RIDEPET_ADVANCE": 229,
+    "PANEL_RIDEPET": 228,
+    "BAG_PET_VIEW_XIANDAN": 1000,
+    "BAG_PET_VIEW_NEIDAN": 1001,
+    "TYPE_PLAYER_PET": 0,
+    "GRID_OPEN": 0,
+    "RIDE_PET_ADV_PANEL_WU": 3,
+    "RIDE_PET_ADV_PENEL_BP": 4,
+    "bp": {
+      "bpVitality": 10014,
+      "bpIntellect": 10013,
+      "bpStrong": 10012,
+      "bpAgile": 10015,
+      "bpBelief": 10016
+    }
+  },
+  "layout": {
+    "RidePetAdvancePanel": {
+      "RidePetAdvancePanel": {
+        "x": 32,
+        "y": 70,
+        "w": 295,
+        "h": 500,
+        "align": ""
+      },
+      "RidePetAdvancePanel_frame": {
+        "x": 12,
+        "y": 65,
+        "w": 271,
+        "h": 421,
+        "align": ""
+      },
+      "RidePetAdvancePanel_tab": {
+        "x": 12,
+        "y": 45,
+        "w": 51,
+        "h": 0,
+        "align": ""
+      }
+    },
+    "ViewRidePetInfo": {
+      "ViewRidePetInfo_frame1": {
+        "x": 5,
+        "y": 25,
+        "w": 260,
+        "h": 224,
+        "align": ""
+      },
+      "ViewRidePetInfo_frame2": {
+        "x": 5,
+        "y": 254,
+        "w": 260,
+        "h": 100,
+        "align": ""
+      },
+      "ViewRidePetInfo_frame3": {
+        "x": 5,
+        "y": 359,
+        "w": 260,
+        "h": 75,
+        "align": ""
+      },
+      "ViewRidePetInfo_frame4": {
+        "x": 8,
+        "y": 363,
+        "w": 150,
+        "h": 65,
+        "align": ""
+      },
+      "ViewRidePetInfo_frame5": {
+        "x": 14,
+        "y": 239,
+        "w": 260,
+        "h": 85,
+        "align": ""
+      },
+      "ViewRidePetInfo_propBg": {
+        "x": 10,
+        "y": 30,
+        "w": 250,
+        "h": 22,
+        "align": ""
+      },
+      "ViewRidePetInfo_prop": {
+        "x": 15,
+        "y": 32,
+        "w": 53,
+        "h": 22,
+        "align": ""
+      },
+      "ViewRidePetInfo_prop2": {
+        "x": 0,
+        "y": 0,
+        "w": 65,
+        "h": 0,
+        "align": ""
+      },
+      "ViewRidePetInfo_lockBtn": {
+        "x": 162,
+        "y": 370,
+        "w": 100,
+        "h": 55,
+        "align": ""
+      },
+      "ViewRidePetInfo_shortkeyBtn": {
+        "x": 215,
+        "y": 217,
+        "w": 0,
+        "h": 0,
+        "align": ""
+      },
+      "ViewRidePetInfo_auto": {
+        "x": 10,
+        "y": 260,
+        "w": 250,
+        "h": 0,
+        "align": ""
+      },
+      "ViewRidePetInfo_desc": {
+        "x": 10,
+        "y": 365,
+        "w": 150,
+        "h": 0,
+        "align": ""
+      },
+      "ViewRidePetInfo_propFrame": {
+        "x": 5,
+        "y": 26,
+        "w": 264,
+        "h": 146,
+        "align": ""
+      },
+      "ViewRidePetInfo_viewProp": {
+        "x": 15,
+        "y": 30,
+        "w": 17,
+        "h": 17,
+        "align": ""
+      }
+    },
+    "ViewPetUnderstanding": {
+      "ViewPetUnderstanding": {
+        "x": 430,
+        "y": 170,
+        "w": 255,
+        "h": 340,
+        "align": ""
+      },
+      "ViewPetUnderstanding_autoupBtn": {
+        "x": 175,
+        "y": 80,
+        "w": 55,
+        "h": 22,
+        "align": ""
+      },
+      "ViewPetUnderstanding_upBtn": {
+        "x": 175,
+        "y": 180,
+        "w": 55,
+        "h": 22,
+        "align": ""
+      },
+      "ViewPetUnderstanding_lockBtn": {
+        "x": 147,
+        "y": 242,
+        "w": 97,
+        "h": 50,
+        "align": ""
+      },
+      "ViewPetUnderstanding_grid": {
+        "x": 18,
+        "y": 95,
+        "w": 0,
+        "h": 0,
+        "align": ""
+      },
+      "ViewPetUnderstanding_useCB": {
+        "x": 48,
+        "y": 48,
+        "w": 120,
+        "h": 0,
+        "align": ""
+      },
+      "ViewPetUnderstanding_wuCB": {
+        "x": 76,
+        "y": 70,
+        "w": 92,
+        "h": 150,
+        "align": ""
+      },
+      "ViewPetUnderstanding_learnText": {
+        "x": 18,
+        "y": 155,
+        "w": 130,
+        "h": 0,
+        "align": ""
+      },
+      "ViewPetUnderstanding_lockText": {
+        "x": 18,
+        "y": 230,
+        "w": 120,
+        "h": 0,
+        "align": ""
+      },
+      "ViewPetUnderstanding_learnFrame": {
+        "x": 18,
+        "y": 155,
+        "w": 0,
+        "h": 65,
+        "align": ""
+      },
+      "ViewPetUnderstanding_lockFrame": {
+        "x": 0,
+        "y": 0,
+        "w": 0,
+        "h": 85,
+        "align": ""
+      },
+      "ViewPetUnderstanding_point": {
+        "x": 5,
+        "y": 5,
+        "w": 0,
+        "h": 0,
+        "align": ""
+      }
+    },
+    "ViewPetInfo_point": {
+      "ViewPetInfo_point": {
+        "x": 5,
+        "y": 5,
+        "w": 0,
+        "h": 0,
+        "align": ""
+      },
+      "ViewPetInfo_point1": {
+        "x": 236,
+        "y": 245,
+        "w": 0,
+        "h": 0,
+        "align": ""
+      },
+      "ViewPetInfo_point2": {
+        "x": 236,
+        "y": 323,
+        "w": 0,
+        "h": 0,
+        "align": ""
+      },
+      "ViewPetInfo_point3": {
+        "x": 236,
+        "y": 206,
+        "w": 0,
+        "h": 0,
+        "align": ""
+      },
+      "ViewPetInfo_point4": {
+        "x": 236,
+        "y": 284,
+        "w": 0,
+        "h": 0,
+        "align": ""
+      },
+      "ViewPetInfo_point5": {
+        "x": 236,
+        "y": 362,
+        "w": 0,
+        "h": 0,
+        "align": ""
+      }
+    },
+    "ViewRidePetWuRate": {
+      "ViewRidePetWuRate_frame": {
+        "x": 5,
+        "y": 25,
+        "w": 262,
+        "h": 175,
+        "align": ""
+      },
+      "ViewRidePetWuRate_desc": {
+        "x": 8,
+        "y": 26,
+        "w": 256,
+        "h": 173,
+        "align": ""
+      },
+      "ViewRidePetWuRate_quaText": {
+        "x": 50,
+        "y": 425,
+        "w": 0,
+        "h": 0,
+        "align": ""
+      }
+    },
+    "ViewPetWuRate": {
+      "ViewPetWuRate_new_itemBtn": {
+        "x": 8,
+        "y": 220,
+        "w": 120,
+        "h": 22,
+        "align": ""
+      },
+      "ViewPetWuRate_new_autoupBtn": {
+        "x": 13,
+        "y": 380,
+        "w": 60,
+        "h": 22,
+        "align": ""
+      },
+      "ViewPetWuRate_new_upBtn": {
+        "x": 100,
+        "y": 380,
+        "w": 60,
+        "h": 22,
+        "align": ""
+      },
+      "ViewPetWuRate_new_growCB": {
+        "x": 85,
+        "y": 288,
+        "w": 76,
+        "h": 150,
+        "align": ""
+      },
+      "ViewPetWuRate_new_useCB": {
+        "x": 85,
+        "y": 266,
+        "w": 76,
+        "h": 0,
+        "align": ""
+      },
+      "ViewPetWuRate_new_qualityInput": {
+        "x": -48,
+        "y": 242,
+        "w": 150,
+        "h": 22,
+        "align": ""
+      },
+      "ViewPetWuRate_new_putGrid": {
+        "x": 11,
+        "y": 311,
+        "w": 0,
+        "h": 0,
+        "align": ""
+      },
+      "ViewPetWuRate_new_check": {
+        "x": 26,
+        "y": 362,
+        "w": 90,
+        "h": 20,
+        "align": ""
+      },
+      "ViewPetWuRate_new_point1": {
+        "x": 130,
+        "y": 15,
+        "w": 0,
+        "h": 0,
+        "align": ""
+      },
+      "ViewPetWuRate_new_point2": {
+        "x": 130,
+        "y": 55,
+        "w": 0,
+        "h": 0,
+        "align": ""
+      },
+      "ViewPetWuRate_new_point3": {
+        "x": 130,
+        "y": 95,
+        "w": 0,
+        "h": 0,
+        "align": ""
+      },
+      "ViewPetWuRate_new_point4": {
+        "x": 130,
+        "y": 135,
+        "w": 0,
+        "h": 0,
+        "align": ""
+      },
+      "ViewPetWuRate_new_point5": {
+        "x": 130,
+        "y": 175,
+        "w": 0,
+        "h": 0,
+        "align": ""
+      },
+      "ViewPetWuRate_new_point": {
+        "x": 16,
+        "y": 316,
+        "w": 0,
+        "h": 0,
+        "align": ""
+      },
+      "ViewPetWuRate_check": {
+        "x": 155,
+        "y": 80,
+        "w": 90,
+        "h": 20,
+        "align": ""
+      },
+      "ViewPetWuRate_point": {
+        "x": 9,
+        "y": 130,
+        "w": 0,
+        "h": 0,
+        "align": ""
+      },
+      "ViewPetWuRate_point1": {
+        "x": 232,
+        "y": 245,
+        "w": 0,
+        "h": 0,
+        "align": ""
+      },
+      "ViewPetWuRate_point2": {
+        "x": 232,
+        "y": 323,
+        "w": 0,
+        "h": 0,
+        "align": ""
+      },
+      "ViewPetWuRate_point3": {
+        "x": 232,
+        "y": 206,
+        "w": 0,
+        "h": 0,
+        "align": ""
+      },
+      "ViewPetWuRate_point4": {
+        "x": 232,
+        "y": 284,
+        "w": 0,
+        "h": 0,
+        "align": ""
+      },
+      "ViewPetWuRate_point5": {
+        "x": 232,
+        "y": 362,
+        "w": 0,
+        "h": 0,
+        "align": ""
+      },
+      "ViewPetWuRate_itemBtn": {
+        "x": 147,
+        "y": 413,
+        "w": 120,
+        "h": 22,
+        "align": ""
+      },
+      "ViewPetWuRate_autoupBtn": {
+        "x": 156,
+        "y": 123,
+        "w": 110,
+        "h": 25,
+        "align": ""
+      },
+      "ViewPetWuRate_upBtn": {
+        "x": 156,
+        "y": 146,
+        "w": 110,
+        "h": 25,
+        "align": ""
+      },
+      "ViewPetWuRate_growCB": {
+        "x": 76,
+        "y": 102,
+        "w": 76,
+        "h": 200,
+        "align": ""
+      },
+      "ViewPetWuRate_useCB": {
+        "x": 76,
+        "y": 80,
+        "w": 76,
+        "h": 0,
+        "align": ""
+      },
+      "ViewPetWuRate_qualityInput": {
+        "x": -51,
+        "y": 175,
+        "w": 260,
+        "h": 22,
+        "align": ""
+      },
+      "ViewPetWuRate_getText": {
+        "x": 211,
+        "y": 113,
+        "w": 0,
+        "h": 0,
+        "align": ""
+      },
+      "ViewPetWuRate_radioText": {
+        "x": 211,
+        "y": 185,
+        "w": 0,
+        "h": 0,
+        "align": ""
+      },
+      "ViewPetWuRate_qualityText": {
+        "x": 42,
+        "y": 425,
+        "w": 0,
+        "h": 0,
+        "align": ""
+      },
+      "ViewPetWuRate_learnInfo": {
+        "x": 4,
+        "y": 25,
+        "w": 260,
+        "h": 0,
+        "align": ""
+      },
+      "ViewPetWuRate_learnFrame": {
+        "x": 4,
+        "y": 25,
+        "w": 0,
+        "h": 50,
+        "align": ""
+      },
+      "ViewPetWuRate_qualityAndratio": {
+        "x": 72,
+        "y": 425,
+        "w": 0,
+        "h": 0,
+        "align": ""
+      }
+    },
+    "ViewRidepet": {
+      "ViewRidepetDan": {
+        "x": 211,
+        "y": 113,
+        "w": 0,
+        "h": 0,
+        "align": ""
+      },
+      "ViewRidepetRatio": {
+        "x": 211,
+        "y": 185,
+        "w": 0,
+        "h": 0,
+        "align": ""
+      },
+      "ViewRidepetBP": {
+        "x": 45,
+        "y": 425,
+        "w": 0,
+        "h": 0,
+        "align": ""
+      }
+    },
+    "ViewRidePetSkill": {
+      "ViewRidePetSkill_frame1": {
+        "x": 5,
+        "y": 25,
+        "w": 261,
+        "h": 309,
+        "align": ""
+      },
+      "ViewRidePetSkill_frame2": {
+        "x": 10,
+        "y": 78,
+        "w": 251,
+        "h": 97,
+        "align": ""
+      },
+      "ViewRidePetSkill_frame3": {
+        "x": 10,
+        "y": 203,
+        "w": 251,
+        "h": 126,
+        "align": ""
+      },
+      "ViewRidePetSkill_frame4": {
+        "x": 20,
+        "y": 100,
+        "w": 230,
+        "h": 40,
+        "align": ""
+      },
+      "ViewRidePetSkill_default": {
+        "x": 22,
+        "y": 102,
+        "w": 226,
+        "h": 0,
+        "align": ""
+      },
+      "ViewRidePetSkill_desc": {
+        "x": 10,
+        "y": 202,
+        "w": 253,
+        "h": 129,
+        "align": ""
+      },
+      "ViewRidePetSkill_descBg": {
+        "x": 11,
+        "y": 203,
+        "w": 250,
+        "h": 126,
+        "align": ""
+      },
+      "ViewRidePetSkill_intro": {
+        "x": 5,
+        "y": 339,
+        "w": 262,
+        "h": 98,
+        "align": ""
+      },
+      "ViewRidePetSkill_tab": {
+        "x": 10,
+        "y": 58,
+        "w": 51,
+        "h": 0,
+        "align": ""
+      },
+      "ViewRidePetSkill_grid": {
+        "x": 14,
+        "y": 5,
+        "w": 48,
+        "h": 45,
+        "align": ""
+      },
+      "ViewRidePetSkill_neidan": {
+        "x": 0,
+        "y": 25,
+        "w": 0,
+        "h": 0,
+        "align": ""
+      },
+      "ViewRidePetSkill_propK1": {
+        "x": 15,
+        "y": 32,
+        "w": 40,
+        "h": 0,
+        "align": ""
+      },
+      "ViewRidePetSkill_propV1": {
+        "x": 65,
+        "y": 0,
+        "w": 120,
+        "h": 0,
+        "align": ""
+      },
+      "ViewRidePetSkill_propBg1": {
+        "x": 10,
+        "y": 30,
+        "w": 190,
+        "h": 0,
+        "align": ""
+      },
+      "ViewRidePetSkill_propK2": {
+        "x": 14,
+        "y": 182,
+        "w": 40,
+        "h": 0,
+        "align": ""
+      },
+      "ViewRidePetSkill_propV2": {
+        "x": 61,
+        "y": 0,
+        "w": 60,
+        "h": 0,
+        "align": ""
+      },
+      "ViewRidePetSkill_propBg2": {
+        "x": 10,
+        "y": 180,
+        "w": 75,
+        "h": 0,
+        "align": ""
+      },
+      "ViewRidePetSkill_propK3": {
+        "x": 92,
+        "y": 182,
+        "w": 50,
+        "h": 0,
+        "align": ""
+      },
+      "ViewRidePetSkill_propV3": {
+        "x": 151,
+        "y": 0,
+        "w": 60,
+        "h": 0,
+        "align": ""
+      },
+      "ViewRidePetSkill_propBg3": {
+        "x": 88,
+        "y": 180,
+        "w": 95,
+        "h": 0,
+        "align": ""
+      },
+      "ViewRidePetSkill_propK4": {
+        "x": 190,
+        "y": 182,
+        "w": 40,
+        "h": 0,
+        "align": ""
+      },
+      "ViewRidePetSkill_propV4": {
+        "x": 237,
+        "y": 0,
+        "w": 120,
+        "h": 0,
+        "align": ""
+      },
+      "ViewRidePetSkill_propBg4": {
+        "x": 186,
+        "y": 180,
+        "w": 76,
+        "h": 0,
+        "align": ""
+      },
+      "ViewRidePetSkill_btnTrain": {
+        "x": 204,
+        "y": 26,
+        "w": 0,
+        "h": 0,
+        "align": ""
+      },
+      "ViewRidePetSkill_btnForget": {
+        "x": 204,
+        "y": 50,
+        "w": 0,
+        "h": 0,
+        "align": ""
+      }
+    },
+    "ViewRidePetFate": {
+      "ViewRidePetFate_fateAttr": {
+        "x": 15,
+        "y": 35,
+        "w": 0,
+        "h": 0,
+        "align": ""
+      },
+      "ViewRidePetFate_fateBag": {
+        "x": 30,
+        "y": 280,
+        "w": 0,
+        "h": 0,
+        "align": ""
+      },
+      "ViewRidePetFate_findFateBtn": {
+        "x": 190,
+        "y": 245,
+        "w": 65,
+        "h": 0,
+        "align": ""
+      },
+      "ViewRidePetFate_sellFateBgn": {
+        "x": 20,
+        "y": 245,
+        "w": 65,
+        "h": 0,
+        "align": ""
+      },
+      "ViewRidePetFate_eatAllBtn": {
+        "x": 105,
+        "y": 245,
+        "w": 65,
+        "h": 0,
+        "align": ""
+      },
+      "ViewRidePetFate_horse": {
+        "x": 60,
+        "y": 30,
+        "w": 0,
+        "h": 0,
+        "align": ""
+      },
+      "ViewRidePetFate_fateInfoText": {
+        "x": 30,
+        "y": 223,
+        "w": 0,
+        "h": 0,
+        "align": ""
+      },
+      "ViewRidePetFate_frame1": {
+        "x": 5,
+        "y": 25,
+        "w": 261,
+        "h": 309,
+        "align": ""
+      },
+      "ViewRidePetFate_frame": {
+        "x": 20,
+        "y": 100,
+        "w": 230,
+        "h": 40,
+        "align": ""
+      },
+      "ViewRidePetFate_default": {
+        "x": 22,
+        "y": 102,
+        "w": 226,
+        "h": 0,
+        "align": ""
+      },
+      "ViewRidePetFate_intro": {
+        "x": 5,
+        "y": 339,
+        "w": 262,
+        "h": 98,
+        "align": ""
+      }
+    }
+  },
+  "lang": {
+    "VIEW_PET_TYPE": {
+      "key": "VIEW_PET_TYPE",
+      "value": 20200,
+      "zh": "类    型:",
+      "missing": null
+    },
+    "VIEW_PET_MAXLEVEL": {
+      "key": "VIEW_PET_MAXLEVEL",
+      "value": 20201,
+      "zh": "成长上限:",
+      "missing": null
+    },
+    "VIEW_PET_GENDER": {
+      "key": "VIEW_PET_GENDER",
+      "value": 20202,
+      "zh": "性    别:",
+      "missing": null
+    },
+    "VIEW_PET_CLOSEVAL": {
+      "key": "VIEW_PET_CLOSEVAL",
+      "value": 20203,
+      "zh": "亲密程度:",
+      "missing": null
+    },
+    "VIEW_PET_SPIRITUAL": {
+      "key": "VIEW_PET_SPIRITUAL",
+      "value": 20204,
+      "zh": "修    为:",
+      "missing": null
+    },
+    "VIEW_PET_SAVVY": {
+      "key": "VIEW_PET_SAVVY",
+      "value": 20205,
+      "zh": "悟    性:",
+      "missing": null
+    },
+    "VIEW_PET_VARIATION": {
+      "key": "VIEW_PET_VARIATION",
+      "value": 20206,
+      "zh": "是否变异:",
+      "missing": null
+    },
+    "VIEW_PET_CARRYLEVEL": {
+      "key": "VIEW_PET_CARRYLEVEL",
+      "value": 20207,
+      "zh": "携带等级:",
+      "missing": null
+    },
+    "VIEW_PET_RATE": {
+      "key": "VIEW_PET_RATE",
+      "value": 20213,
+      "zh": "<font color='#55d7bd'>宠物成长率: </font>",
+      "missing": null
+    },
+    "RIDE_SOULSHIFT": {
+      "key": "RIDE_SOULSHIFT",
+      "value": 30371,
+      "zh": "<font color='#55d7bd'>转生需求:</font>",
+      "missing": null
+    },
+    "VIEW_PET_SELECTPILLS": {
+      "key": "VIEW_PET_SELECTPILLS",
+      "value": 20199,
+      "zh": "-请选择悟性丹-",
+      "missing": null
+    },
+    "VIEW_PET_BPVITALITY": {
+      "key": "VIEW_PET_BPVITALITY",
+      "value": 20208,
+      "zh": "耐力资质:",
+      "missing": null
+    },
+    "VIEW_PET_BPINTELLECT": {
+      "key": "VIEW_PET_BPINTELLECT",
+      "value": 20209,
+      "zh": "智力资质:",
+      "missing": null
+    },
+    "VIEW_PET_BPSTRONG": {
+      "key": "VIEW_PET_BPSTRONG",
+      "value": 20210,
+      "zh": "强壮资质:",
+      "missing": null
+    },
+    "VIEW_PET_BPAGLIE": {
+      "key": "VIEW_PET_BPAGLIE",
+      "value": 20211,
+      "zh": "敏捷资质:",
+      "missing": null
+    },
+    "VIEW_PET_BPBELIEF": {
+      "key": "VIEW_PET_BPBELIEF",
+      "value": 20212,
+      "zh": "信仰资质:",
+      "missing": null
+    },
+    "VIEW_PET_PUTIN_PILLS": {
+      "key": "VIEW_PET_PUTIN_PILLS",
+      "value": 20214,
+      "zh": "放入宠物仙丹可提升宠物资质",
+      "missing": null
+    },
+    "VIEW_PET_WU_STOP": {
+      "key": "VIEW_PET_WU_STOP",
+      "value": 20216,
+      "zh": "遇变异宠自动停止",
+      "missing": null
+    },
+    "VIEW_PET_WU_TYPR": {
+      "key": "VIEW_PET_WU_TYPR",
+      "value": 20217,
+      "zh": "选择种类",
+      "missing": null
+    },
+    "VIEW_PET_WU_PERFECTION": {
+      "key": "VIEW_PET_WU_PERFECTION",
+      "value": 20218,
+      "zh": "完美",
+      "missing": null
+    },
+    "VIEW_PET_WU_SALIENCE": {
+      "key": "VIEW_PET_WU_SALIENCE",
+      "value": 20219,
+      "zh": "卓越",
+      "missing": null
+    },
+    "VIEW_RIDEPET_WU_UPRATE": {
+      "key": "VIEW_RIDEPET_WU_UPRATE",
+      "value": 20437,
+      "zh": "当前骑宠成长率为：",
+      "missing": null
+    },
+    "RIDEPET_NPC_INFO": {
+      "key": "RIDEPET_NPC_INFO",
+      "value": 229,
+      "zh": "  前往回音谷找到<a href='event:x:34,y:83,m:67,n:72014'><u>三石</u></a>道长,传闻他会帮你提升骑宠实力",
+      "missing": null
+    },
+    "RIDEPET_SKILL_INTRO": {
+      "key": "RIDEPET_SKILL_INTRO",
+      "value": 227,
+      "zh": "<font size='12'>技能通过领悟获得，骑宠需要三石道长的帮助才能领悟。<br>提升等级上限需要耗费学习度。<br>已领悟的技能需要投入至少一点技能点才能生效</font>",
+      "missing": null
+    },
+    "LEARN_POINT": {
+      "key": "LEARN_POINT",
+      "value": 223,
+      "zh": "学习度：",
+      "missing": null
+    },
+    "SKILL_POINT": {
+      "key": "SKILL_POINT",
+      "value": 224,
+      "zh": "技能点：",
+      "missing": null
+    },
+    "SKILL_COUNT": {
+      "key": "SKILL_COUNT",
+      "value": 225,
+      "zh": "技能数量：",
+      "missing": null
+    },
+    "FOCUS_POINT": {
+      "key": "FOCUS_POINT",
+      "value": 226,
+      "zh": "集中值：",
+      "missing": null
+    },
+    "RIDEPET_OPTION_ALERT": {
+      "key": "RIDEPET_OPTION_ALERT",
+      "value": 228,
+      "zh": "请先选择一个骑宠技能",
+      "missing": null
+    },
+    "RIDEPETFATE_NPC_INFO": {
+      "key": "RIDEPETFATE_NPC_INFO",
+      "value": 40085,
+      "zh": "一转后前往灵昌城寻找<a href='event:x:31,y:130,m:12,n:008032'><u>周猎户</u></a>,他会帮你开启兽魂。",
+      "missing": null
+    },
+    "RIDEPET_FATE_INTRO": {
+      "key": "RIDEPET_FATE_INTRO",
+      "value": 40088,
+      "zh": "<font size='12'>骑宠拥有兽魂可以让和它契约的宠物更加强力</font>",
+      "missing": null
+    },
+    "RIDEPET_EATFATE_INTRO": {
+      "key": "RIDEPET_EATFATE_INTRO",
+      "value": 40089,
+      "zh": "一键吞噬：背包中的兽魂相互吞噬，最终保留一个兽魂。颜色品质最高的兽魂优先保留，同等颜色保留等级高的兽魂。",
+      "missing": null
+    },
+    "RIDEPET_FATE_INFO": {
+      "key": "RIDEPET_FATE_INFO",
+      "value": 40099,
+      "zh": "兽魂可以为骑宠的契约宠物增加属性。",
+      "missing": null
+    }
+  },
+  "res": {
+    "text_panel_player_property": {
+      "file": "textpanelplayerproperty.png",
+      "dir": "res",
+      "dirPath": "update/i18n/zh_CN/Resource/icons"
+    },
+    "text_panel_petWu": {
+      "file": "textpanelpetwu.png",
+      "dir": "res",
+      "dirPath": "update/i18n/zh_CN/Resource/icons"
+    },
+    "text_panel_pet_skill": {
+      "file": "textpanelpetskill.png",
+      "dir": "res",
+      "dirPath": "update/i18n/zh_CN/Resource/icons"
+    },
+    "text_panel_fateTabBtn": {
+      "file": "textpanelfatetabbtn.png",
+      "dir": "res",
+      "dirPath": "update/i18n/zh_CN/Resource/icons"
+    },
+    "text_panel_talentBtn": {
+      "file": "textpaneltalentbtn.png",
+      "dir": "resLogin",
+      "dirPath": "update/i18n/zh_CN/LoginResource/icons"
+    },
+    "text_panel_ridepet_ningshen": {
+      "file": "textpanelridepetningshen.png",
+      "dir": "res",
+      "dirPath": "update/i18n/zh_CN/Resource/icons"
+    },
+    "text_panel_ridepet_fenglei": {
+      "file": "textpanelridepetfenglei.png",
+      "dir": "res",
+      "dirPath": "update/i18n/zh_CN/Resource/icons"
+    },
+    "text_panel_ridepet_mingguang": {
+      "file": "textpanelridepetmingguang.png",
+      "dir": "res",
+      "dirPath": "update/i18n/zh_CN/Resource/icons"
+    },
+    "text_panel_ridepet_linghuan": {
+      "file": "textpanelridepetlinghuan.png",
+      "dir": "res",
+      "dirPath": "update/i18n/zh_CN/Resource/icons"
+    },
+    "text_panel_petUnlock": {
+      "file": "textpanelpetunlock.png",
+      "dir": "res",
+      "dirPath": "update/i18n/zh_CN/Resource/icons"
+    },
+    "text_panel_petLock": {
+      "file": "textpanelpetlock.png",
+      "dir": "res",
+      "dirPath": "update/i18n/zh_CN/Resource/icons"
+    },
+    "text_panel_ridepet_ratio": {
+      "file": "textpanelridepetratio.png",
+      "dir": "res",
+      "dirPath": "update/i18n/zh_CN/Resource/icons"
+    },
+    "text_panel_autoUp": {
+      "file": "textpanelautoup.png",
+      "dir": "res",
+      "dirPath": "update/i18n/zh_CN/Resource/icons"
+    },
+    "text_panel_up": {
+      "file": "textpanelup.png",
+      "dir": "res",
+      "dirPath": "update/i18n/zh_CN/Resource/icons"
+    },
+    "text_panel_pet_info_auto": {
+      "file": "textpanelpetinfoauto.png",
+      "dir": "res",
+      "dirPath": "update/i18n/zh_CN/Resource/icons"
+    },
+    "text_panel_ridepet_train": {
+      "file": "textpanelridepettrain.png",
+      "dir": "res",
+      "dirPath": "update/i18n/zh_CN/Resource/icons"
+    },
+    "text_panel_ridepet_forget": {
+      "file": "textpanelridepetforget.png",
+      "dir": "res",
+      "dirPath": "update/i18n/zh_CN/Resource/icons"
+    },
+    "text_panel_sellFate": {
+      "file": "textpanelsellfate.png",
+      "dir": "res",
+      "dirPath": "update/i18n/zh_CN/Resource/icons"
+    },
+    "text_panel_eatAll": {
+      "file": "textpaneleatall.png",
+      "dir": "res",
+      "dirPath": "update/i18n/zh_CN/Resource/icons"
+    },
+    "text_panel_findFateBtn": {
+      "file": "textpanelfindfatebtn.png",
+      "dir": "res",
+      "dirPath": "update/i18n/zh_CN/Resource/icons"
+    },
+    "panel_fateHorse": {
+      "file": "panelfatehorse.png",
+      "dir": "res",
+      "dirPath": "update/i18n/zh_CN/Resource/icons"
+    },
+    "text_panel_trainBtn": {
+      "file": "textpaneltrainbtn.png",
+      "dir": "resLogin",
+      "dirPath": "update/i18n/zh_CN/LoginResource/icons"
+    },
+    "text_panel_sophisticationBtn": {
+      "file": "textpanelsophisticationbtn.png",
+      "dir": "resLogin",
+      "dirPath": "update/i18n/zh_CN/LoginResource/icons"
+    },
+    "text_panel_saveBtn": {
+      "file": "textpanelsavebtn.png",
+      "dir": "resLogin",
+      "dirPath": "update/i18n/zh_CN/LoginResource/icons"
+    },
+    "text_panel_ridepet_dan": {
+      "file": "textpanelridepetdan.png",
+      "dir": "res",
+      "dirPath": "update/i18n/zh_CN/Resource/icons"
+    },
+    "text_panel_add_ridepet_qa": {
+      "file": "textpaneladdridepetqa.png",
+      "dir": "res",
+      "dirPath": "update/i18n/zh_CN/Resource/icons"
+    }
+  },
+  "tabs": [
+    {
+      "id": 0,
+      "key": "text_panel_player_property",
+      "name": "信息"
+    },
+    {
+      "id": 1,
+      "key": "text_panel_petWu",
+      "name": "仙丹"
+    },
+    {
+      "id": 2,
+      "key": "text_panel_pet_skill",
+      "name": "技能"
+    },
+    {
+      "id": 3,
+      "key": "text_panel_fateTabBtn",
+      "name": "命格"
+    },
+    {
+      "id": 4,
+      "key": "text_panel_talentBtn",
+      "name": "天赋"
+    }
+  ],
+  "data": {
+    "ridepets": [
+      {
+        "ridePetID": "c517d364-7b08-4ced-8306-647a85453b32",
+        "name": "五行",
+        "portraitImage": "300531",
+        "bodyImage": "400000",
+        "level": 79,
+        "loyality": 0,
+        "life": 4450,
+        "lifeMax": 4450,
+        "hpCur": 6827,
+        "hpMax": 6827,
+        "mpCur": 1656,
+        "mpMax": 1656,
+        "strong": 89,
+        "intellect": 80,
+        "vitality": 247,
+        "agile": 130,
+        "belief": 75,
+        "attack": 288,
+        "defense": 261,
+        "speed": 369,
+        "spirit": 83,
+        "restore": 275,
+        "leftPoint": 0,
+        "ridePlusRate": 20,
+        "state": 1,
+        "aptitude": 4,
+        "loyalityMax": 100,
+        "iceDef": 0,
+        "fireDef": 0,
+        "windDef": 0,
+        "dustDef": 0,
+        "antiDrunck": 0,
+        "antiSleep": 0,
+        "antiChaos": 0,
+        "antiSlow": 0,
+        "antiWeak": 0,
+        "antiReel": "0",
+        "antiToic": "0",
+        "growUpRate": "<font color='#43F8E9'>杰出</font>",
+        "bpStrong": "3337",
+        "bpIntellect": "3029",
+        "bpVitality": "4614",
+        "bpAgile": "3718",
+        "bpBelief": "2813",
+        "bind": "1",
+        "outLineType": "5",
+        "maxLevel": "79",
+        "gender": "1",
+        "closeVal": "2873",
+        "spiritual": "0",
+        "spiritualMax": "1580",
+        "savvy": "0",
+        "variation": "0",
+        "maxSkillCount": "5",
+        "wuRate": "15",
+        "phyHit": "9555",
+        "phyBang": "1485",
+        "phyJook": "1226",
+        "magicAttack": "137",
+        "magicDef": "544",
+        "magicHit": "9437",
+        "magicBang": "1155",
+        "magicJook": "1006",
+        "carryLevel": "79",
+        "aptUp": "280%",
+        "petLockState": "0",
+        "spiritualRankFlag": "0",
+        "ripeLevel": "1",
+        "rentLimit": "-1",
+        "field68": "0",
+        "items[field69]": "",
+        "learnPoint": "222354",
+        "skillPoint": "8",
+        "focusValue": "2",
+        "focusMax": "3",
+        "field74": "2",
+        "field77": "1",
+        "field78": "8000002",
+        "field79": "0",
+        "_源opcode": "293",
+        "_源协议": "SC_RIDEPET_LIST",
+        "_首见文件": "1",
+        "_首见时间": "2026-09-01 21:00:00:3045757",
+        "_出现次数": "2"
+      },
+      {
+        "ridePetID": "a6ef69b1-9cb5-4028-b5e7-cb13eabaf234",
+        "name": "御宅战熊",
+        "portraitImage": "300534",
+        "bodyImage": "400004",
+        "level": 1,
+        "loyality": 100,
+        "life": 550,
+        "lifeMax": 550,
+        "hpCur": 407,
+        "hpMax": 407,
+        "mpCur": 85,
+        "mpMax": 85,
+        "strong": 2,
+        "intellect": 2,
+        "vitality": 14,
+        "agile": 1,
+        "belief": 14,
+        "attack": 29,
+        "defense": 53,
+        "speed": 28,
+        "spirit": 100,
+        "restore": 109,
+        "leftPoint": 0,
+        "ridePlusRate": 20,
+        "state": 0,
+        "aptitude": 0,
+        "loyalityMax": 100,
+        "iceDef": 0,
+        "fireDef": 0,
+        "windDef": 0,
+        "dustDef": 0,
+        "antiDrunck": 0,
+        "antiSleep": 0,
+        "antiChaos": 0,
+        "antiSlow": 0,
+        "antiWeak": 0,
+        "antiReel": "0",
+        "antiToic": "0",
+        "growUpRate": "<font color='#00FF00'>优秀</font>",
+        "bpStrong": "1113",
+        "bpIntellect": "817",
+        "bpVitality": "7001",
+        "bpAgile": "510",
+        "bpBelief": "6984",
+        "bind": "1",
+        "outLineType": "1",
+        "maxLevel": "80",
+        "gender": "1",
+        "closeVal": "0",
+        "spiritual": "0",
+        "spiritualMax": "20",
+        "savvy": "0",
+        "variation": "0",
+        "maxSkillCount": "5",
+        "wuRate": "15",
+        "phyHit": "98",
+        "phyBang": "11",
+        "phyJook": "1",
+        "magicAttack": "3",
+        "magicDef": "31",
+        "magicHit": "0",
+        "magicBang": "0",
+        "magicJook": "7",
+        "carryLevel": "1",
+        "aptUp": "220%",
+        "petLockState": "0",
+        "spiritualRankFlag": "0",
+        "ripeLevel": "1",
+        "rentLimit": "-1",
+        "field68": "0",
+        "items[field69]": "",
+        "learnPoint": "0",
+        "skillPoint": "0",
+        "focusValue": "0",
+        "focusMax": "3",
+        "field74": "1",
+        "field77": "1",
+        "field78": "8000005",
+        "field79": "0",
+        "_源opcode": "293",
+        "_源协议": "SC_RIDEPET_LIST",
+        "_首见文件": "1",
+        "_首见时间": "2026-09-01 21:00:00:3045757",
+        "_出现次数": "2"
+      }
+    ]
+  },
+  "formulas": {
+    "待逆向": [
+      "骑宠喂丹（sendPetFeedUpgrade）成功率与悟性提升幅度（服务端计算后回推）",
+      "骑宠命格（sendFindRidePetFate）寻访结果概率表",
+      "骑宠天赋（RidePetTalent）点数/洗练消耗表",
+      "骑宠技能（sendRidePetSkillOption）修炼/遗忘消耗表"
+    ]
+  }
+}

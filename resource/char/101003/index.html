@@ -1,0 +1,61 @@
+<!doctype html><html><head><meta charset="utf-8"><title>101003.swf.zip</title>
+<style>html,body{margin:0;background:#1c1c1c;color:#ddd;font-family:sans-serif}
+#stage{width:512px;height:512px;position:relative;margin:16px auto;background:repeating-conic-gradient(#333 0% 25%,#2a2a2a 0% 50%) 50%/32px 32px;border:1px solid #555}#stage canvas{position:absolute;left:0;top:0;background:transparent}
+#bar{display:flex;flex-wrap:wrap;gap:4px;max-width:560px;margin:0 auto;justify-content:center}
+button{padding:4px 8px;cursor:pointer;background:#333;color:#ddd;border:1px solid #555;border-radius:4px;font-size:12px}
+button:hover{background:#456}
+#now{text-align:center;margin:8px;font-size:18px}
+#empties{text-align:center;margin:6px;font-size:12px;color:#e88;min-height:16px}
+button.empty{background:#262626;color:#777;text-decoration:line-through;cursor:help;border-color:#444}
+button.empty::after{content:" 空";color:#c66;font-size:10px;margin-left:2px}
+</style></head><body>
+<div id="now">—</div><div id="empties"></div><div id="stage"><canvas id="cv"></canvas></div>
+<div id="bar"><button class="" data-pool="5" data-label="attackLT">attackLT</button>
+<button class="" data-pool="10" data-label="attackRB">attackRB</button>
+<button class="" data-pool="14" data-label="castLT">castLT</button>
+<button class="" data-pool="18" data-label="castRB">castRB</button>
+<button class="" data-pool="22" data-label="downLT">downLT</button>
+<button class="" data-pool="26" data-label="downRB">downRB</button>
+<button class="" data-pool="30" data-label="standLT">standLT</button>
+<button class="empty" data-pool="30" data-label="standLB" title="此动画无独立素材：游戏中由水平翻转生成（空方向）">standLB</button>
+<button class="empty" data-pool="30" data-label="standRT" title="此动画无独立素材：游戏中由水平翻转生成（空方向）">standRT</button>
+<button class="" data-pool="34" data-label="standRB">standRB</button>
+<button class="" data-pool="39" data-label="walkLT">walkLT</button>
+<button class="empty" data-pool="39" data-label="walkLB" title="此动画无独立素材：游戏中由水平翻转生成（空方向）">walkLB</button>
+<button class="empty" data-pool="39" data-label="walkRT" title="此动画无独立素材：游戏中由水平翻转生成（空方向）">walkRT</button>
+<button class="" data-pool="44" data-label="walkRB">walkRB</button>
+<button class="empty" data-pool="44" data-label="defendLT" title="此动画无独立素材：游戏中由水平翻转生成（空方向）">defendLT</button>
+<button class="empty" data-pool="44" data-label="defendRB" title="此动画无独立素材：游戏中由水平翻转生成（空方向）">defendRB</button>
+<button class="empty" data-pool="44" data-label="sitLT" title="此动画无独立素材：游戏中由水平翻转生成（空方向）">sitLT</button>
+<button class="empty" data-pool="44" data-label="sitLB" title="此动画无独立素材：游戏中由水平翻转生成（空方向）">sitLB</button>
+<button class="empty" data-pool="44" data-label="sitRT" title="此动画无独立素材：游戏中由水平翻转生成（空方向）">sitRT</button>
+<button class="empty" data-pool="44" data-label="sitRB" title="此动画无独立素材：游戏中由水平翻转生成（空方向）">sitRB</button>
+<button class="empty" data-pool="44" data-label="damageLT" title="此动画无独立素材：游戏中由水平翻转生成（空方向）">damageLT</button>
+<button class="empty" data-pool="44" data-label="damageRB" title="此动画无独立素材：游戏中由水平翻转生成（空方向）">damageRB</button>
+<button class="empty" data-pool="44" data-label="prepLT" title="此动画无独立素材：游戏中由水平翻转生成（空方向）">prepLT</button>
+<button class="empty" data-pool="44" data-label="PrepRB" title="此动画无独立素材：游戏中由水平翻转生成（空方向）">PrepRB</button></div>
+<script src="../../../fanvas3-transparent.js"></script><script src="swfData.js"></script>
+<script>
+const labels=[{"label":"attackLT","pool":5,"roleFrame":2,"empty":false},{"label":"attackRB","pool":10,"roleFrame":3,"empty":false},{"label":"castLT","pool":14,"roleFrame":4,"empty":false},{"label":"castRB","pool":18,"roleFrame":5,"empty":false},{"label":"downLT","pool":22,"roleFrame":6,"empty":false},{"label":"downRB","pool":26,"roleFrame":7,"empty":false},{"label":"standLT","pool":30,"roleFrame":8,"empty":false},{"label":"standLB","pool":30,"roleFrame":9,"empty":true},{"label":"standRT","pool":30,"roleFrame":10,"empty":true},{"label":"standRB","pool":34,"roleFrame":11,"empty":false},{"label":"walkLT","pool":39,"roleFrame":12,"empty":false},{"label":"walkLB","pool":39,"roleFrame":13,"empty":true},{"label":"walkRT","pool":39,"roleFrame":14,"empty":true},{"label":"walkRB","pool":44,"roleFrame":15,"empty":false},{"label":"defendLT","pool":44,"roleFrame":16,"empty":true},{"label":"defendRB","pool":44,"roleFrame":17,"empty":true},{"label":"sitLT","pool":44,"roleFrame":18,"empty":true},{"label":"sitLB","pool":44,"roleFrame":19,"empty":true},{"label":"sitRT","pool":44,"roleFrame":20,"empty":true},{"label":"sitRB","pool":44,"roleFrame":21,"empty":true},{"label":"damageLT","pool":44,"roleFrame":22,"empty":true},{"label":"damageRB","pool":44,"roleFrame":23,"empty":true},{"label":"prepLT","pool":44,"roleFrame":24,"empty":true},{"label":"PrepRB","pool":44,"roleFrame":25,"empty":true}];
+const charMode=true;
+const emptySet=new Set(labels.filter(L=>L.empty).map(L=>L.label));
+const ec=emptySet.size;
+document.getElementById('empties').textContent= ec>0 ? ('⚠ 空动画（'+ec+' 个，翻转生成）：'+[...emptySet].join('、')) : '全部动画均有独立素材';
+function play(pool,label){
+  const rd=swfData.definitionPool[pool];
+  if(rd && (!rd.rect || (rd.rect.width===0 && rd.rect.height===0)) && swfData.stageWidth){
+    rd.rect={x:0,y:0,width:swfData.stageWidth,height:swfData.stageHeight};
+  }
+  const stage=document.getElementById('stage'); const old=document.getElementById('cv');
+  if(old){try{fanvas.pause(old);}catch(e){} old.remove();}
+  const cv=document.createElement('canvas'); cv.id='cv'; stage.appendChild(cv);
+  const note=emptySet&&emptySet.has(label)?'   ⚠ 此动画无独立素材：游戏中由水平翻转生成（空方向）':'';
+  document.getElementById('now').textContent=label+'  (rootDef='+pool+')'+note;
+  const cfg = charMode
+    ? {rootDef:pool,transparent:true,char512:true,cache:1,scale:1,imagePath:'images/',autoPlay:true}
+    : {rootDef:pool,transparent:true,autoPlay:true,imagePath:'images/'};
+  fanvas.play(cv,swfData,cfg);
+}
+document.querySelectorAll('#bar button').forEach(b=>b.onclick=()=>play(+b.dataset.pool,b.dataset.label));
+if(labels.length) play(labels[0].pool, labels[0].label);
+</script></body></html>

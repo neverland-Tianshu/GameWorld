@@ -1,0 +1,37 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>天书奇谈 · HTML5 单机版</title>
+  <link rel="stylesheet" href="css/style.css?v=20261007c">
+  <link rel="stylesheet" href="css/tools.css?v=20261007c">
+  <!-- 13j 修复内联：引导全屏遮罩(.tutor-overlay)不得拦截鼠标（对齐 css/style.css）。
+       内联确保即时生效——静态服务对 css/style.css 有按路径的内存缓存，单独改 CSS 文件可能不生效。 -->
+  <style>
+    .tutor-overlay { pointer-events: none !important; }
+    .tutor-box { pointer-events: auto !important; }
+  </style>
+  <!-- 冻结自诊断横幅（经典脚本，先于游戏模块执行；捕获全局错误/未处理Promise/被吞循环异常，并在红条显示） -->
+  <script src="js/diag-banner.js?v=20261007c"></script>
+  <!-- 公共运行时：腾讯 Fanvas 透明版（支持 transparent:true 真透明背景 + char512:true 512 画布） -->
+  <script src="fanvas3-transparent.js"></script>
+  <!-- 注：角色资源已是解压后的 swfData.js + images/，本游戏不依赖 jszip，故不引入 CDN。 -->
+  <!-- 注意：标准版 fanvas3-min.js 不含 char512 也不支持真透明，会导致角色 10x10 白块，务必用透明版。 -->
+</head>
+<body>
+  <!-- 分层显示，对应 manager.SceneManager 的 loading / world / ui 三层 -->
+  <div id="loading-layer"></div>
+  <div id="world" style="display:none"></div>
+  <div id="ui-layer">
+    <!-- 对应 AS：_gameWorld.battleLayer / panelLayer / promptLayer 的 UI 侧容器 -->
+    <div id="panelLayer"></div>
+    <div id="promptLayer"></div>
+    <!-- 右侧独立栏：聊天列 + 角色面板 + 战斗指令条（不叠加主窗口、不透明、不被遮挡） -->
+    <div id="sidebar"></div>
+  </div>
+
+  <!-- ?v 跟随 BUILD_STAMP：改动 js/ 后同步更新本查询串，确保浏览器拉到新模块（ES 模块强缓存，硬刷仍可能命中旧入口） -->
+  <script type="module" src="js/game.js?v=20261007c"></script>
+</body>
+</html>

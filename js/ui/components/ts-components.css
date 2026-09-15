@@ -1,0 +1,1158 @@
+/* ts-components.css — AS3 fl.* 组件皮肤的 CSS 复刻
+ *
+ * 移植自 DefaultComponent.swf / UIComponent.swf 的 Skin 类（Button_upSkin、
+ * CellRenderer_selectedDownSkin、List_skin、DataGrid_skin、ScrollArrowUp_upSkin 等）。
+ * 原版皮肤是 assets.swf 中的位图形状，这里按用户选择用 CSS 渐变/边框/圆角近似。
+ *
+ * ★ 颜色全部取自 UIComponent.swf / DefaultComponent.swf 中导出的真实皮肤形状
+ *   （ffdec -export shape 导出的 SVG fill / gradient），不做风格改动：
+ *     #522807  深棕   —— 主边框/线条色（几乎所有皮肤的描边）
+ *     #e4ceaf  米色   —— 行悬停底/按下表头底（CellRenderer_overSkin / HeaderRenderer_downSkin）
+ *     #b38d56  金棕   —— 选中行底/树选中边框（CellRenderer_selectedUpSkin）
+ *     #d5b985  浅金棕 —— List 九宫格背景渐变（List_skin）
+ *     #0a4e46  深青绿 —— TextArea / DataGrid 内底（TextArea_upSkin / DataGrid_skin）
+ *     #92310e→#d07f62 暗红→暖橙 —— 按钮/表头/下拉框主渐变（ComboBox_upSkin / HeaderRenderer_upSkin）
+ *     #f2a809  金黄   —— 排序箭头、over 高光（HeaderSortArrow_ascIcon / ComboBox_overSkin）
+ *     #9ad8ff  亮蓝   —— 列表/树选中底（TreeCellRenderer_selectedUpSkin / CellRenderer 选中）
+ *     #daf1ff  淡蓝   —— 树悬停底（TreeCellRenderer_overSkin）
+ *     #ffffff  白     —— TextInput / ScrollPane / Tree 背景（TextInput_upSkin / ScrollPane_upSkin）
+ *     #747474  灰     —— 焦点框（focusRectSkin）
+ *
+ * ★★ 按钮（ts-button）皮肤改用游戏内 CSS 拟物按钮画法（.tsqt-btn-orange，
+ *   人物/宠物面板按钮）：up/over/down/disabled = 暗红→暖橙 4 段渐变 + 双向
+ *   inset 阴影 + 外投影；切换按钮（toggle）选中态另用人物面板页签
+ *   .tsqt-tab-item.active 的深红（装备/属性/心法/徽章那几个按钮的选中色）。
+ *
+ * 皮肤状态命名严格对齐 AS3 皮肤状态机：
+ *   data-mouse-state = up | over | down | disabled
+ *   data-selected    = true | false（选中态在 mouseState 前加 selected 前缀）
+ */
+
+:root {
+  /* —— 取自 SWF 皮肤形状的真实色板（不做风格改动）—— */
+  --ts-brown: #522807; /* 深棕：主边框/线条（TextInput/TextArea/List/CellRenderer 描边） */
+  --ts-brown-d: #321702; /* 更深棕：描边阴影 */
+  --ts-tan: #e4ceaf; /* 米色：行悬停底、按下态底（CellRenderer_overSkin / HeaderRenderer_downSkin） */
+  --ts-gold: #b38d56; /* 金棕：选中行底（CellRenderer_selectedUpSkin） */
+  --ts-gold-l: #d5b985; /* 浅金棕：List 九宫格渐变（List_skin） */
+  --ts-gold-d: #995f38; /* 深金棕：滑块渐变中间色（ScrollThumb_upSkin） */
+  --ts-teal: #0a4e46; /* 深青绿：TextArea/DataGrid 内底（TextArea_upSkin / DataGrid_skin） */
+  --ts-red: #92310e; /* 暗红：按钮渐变起点（ComboBox_upSkin / HeaderRenderer_upSkin） */
+  --ts-orange: #d07f62; /* 暖橙：按钮渐变终点 */
+  --ts-yellow: #f2a809; /* 金黄：排序箭头、over 高光（HeaderSortArrow / ComboBox_overSkin） */
+  --ts-yellow-l: #ffcc00; /* 亮黄：down 高光（ComboBox_downSkin） */
+  --ts-sel-blue: #9ad8ff; /* 亮蓝：列表/树选中底（TreeCellRenderer_selectedUpSkin） */
+  --ts-sel-blue-l: #daf1ff; /* 淡蓝：树悬停底（TreeCellRenderer_overSkin） */
+  --ts-white: #ffffff;
+  --ts-gray: #747474; /* 焦点框（focusRectSkin） */
+  --ts-gray-l: #b7babc; /* 禁用态金属灰渐变（HeaderRenderer_disabledSkin） */
+  --ts-track: #000000; /* 滚动条轨道（ScrollTrack_skin 黑底白边） */
+
+  /* 语义别名（组件规则引用）*/
+  --ts-border: var(--ts-brown);
+  --ts-text: #f2e9d8; /* 深底（红橙/青绿）上的亮色字 */
+  --ts-text-dark: #3a2210; /* 亮底（米色/白）上的深色字 */
+  --ts-text-disabled: #7c8e86; /* 禁用字色（CellRenderer_selectedDisabledSkin 灰绿） */
+  --ts-focus: var(--ts-gray);
+
+  --ts-radius: 3px;
+  --ts-font: 12px/1.4 'Microsoft YaHei', '微软雅黑', sans-serif;
+  --ts-text-padding: 5px; /* 对齐 LabelButton.defaultStyles.textPadding */
+
+  /* —— 拟物按钮皮肤（画法移植自游戏内 CSS 按钮：
+   *     up/over/down/disabled = .tsqt-btn-orange（人物/宠物面板按钮，暗红→暖橙系），
+   *     selected = 人物面板页签 .tsqt-tab-item.active 深红选中色
+   *     （装备/属性/心法/徽章那几个按钮））—— */
+  --ts-btn-radius: 5px;
+  /* up（.tsqt-btn-orange 默认态）*/
+  --ts-btn-border: #4a1300;
+  --ts-btn-c1: #d77c4b; /* 0% */
+  --ts-btn-c2: #c4430a; /* 45% */
+  --ts-btn-c3: #b13f10; /* 50% */
+  --ts-btn-c4: #a0320a; /* 100% */
+  --ts-btn-hi: rgba(255, 178, 115, 0.8); /* 顶部内高光 */
+  --ts-btn-lo: rgba(45, 10, 0, 0.6); /* 底部内阴影 */
+  --ts-btn-sh: rgba(0, 0, 0, 0.5); /* 外投影 */
+  --ts-btn-text: #ffe3ca;
+  --ts-btn-text-shadow: 1px 1px 1px #310d00;
+  /* over（.tsqt-btn-orange:hover：更亮 + 橙色外发光）*/
+  --ts-btn-over-c1: #f06c27;
+  --ts-btn-over-c2: #d75013;
+  --ts-btn-over-c3: #c8440d;
+  --ts-btn-over-c4: #9f2f05;
+  --ts-btn-over-hi: rgba(255, 200, 150, 0.9);
+  --ts-btn-over-glow: rgba(226, 91, 24, 0.4);
+  /* down（.tsqt-btn-orange:active：深色反向渐变）*/
+  --ts-btn-down-c1: #6d1b00;
+  --ts-btn-down-c2: #962a04;
+  --ts-btn-down-c3: #c4430a;
+  /* selected（深红，画法同人物面板页签 .tsqt-tab-item.active：
+   *     装备/属性/心法/徽章那几个按钮的选中色）*/
+  --ts-btn-sel-border: #100204;
+  --ts-btn-sel-c1: #a80f2d; /* 0% */
+  --ts-btn-sel-c2: #8b0821; /* 40% */
+  --ts-btn-sel-c3: #700318; /* 60% */
+  --ts-btn-sel-c4: #4e000f; /* 100% */
+  --ts-btn-sel-hi: rgba(255, 140, 160, 0.5);
+  --ts-btn-sel-lo: rgba(0, 0, 0, 0.4);
+  --ts-btn-sel-sh: rgba(0, 0, 0, 0.5);
+  --ts-btn-sel-text: #ffe6ea;
+  --ts-btn-sel-text-shadow: 1px 1px 2px #200005;
+  /* over：页签 .active:hover 与 .active 同色，不额外变色 */
+  --ts-btn-sel-over-c1: #a80f2d;
+  --ts-btn-sel-over-c2: #8b0821;
+  --ts-btn-sel-over-c3: #700318;
+  --ts-btn-sel-over-c4: #4e000f;
+  /* down：深红内凹（原作无此态，沿用 down 的内凹反馈）*/
+  --ts-btn-sel-down-c1: #4e000f;
+  --ts-btn-sel-down-c2: #700318;
+  --ts-btn-sel-down-c3: #8b0821;
+  /* disabled（去色保留立体感）*/
+  --ts-btn-dis-c1: #8a6a55;
+  --ts-btn-dis-c2: #6b4a38;
+  --ts-btn-dis-border: #4a3322;
+  --ts-btn-dis-text: #d8c9b4;
+  /* toggle 未选中态（人物面板页签 .tsqt-tab-item 默认态：金棕渐变）*/
+  --ts-btn-tab-border: #14110b;
+  --ts-btn-tab-c1: #dfc28d; /* 0% */
+  --ts-btn-tab-c2: #d1af77; /* 40% */
+  --ts-btn-tab-c3: #c39d61; /* 60% */
+  --ts-btn-tab-c4: #a67e45; /* 100% */
+  --ts-btn-tab-hi: rgba(255, 255, 255, 0.7);
+  --ts-btn-tab-side-hi: rgba(255, 255, 255, 0.3);
+  --ts-btn-tab-side-lo: rgba(0, 0, 0, 0.2);
+  --ts-btn-tab-text: #4a2f0b;
+  --ts-btn-tab-text-shadow: 0 1px 0 rgba(255, 255, 255, 0.4);
+  /* toggle down：金棕加深内凹（页签无此态，沿用按下反馈）*/
+  --ts-btn-tab-down-c1: #a67e45;
+  --ts-btn-tab-down-c2: #8a6536;
+  --ts-btn-tab-down-c3: #6e5028;
+
+  /* —— 组件默认尺寸（对齐 AS3 默认值）—— */
+  --ts-button-h: 22px;
+  --ts-row-h: 20px; /* List.rowHeight */
+  --ts-header-h: 25px; /* DataGrid.headerHeight */
+  --ts-scroll-w: 17px; /* 对齐参考设计的 17px 复古木质滚动条 */
+
+  /* —— 滚动条皮肤（复古木质，用户给的参考样式 2026-10-03）—— */
+  --ts-sb-track-border: #3b2415; /* 轨道左右描边 */
+  --ts-sb-track-c1: #5a381f; /* 轨道两侧深木 */
+  --ts-sb-track-c2: #bd8b58; /* 轨道内沿浅木 */
+  --ts-sb-track-c3: #80512e; /* 轨道分隔线 */
+  --ts-sb-track-c4: #c79a68; /* 轨道中央木纹 */
+  --ts-sb-track-c5: #4d301d; /* 轨道暗沿 */
+  --ts-sb-track-c6: #6f4528; /* 轨道中央主色 */
+  --ts-sb-thumb: #754522; /* 滑块底色 */
+  --ts-sb-thumb-hi: #bd8550; /* 滑块左上高光 */
+  --ts-sb-thumb-lo: #4a2b18; /* 滑块右下暗边 */
+  --ts-sb-thumb-border: #3d2414; /* 滑块描边 */
+  --ts-sb-thumb-icon: #c7a070; /* 滑块中央 ≡ 抓手色 */
+  --ts-sb-thumb-over: #87552d; /* 滑块悬停 */
+  --ts-sb-arrow: #9b6840; /* 箭头按钮底色 */
+  --ts-sb-arrow-hi: #d7a06a; /* 箭头左上高光 */
+  --ts-sb-arrow-lo: #4b2c19; /* 箭头右下暗边 */
+  --ts-sb-arrow-icon: #e3c49a; /* 箭头三角形填充 */
+  --ts-sb-arrow-icon-stroke: #53331d; /* 箭头三角形描边 */
+  --ts-input-h: 22px; /* TextInput 默认高 */
+  --ts-combo-w: 24px; /* ComboBox.buttonWidth */
+}
+
+/* —— 基础 —— */
+ts-button,
+ts-textinput,
+ts-textarea,
+ts-scrollbar,
+ts-uiscrollbar,
+ts-scrollpane,
+ts-list,
+ts-combobox,
+ts-datagrid,
+ts-tree {
+  box-sizing: border-box;
+  position: relative; /* UIComponent.move() 需要定位上下文 */
+  font: var(--ts-font);
+  color: var(--ts-text);
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+ts-textinput,
+ts-textarea {
+  user-select: text;
+  -webkit-user-select: text;
+}
+
+/* 焦点框（对齐 AS3 focusRectSkin：灰色虚线框）*/
+.ts-focused {
+  outline: 1px dashed var(--ts-focus);
+  outline-offset: 1px;
+}
+
+/* —— 通用背景层（对齐 AS3 各组件的 *Skin 皮肤元素）—— */
+.ts-bg {
+  position: absolute;
+  inset: 0;
+  border: 1px solid var(--ts-brown);
+  border-radius: var(--ts-radius);
+  pointer-events: none;
+}
+
+/* ============================================================
+ * Button（ts-button）
+ * 移植：fl.controls.Button / LabelButton / BaseButton
+ * 按钮皮肤在外部 assets.swf（未打入组件 SWF），主渐变取自同款
+ * ComboBox_upSkin / HeaderRenderer_upSkin 的 #92310e→#d07f62 暗红→暖橙。
+ * ★ 画法移植自游戏内 CSS 拟物按钮（.tsqt-btn-orange，人物/宠物面板按钮）：
+ *   4 段渐变 + 双向 inset 内阴影 + 外投影 + text-shadow，
+ *   状态对应 up→默认 / over→:hover / down→:active / disabled。
+ * ★ 切换按钮（toggle）选中态另用人物面板页签 .tsqt-tab-item.active 的深红
+ *   （装备/属性/心法/徽章那几个按钮的选中色），见下方 selected 规则。
+ * 默认尺寸 100×22；labelPlacement 默认 right（图标在左）
+ * ============================================================ */
+ts-button {
+  display: inline-block;
+  height: var(--ts-button-h);
+  cursor: default;
+  vertical-align: middle;
+  color: var(--ts-btn-text);
+  transition: transform 0.08s ease;
+}
+ts-button > .ts-bg {
+  border-color: var(--ts-btn-border);
+  border-radius: var(--ts-btn-radius);
+  background: linear-gradient(
+    to bottom,
+    var(--ts-btn-c1) 0%,
+    var(--ts-btn-c2) 45%,
+    var(--ts-btn-c3) 50%,
+    var(--ts-btn-c4) 100%
+  );
+  box-shadow:
+    inset 0 1px 1px var(--ts-btn-hi),
+    inset 0 -1px 2px var(--ts-btn-lo),
+    0 1px 3px var(--ts-btn-sh);
+  transition: background 0.08s ease, box-shadow 0.08s ease;
+}
+/* over（对应 .tsqt-btn-orange:hover：更亮 + 橙色外发光）*/
+ts-button[data-mouse-state='over'] > .ts-bg {
+  background: linear-gradient(
+    to bottom,
+    var(--ts-btn-over-c1) 0%,
+    var(--ts-btn-over-c2) 45%,
+    var(--ts-btn-over-c3) 50%,
+    var(--ts-btn-over-c4) 100%
+  );
+  box-shadow:
+    inset 0 1px 1px var(--ts-btn-over-hi),
+    inset 0 -1px 2px var(--ts-btn-lo),
+    0 0 5px var(--ts-btn-over-glow);
+}
+/* down（对应 .tsqt-btn-orange:active：深色反向渐变 + 内凹阴影 + 下沉 1px）*/
+ts-button[data-mouse-state='down'] > .ts-bg {
+  background: linear-gradient(
+    to bottom,
+    var(--ts-btn-down-c1) 0%,
+    var(--ts-btn-down-c2) 50%,
+    var(--ts-btn-down-c3) 100%
+  );
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.6);
+}
+ts-button[data-mouse-state='down'] {
+  transform: translateY(1px);
+}
+ts-button[data-mouse-state='disabled'] > .ts-bg,
+ts-button[disabled] > .ts-bg {
+  background: linear-gradient(var(--ts-btn-dis-c1), var(--ts-btn-dis-c2));
+  border-color: var(--ts-btn-dis-border);
+  box-shadow:
+    inset 0 1px 1px rgba(255, 255, 255, 0.15),
+    inset 0 -1px 2px rgba(0, 0, 0, 0.3);
+}
+ts-button[data-mouse-state='disabled'],
+ts-button[disabled] {
+  cursor: default;
+  color: var(--ts-btn-dis-text);
+}
+/* toggle 按钮未选中态（人物面板页签 .tsqt-tab-item 的金棕默认态；
+ * 特异性高于 over 规则，故悬停不变青蓝，保持金棕色系）*/
+ts-button[toggle]:not([data-selected='true']) > .ts-bg {
+  border-color: var(--ts-btn-tab-border);
+  background: linear-gradient(
+    to bottom,
+    var(--ts-btn-tab-c1) 0%,
+    var(--ts-btn-tab-c2) 40%,
+    var(--ts-btn-tab-c3) 60%,
+    var(--ts-btn-tab-c4) 100%
+  );
+  box-shadow:
+    inset 0 1px 1px var(--ts-btn-tab-hi),
+    inset 1px 0 0 var(--ts-btn-tab-side-hi),
+    inset -1px 0 0 var(--ts-btn-tab-side-lo);
+}
+ts-button[toggle]:not([data-selected='true']) {
+  color: var(--ts-btn-tab-text);
+}
+ts-button[toggle]:not([data-selected='true']) .ts-label {
+  text-shadow: var(--ts-btn-tab-text-shadow);
+}
+/* toggle 未选中 + down：金棕加深 + 内凹（页签无此态，沿用按下反馈）*/
+ts-button[toggle]:not([data-selected='true'])[data-mouse-state='down'] > .ts-bg {
+  background: linear-gradient(
+    to bottom,
+    var(--ts-btn-tab-down-c1) 0%,
+    var(--ts-btn-tab-down-c2) 50%,
+    var(--ts-btn-tab-down-c3) 100%
+  );
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.45);
+}
+/* toggle 未选中 + disabled：金棕去色（特异性高于上面的金棕规则）*/
+ts-button[toggle]:not([data-selected='true'])[data-mouse-state='disabled'] > .ts-bg,
+ts-button[toggle]:not([data-selected='true'])[disabled] > .ts-bg {
+  background: linear-gradient(#c9c0ae, #a89f8d);
+  border-color: #5f5746;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4);
+}
+ts-button[toggle]:not([data-selected='true'])[data-mouse-state='disabled'],
+ts-button[toggle]:not([data-selected='true'])[disabled] {
+  color: #8a8268;
+}
+/* toggle 按钮选中态（画法同人物面板页签 .tsqt-tab-item.active：装备/属性/心法/徽章那几个按钮的深红选中色）*/
+ts-button[data-selected='true'] {
+  color: var(--ts-btn-sel-text);
+}
+ts-button[data-selected='true'] > .ts-bg {
+  border-color: var(--ts-btn-sel-border);
+  background: linear-gradient(
+    to bottom,
+    var(--ts-btn-sel-c1) 0%,
+    var(--ts-btn-sel-c2) 40%,
+    var(--ts-btn-sel-c3) 60%,
+    var(--ts-btn-sel-c4) 100%
+  );
+  box-shadow:
+    inset 0 1px 1px var(--ts-btn-sel-hi),
+    inset 0 -1px 1px var(--ts-btn-sel-lo),
+    0 1px 2px var(--ts-btn-sel-sh);
+}
+ts-button[data-selected='true'][data-mouse-state='over'] > .ts-bg {
+  background: linear-gradient(
+    to bottom,
+    var(--ts-btn-sel-over-c1) 0%,
+    var(--ts-btn-sel-over-c2) 40%,
+    var(--ts-btn-sel-over-c3) 60%,
+    var(--ts-btn-sel-over-c4) 100%
+  );
+}
+ts-button[data-selected='true'][data-mouse-state='down'] > .ts-bg {
+  background: linear-gradient(
+    to bottom,
+    var(--ts-btn-sel-down-c1) 0%,
+    var(--ts-btn-sel-down-c2) 50%,
+    var(--ts-btn-sel-down-c3) 100%
+  );
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.45);
+}
+/* selected + disabled（对齐 selectedDisabledSkin：去色，灰字）*/
+ts-button[data-selected='true'][data-mouse-state='disabled'] > .ts-bg,
+ts-button[data-selected='true'][disabled] > .ts-bg {
+  background: linear-gradient(#9e7782, #7a4f5c);
+  border-color: #4a2a30;
+  box-shadow: inset 0 1px 1px rgba(255, 200, 210, 0.2);
+}
+ts-button[data-selected='true'][data-mouse-state='disabled'],
+ts-button[data-selected='true'][disabled] {
+  color: #c9b8bb;
+}
+ts-button .ts-label {
+  position: relative;
+  display: inline-block;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  padding: 0 var(--ts-text-padding);
+  line-height: var(--ts-button-h);
+  text-shadow: var(--ts-btn-text-shadow);
+  font-weight: 700;
+}
+ts-button[data-selected='true'] .ts-label {
+  text-shadow: var(--ts-btn-sel-text-shadow);
+}
+ts-button .ts-icon {
+  position: relative;
+  display: inline-block;
+  vertical-align: middle;
+  line-height: var(--ts-button-h);
+}
+/* labelPlacement: bottom / top */
+ts-button[data-label-placement='bottom'],
+ts-button[data-label-placement='top'] {
+  height: auto;
+}
+ts-button[data-label-placement='bottom'] .ts-label,
+ts-button[data-label-placement='top'] .ts-label {
+  display: block;
+  line-height: 1.4;
+  padding: 2px var(--ts-text-padding);
+}
+/* emphasized（对齐 Button.emphasizedSkin：金黄描边+加粗；外发光画在宿主上，不覆盖 .ts-bg 的 inset 立体感）*/
+ts-button.emphasized {
+  box-shadow: 0 0 5px rgba(242, 168, 9, 0.6);
+}
+ts-button.emphasized > .ts-bg {
+  border-color: var(--ts-yellow);
+}
+ts-button.emphasized .ts-label {
+  font-weight: 700;
+}
+
+/* ============================================================
+ * TextInput（ts-textinput）
+ * 移植：fl.controls.TextInput —— 取 TextInput_upSkin 真实颜色：
+ *      白底 #ffffff + 深棕描边 #522807
+ * ============================================================ */
+ts-textinput {
+  display: inline-block;
+  height: var(--ts-input-h);
+  overflow: hidden;
+  color: #2a1a08;
+}
+ts-textinput > .ts-bg {
+  background: var(--ts-white);
+}
+ts-textinput input {
+  position: relative;
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0 var(--ts-text-padding);
+  border: none;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  outline: none;
+}
+ts-textinput input[disabled] {
+  color: var(--ts-text-disabled);
+}
+
+/* ============================================================
+ * TextArea（ts-textarea）
+ * 移植：fl.controls.TextArea —— 取 TextArea_upSkin 真实颜色：
+ *      深青绿底 #0a4e46 + 深棕描边 #522807；
+ *      disabled 态取 TextArea_disabledSkin 的金属灰
+ * ============================================================ */
+ts-textarea {
+  display: block;
+  overflow: hidden;
+  color: #e8f2ef;
+}
+ts-textarea > .ts-bg {
+  background: var(--ts-teal);
+}
+ts-textarea[disabled] > .ts-bg {
+  background: #8f9293;
+  border-color: #6d6f70;
+}
+ts-textarea textarea {
+  position: relative;
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: var(--ts-text-padding);
+  border: none;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  outline: none;
+  resize: none;
+  overflow: hidden;
+  word-break: break-all;
+}
+ts-textarea textarea[disabled] {
+  color: #d5d6d6;
+}
+
+/* ============================================================
+ * ScrollBar（ts-scrollbar）
+ * 皮肤：复古木质滚动条（用户给的参考样式，2026-10-03）——
+ *   轨道：多段横向渐变刻出木质凹槽，左右 1px 深棕描边
+ *   滑块：#754522 实色 + 深棕描边 + 双向 inset 高光/暗边，中央 ≡ 抓手图标
+ *   箭头：#9b6840 斜面按钮（左上亮 #d7a06a / 右下暗 #4b2c19）+ SVG 三角图标
+ *   宽 17px；滑块最小 38px（MIN_THUMB_SIZE 同步，几何与拖拽比例同源）
+ * ============================================================ */
+ts-scrollbar,
+ts-uiscrollbar {
+  display: block;
+  width: var(--ts-scroll-w);
+  height: 100%;
+  overflow: hidden;
+}
+ts-scrollbar[data-direction='horizontal'],
+ts-uiscrollbar[data-direction='horizontal'] {
+  width: 100%;
+  height: var(--ts-scroll-w);
+}
+/* ts-uiscrollbar 由宿主（TextArea）在 drawLayout 中手动设 left/top/width/height，
+   必须绝对定位这些值才生效；基础块的 relative 在此覆盖 */
+ts-uiscrollbar {
+  position: absolute;
+}
+/* —— 轨道：木质凹槽（竖滚动条渐变横向走、横滚动条纵向走）—— */
+ts-scrollbar .ts-track {
+  position: absolute;
+  box-sizing: border-box;
+}
+ts-scrollbar[data-direction='vertical'] .ts-track,
+ts-uiscrollbar[data-direction='vertical'] .ts-track {
+  left: 0;
+  right: 0;
+  top: var(--ts-scroll-w);
+  bottom: var(--ts-scroll-w);
+  border-left: 1px solid var(--ts-sb-track-border);
+  border-right: 1px solid var(--ts-sb-track-border);
+  background: linear-gradient(
+    to right,
+    var(--ts-sb-track-c1) 0,
+    var(--ts-sb-track-c1) 1px,
+    var(--ts-sb-track-c2) 1px,
+    var(--ts-sb-track-c2) 3px,
+    var(--ts-sb-track-c3) 3px,
+    var(--ts-sb-track-c3) 4px,
+    var(--ts-sb-track-c4) 4px,
+    var(--ts-sb-track-c4) 13px,
+    var(--ts-sb-track-c3) 13px,
+    var(--ts-sb-track-c3) 14px,
+    var(--ts-sb-track-c5) 14px,
+    var(--ts-sb-track-c5) 16px,
+    var(--ts-sb-track-c6) 16px,
+    var(--ts-sb-track-c6) 100%
+  );
+}
+ts-scrollbar[data-direction='horizontal'] .ts-track,
+ts-uiscrollbar[data-direction='horizontal'] .ts-track {
+  top: 0;
+  bottom: 0;
+  left: var(--ts-scroll-w);
+  right: var(--ts-scroll-w);
+  border-top: 1px solid var(--ts-sb-track-border);
+  border-bottom: 1px solid var(--ts-sb-track-border);
+  background: linear-gradient(
+    to bottom,
+    var(--ts-sb-track-c1) 0,
+    var(--ts-sb-track-c1) 1px,
+    var(--ts-sb-track-c2) 1px,
+    var(--ts-sb-track-c2) 3px,
+    var(--ts-sb-track-c3) 3px,
+    var(--ts-sb-track-c3) 4px,
+    var(--ts-sb-track-c4) 4px,
+    var(--ts-sb-track-c4) 13px,
+    var(--ts-sb-track-c3) 13px,
+    var(--ts-sb-track-c3) 14px,
+    var(--ts-sb-track-c5) 14px,
+    var(--ts-sb-track-c5) 16px,
+    var(--ts-sb-track-c6) 16px,
+    var(--ts-sb-track-c6) 100%
+  );
+}
+/* —— 滑块 —— */
+ts-scrollbar .ts-thumb {
+  position: absolute;
+  box-sizing: border-box;
+  border: 1px solid var(--ts-sb-thumb-border);
+  background-color: var(--ts-sb-thumb);
+  box-shadow: inset 1px 1px 0 var(--ts-sb-thumb-hi), inset -1px -1px 0 var(--ts-sb-thumb-lo);
+  cursor: default;
+}
+ts-scrollbar[data-direction='vertical'] .ts-thumb,
+ts-uiscrollbar[data-direction='vertical'] .ts-thumb {
+  left: 1px;
+  right: 1px;
+  top: 0;
+  min-height: 38px; /* 对齐参考 ::-webkit-scrollbar-thumb 的 min-height，与 MIN_THUMB_SIZE 同源 */
+}
+ts-scrollbar[data-direction='horizontal'] .ts-thumb,
+ts-uiscrollbar[data-direction='horizontal'] .ts-thumb {
+  top: 1px;
+  bottom: 1px;
+  left: 0;
+  min-width: 38px;
+}
+ts-scrollbar .ts-thumb:hover,
+ts-uiscrollbar .ts-thumb:hover,
+ts-scrollbar .ts-thumb[data-mouse-state='over'],
+ts-uiscrollbar .ts-thumb[data-mouse-state='over'] {
+  background-color: var(--ts-sb-thumb-over);
+}
+ts-scrollbar .ts-thumb[data-mouse-state='down'],
+ts-uiscrollbar .ts-thumb[data-mouse-state='down'] {
+  background-color: #5e3718; /* 按下比悬停更深 */
+  box-shadow: inset -1px -1px 0 var(--ts-sb-thumb-hi), inset 1px 1px 0 var(--ts-sb-thumb-lo);
+}
+/* 滑块中央 ≡ 抓手（参考的 SVG 图标，横向滚动条旋转 90°）*/
+ts-scrollbar .ts-thumb::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 17px;
+  height: 24px;
+  transform: translate(-50%, -50%);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='17' height='24' viewBox='0 0 17 24'%3E%3Ctext x='8.5' y='17' text-anchor='middle' font-family='Arial' font-size='16' font-weight='bold' fill='%23c7a070'%3E%E2%89%A1%3C/text%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: center;
+  pointer-events: none;
+}
+ts-scrollbar[data-direction='horizontal'] .ts-thumb::after,
+ts-uiscrollbar[data-direction='horizontal'] .ts-thumb::after {
+  transform: translate(-50%, -50%) rotate(90deg);
+}
+/* —— 箭头按钮：斜面（左上亮 / 右下暗）—— */
+ts-scrollbar .ts-arrow {
+  position: absolute;
+  box-sizing: border-box;
+  cursor: default;
+  background-color: var(--ts-sb-arrow);
+  border-top: 1px solid var(--ts-sb-arrow-hi);
+  border-left: 1px solid var(--ts-sb-arrow-hi);
+  border-right: 1px solid var(--ts-sb-arrow-lo);
+  border-bottom: 1px solid var(--ts-sb-arrow-lo);
+}
+ts-scrollbar .ts-arrow:hover,
+ts-uiscrollbar .ts-arrow:hover {
+  background-color: #ab7549;
+}
+ts-scrollbar[data-direction='vertical'] .ts-arrow-up,
+ts-uiscrollbar[data-direction='vertical'] .ts-arrow-up {
+  left: 0;
+  right: 0;
+  top: 0;
+  height: var(--ts-scroll-w);
+}
+ts-scrollbar[data-direction='vertical'] .ts-arrow-down,
+ts-uiscrollbar[data-direction='vertical'] .ts-arrow-down {
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: var(--ts-scroll-w);
+}
+ts-scrollbar[data-direction='horizontal'] .ts-arrow-up,
+ts-uiscrollbar[data-direction='horizontal'] .ts-arrow-up {
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: var(--ts-scroll-w);
+}
+ts-scrollbar[data-direction='horizontal'] .ts-arrow-down,
+ts-uiscrollbar[data-direction='horizontal'] .ts-arrow-down {
+  top: 0;
+  bottom: 0;
+  right: 0;
+  width: var(--ts-scroll-w);
+}
+/* 箭头三角形（SVG 图标，取参考的 fill #e3c49a + stroke #53331d）*/
+ts-scrollbar .ts-arrow::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 17px;
+  height: 17px;
+  transform: translate(-50%, -50%);
+  background-repeat: no-repeat;
+  background-position: center;
+  pointer-events: none;
+}
+ts-scrollbar[data-direction='vertical'] .ts-arrow-up::after,
+ts-uiscrollbar[data-direction='vertical'] .ts-arrow-up::after {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='17' height='17'%3E%3Cpolygon points='8,4 4,10 12,10' fill='%23e3c49a' stroke='%2353331d' stroke-width='1'/%3E%3C/svg%3E");
+}
+ts-scrollbar[data-direction='vertical'] .ts-arrow-down::after,
+ts-uiscrollbar[data-direction='vertical'] .ts-arrow-down::after {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='17' height='17'%3E%3Cpolygon points='4,7 12,7 8,13' fill='%23e3c49a' stroke='%2353331d' stroke-width='1'/%3E%3C/svg%3E");
+}
+ts-scrollbar[data-direction='horizontal'] .ts-arrow-up::after,
+ts-uiscrollbar[data-direction='horizontal'] .ts-arrow-up::after {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='17' height='17'%3E%3Cpolygon points='4,8 10,4 10,12' fill='%23e3c49a' stroke='%2353331d' stroke-width='1'/%3E%3C/svg%3E");
+}
+ts-scrollbar[data-direction='horizontal'] .ts-arrow-down::after,
+ts-uiscrollbar[data-direction='horizontal'] .ts-arrow-down::after {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='17' height='17'%3E%3Cpolygon points='13,8 7,4 7,12' fill='%23e3c49a' stroke='%2353331d' stroke-width='1'/%3E%3C/svg%3E");
+}
+ts-scrollbar[data-mouse-state='disabled'] .ts-arrow,
+ts-uiscrollbar[data-mouse-state='disabled'] .ts-arrow,
+ts-scrollbar[disabled] .ts-arrow,
+ts-uiscrollbar[disabled] .ts-arrow,
+ts-scrollbar[data-mouse-state='disabled'] .ts-thumb,
+ts-uiscrollbar[data-mouse-state='disabled'] .ts-thumb,
+ts-scrollbar[disabled] .ts-thumb,
+ts-uiscrollbar[disabled] .ts-thumb {
+  opacity: 0.5;
+}
+
+/* ============================================================
+ * ScrollPane（ts-scrollpane）
+ * 移植：fl.containers.ScrollPane —— 取 ScrollPane_upSkin 真实颜色：
+ *      白底 #ffffff + 深棕描边 #522807（contentPadding=0）
+ * ============================================================ */
+ts-scrollpane {
+  display: block;
+  overflow: hidden;
+  color: #2a1a08;
+}
+ts-scrollpane > .ts-bg {
+  background: var(--ts-white);
+}
+ts-scrollpane[disabled] > .ts-bg {
+  background: #d8d8d8;
+  border-color: #6d6f70;
+}
+ts-scrollpane .ts-content-clip {
+  position: absolute;
+  overflow: hidden;
+}
+ts-scrollpane .ts-content-clip > slot {
+  display: block;
+}
+ts-scrollpane .ts-h-scroll,
+ts-scrollpane .ts-v-scroll {
+  position: absolute;
+}
+ts-scrollpane .ts-h-scroll {
+  left: 0;
+  bottom: 0;
+}
+ts-scrollpane .ts-v-scroll {
+  top: 0;
+  right: 0;
+}
+
+/* ============================================================
+ * List（ts-list）
+ * 移植：fl.controls.List / SelectableList / CellRenderer，取真实颜色：
+ *   List_skin（九宫格）：#522807 描边 + #d5b985 金棕渐变底
+ *   CellRenderer_upSkin：透明（仅描边 #522807）
+ *   CellRenderer_overSkin：米色底 #e4ceaf
+ *   CellRenderer_selectedUpSkin：金棕底 #b38d56
+ *   CellRenderer_selectedDisabledSkin：灰绿 #7c8e86
+ * 行高 20（rowHeight）
+ * ============================================================ */
+ts-list {
+  display: block;
+  overflow: hidden;
+  color: var(--ts-text-dark);
+}
+ts-list > .ts-bg {
+  background: linear-gradient(var(--ts-gold-l), #c9a06a);
+}
+ts-list[disabled] > .ts-bg {
+  background: #b9b3a6;
+  border-color: #6d6f70;
+}
+ts-list .ts-list-holder {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+ts-list .ts-list-inner {
+  position: relative;
+}
+ts-list .ts-cell {
+  display: block;
+  position: absolute;
+  left: 0;
+  box-sizing: border-box;
+  height: var(--ts-row-h);
+  line-height: var(--ts-row-h);
+  padding: 0 var(--ts-text-padding);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  cursor: default;
+  border: 1px solid transparent;
+}
+ts-list .ts-cell .ts-icon {
+  display: inline-block;
+  vertical-align: middle;
+  margin-right: 4px;
+}
+ts-list .ts-cell[data-mouse-state='over'] {
+  background: var(--ts-tan);
+  border-color: var(--ts-brown);
+}
+ts-list .ts-cell[data-mouse-state='down'] {
+  background: var(--ts-tan);
+  border-color: var(--ts-brown-d);
+}
+ts-list .ts-cell[data-selected='true'] {
+  background: linear-gradient(var(--ts-gold), var(--ts-gold-d));
+  border-color: var(--ts-brown-d);
+  color: #fff5e0;
+}
+ts-list .ts-cell[data-selected='true'][data-mouse-state='over'] {
+  background: linear-gradient(var(--ts-gold-l), var(--ts-gold));
+}
+ts-list .ts-cell[data-selected='true'][data-mouse-state='down'] {
+  background: linear-gradient(var(--ts-gold-d), var(--ts-gold));
+}
+ts-list .ts-v-scroll {
+  position: absolute;
+  top: 0;
+  right: 0;
+  height: 100%;
+}
+ts-list[disabled] .ts-cell {
+  color: var(--ts-text-disabled);
+}
+
+/* ============================================================
+ * ComboBox（ts-combobox）
+ * 移植：fl.controls.ComboBox —— 取真实颜色：
+ *   ComboBox_upSkin：深棕描边 #522807 + 暗红→暖橙渐变 #92310e→#d07f62
+ *   ComboBox_overSkin：渐变 + 金黄高光 #ffc000
+ *   ComboBox_downSkin：渐变 + 亮黄高光 #ffcc00
+ * buttonWidth=24、rowCount=5
+ * ============================================================ */
+ts-combobox {
+  display: inline-block;
+  height: var(--ts-input-h);
+  overflow: visible;
+  color: var(--ts-btn-text);
+}
+ts-combobox > .ts-bg {
+  border-color: var(--ts-btn-border);
+  border-radius: var(--ts-btn-radius);
+  background: linear-gradient(
+    to bottom,
+    var(--ts-btn-c1) 0%,
+    var(--ts-btn-c2) 45%,
+    var(--ts-btn-c3) 50%,
+    var(--ts-btn-c4) 100%
+  );
+  box-shadow:
+    inset 0 1px 1px var(--ts-btn-hi),
+    inset 0 -1px 2px var(--ts-btn-lo),
+    0 1px 3px var(--ts-btn-sh);
+}
+ts-combobox[data-mouse-state='over'] > .ts-bg {
+  background: linear-gradient(
+    to bottom,
+    var(--ts-btn-over-c1) 0%,
+    var(--ts-btn-over-c2) 45%,
+    var(--ts-btn-over-c3) 50%,
+    var(--ts-btn-over-c4) 100%
+  );
+  box-shadow:
+    inset 0 1px 1px var(--ts-btn-over-hi),
+    inset 0 -1px 2px var(--ts-btn-lo),
+    0 0 5px var(--ts-btn-over-glow);
+}
+ts-combobox[data-mouse-state='down'] > .ts-bg {
+  background: linear-gradient(
+    to bottom,
+    var(--ts-btn-down-c1) 0%,
+    var(--ts-btn-down-c2) 50%,
+    var(--ts-btn-down-c3) 100%
+  );
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.6);
+}
+ts-combobox[disabled] > .ts-bg {
+  background: linear-gradient(var(--ts-btn-dis-c1), var(--ts-btn-dis-c2));
+  border-color: var(--ts-btn-dis-border);
+  box-shadow:
+    inset 0 1px 1px rgba(255, 255, 255, 0.15),
+    inset 0 -1px 2px rgba(0, 0, 0, 0.3);
+}
+ts-combobox .ts-field {
+  position: absolute;
+  inset: 0;
+  box-sizing: border-box;
+  padding: 0 calc(var(--ts-combo-w) + 4px) 0 var(--ts-text-padding);
+  border: none;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  outline: none;
+  line-height: var(--ts-input-h);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  text-shadow: var(--ts-btn-text-shadow);
+}
+ts-combobox[editable] .ts-field {
+  color: var(--ts-btn-text);
+}
+ts-combobox .ts-field[disabled] {
+  color: var(--ts-btn-dis-text);
+}
+ts-combobox .ts-arrow-btn {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: var(--ts-combo-w);
+  box-sizing: border-box;
+  border-left: 1px solid var(--ts-brown);
+  border-radius: 0 var(--ts-radius) var(--ts-radius) 0;
+  cursor: default;
+  background: linear-gradient(#ccaa72, var(--ts-gold-d));
+}
+ts-combobox .ts-arrow-btn::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  border: 4px solid transparent;
+  border-top-color: #fff5e0;
+  transform: translate(-50%, -40%);
+}
+ts-combobox[data-open='true'] .ts-arrow-btn::after {
+  border-top-color: transparent;
+  border-bottom-color: #fff5e0;
+  transform: translate(-50%, -60%);
+}
+ts-combobox .ts-dropdown {
+  position: absolute;
+  left: 0;
+  top: 100%;
+  z-index: 1000;
+  display: none;
+  box-sizing: border-box;
+  min-width: 100%;
+  border: 1px solid var(--ts-brown);
+  border-radius: var(--ts-radius);
+  background: linear-gradient(var(--ts-gold-l), #c9a06a);
+  box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.5);
+  overflow: hidden;
+}
+ts-combobox[data-open='true'] .ts-dropdown {
+  display: block;
+}
+ts-combobox .ts-dropdown ts-list {
+  display: block;
+  width: 100%;
+}
+/* editable 时输入区白底（对齐 AS3 editable 下露出 TextInput 皮肤）*/
+ts-combobox[editable] .ts-field {
+  background: var(--ts-white);
+  color: #2a1a08;
+  text-shadow: none;
+}
+
+/* ============================================================
+ * DataGrid（ts-datagrid）
+ * 移植：fl.controls.DataGrid —— 取真实颜色：
+ *   DataGrid_skin：深青绿底 #0a4e46
+ *   HeaderRenderer_upSkin：暗红→暖橙渐变 #92310e→#d07f62（白字）
+ *   HeaderRenderer_downSkin：米色底 #e4ceaf + 同渐变
+ *   HeaderRenderer_disabledSkin / selectedUpSkin：金属灰渐变
+ *   HeaderSortArrow_ascIcon/descIcon：金黄 #f2a809
+ *   ColumnStretch_cursor：#000000 + #f2a809
+ *   DataGridCellEditor_skin：白底 #ffffff + #b0e1dc 边
+ * headerHeight=25、rowHeight=20
+ * ============================================================ */
+ts-datagrid {
+  display: block;
+  overflow: hidden;
+  color: #e8f2ef;
+}
+ts-datagrid > .ts-bg {
+  background: var(--ts-teal);
+}
+ts-datagrid[disabled] > .ts-bg {
+  background: #8f9293;
+}
+ts-datagrid .ts-header {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: var(--ts-header-h);
+  overflow: hidden;
+  background: linear-gradient(var(--ts-red), var(--ts-orange));
+  border-bottom: 1px solid var(--ts-brown-d);
+}
+ts-datagrid[data-show-headers='false'] .ts-header {
+  display: none;
+}
+ts-datagrid .ts-header-cell {
+  position: absolute;
+  top: 0;
+  height: var(--ts-header-h);
+  box-sizing: border-box;
+  border-right: 1px solid var(--ts-brown-d);
+  padding: 0 var(--ts-text-padding);
+  line-height: var(--ts-header-h);
+  color: #fff;
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.5);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  cursor: default;
+}
+ts-datagrid .ts-header-cell[data-mouse-state='over'] {
+  background: rgba(255, 255, 255, 0.14);
+}
+ts-datagrid .ts-header-cell[data-mouse-state='down'] {
+  /* 对齐 HeaderRenderer_downSkin：米色底 */
+  background: var(--ts-tan);
+  color: var(--ts-text-dark);
+  text-shadow: none;
+}
+/* 列排序箭头（对齐 HeaderSortArrow_ascIcon/descIcon：金黄 #f2a809）*/
+ts-datagrid .ts-header-cell[data-sort='asc']::after,
+ts-datagrid .ts-header-cell[data-sort='desc']::after {
+  content: '';
+  position: absolute;
+  right: 3px;
+  top: 50%;
+  border: 4px solid transparent;
+  transform: translateY(-50%);
+}
+ts-datagrid .ts-header-cell[data-sort='asc']::after {
+  border-bottom-color: var(--ts-yellow);
+  margin-top: -3px;
+}
+ts-datagrid .ts-header-cell[data-sort='desc']::after {
+  border-top-color: var(--ts-yellow);
+  margin-top: 3px;
+}
+/* 列拉伸分隔条（对齐 columnDividerSkin + ColumnStretch_cursor 的 #f2a809）*/
+ts-datagrid .ts-col-stretcher {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 5px;
+  margin-left: -3px;
+  cursor: col-resize;
+}
+ts-datagrid .ts-col-stretcher[data-mouse-state='over'] {
+  background: rgba(242, 168, 9, 0.6);
+}
+ts-datagrid .ts-body {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  overflow: hidden;
+}
+ts-datagrid .ts-body-inner {
+  position: relative;
+}
+ts-datagrid .ts-cell {
+  display: block;
+  position: absolute;
+  box-sizing: border-box;
+  height: var(--ts-row-h);
+  line-height: var(--ts-row-h);
+  padding: 0 var(--ts-text-padding);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  border-right: 1px solid rgba(82, 40, 7, 0.5);
+}
+ts-datagrid .ts-cell[data-mouse-state='over'] {
+  background: rgba(228, 206, 175, 0.85);
+  color: var(--ts-text-dark);
+}
+ts-datagrid .ts-cell[data-selected='true'] {
+  background: linear-gradient(var(--ts-gold), var(--ts-gold-d));
+  color: #fff5e0;
+}
+ts-datagrid .ts-v-scroll {
+  position: absolute;
+  top: 0;
+  right: 0;
+  height: 100%;
+}
+ts-datagrid .ts-h-scroll {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+}
+/* 单元格编辑器（对齐 DataGridCellEditor_skin：白底 + #b0e1dc 边）*/
+ts-datagrid .ts-cell-editor {
+  position: absolute;
+  box-sizing: border-box;
+  border: 1px solid #b0e1dc;
+  background: var(--ts-white);
+  padding: 0 2px;
+  height: var(--ts-row-h);
+  box-shadow: 0 0 4px rgba(176, 225, 220, 0.8);
+}
+ts-datagrid .ts-cell-editor input {
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  border: none;
+  background: transparent;
+  color: #2a1a08;
+  font: inherit;
+  outline: none;
+  padding: 0 var(--ts-text-padding);
+}
+
+/* ============================================================
+ * Tree（ts-tree）
+ * 移植：component.Tree + treeClasses.TreeCellRenderer，取真实颜色：
+ *   TreeCellRenderer_upSkin：白底 #ffffff
+ *   TreeCellRenderer_overSkin：淡蓝底 #daf1ff + 米色边 #e4ceaf
+ *   TreeCellRenderer_selectedUpSkin：亮蓝底 #9ad8ff + 金棕边 #b38d56
+ *   openBranchIcon / closedBranchIcon：金色渐变 #fff3ce→#a1895f + 深棕 #522807
+ *   leafIcon：灰 #cccccc + 深棕边
+ * ============================================================ */
+ts-tree {
+  display: block;
+  overflow: hidden;
+  color: var(--ts-text-dark);
+}
+ts-tree > .ts-bg {
+  background: var(--ts-white);
+}
+ts-tree .ts-cell {
+  display: block;
+  position: absolute;
+  left: 0;
+  box-sizing: border-box;
+  height: var(--ts-row-h);
+  line-height: var(--ts-row-h);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  cursor: default;
+  border: 1px solid transparent;
+}
+ts-tree .ts-cell .ts-icon {
+  display: inline-block;
+  width: 16px;
+  vertical-align: middle;
+  text-align: center;
+  font-size: 9px;
+  line-height: var(--ts-row-h);
+  color: var(--ts-brown);
+}
+ts-tree .ts-cell .ts-label {
+  display: inline-block;
+  vertical-align: middle;
+  max-width: calc(100% - 20px);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding: 0 2px;
+}
+ts-tree .ts-cell[data-mouse-state='over'] {
+  background: var(--ts-sel-blue-l);
+  border-color: var(--ts-tan);
+}
+ts-tree .ts-cell[data-selected='true'] {
+  background: var(--ts-sel-blue);
+  border-color: var(--ts-gold);
+}
+ts-tree .ts-v-scroll {
+  position: absolute;
+  top: 0;
+  right: 0;
+  height: 100%;
+}

@@ -1,0 +1,480 @@
+{
+ "_meta": {
+  "generatedBy": "_verify/gen_attr_formula_cfg.py",
+  "用途": "角色属性公式真源：主属性成长 + 五维→二级属性换算 + 暴击/闪避/命中（按类型）+ 品级/变异/寿命。全部数值可纯靠本表调整。",
+  "数据来源": {
+   "二级属性加成": "资料/二级属性加成表.csv（原版公式表）",
+   "主属性公式": "用户裁决：主属性 = 资质×(等级-1)×成长率/800000 + 资质/500",
+   "成长率单位": "百分数原值（人物150、普通100、优秀170、杰出230、卓越280、完美320）；变异 ×1.25 → 完美320×1.25=400 即上限",
+   "品级分布": "用户裁决：普通29 / 优秀30 / 杰出25 / 卓越15 / 完美1",
+   "变异": "用户裁决：仅杰出/卓越/完美可变异（优秀档无变异），内部概率 1%/3%/30%；变异成长率 ×1.25（400% 上限仅陈述不判定）",
+   "人物成长率": "用户裁决：固定 150（原每级3点自由属性点并入资质自然增长）",
+   "寿命": "用户裁决：寿命 = 50×等级 + 500"
+  },
+  "注意": "derive() 消费本表前会校验 _schema；改动公式后递增 _schema 使旧实例失效。"
+ },
+ "_schema": "20260918",
+ "primary": {
+  "formula": "主属性 = 资质 × (等级-1) × 成长率 / divisor + 资质 / baseDivisor",
+  "divisor": 800000,
+  "baseDivisor": 500,
+  "humanGrowRate": 150,
+  "variantMultiplier": 1.25,
+  "variantCap": 400,
+  "variantCapEnforced": false
+ },
+ "grade": {
+  "普通": {
+   "rate": 100,
+   "weight": 29,
+   "variant": 0
+  },
+  "优秀": {
+   "rate": 170,
+   "weight": 30,
+   "variant": 0
+  },
+  "杰出": {
+   "rate": 230,
+   "weight": 25,
+   "variant": 0.001
+  },
+  "卓越": {
+   "rate": 280,
+   "weight": 15,
+   "variant": 0.004
+  },
+  "完美": {
+   "rate": 320,
+   "weight": 1,
+   "variant": 0.015
+  }
+ },
+ "gradeOrder": [
+  "普通",
+  "优秀",
+  "杰出",
+  "卓越",
+  "完美"
+ ],
+ "conv": {
+  "strength": {
+   "maxHp": 2,
+   "maxMp": 2,
+   "rageMax": 2,
+   "spd": 0.2,
+   "recover": -0.2,
+   "atk": 2.2,
+   "def": 0.2,
+   "mag": 0,
+   "magDef": 0
+  },
+  "stamina": {
+   "maxHp": 24,
+   "maxMp": 1,
+   "rageMax": 8,
+   "spd": 0.2,
+   "recover": 0.8,
+   "atk": 0.1,
+   "def": 0.1,
+   "mag": 0,
+   "magDef": 2.2
+  },
+  "agility": {
+   "maxHp": 3,
+   "maxMp": 2,
+   "rageMax": 2,
+   "spd": 2,
+   "recover": 0.2,
+   "atk": 0.2,
+   "def": 0.2,
+   "mag": 0,
+   "magDef": 0
+  },
+  "intellect": {
+   "maxHp": 1,
+   "maxMp": 10,
+   "rageMax": 2,
+   "spd": 0.1,
+   "recover": -0.3,
+   "atk": 0.1,
+   "def": 0.1,
+   "mag": 1.7,
+   "magDef": 0
+  },
+  "faith": {
+   "maxHp": 3,
+   "maxMp": 2,
+   "rageMax": 12,
+   "spd": 0.2,
+   "recover": -0.1,
+   "atk": 0.2,
+   "def": 2.2,
+   "mag": 0,
+   "magDef": 0
+  }
+ },
+ "combat": {
+  "侠客": {
+   "phyCrit": {
+    "lvl": 4,
+    "attr": "agility",
+    "per": 3.5,
+    "capLvl": 80
+   },
+   "phyDodge": {
+    "lvl": 2,
+    "attr": "agility",
+    "per": 1,
+    "capLvl": 65
+   },
+   "phyHit": {
+    "lvl": 0,
+    "attr": "agility",
+    "per": 27,
+    "capLvl": 125
+   },
+   "magCrit": {
+    "lvl": 2.55,
+    "attr": "faith",
+    "per": 2.25,
+    "capLvl": 72.5
+   },
+   "magDodge": {
+    "lvl": 0.8,
+    "attr": "faith",
+    "per": 1,
+    "capLvl": 65
+   },
+   "magHit": {
+    "lvl": 30,
+    "attr": "faith",
+    "per": 25,
+    "capLvl": 100.2
+   }
+  },
+  "刺客": {
+   "phyCrit": {
+    "lvl": 5.65,
+    "attr": "agility",
+    "per": 5,
+    "capLvl": 80
+   },
+   "phyDodge": {
+    "lvl": 1.5,
+    "attr": "agility",
+    "per": 1.875,
+    "capLvl": 65
+   },
+   "phyHit": {
+    "lvl": 0,
+    "attr": "agility",
+    "per": 21.6,
+    "capLvl": 125
+   },
+   "magCrit": {
+    "lvl": 2.55,
+    "attr": "faith",
+    "per": 1.5,
+    "capLvl": 20
+   },
+   "magDodge": {
+    "lvl": 1,
+    "attr": "faith",
+    "per": 0.5,
+    "capLvl": 65
+   },
+   "magHit": {
+    "lvl": 45,
+    "attr": "faith",
+    "per": 18,
+    "capLvl": 100.2
+   }
+  },
+  "术士": {
+   "phyCrit": {
+    "lvl": 2.55,
+    "attr": "agility",
+    "per": 1.5,
+    "capLvl": 20
+   },
+   "phyDodge": {
+    "lvl": 1,
+    "attr": "agility",
+    "per": 0.5,
+    "capLvl": 65
+   },
+   "phyHit": {
+    "lvl": 30,
+    "attr": "agility",
+    "per": 25,
+    "capLvl": 100.2
+   },
+   "magCrit": {
+    "lvl": 5.65,
+    "attr": "faith",
+    "per": 5,
+    "capLvl": 117.5
+   },
+   "magDodge": {
+    "lvl": 1.5,
+    "attr": "faith",
+    "per": 1,
+    "capLvl": 65
+   },
+   "magHit": {
+    "lvl": 0,
+    "attr": "faith",
+    "per": 21.6,
+    "capLvl": 125
+   }
+  },
+  "修真": {
+   "phyCrit": {
+    "lvl": 2.55,
+    "attr": "agility",
+    "per": 2.25,
+    "capLvl": 72.5
+   },
+   "phyDodge": {
+    "lvl": 0.8,
+    "attr": "agility",
+    "per": 1,
+    "capLvl": 65
+   },
+   "phyHit": {
+    "lvl": 45,
+    "attr": "agility",
+    "per": 18,
+    "capLvl": 100.2
+   },
+   "magCrit": {
+    "lvl": 5.65,
+    "attr": "faith",
+    "per": 3.5,
+    "capLvl": 72.5
+   },
+   "magDodge": {
+    "lvl": 2,
+    "attr": "faith",
+    "per": 1.875,
+    "capLvl": 65
+   },
+   "magHit": {
+    "lvl": 0,
+    "attr": "faith",
+    "per": 27,
+    "capLvl": 125
+   }
+  },
+  "人形": {
+   "phyCrit": {
+    "lvl": 7.4,
+    "attr": "agility",
+    "per": 2,
+    "capLvl": 72.5
+   },
+   "phyDodge": {
+    "lvl": 0,
+    "attr": "agility",
+    "per": 0.5,
+    "capLvl": 20
+   },
+   "phyHit": {
+    "lvl": 100.2,
+    "attr": null,
+    "per": 0,
+    "capLvl": 100.2
+   },
+   "magCrit": {
+    "lvl": 11.4,
+    "attr": "faith",
+    "per": 0.2,
+    "capLvl": 72.5
+   },
+   "magDodge": {
+    "lvl": 13,
+    "attr": "faith",
+    "per": 3,
+    "capLvl": 72.5
+   },
+   "magHit": {
+    "lvl": 100.2,
+    "attr": null,
+    "per": 0,
+    "capLvl": 100.2
+   }
+  },
+  "妖怪": {
+   "phyCrit": {
+    "lvl": 0,
+    "attr": "agility",
+    "per": 1,
+    "capLvl": 0.5
+   },
+   "phyDodge": {
+    "lvl": 13,
+    "attr": "agility",
+    "per": 3,
+    "capLvl": 72.5
+   },
+   "phyHit": {
+    "lvl": 125,
+    "attr": null,
+    "per": 0,
+    "capLvl": 125
+   },
+   "magCrit": {
+    "lvl": 7.4,
+    "attr": "faith",
+    "per": 2,
+    "capLvl": 72.5
+   },
+   "magDodge": {
+    "lvl": 0,
+    "attr": "faith",
+    "per": 0.5,
+    "capLvl": 20
+   },
+   "magHit": {
+    "lvl": 85,
+    "attr": null,
+    "per": 0,
+    "capLvl": 125
+   }
+  },
+  "精灵": {
+   "phyCrit": {
+    "lvl": 7.4,
+    "attr": "agility",
+    "per": 1,
+    "capLvl": 72.5
+   },
+   "phyDodge": {
+    "lvl": 0,
+    "attr": "agility",
+    "per": 0.5,
+    "capLvl": 20
+   },
+   "phyHit": {
+    "lvl": 100.2,
+    "attr": null,
+    "per": 0,
+    "capLvl": 100.2
+   },
+   "magCrit": {
+    "lvl": 13,
+    "attr": "faith",
+    "per": 6,
+    "capLvl": 117.5
+   },
+   "magDodge": {
+    "lvl": 0,
+    "attr": "faith",
+    "per": 0.5,
+    "capLvl": 20
+   },
+   "magHit": {
+    "lvl": 125,
+    "attr": null,
+    "per": 0,
+    "capLvl": 125
+   }
+  },
+  "野兽": {
+   "phyCrit": {
+    "lvl": 13,
+    "attr": "agility",
+    "per": 6,
+    "capLvl": 117.5
+   },
+   "phyDodge": {
+    "lvl": 0,
+    "attr": "agility",
+    "per": 0.5,
+    "capLvl": 20
+   },
+   "phyHit": {
+    "lvl": 125,
+    "attr": null,
+    "per": 0,
+    "capLvl": 125
+   },
+   "magCrit": {
+    "lvl": 0,
+    "attr": null,
+    "per": 0,
+    "capLvl": 0
+   },
+   "magDodge": {
+    "lvl": 0,
+    "attr": "faith",
+    "per": 0.5,
+    "capLvl": 20
+   },
+   "magHit": {
+    "lvl": 0,
+    "attr": null,
+    "per": 0,
+    "capLvl": 0
+   }
+  },
+  "神兽": {
+   "phyCrit": {
+    "lvl": 13,
+    "attr": "agility",
+    "per": 6,
+    "capLvl": 152.5
+   },
+   "phyDodge": {
+    "lvl": 13,
+    "attr": "agility",
+    "per": 4,
+    "capLvl": 92.5
+   },
+   "phyHit": {
+    "lvl": 120,
+    "attr": null,
+    "per": 0,
+    "capLvl": 120
+   },
+   "magCrit": {
+    "lvl": 13,
+    "attr": "faith",
+    "per": 6,
+    "capLvl": 152.5
+   },
+   "magDodge": {
+    "lvl": 13,
+    "attr": "faith",
+    "per": 4,
+    "capLvl": 92.5
+   },
+   "magHit": {
+    "lvl": 120,
+    "attr": null,
+    "per": 0,
+    "capLvl": 120
+   }
+  }
+ },
+ "combatTypeMap": {
+  "男侠客": "侠客",
+  "女侠客": "侠客",
+  "男刺客": "刺客",
+  "女刺客": "刺客",
+  "男术士": "术士",
+  "女术士": "术士",
+  "男修真": "修真",
+  "女修真": "修真",
+  "神兽": "神兽",
+  "妖怪": "妖怪",
+  "野兽": "野兽",
+  "精灵": "精灵",
+  "人形": "人形"
+ },
+ "life": {
+  "perLevel": 50,
+  "base": 500
+ }
+}

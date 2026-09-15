@@ -1,0 +1,116 @@
+<!doctype html><html><head><meta charset="utf-8"><title>400033.swf.zip</title>
+<style>html,body{margin:0;background:#1c1c1c;color:#ddd;font-family:sans-serif}
+#stage{width:512px;height:512px;position:relative;margin:16px auto;background:repeating-conic-gradient(#333 0% 25%,#2a2a2a 0% 50%) 50%/32px 32px;border:1px solid #555;overflow:hidden}
+#flipwrap{position:absolute;left:0;top:0;width:512px;height:512px}
+#flipwrap canvas{position:absolute;background:transparent}
+#dummy{position:absolute;pointer-events:none;opacity:.55}
+#mark{position:absolute;left:256px;top:256px;width:17px;height:17px;margin:-8px 0 0 -8px;border:2px solid #e8333d;border-radius:50%;pointer-events:none}
+#mark::after{content:"";position:absolute;left:7px;top:-13px;width:2px;height:11px;background:#e8333d}
+#bar{display:flex;flex-wrap:wrap;gap:4px;max-width:560px;margin:0 auto;justify-content:center}
+button{padding:4px 8px;cursor:pointer;background:#333;color:#ddd;border:1px solid #555;border-radius:4px;font-size:12px}
+button:hover{background:#456}
+button.on{background:#1d6fa5;color:#fff;border-color:#6cf}
+#now{text-align:center;margin:8px;font-size:15px}
+#opts{text-align:center;margin:4px;font-size:12px}
+#opts label{cursor:pointer}
+#empties{text-align:center;margin:6px;font-size:12px;color:#e88;min-height:16px}
+button.empty{background:#262626;color:#777;text-decoration:line-through;cursor:help;border-color:#444}
+button.empty::after{content:" 空";color:#c66;font-size:10px;margin-left:2px}
+</style></head><body>
+<div id="now">—</div><div id="empties"></div>
+<div id="stage"><div id="flipwrap"></div><div id="mark"></div></div>
+<div id="opts"><label><input type="checkbox" id="showdummy" checked> 骑手占位（灰人形，脚底=红点=Flash原点）</label></div>
+<div id="bar">
+<button data-label="walkRB">walkRB</button>
+<button class="empty" data-label="RideWalkRT" title="此动画无独立素材：游戏中由水平翻转生成（空方向）">RideWalkRT</button>
+<button class="empty" data-label="RideWalkLB" title="此动画无独立素材：游戏中由水平翻转生成（空方向）">RideWalkLB</button>
+<button data-label="walkLT">walkLT</button>
+<button data-label="standRB">standRB</button>
+<button class="empty" data-label="RideStandRT" title="此动画无独立素材：游戏中由水平翻转生成（空方向）">RideStandRT</button>
+<button class="empty" data-label="RideStandLB" title="此动画无独立素材：游戏中由水平翻转生成（空方向）">RideStandLB</button>
+<button data-label="standLT">standLT</button></div>
+<script src="../../../fanvas3-transparent.js"></script><script src="swfData.js"></script>
+<script>
+const labels=[{"label":"walkRB","pool":12,"roleFrame":2,"empty":false,"bg":11,"fg":12,"flip":false},{"label":"RideWalkRT","pool":23,"roleFrame":3,"empty":true,"bg":22,"fg":23,"flip":true},{"label":"RideWalkLB","pool":12,"roleFrame":4,"empty":true,"bg":11,"fg":12,"flip":true},{"label":"walkLT","pool":23,"roleFrame":5,"empty":false,"bg":22,"fg":23,"flip":false},{"label":"standRB","pool":29,"roleFrame":6,"empty":false,"bg":28,"fg":29,"flip":false},{"label":"RideStandRT","pool":35,"roleFrame":7,"empty":true,"bg":34,"fg":35,"flip":true},{"label":"RideStandLB","pool":29,"roleFrame":8,"empty":true,"bg":28,"fg":29,"flip":true},{"label":"standLT","pool":35,"roleFrame":9,"empty":false,"bg":34,"fg":35,"flip":false}];const ridepetMeta={"rideType":"stand"};
+const byLabel={}; labels.forEach(L=>byLabel[L.label]=L);
+const emptySet=new Set(labels.filter(L=>L.empty).map(L=>L.label));
+const ec=emptySet.size;
+document.getElementById('empties').textContent= ec>0 ? ('⚠ 空动画（'+ec+' 个，翻转生成）：'+[...emptySet].join('、')) : '全部动画均有独立素材';
+
+function mergeRect(a,b){ if(!a) return b; if(!b) return a; const x=Math.min(a.x,b.x),y=Math.min(a.y,b.y); return {x:x,y:y,width:Math.max(a.x+a.width,b.x+b.width)-x,height:Math.max(a.y+a.height,b.y+b.height)-y}; }
+function unionRectOf(dp,idx,seen){
+  seen=seen||new Set(); if(seen.has(idx)) return null; seen.add(idx);
+  const d=dp[idx]; if(!d) return null;
+  let r=(d.rect&&(d.rect.width||d.rect.height))?{x:d.rect.x,y:d.rect.y,width:d.rect.width,height:d.rect.height}:null;
+  const fal=d.frameActionList;
+  if(fal&&Array.isArray(fal)){ for(const kf of fal){ if(!kf) continue; const acts=Array.isArray(kf)?kf.slice(1):[]; for(const a of acts){ if(Array.isArray(a)&&a[0]==='pE'&&a[1]&&a[1].id!=null){ const cr=unionRectOf(dp,a[1].id,seen); if(cr) r=mergeRect(r,cr); } } } }
+  const dl=d.displayList||d.frames;
+  if(dl&&Array.isArray(dl)){ for(const fr of dl){ if(Array.isArray(fr)){ for(const a of fr){ if(Array.isArray(a)&&a[0]==='pE'&&a[1]&&a[1].id!=null){ const cr=unionRectOf(dp,a[1].id,seen); if(cr) r=mergeRect(r,cr); } } } } }
+  return r;
+}
+
+const stage=document.getElementById('stage');
+const flipwrap=document.getElementById('flipwrap');
+const ORG=256;                       // Flash 原点 = 骑手脚点（bg/fg 放置在 (-256,-256)，rider 挂点在 (0,0)）
+let playing=[];
+
+function clearStage(){
+  playing.forEach(c=>{try{fanvas.pause(c);}catch(e){}});
+  playing=[];
+  flipwrap.querySelectorAll('canvas').forEach(c=>c.remove());
+  const d=document.getElementById('dummy'); if(d) d.remove();
+}
+function drawLayer(pool,z,sc){
+  if(pool==null) return;
+  const rd=swfData.definitionPool[pool]; if(!rd) return;
+  const ur=unionRectOf(swfData.definitionPool,pool);
+  if(ur&&ur.width>0&&ur.height>0) rd.rect=ur;
+  const r=rd.rect||{x:0,y:0,width:1,height:1};
+  const cv=document.createElement('canvas');
+  cv.style.position='absolute'; cv.style.zIndex=String(z);
+  // 脚点锚定（与画廊 modelBox 世界坐标同源）：画布像素 (0,0) = flash (r.x,r.y)，
+  // 该点在主时间轴坐标 = (r.x-256, r.y-256)（bg/fg 被放在 (-256,-256)），
+  // 骑手脚点 = 主时间轴原点 ⇒ 脚点落在舞台 (256,256) ⇒ left = ORG-(256-r.x)*sc
+  cv.style.left=(ORG-(ORG-r.x)*sc)+'px';
+  cv.style.top=(ORG-(ORG-r.y)*sc)+'px';
+  flipwrap.appendChild(cv);
+  playing.push(cv);
+  fanvas.play(cv,swfData,{rootDef:pool,transparent:true,cache:1,scale:sc,imagePath:'images/',autoPlay:true});
+}
+function drawDummy(sc){
+  const el=document.createElement('div'); el.id='dummy';
+  const h=150*sc,w=46*sc;
+  el.style.left=(ORG-w/2)+'px'; el.style.top=(ORG-h)+'px';
+  el.style.width=w+'px'; el.style.height=h+'px'; el.style.zIndex='2';
+  el.innerHTML='<svg width="'+w+'" height="'+h+'" viewBox="0 0 46 150"><ellipse cx="23" cy="14" rx="13" ry="13" fill="#8a8f98"/><rect x="8" y="28" width="30" height="58" rx="12" fill="#8a8f98"/><rect x="11" y="84" width="10" height="52" rx="4" fill="#8a8f98"/><rect x="25" y="84" width="10" height="52" rx="4" fill="#8a8f98"/></svg>';
+  flipwrap.appendChild(el);
+}
+function play(label){
+  const L=byLabel[label]; if(!L) return;
+  curLabel=label;
+  clearStage();
+  // 翻转：AS3 _rider.scaleX=-1 绕骑手脚点整体水平翻转（RT=LT镜像 / LB=RB镜像）
+  flipwrap.style.transform=L.flip?'scaleX(-1)':'none';
+  flipwrap.style.transformOrigin=ORG+'px '+ORG+'px';
+  // 缩放：两层并集相对原点的最大半宽/半高，保证不溢出 512 舞台
+  let sc=1;
+  for(const p of [L.bg,L.fg]){
+    if(p==null) continue;
+    const ur=unionRectOf(swfData.definitionPool,p); if(!ur) continue;
+    const dx=Math.max(Math.abs(ur.x-ORG),Math.abs(ur.x+ur.width-ORG));
+    const dy=Math.max(Math.abs(ur.y-ORG),Math.abs(ur.y+ur.height-ORG));
+    sc=Math.min(sc,236/Math.max(1,dx),236/Math.max(1,dy));
+  }
+  sc=Math.max(0.05,Math.min(1,sc));
+  drawLayer(L.bg,1,sc);
+  if(document.getElementById('showdummy').checked) drawDummy(sc);
+  drawLayer(L.fg,3,sc);
+  document.querySelectorAll('#bar button').forEach(b=>b.classList.toggle('on',b.dataset.label===label));
+  const note=emptySet&&emptySet.has(label)?'   ⚠ 空方向：游戏中由水平翻转生成':'';
+  document.getElementById('now').textContent=label+'  bg='+L.bg+' fg='+L.fg+' flip='+L.flip+'  [bg+fg双层·Flash原点(256,256)锚定·sc='+sc.toFixed(2)+']'+note;
+}
+document.getElementById('showdummy').onchange=()=>play(curLabel);
+document.querySelectorAll('#bar button').forEach(b=>b.onclick=()=>play(b.dataset.label));
+var curLabel=labels[0].label;
+play(curLabel);
+</script></body></html>

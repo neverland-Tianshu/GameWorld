@@ -1,0 +1,352 @@
+{
+ "meta": "ItemPanel03 配置真源 · 由 _verify/gen_item_panel03_cfg.mjs 生成 · 布局=layout.xml(FacturePanel*) / 按钮面图=Resource/icons(textpanel*.png) / 协议=NetNet.as(CS_ITEM_REMAKE=206)",
+ "layout": {
+  "FacturePanel": {
+   "FacturePanel": {
+    "x": "15",
+    "y": "70",
+    "w": "460",
+    "h": "450"
+   },
+   "FacturePanel_content": {
+    "x": "26",
+    "y": "113",
+    "w": "190",
+    "h": "270"
+   },
+   "FacturePanel_button": {
+    "x": "16",
+    "y": "50",
+    "w": "72",
+    "h": "25"
+   },
+   "FacturePanel_armMake": {
+    "x": "4",
+    "y": "80"
+   },
+   "FacturePanel_armDecompose": {
+    "x": "0",
+    "y": "80"
+   },
+   "FacturePanel_potionBrew": {
+    "x": "0",
+    "y": "80"
+   },
+   "FacturePanel_revelation": {
+    "x": "0",
+    "y": "80"
+   },
+   "FacturePanel_armUpgrade": {
+    "x": "0"
+   },
+   "FacturePanel_makeEffect": {
+    "x": "200",
+    "y": "100"
+   }
+  },
+  "FacturePanel_button": {
+   "FacturePanel_button": {
+    "x": "16",
+    "y": "50",
+    "w": "72",
+    "h": "25"
+   }
+  },
+  "FacturePanel_content": {
+   "FacturePanel_content": {
+    "x": "26",
+    "y": "113",
+    "w": "190",
+    "h": "270"
+   }
+  },
+  "FacturePanel_makeEffect": {
+   "FacturePanel_makeEffect": {
+    "x": "200",
+    "y": "100"
+   }
+  },
+  "FacturePanel_armMake": {
+   "FacturePanel_armMake": {
+    "x": "4",
+    "y": "80"
+   }
+  },
+  "FacturePanel_armDecompose": {
+   "FacturePanel_armDecompose": {
+    "x": "0",
+    "y": "80"
+   }
+  },
+  "FacturePanel_potionBrew": {
+   "FacturePanel_potionBrew": {
+    "x": "0",
+    "y": "80"
+   }
+  },
+  "FacturePanel_revelation": {
+   "FacturePanel_revelation": {
+    "x": "0",
+    "y": "80"
+   }
+  },
+  "FacturePanel_armUpgrade": {
+   "FacturePanel_armUpgrade": {
+    "x": "0"
+   }
+  }
+ },
+ "frame": {
+  "x": "15",
+  "y": "70",
+  "w": "460",
+  "h": "450"
+ },
+ "buttonGrid": {
+  "x": "16",
+  "y": "50",
+  "w": "72",
+  "h": "25"
+ },
+ "content": {
+  "x": "26",
+  "y": "113",
+  "w": "190",
+  "h": "270"
+ },
+ "makeEffect": {
+  "x": "200",
+  "y": "100"
+ },
+ "title": {
+  "key": "text_panel_title_item",
+  "zh": "装备制造",
+  "res": "textpaneltitleitem.png",
+  "w": 68
+ },
+ "tempY": 25,
+ "btnWidth": 65,
+ "buttons": [
+  {
+   "id": "sourceMix",
+   "gid": "BUTTON_SOURCE_MIX",
+   "langKey": "text_panel_sourceMix",
+   "zh": "合成",
+   "col": 0,
+   "row": 0,
+   "img": "textpanelsourcemix.png"
+  },
+  {
+   "id": "armAddstar",
+   "gid": "BUTTON_ARM_ADDSTAR",
+   "langKey": "text_panel_arm_enhance",
+   "zh": "强化",
+   "col": 1,
+   "row": 0,
+   "img": "textpanelarmenhance.png"
+  },
+  {
+   "id": "stoneMake",
+   "gid": "BUTTON_STONE_MAKE",
+   "langKey": "text_panel_stoneMake",
+   "zh": "宝石制作",
+   "col": 2,
+   "row": 0,
+   "img": "textpanelstonemake.png"
+  },
+  {
+   "id": "armPoke",
+   "gid": "BUTTON_ARM_POKE",
+   "langKey": "text_panel_armPoke",
+   "zh": "点化",
+   "col": 3,
+   "row": 0,
+   "img": "textpanelarmpoke.png"
+  },
+  {
+   "id": "armChangeHole",
+   "gid": "BUTTON_ARM_CHANGEHOLE",
+   "langKey": "text_panel_armChangeHole",
+   "zh": "改孔",
+   "col": 4,
+   "row": 0,
+   "img": "textpanelarmchangehole.png"
+  },
+  {
+   "id": "potionBrew",
+   "gid": "BUTTON_POTION_BREW",
+   "langKey": "text_panel_pharmacy",
+   "zh": "炼药",
+   "col": 5,
+   "row": 0,
+   "img": "textpanelpharmacy.png"
+  },
+  {
+   "id": "armMake",
+   "gid": "BUTTON_ARM_MAKE",
+   "langKey": "text_panel_armMake",
+   "zh": "装备打造",
+   "col": 0,
+   "row": 1,
+   "img": "textpanelarmmake.png"
+  },
+  {
+   "id": "armUpgrade",
+   "gid": "BUTTON_ARM_UPGRADE",
+   "langKey": "text_panel_armUpgrade",
+   "zh": "装备升级",
+   "col": 1,
+   "row": 1,
+   "img": "textpanelarmupgrade.png"
+  },
+  {
+   "id": "armStud",
+   "gid": "BUTTON_ARM_STUD",
+   "langKey": "text_panel_armStud",
+   "zh": "镶嵌",
+   "col": 2,
+   "row": 1,
+   "img": "textpanelarmstud.png"
+  },
+  {
+   "id": "armUnStud",
+   "gid": "BUTTON_ARM_UNSTUD",
+   "langKey": "text_panel_armUnstud",
+   "zh": "摘除",
+   "col": 3,
+   "row": 1,
+   "img": "textpanelarmunstud.png"
+  },
+  {
+   "id": "armSplit",
+   "gid": "BUTTON_ARM_SPLIT",
+   "langKey": "text_panel_armSplit",
+   "zh": "分解",
+   "col": 4,
+   "row": 1,
+   "img": "textpanelarmsplit.png"
+  },
+  {
+   "id": "equipEnchant",
+   "gid": "BUTTON_EQUIP_ENCHANT",
+   "langKey": "text_panel_armEnchant",
+   "zh": "附魔",
+   "col": 5,
+   "row": 1,
+   "img": "textpanelarmenchant.png"
+  },
+  {
+   "id": "revelation",
+   "gid": "BUTTON_REVELATION",
+   "langKey": "text_panel_revelation",
+   "zh": "启示录",
+   "col": 0,
+   "row": 2,
+   "img": "textpanelrevelation.png"
+  },
+  {
+   "id": "transformCard",
+   "gid": "BUTTON_TRANSFORM_CARD",
+   "langKey": "text_panel_transformCard",
+   "zh": "变身卡",
+   "col": 1,
+   "row": 2,
+   "img": "textpaneltransformcard.png"
+  }
+ ],
+ "subPanels": [
+  {
+   "id": "stoneMake",
+   "zh": "宝石制作",
+   "cls": "StoneMake",
+   "bag": "BAG_STONE_MAKE"
+  },
+  {
+   "id": "armStud",
+   "zh": "镶嵌",
+   "cls": "ArmStud",
+   "bag": "BAG_ARM_STUD"
+  },
+  {
+   "id": "armUnStud",
+   "zh": "摘除",
+   "cls": "ArmUnStud",
+   "bag": "BAG_ARM_UNSTUD"
+  },
+  {
+   "id": "armMake",
+   "zh": "装备打造",
+   "cls": "ArmMake",
+   "bag": "BAG_ARM_MAKE"
+  },
+  {
+   "id": "sourceMix",
+   "zh": "合成",
+   "cls": "SourceMix",
+   "bag": "BAG_SOURCE_MIX"
+  },
+  {
+   "id": "armAddstar",
+   "zh": "强化",
+   "cls": "ArmAddstar",
+   "bag": "BAG_ARM_ADDSTAR"
+  },
+  {
+   "id": "armPoke",
+   "zh": "点化",
+   "cls": "ArmPoke",
+   "bag": "BAG_ARM_POKE"
+  },
+  {
+   "id": "armDecompose",
+   "zh": "分解",
+   "cls": "ArmDecompose",
+   "bag": "BAG_ARM_DECOMPOSE"
+  },
+  {
+   "id": "potionBrew",
+   "zh": "炼药",
+   "cls": "PotionBrew",
+   "bag": "BAG_POTIONBREW"
+  },
+  {
+   "id": "armUpgrade",
+   "zh": "装备升级",
+   "cls": "ArmUpgrade",
+   "bag": "BAG_ARM_UPGRADE"
+  },
+  {
+   "id": "armChangeHole",
+   "zh": "改孔",
+   "cls": "ArmChangeHole",
+   "bag": "BAG_CHANGEHOLE"
+  },
+  {
+   "id": "equipEnchant",
+   "zh": "附魔",
+   "cls": "EquipEnchant",
+   "bag": "BAG_EQUIP_ENCHANT"
+  },
+  {
+   "id": "transformCard",
+   "zh": "变身卡",
+   "cls": "TransformCard",
+   "bag": "BAG_TRANSFORM_CARD"
+  },
+  {
+   "id": "revelation",
+   "zh": "启示录",
+   "cls": "RevelationPanel02",
+   "bag": "BAG_REVELATION"
+  }
+ ],
+ "defaultSub": "armMake",
+ "proto": {
+  "CS_ITEM_REMAKE": 206
+ },
+ "res": {
+  "title": "textpaneltitleitem.png",
+  "btnSilver": "panelbtnsilver.png"
+ },
+ "note": "ItemPanel03.as 本体为容器：14 按钮网格 + 标题 + 内容头 + makeEffect + 14 子面板路由器。14 子面板各自为独立 RevelationPanel 深类（ArmMake/StoneMake/...），本面板不逆向其内部合成/材料/成功率，统一用占位框标注（待逆向）。协议仅容器自身 sendItemRemark(3,-1)→CS_ITEM_REMAKE(206)，关闭时发送。"
+}
